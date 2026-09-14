@@ -1,34 +1,39 @@
-import { useState } from 'react'; 
+import { useState } from 'react';
 import './buscarObjetos.css';
 
-import  FilterProvider  from '../../../contexts/buscarObjetosContexts/filterContext.jsx';
+import FilterProvider from '../../../contexts/buscarObjetosContexts/filterContext.jsx';
 
 import sumaryIcon from '../../../assets/icons/buscarObjetos/sumary.svg';
 import arrowGray from '../../../assets/icons/buscarObjetos/arrow-gray.png'
 
 import PrimaryFilters from '../components/primaryFilters/PrimaryFilters.jsx';
-import SecondaryFilters from '../components/secondaryFilters/SecondaryFilters.jsx'; 
+import SecondaryFilters from '../components/secondaryFilters/SecondaryFilters.jsx';
 import PrincipalCards from '../components/principalCards/PrincipalCards.jsx';
 
 
-function BuscarObjetos(){
+function BuscarObjetos() {
 
-    const [pagina, setPagina] = useState(1); 
+    const [pagina, setPagina] = useState(1);
+    const [exibidos, setExibidos] = useState(0)
 
-    const total = 80
+    const total = 80 // Aqui vai o total de obj encontrados
     const totalPorPagina = 6;
     const totalDePaginas = [];
     const totalDePaginasNumerico = Math.ceil(total / totalPorPagina)
 
-    for(let i = 1; i < totalDePaginasNumerico + 1; i++){
+    for (let i = 1; i < totalDePaginasNumerico + 1; i++) {
         totalDePaginas.push(i)
     }
 
     let inicio = totalPorPagina * (pagina - 1);
     let fim = inicio + totalPorPagina;
 
-    function alternarPagina(pagina){
-        setPagina(pagina);
+    function alternarPagina(pagina) {
+         setPagina(pagina);
+    }
+
+    function resultadosExibidos(cards){ 
+        setExibidos(cards); 
     }
 
     return (
@@ -44,11 +49,11 @@ function BuscarObjetos(){
 
                     <div className="right">
                         <div>
-                            <h2 className="head__encontrados">1.245</h2>
+                            <h2 className="head__encontrados"> {total} </h2>
                             <p className="subtitle">objetos encontrados</p>
                         </div>
 
-                        <img className="sumary__icon" src={sumaryIcon} alt="" />
+                        <img className="sumary__icon" src={sumaryIcon} />
                     </div>
 
                 </div>
@@ -65,29 +70,29 @@ function BuscarObjetos(){
                     <div className='container__principal'>
 
                         <div className='principal__cabecalho'>
-                            <span className='text__principal'> {} objetos encontrados </span>
+                            <span className='text__principal'> { total } objetos encontrados </span>
                             <p className="subtitle">Resultados relacionados à sua busca</p>
                         </div>
 
                         <div className='principal__cards'>
-                            <PrincipalCards  key='' inicio={inicio} fim={fim}/>
+                            <PrincipalCards key='' inicio={inicio} fim={fim} resultadosExibidos={resultadosExibidos} />
                         </div>
 
                         <div className='principal__footer'>
-                            <span>mostrando {fim > total ? total : fim} de {total} resultados</span>
+                            <span>mostrando { exibidos } de {total} resultados</span>
 
                             <div className="paginas__principal">
 
-                                <div onClick={() => pagina < 1 ?  setPagina(1) : setPagina(pagina - 1)} className='button button__arrow'>
-                                        <img className='arrow__left' src={arrowGray} />
+                                <div onClick={() => pagina < 1 ? setPagina(1) : setPagina(pagina - 1)} className='button button__arrow'>
+                                    <img className='arrow__left' src={arrowGray} />
                                 </div>
 
                                 {totalDePaginas.map((valor) => {
-                                    return (<p onClick={() => {alternarPagina(valor)}} className={pagina === valor ? 'paginas pagina__ativa' : 'paginas'}> {valor} </p>)
+                                    return (<p onClick={() => { alternarPagina(valor) }} className={pagina === valor ? 'paginas pagina__ativa' : 'paginas'}> {valor} </p>)
                                 })}
 
                                 <div onClick={() => pagina > totalDePaginasNumerico ? setPagina(totalDePaginasNumerico) : setPagina(pagina + 1)} className='button button__arrow'>
-                                        <img className='arrow__right' src={arrowGray} />
+                                    <img className='arrow__right' src={arrowGray} />
                                 </div>
 
                             </div>
@@ -96,8 +101,6 @@ function BuscarObjetos(){
                     </div>
 
                 </div>
-
-
 
             </section>
         </FilterProvider>

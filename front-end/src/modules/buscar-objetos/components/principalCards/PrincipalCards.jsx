@@ -1,10 +1,7 @@
-import { useState } from 'react';
 import { useFilter } from '../../../../hooks/buscarObjetos/filterHook.jsx';
-import { objetoVazio } from '../../../../utils/validators.js';
-import { NavLink } from 'react-router'; 
+import { NavLink } from 'react-router';
 
-
-import './principalCards.css'; 
+import './principalCards.css';
 
 import pinGray from '../../../../assets/icons/buscarObjetos/pin-gray.svg';
 import calendarGray from '../../../../assets/icons/buscarObjetos/calendar-gray.svg';
@@ -20,9 +17,9 @@ const objetos = [
     {
         id: 1,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker', 
+        nome: 'Bola de Basquete Poker',
         status: 'PERDIDO',
-        categoria: 'Bolas', 
+        categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -32,9 +29,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker', 
+        nome: 'Bola de Basquete Poker',
         status: 'ENCONTRADO',
-        categoria: 'Bolas', 
+        categoria: 'tacos',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -44,9 +41,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker', 
+        nome: 'Bola de Basquete Poker',
         status: 'ENCONTRADO',
-        categoria: 'Bolas', 
+        categoria: 'eletronicos',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -56,9 +53,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker', 
+        nome: 'Bola de Basquete Poker',
         status: 'ENCONTRADO',
-        categoria: 'Bolas', 
+        categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -68,9 +65,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker', 
+        nome: 'Bola de Basquete Poker',
         status: 'ENCONTRADO',
-        categoria: 'Bolas', 
+        categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -80,9 +77,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker', 
+        nome: 'Bola de Basquete Poker',
         status: 'ENCONTRADO',
-        categoria: 'Bolas', 
+        categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -92,9 +89,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker', 
+        nome: 'Bola de Basquete Poker',
         status: 'ENCONTRADO',
-        categoria: 'Bolas', 
+        categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -104,9 +101,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Carteira de Basquete Poker', 
+        nome: 'Carteira de Basquete Poker',
         status: 'ENCONTRADO',
-        categoria: 'Bolas', 
+        categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -116,9 +113,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker', 
+        nome: 'Bola de Basquete Poker',
         status: 'ENCONTRADO',
-        categoria: 'Bolas', 
+        categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -128,9 +125,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Carteira de Basquete Poker', 
+        nome: 'Carteira de Basquete Poker',
         status: 'ENCONTRADO',
-        categoria: 'Bolas', 
+        categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -140,9 +137,9 @@ const objetos = [
     {
         id: 2,
         imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Carteira de Basquete Poker', 
+        nome: 'Carteira de Basquete Poker',
         status: 'PERDIDO',
-        categoria: 'Bolas', 
+        categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
@@ -152,153 +149,165 @@ const objetos = [
 
 ]
 
-function PrincipalCards({/* objetos */ inicio, fim}){ 
+function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos }) {
 
-    const {state} = useFilter();
-    const {primaryFilters, secondaryFilters} = state;
+    let cardsExibidos = 0
 
-    
-    function filtros(valor){
+    const { state } = useFilter();
+    const { primaryFilters, secondaryFilters } = state;
 
-        let posicao = 0;
+    function objetosAprovados(objetos){
 
+        const filtrosAprovados = {}
         const categorias = ['OBJETO', 'LOCALIZAÇÃO', 'CATEGORIA', 'PERÍODO'];
-        const objetos = ['nome', '', '', 'dataOcorrencia']; 
-
-        const objetosAprovados = {}
 
         categorias.map((valorCategorias) => {
 
-            if(valorCategorias === 'LOCALIZAÇÃO'){
+            if (!primaryFilters[valorCategorias]) { return }
 
-                if (!primaryFilters[valorCategorias]) { return }
+            if (valorCategorias === 'LOCALIZAÇÃO') {
 
-                const input = primaryFilters[valorCategorias].toUpperCase().split(' ');
-                const bancoDados1 = valor.cidade.toUpperCase(); 
-                const bancoDados2 = valor.endereco.toUpperCase(); 
+                const termosBusca = primaryFilters[valorCategorias].toUpperCase().split(' ');
+                const cidadeObjeto = objetos.cidade.toUpperCase();
+                const enderecoObjeto = objetos.endereco.toUpperCase();
 
                 // every funciona igual o filter, a diferenca é que o filter retorna um novo array, o every retorna um boolean
+                const objetosEncontrados = termosBusca.every((valorEncontrados) => {
+                    return cidadeObjeto.includes(valorEncontrados) || enderecoObjeto.includes(valorEncontrados);
+                });
 
-                const encontrados = input.every((valorEncontrados) => {
-                        return bancoDados1.includes(valorEncontrados) || bancoDados2.includes(valorEncontrados);
-                }); 
+                filtrosAprovados[valorCategorias] = objetosEncontrados
 
-                objetosAprovados[valorCategorias] = encontrados
+            } else if (valorCategorias === 'CATEGORIA') {
 
-            } else if (valorCategorias === 'CATEGORIA'){
+                const termosBusca = primaryFilters[valorCategorias].toUpperCase();
+                const nomeDoObjeto = objetos.categoria.toUpperCase();
 
-                if (!primaryFilters[valorCategorias]) { return }
+                if (nomeDoObjeto.includes(termosBusca)) { filtrosAprovados[valorCategorias] = false }
+                if (nomeDoObjeto.includes(termosBusca)) { filtrosAprovados[valorCategorias] = true }
 
-                const input = primaryFilters[valorCategorias].toUpperCase();
-                const bancoDados = valor.categoria.toUpperCase(); 
+            } else if (valorCategorias === 'OBJETO'){
 
-               if(bancoDados.includes(input)) { objetosAprovados[valorCategorias] = false }
-               if(bancoDados.includes(input) ) {objetosAprovados[valorCategorias] = true}
+                const termosBusca = primaryFilters[valorCategorias].toUpperCase().split(' ');
+                const nomeDoObjeto = objetos.nome.toUpperCase();
+
+                
+                const objetosEncontrados = termosBusca.every((valorEncontrados) => {
+                    return nomeDoObjeto.includes(valorEncontrados);
+                })
+                
+                filtrosAprovados[valorCategorias] = objetosEncontrados
 
             } else {
 
-                if (!primaryFilters[valorCategorias]) { return }
-    
-                const input = primaryFilters[valorCategorias].toUpperCase().split(' ');
-                const bancoDados = valor[objetos[posicao]].toUpperCase(); 
+                // montar logica de periodo após req ao banco estiver funcionando
+                
+                const termosBusca = primaryFilters[valorCategorias].toUpperCase();
+                const nomeDoObjeto = objetos.dataOcorrencia.toUpperCase();
 
-                const encontrados = input.every((valorEncontrados) => {
-                        return bancoDados.includes(valorEncontrados);
-                })
+                // const objetosEncontrados = termosBusca.every((valorEncontrados) => {
+                //     return nomeDoObjeto.includes(valorEncontrados);
+                // })
 
-                objetosAprovados[valorCategorias] = encontrados
+                // Aprovados[valorCategorias] = objetosEncontrados
+            }
 
-            }   
-            
-            posicao ++
-    
-        }); 
+        });
 
-        // if a quantidade de objetos preenchidos for a mesma de objetos aprovados, então ele filtra
+        return filtrosAprovados
+    }
 
+    function filtros(objetos) {
+        
+        const resultadoFiltros = objetosAprovados(objetos); 
+        
         const aprovados = []
         const preenchidos = []
-
-        for(let p in primaryFilters){
-            if (primaryFilters[p]) {preenchidos.push(p)};
+        
+        for (let camposPreenchidos in primaryFilters) { 
+            if (primaryFilters[camposPreenchidos]) { preenchidos.push(camposPreenchidos) };
         }
-
-        for(let i in objetosAprovados){        
-            if (objetosAprovados[i]) {aprovados.push(i)};
+        
+        for (let ResultadosAprovados in resultadoFiltros) { 
+            if (resultadoFiltros[ResultadosAprovados]) { aprovados.push(ResultadosAprovados) }; 
         }
-
+        
+        // if a quantidade de objetos preenchidos for a mesma de objetos aprovados, então ele filtra
         // se não tiver nenhum preenchido nem aprovado ele filtra pelos secondaryFilters direto
-        if(preenchidos.length === aprovados.length){
-            if(!secondaryFilters || secondaryFilters === 'TODOS'){ return (valor)}
-            if(valor.status === secondaryFilters.slice(0,7)){ return (valor)}
-            if(valor.status === secondaryFilters.slice(0,10)){return (valor)}
+        if (preenchidos.length === aprovados.length) {
+            if (!secondaryFilters || secondaryFilters === 'TODOS') { return (objetos) }
+            if (objetos.status === secondaryFilters.slice(0, 7)) { return (objetos) }
+            if (objetos.status === secondaryFilters.slice(0, 10)) { return (objetos) }
 
             // logica dos mais recentes e relevantes
-
         }
     }
 
-    function verificaIconStatus(status){
-            if (status === 'PERDIDO'){ return warningRed  }
-            if (status === 'ENCONTRADO') { return checkGreen }
-            if (status === 'ANALISE') { return hourglassOrange }
+    function verificaIconStatus(status) {
+        if (status === 'PERDIDO') { return warningRed }
+        if (status === 'ENCONTRADO') { return checkGreen }
+        if (status === 'ANALISE') { return hourglassOrange }
     }
 
-    function adicionaClassNameStatus(status){
-            if (status === 'PERDIDO'){ return 'status__red'  }
-            if (status === 'ENCONTRADO') { return 'status__green'}
-            if (status === 'ANALISE') { return 'status__orange'}
+    function adicionaClassNameStatus(status) {
+        if (status === 'PERDIDO') { return 'status__red' }
+        if (status === 'ENCONTRADO') { return 'status__green' }
+        if (status === 'ANALISE') { return 'status__orange' }
     }
 
     return (
         <div>
-            {objetos.filter((valor) => { return filtros(valor)}).slice(inicio, fim).map((valor) => {
-                return (<div className='card__principal'>
-                            <img className='image__card ' src={valor.imagem} />
+            {objetos.filter((valor) => { return filtros(valor) }).slice(inicio, fim).map((valor) => {
+                cardsExibidos++
 
-                            <div className='principal__meio'>
+                return (
 
-                                <div className='principal__encima'>
+                    <div className='card__principal'>
+                        <img className='image__card ' src={valor.imagem} />
 
-                                    <h1 className='titulo__principal'>{valor.nome}</h1>
+                        <div className='principal__meio'>
 
-                                    <div className='categoria__status'>
-                                        <div className='status__principal'>
-                                            <div className={adicionaClassNameStatus(valor.status)}>
+                            <div className='principal__encima'>
 
-                                                <img className="image__principal" src={verificaIconStatus(valor.status)} />
-                                                <span>{valor.status}</span>
+                                <h1 className='titulo__principal'>{valor.nome}</h1>
 
-                                            </div>
-                                        </div>
+                                <div className='categoria__status'>
+                                    <div className='status__principal'>
+                                        <div className={adicionaClassNameStatus(valor.status)}>
 
-                                        <div className='categoria__principal'>
-                                            <img className='icon__categoria'src={valor.icon_url} />
-                                            <span>{valor.categoria}</span>
+                                            <img className="image__principal" src={verificaIconStatus(valor.status)} />
+                                            <span>{valor.status}</span>
+
                                         </div>
                                     </div>
 
+                                    <div className='categoria__principal'>
+                                        <img className='icon__categoria' src={valor.icon_url} />
+                                        <span>{valor.categoria}</span>
+                                    </div>
                                 </div>
 
-                                <div className='principal__embaixo'>
+                            </div>
 
-                                    <div className='data__hora'>
-                                        <div className='data__principal'>
-                                            <img src={pinGray} alt="" />
-                                            <span>{valor.cidade}, {valor.endereco}</span>
-                                        </div>
+                            <div className='principal__embaixo'>
 
-                                        <p>|</p>
-
-                                        <div className='hora__principal'>
-                                            <img src={calendarGray} alt="" />
-                                            <span>{valor.dataOcorrencia}</span>
-                                        </div>
+                                <div className='data__hora'>
+                                    <div className='data__principal'>
+                                        <img src={pinGray} alt="" />
+                                        <span>{valor.cidade}, {valor.endereco}</span>
                                     </div>
 
-                                    <p className='descricao__principal'>{valor.descricaoBreve}</p>
+                                    <p>|</p>
 
+                                    <div className='hora__principal'>
+                                        <img src={calendarGray} alt="" />
+                                        <span>{valor.dataOcorrencia}</span>
+                                    </div>
                                 </div>
+
+                                <p className='descricao__principal'>{valor.descricaoBreve}</p>
+
+                            </div>
 
                         </div>
 
@@ -310,9 +319,11 @@ function PrincipalCards({/* objetos */ inicio, fim}){
                             </div>
                         </div>
                     </div>
+
                 )})}
+            {resultadosExibidos(cardsExibidos)}
         </div>
-        )
+    )
 }
 
 export default PrincipalCards;
