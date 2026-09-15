@@ -22,9 +22,9 @@ const objetos = [
         categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
-        dataOcorrencia: 'Hoje, 12:30'
+        endereco: 'Jardim São Sebastião',
+        cidade: 'São José do Vale do Rio Preto',
+        dataOcorrencia: '14/09/2026, 12:30'
     },
     {
         id: 2,
@@ -36,7 +36,7 @@ const objetos = [
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
         cidade: 'Rio de Janeiro',
-        dataOcorrencia: 'Hoje, 12:30'
+        dataOcorrencia: '14/09/2026, 12:30'
     },
     {
         id: 2,
@@ -107,7 +107,7 @@ const objetos = [
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
         endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
+        cidade: 'RJ',
         dataOcorrencia: 'Hoje, 12:30'
     },
     {
@@ -118,8 +118,8 @@ const objetos = [
         categoria: 'Bolas',
         icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
         descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
+        endereco: 'sapucaia do sul',
+        cidade: 'Rio grande do sul',
         dataOcorrencia: 'Hoje, 12:30'
     },
     {
@@ -269,11 +269,12 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos }) {
 
                             <div className='principal__encima'>
 
-                                <h1 className='titulo__principal'>{valor.nome}</h1>
+                                <h1 className='titulo__principal'>{ valor.nome.length < 35 ? valor.nome : `${valor.nome.slice(0, 35)}...` }</h1>
+                                <h1 className='titulo__responsive'>{ valor.nome.length < 25 ? valor.nome : `${valor.nome.slice(0, 25)}...`}</h1>
 
                                 <div className='categoria__status'>
                                     <div className='status__principal'>
-                                        <div className={adicionaClassNameStatus(valor.status)}>
+                                        <div className={adicionaClassNameStatus(valor.status)} >
 
                                             <img className="image__principal" src={verificaIconStatus(valor.status)} />
                                             <span>{valor.status}</span>
@@ -293,24 +294,28 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos }) {
 
                                 <div className='data__hora'>
                                     <div className='data__principal'>
-                                        <img src={pinGray} alt="" />
-                                        <span>{valor.cidade}, {valor.endereco}</span>
+                                        <img src={pinGray} />
+                                        <p className='endereco__principal'>{valor.cidade.length + valor.endereco.length < 50 ? `${valor.cidade}, ${valor.endereco}` : `${valor.cidade}, ${valor.endereco}`.slice(0, 50) + `...`}</p>
+                                        <span className='endereco__responsive'>{valor.cidade.length + valor.endereco.length < 32 ? `${valor.cidade}, ${valor.endereco}` : `${valor.cidade}, ${valor.endereco}`.slice(0, 32) + `...`}</span>
                                     </div>
 
-                                    <p>|</p>
+                                    <p className='divisoria'>|</p>
 
                                     <div className='hora__principal'>
-                                        <img src={calendarGray} alt="" />
+                                        <img src={calendarGray} />
                                         <span>{valor.dataOcorrencia}</span>
                                     </div>
                                 </div>
 
                                 <p className='descricao__principal'>{valor.descricaoBreve}</p>
 
+                                <div className='button__responsive'>
+                                    <NavLink className='detalhes__principal' to={`/buscar-objetos/${valor.id}`}>Ver detalhes</NavLink>
+                                    <img className='arrow__button__principal' src={arrowBlue} alt="" />
+                                </div>
                             </div>
 
                         </div>
-
 
                         <div className='principal__direita'>
                             <div className='button__principal'>

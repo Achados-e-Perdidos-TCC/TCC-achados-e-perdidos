@@ -11,8 +11,8 @@ function DateRange({placeholder, arrow, close, change}){
     const [dataInicial, dataFinal] = data; 
 
     return (
-        <div className="calendar">
-            <DatePicker className="input__filter date" selectsRange startDate={dataInicial} endDate={dataFinal} 
+        <div className="input__filter calendar">
+            <DatePicker className="date" selectsRange startDate={dataInicial} endDate={dataFinal} 
             placeholderText={placeholder} dateFormat={'dd/MM/yyyy'} onChange={(date) => {setData(date), change('DATA', `${date}`)}}
             minDate={new Date('01/01/2026')} onCalendarOpen ={() => {setCalendarVisible(true)}} 
             onCalendarClose={() => {setCalendarVisible(false)} } />

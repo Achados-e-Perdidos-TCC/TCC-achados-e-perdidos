@@ -25,18 +25,18 @@ const icons = {
 function BasicFilters(){
 
     const {dispatch} = useFilter();
-    const [valor, setValor] = useState({}); 
+    const [valorInput, setValorInput] = useState({}); 
     
 
     function pegarValorInput(categoria, valor){
-       setValor((valorAnterior) => ({
+       setValorInput((valorAnterior) => ({
         ...valorAnterior,
-        [categoria.toUpperCase()]: valor !== '' ? valor.toUpperCase() : false
+        [categoria.toUpperCase()]: valor === '' ? false : valor.toUpperCase()
        })); 
     }
 
     function filtrar(){
-        dispatch({ type: 'change', value: valor});
+        dispatch({ type: 'change', value: valorInput});
     }
 
     // Aqui vai ficar a requisicao http solicitando todas as categorias registradas
@@ -60,7 +60,7 @@ function BasicFilters(){
         <div className='filter'>
 
             {filtros.map((valor) => { 
-                return <div>
+                return <div >
                             <label htmlFor={valor.categoria} className="text__filter" > {valor.categoria} </label>
                                     
                             <div className='input__container'>
@@ -80,11 +80,12 @@ function BasicFilters(){
                         </div>       
             })}
 
+                <div className='button__buscar'>
                     <button className='button buscar' onClick={() => {filtrar()}}>
-                            <img className="lupa__icon" src={lupaIcon} alt="" />
-                            <span className='buscar__text'>buscar</span>
+                        <img className="lupa__icon" src={lupaIcon} alt="" />
+                        <span className='buscar__text'>buscar</span>
                     </button>
-
+                </div>
         </div>
     )
 }

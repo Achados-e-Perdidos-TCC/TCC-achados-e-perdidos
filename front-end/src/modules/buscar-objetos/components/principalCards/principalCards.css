@@ -1,11 +1,11 @@
 .card__principal{
     display: flex;
-    gap: 3rem;
+    gap: clamp(1rem, 2vw, 3rem);
     border: 0.1rem solid #999999;
     background-color: var(--card-color);
     border-radius: 1rem;
-    margin-bottom: 2.5rem;
-    padding: 1rem;
+    margin-bottom: clamp(1.5rem, 2vw, 2.5rem);
+    padding: clamp(0.5rem, 2vw, 1rem);
     height: 22rem;
     width: 100%;
 }
@@ -13,8 +13,9 @@
 .image__card{
     border-radius: 1rem;
     height: 20rem;
-    width: 32rem;
+    width: clamp(12rem, 16vw, 30rem);
     object-fit: cover;
+    object-position: center center;
 }
 
 .titulo__principal{
@@ -26,24 +27,24 @@
     display: flex;
     flex-direction: column;
     gap: 8rem;
+    min-width: 0; /* faz com que não fuja do maximo do bloco, por padrao vem como auto quando display flex, por isso que quebra*/
 }
 
 .categoria__status{
     display: flex;
-    gap: 2rem;
-    font-size: 1.8rem;
+    gap: clamp(0.2rem, 2vw, 2rem);
 }
 
 .data__hora{
     display: flex;
-    gap: 2rem;
-    font-size: 1.3rem;
+    gap: 1rem;
+    font-size: clamp(1rem, 2vw, 1.3rem);
 }
 
 .data__principal, .hora__principal{
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: clamp(0.1rem, 1vw, 0.8rem);
 }
 
 .status__red, .status__orange, .status__green{
@@ -72,14 +73,13 @@
     color: var(--secondary-color-gray)
 }
 
-
 .image__principal{
-    height: 2rem;
+    height:clamp(1.4rem, 2vw, 2rem);
     margin-bottom: 0.2rem;
 }
 
 .icon__categoria{
-    height: 2rem;
+    height: clamp(1.5rem, 2vw, 2rem);
 }
 
 .categoria__principal{
@@ -116,4 +116,108 @@
 .arrow__button__principal{
     margin-top: 0.25rem;
     height: 1.5rem;
+}
+
+.button__responsive, .endereco__responsive, .titulo__responsive{
+    display: none;
+}
+
+@media ( max-width: 1024px ){
+
+    .descricao__principal, .titulo__principal, .endereco__principal{ display: none}
+    .endereco__responsive{ display: flex }
+
+    .titulo__responsive{
+        display: flex;
+        color: var(--primary-color-text);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 3rem;
+        line-height: 3rem;
+    }
+
+    .data__principal, .hora__principal{
+        font-size: 1.1rem; 
+        line-height: 1.1rem;
+    }
+
+    .principal__embaixo{
+        display: flex;
+        justify-content: end;
+        flex-direction: column;
+        flex: 1;
+    }
+}
+
+
+@media ( max-width: 768px ){
+
+    .descricao__principal, .principal__direita, .divisoria, .titulo__principal, .endereco__principal{ display: none}
+
+    .endereco__responsive{
+        display: flex;
+    }
+
+    .categoria__status{
+        flex-direction: column;
+        margin-top: 1rem;
+    }
+
+    .titulo__responsive{
+        display: flex;
+        color: var(--primary-color-text);
+        font-weight: 600;
+        font-size: 1.5rem;
+        line-height: 1.7rem;
+    }
+
+    .principal__meio{
+        min-width: 0;
+        min-height: 0;
+        gap: 0%;
+        flex: 1;
+    }
+
+    .categoria__principal span{ font-size: 12px }
+
+    .image__principal{ margin-bottom: 0% }
+
+    .status__red, .status__orange, .status__green{
+        gap: 0.7rem;
+        font-size: 1.1rem; 
+        padding: 0.2rem 0.7rem;
+    }
+
+    .data__principal, .hora__principal{
+        font-size: 0.8rem; 
+        line-height: 1.1rem;
+    }
+
+    .principal__embaixo{
+        display: flex;
+        justify-content: end;
+        gap: 0.5rem;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .arrow__button__principal{
+        margin-top: 0.25rem;
+        height: 1rem;
+    }
+
+    .button__responsive{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem; 
+        padding: 0.2rem 0.7rem;
+        font-weight: 500;
+        font-size: 1.2rem;
+        border: 0.2rem solid var(--primary-color-blue);
+        border-radius: 1rem;
+        font-family: var(--font-principal);
+    }
+
+    .data__hora{ gap: 1rem }
 }

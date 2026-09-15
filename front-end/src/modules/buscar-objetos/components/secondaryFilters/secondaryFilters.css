@@ -25,3 +25,11 @@
     background-color: #0049e8;
     color: var(--secondary-color-white);
 }
+
+@media(max-width: 1024px){
+    .icon__secondary__filter{ left: 1.5% }
+}
+
+@media(max-width: 767px){ /* 767 para não pegar o ipad mini */
+    .icon__secondary__filter{ left: 4% }
+}
