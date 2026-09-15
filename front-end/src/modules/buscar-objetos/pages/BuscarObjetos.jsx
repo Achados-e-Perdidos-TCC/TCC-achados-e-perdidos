@@ -15,22 +15,26 @@ function BuscarObjetos() {
 
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [exibidos, setExibidos] = useState(0)
+    const [totalEncontrados, setTotalEncontrados] = useState(0); 
 
-    const total = 80 // Aqui vai o total de obj encontrados
+    
+    const total = totalEncontrados// Aqui vai o total de obj encontrados
     const totalPorPagina = 6;
     const totalDePaginas = [];
     const totalDePaginasNumerico = Math.ceil(total / totalPorPagina)
-
+    
     for (let i = 1; i < totalDePaginasNumerico + 1; i++) {
         totalDePaginas.push(i)
     }
-
+    
     let inicio = totalPorPagina * (paginaAtual - 1);
     let fim = inicio + totalPorPagina;
-
+    
     function alternarPagina(pagina) { setPaginaAtual(pagina) }
 
     function resultadosExibidos(cards) { setExibidos(cards) }
+
+    function resultadoTotalEncontrados(cards) {setTotalEncontrados(cards)}
 
     return (
         <FilterProvider >
@@ -66,12 +70,12 @@ function BuscarObjetos() {
                     <div className='container__principal'>
 
                         <div className='principal__cabecalho'>
-                            <span className='text__principal'> {total} objetos encontrados </span>
+                            <span className='text__principal'> {totalEncontrados} objetos encontrados </span>
                             <p className="subtitle">Resultados relacionados à sua busca</p>
                         </div>
 
                         <div className='principal__cards'>
-                            <PrincipalCards key='' inicio={inicio} fim={fim} resultadosExibidos={resultadosExibidos} />
+                            <PrincipalCards key='' inicio={inicio} fim={fim} resultadosExibidos={resultadosExibidos} resultadoTotalEncontrados={resultadoTotalEncontrados} />
                         </div>
 
                         <div className='principal__footer'>
@@ -79,7 +83,7 @@ function BuscarObjetos() {
 
                             <div className="paginas__principal">
 
-                                <div onClick={() => paginaAtual < 1 ? setPaginaAtual(1) : setPaginaAtual(paginaAtual - 1)} className='button button__arrow'>
+                                <div onClick={() => paginaAtual <= 1 ? setPaginaAtual(1) : setPaginaAtual(paginaAtual - 1)} className='button button__arrow'>
                                     <img className='arrow__left' src={arrowGray} />
                                 </div>
 
@@ -87,18 +91,18 @@ function BuscarObjetos() {
                                     {totalDePaginas.slice(Math.floor((paginaAtual - 1) / 10) * 10, Math.floor((paginaAtual - 1) / 10) * 10 + 10).map((valor) => {
                                         return (<p onClick={() => { alternarPagina(valor) }} className={paginaAtual === valor ? 'paginas pagina__ativa' : 'paginas'}> {valor} </p>)
                                     })}
-                                    <span>...</span>
+                                    <span>{totalDePaginas.length > 10 ? '...' : ''}</span>
                                 </div>
 
                                 <div className='paginas__responsivas'>
                                     {totalDePaginas.slice(Math.floor((paginaAtual - 1) / 5) * 5, Math.floor((paginaAtual - 1) / 5) * 5 + 5).map((valor) => {
                                         return (<p onClick={() => { alternarPagina(valor) }} className={paginaAtual === valor ? 'paginas pagina__ativa' : 'paginas'}> {valor} </p>)
                                     })}
-                                    <span>...</span>
+                                    <span>{totalDePaginas.length > 5 ? '...' : ''}</span>
                                 </div>
 
 
-                                <div onClick={() => paginaAtual > totalDePaginasNumerico ? setPaginaAtual(totalDePaginasNumerico) : setPaginaAtual(paginaAtual + 1)} className='button button__arrow'>
+                                <div onClick={() => paginaAtual >= totalDePaginasNumerico ? setPaginaAtual(totalDePaginasNumerico) : setPaginaAtual(paginaAtual + 1)} className='button button__arrow'>
                                     <img className='arrow__right' src={arrowGray} />
                                 </div>
                             </div>

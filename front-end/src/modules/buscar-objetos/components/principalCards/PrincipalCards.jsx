@@ -149,9 +149,10 @@ const objetos = [
 
 ]
 
-function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos }) {
+function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultadoTotalEncontrados }) {
 
-    let cardsExibidos = 0
+    let cardsExibidos = 0;
+    let totalEncontrados = 0;
 
     const { state } = useFilter();
     const { primaryFilters, secondaryFilters } = state;
@@ -235,9 +236,18 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos }) {
         // if a quantidade de objetos preenchidos for a mesma de objetos aprovados, então ele filtra
         // se não tiver nenhum preenchido nem aprovado ele filtra pelos secondaryFilters direto
         if (preenchidos.length === aprovados.length) {
-            if (!secondaryFilters || secondaryFilters === 'TODOS') { return (objetos) }
-            if (objetos.status === secondaryFilters.slice(0, 7)) { return (objetos) }
-            if (objetos.status === secondaryFilters.slice(0, 10)) { return (objetos) }
+            if (!secondaryFilters || secondaryFilters === 'TODOS') { 
+                totalEncontrados++
+                return (objetos) }
+
+            if (objetos.status === secondaryFilters.slice(0, 7)) { 
+                totalEncontrados++ 
+                return (objetos)
+            }
+
+            if (objetos.status === secondaryFilters.slice(0, 10)) { 
+                totalEncontrados++
+                return (objetos) }
 
             // logica dos mais recentes e relevantes
         }
@@ -327,6 +337,7 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos }) {
 
                 )})}
             {resultadosExibidos(cardsExibidos)}
+            {resultadoTotalEncontrados(totalEncontrados)}
         </div>
     )
 }
