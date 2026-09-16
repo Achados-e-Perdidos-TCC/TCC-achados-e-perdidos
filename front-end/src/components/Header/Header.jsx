@@ -32,12 +32,12 @@ function Header({ tema, aoAlternarTema }) {
                 {tema === 'light' ? <img className='burguer close__menu' onClick={toogleMenu} src={closeWhite} alt="Fechar menu" /> : <img className='burguer close__menu' onClick={toogleMenu} src={closeBlack} alt="Fechar menu" />}
                 <nav>
                     <ul>
-                        <NavLink to='/' end> <li><a className='nav__link'>início</a></li> </NavLink>
-                        <NavLink to='/buscar-objetos' end> <li><a className='nav__link'>Buscar objetos</a></li> </NavLink>
-                        <NavLink to='/' end className='link__cadastrar'> <li> <a className='nav__link'>Cadastrar objeto</a> </li> </NavLink>
-                        <NavLink to='/' end> <li><a className='nav__link'>Como funciona</a></li> </NavLink>
-                        <NavLink to='/' end> <li><a className='nav__link'>Achados</a></li> </NavLink>
-                        <NavLink to='/' end> <li><a className='nav__link'>Perdidos</a></li> </NavLink>
+                        <NavLink className='nav__link' to='/'end><li> <p>início</p> </li> </NavLink>
+                        <NavLink className='nav__link' to='/buscar-objetos' end> <li> <p>Buscar objetos</p> </li> </NavLink>
+                        <NavLink className='link__cadastrar nav__link' to='/' end ><li> <p>Cadastrar objeto</p> </li></NavLink>
+                        <NavLink className='nav__link' to='/' end> <li> <p>Como funciona</p> </li> </NavLink>
+                        <NavLink className='nav__link' to='/' end> <li> <p>Achados</p> </li> </NavLink>
+                        <NavLink className='nav__link' to='/' end> <li> <p>Perdidos</p> </li> </NavLink>
 
                     </ul>
                 </nav>
