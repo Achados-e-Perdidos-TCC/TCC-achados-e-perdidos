@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react'; 
-import { useFilter } from '../../../../hooks/filters/filterHook.jsx';
+import { useFilter } from '../../../../hooks/filters/filterHook.jsx'; 
+import { useEffect, useRef} from 'react'; 
 import { NavLink } from 'react-router';
+
+import filtros from '../../../../utils/filters/filtrarObjetos.js'; 
 
 import './principalCards.css';
 
@@ -18,11 +20,11 @@ import objetos from './objetos.json';
 
 function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultadoTotalEncontrados }) {
 
-    let cardsExibidos = 0;
-    let totalEncontrados = 0;
-
     const { state } = useFilter();
     const { primaryFilters, secondaryFilters } = state;
+
+    let cardsExibidos = 0;
+    const totalEncontrados = objetos.filter((valor) => { return filtros(valor, primaryFilters, secondaryFilters) }).length; 
 
     // useRef = cria algo parecido com: { current: x } e guarda essa referencia, é usado tbm p/Acessar um elemento HTML diretamente
     // funciona de forma semelhante ao useState, mas a diferença é que uma mudança no useState causa uma nova renderização,
@@ -42,102 +44,6 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
         }
     });
 
-    function objetosAprovados(objetos){
-
-        const filtrosAprovados = {}
-        const categorias = ['OBJETO', 'LOCALIZAÇÃO', 'CATEGORIA', 'PERÍODO'];
-
-        categorias.map((valorCategorias) => {
-
-            if (!primaryFilters[valorCategorias]) { return }
-
-            if (valorCategorias === 'LOCALIZAÇÃO') {
-
-                const termosBusca = primaryFilters[valorCategorias].toUpperCase().split(' ');
-                const cidadeObjeto = objetos.cidade.toUpperCase();
-                const enderecoObjeto = objetos.endereco.toUpperCase();
-
-                // every funciona igual o filter, a diferenca é que o filter retorna um novo array, o every retorna um boolean
-                const objetosEncontrados = termosBusca.every((valorEncontrados) => {
-                    return cidadeObjeto.includes(valorEncontrados) || enderecoObjeto.includes(valorEncontrados);
-                });
-
-                filtrosAprovados[valorCategorias] = objetosEncontrados
-
-            } else if (valorCategorias === 'CATEGORIA') {
-
-                const termosBusca = primaryFilters[valorCategorias].toUpperCase();
-                const nomeDoObjeto = objetos.categoria.toUpperCase();
-
-                if (nomeDoObjeto.includes(termosBusca)) { filtrosAprovados[valorCategorias] = false }
-                if (nomeDoObjeto.includes(termosBusca)) { filtrosAprovados[valorCategorias] = true }
-
-            } else if (valorCategorias === 'OBJETO'){
-
-                const termosBusca = primaryFilters[valorCategorias].toUpperCase().split(' ');
-                const nomeDoObjeto = objetos.nome.toUpperCase();
-
-                
-                const objetosEncontrados = termosBusca.every((valorEncontrados) => {
-                    return nomeDoObjeto.includes(valorEncontrados);
-                })
-                
-                filtrosAprovados[valorCategorias] = objetosEncontrados
-
-            } else {
-
-                // montar logica de periodo após req ao banco estiver funcionando
-                
-                // const termosBusca = primaryFilters[valorCategorias].toUpperCase();
-                // const nomeDoObjeto = objetos.dataOcorrencia.toUpperCase();
-
-                // const objetosEncontrados = termosBusca.every((valorEncontrados) => {
-                //     return nomeDoObjeto.includes(valorEncontrados);
-                // })
-
-                // Aprovados[valorCategorias] = objetosEncontrados
-            }
-
-        });
-
-        return filtrosAprovados
-    }
-
-    function filtros(objetos) {
-        
-        const resultadoFiltros = objetosAprovados(objetos); 
-        
-        const aprovados = []
-        const preenchidos = []
-        
-        for (let camposPreenchidos in primaryFilters) { 
-            if (primaryFilters[camposPreenchidos]) { preenchidos.push(camposPreenchidos) };
-        }
-        
-        for (let ResultadosAprovados in resultadoFiltros) { 
-            if (resultadoFiltros[ResultadosAprovados]) { aprovados.push(ResultadosAprovados) }; 
-        }
-        
-        // if a quantidade de objetos preenchidos for a mesma de objetos aprovados, então ele filtra
-        // se não tiver nenhum preenchido nem aprovado ele filtra pelos secondaryFilters direto
-        if (preenchidos.length === aprovados.length) {
-            if (!secondaryFilters || secondaryFilters === 'TODOS') { 
-                totalEncontrados++
-                return (objetos) }
-
-            if (objetos.status === secondaryFilters.slice(0, 7)) { 
-                totalEncontrados++ 
-                return (objetos)
-            }
-
-            if (objetos.status === secondaryFilters.slice(0, 10)) { 
-                totalEncontrados++
-                return (objetos) }
-
-            // logica dos mais recentes e relevantes
-        }
-    }
-
     function verificaIconStatus(status) {
         if (status === 'PERDIDO') { return warningRed }
         if (status === 'ENCONTRADO') { return checkGreen }
@@ -152,7 +58,7 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
     return (
         <div>
-            {objetos.filter((valor) => { return filtros(valor) }).slice(inicio, fim).map((valor) => {
+            {objetos.filter((valor) => { return filtros(valor, primaryFilters, secondaryFilters)}).slice(inicio, fim).map((valor) => {
                 cardsExibidos++
 
                 return (
