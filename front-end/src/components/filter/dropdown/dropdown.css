@@ -8,9 +8,7 @@
     height: 15px;
 }
 
-.up{
-    transform: rotate(180deg);
-}
+.up{ transform: rotate(180deg) }
 
 .x{
     cursor: pointer;
@@ -42,11 +40,11 @@
 
 .dropdown__itens:hover{ background-color: #edecec76 }
 
-.button__filter{ 
-    cursor: pointer;
-}
+.button__filter{ cursor: pointer }
 
 .category{ color: #767676 }
+
+/* responsividade */
 
 @media( max-width: 768px ){
     .dropdown__content{ z-index: 10 }

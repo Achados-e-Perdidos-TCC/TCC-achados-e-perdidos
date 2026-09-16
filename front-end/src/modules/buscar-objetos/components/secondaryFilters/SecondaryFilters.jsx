@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useOutletContext } from 'react-router'; 
-import { useFilter }  from '../../../../hooks/buscarObjetos/filterHook.jsx'; 
+import { useFilter }  from '../../../../hooks/filters/filterHook.jsx'; 
 import './secondaryFilters.css'; 
 
 import todosWhite from '../../../../assets/icons/buscarObjetos/grid-white.png';
@@ -59,7 +59,7 @@ function SecondaryFilters(){
         <div className='filter'>
 
             {filtros.map((valor) => { 
-                return <div>
+                return <div key={valor.id}>
                             <div className='input__container'>
 
                                 <div className={ativo === valor.categoria ? 'button__secondary__filter secondary__active' : 'button__secondary__filter'}

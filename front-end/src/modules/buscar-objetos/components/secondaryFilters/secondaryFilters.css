@@ -26,6 +26,8 @@
     color: var(--secondary-color-white);
 }
 
+/* responsividade */
+
 @media(max-width: 1024px){
     .icon__secondary__filter{ left: 1.5% }
 }

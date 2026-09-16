@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { filterContext } from '../../contexts/buscarObjetosContexts/filterContext.jsx'; 
+import { filterContext } from '../../contexts/filterContexts/filterContext.jsx'; 
 
 function useFilter(){
 

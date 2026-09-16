@@ -1,0 +1,135 @@
+[
+    {
+        "id": 1,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Bola de Basquete Poker",
+        "status": "PERDIDO",
+        "categoria": "Bolas",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Jardim São Sebastião",
+        "cidade": "São José do Vale do Rio Preto",
+        "dataOcorrencia": "14/09/2026, 12:30"
+    },
+    {
+        "id": 2,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Bola de Basquete Poker",
+        "status": "ENCONTRADO",
+        "categoria": "tacos",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Ipanema",
+        "cidade": "Rio de Janeiro",
+        "dataOcorrencia": "14/09/2026, 12:30"
+    },
+    {
+        "id": 3,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Bola de Basquete Poker",
+        "status": "ENCONTRADO",
+        "categoria": "eletronicos",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Ipanema",
+        "cidade": "Rio de Janeiro",
+        "dataOcorrencia": "Hoje, 12:30"
+    },
+    {
+        "id": 4,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Bola de Basquete Poker",
+        "status": "ENCONTRADO",
+        "categoria": "Bolas",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Ipanema",
+        "cidade": "Rio de Janeiro",
+        "dataOcorrencia": "Hoje, 12:30"
+    },
+    {
+        "id": 5,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Bola de Basquete Poker",
+        "status": "ENCONTRADO",
+        "categoria": "Bolas",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Ipanema",
+        "cidade": "Rio de Janeiro",
+        "dataOcorrencia": "Hoje, 12:30"
+    },
+    {
+        "id": 6,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Bola de Basquete Poker",
+        "status": "ENCONTRADO",
+        "categoria": "Bolas",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Ipanema",
+        "cidade": "Rio de Janeiro",
+        "dataOcorrencia": "Hoje, 12:30"
+    },
+    {
+        "id": 7,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Bola de Basquete Poker",
+        "status": "ENCONTRADO",
+        "categoria": "Bolas",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Ipanema",
+        "cidade": "Rio de Janeiro",
+        "dataOcorrencia": "Hoje, 12:30"
+    },
+    {
+        "id": 8,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Carteira de Basquete Poker",
+        "status": "ENCONTRADO",
+        "categoria": "Bolas",
+        "icon_ur": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Ipanema",
+        "cidade": "RJ",
+        "dataOcorrencia": "Hoje, 12:30"
+    },
+    {
+        "id": 9,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Bola de Basquete Poker",
+        "status": "ENCONTRADO",
+        "categoria": "Bolas",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "sapucaia do sul",
+        "cidade": "Rio grande do sul",
+        "dataOcorrencia": "Hoje, 12:30"
+    },
+    {
+        "id": 10,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Carteira de Basquete Poker",
+        "status": "ENCONTRADO",
+        "categoria": "Bolas",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Ipanema",
+        "cidade": "Rio de Janeiro",
+       "dataOcorrencia": "Hoje, 12:30"
+    },
+    {
+        "id": 11,
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+        "nome": "Carteira de Basquete Poker",
+        "status": "PERDIDO",
+        "categoria": "Bolas",
+        "icon_url": "https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373",
+        "descricaoBreve": "Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde",
+        "endereco": "Ipanema",
+        "cidade": "Rio de Janeiro",
+        "dataOcorrencia": "Hoje, 12:30"
+    }
+
+]

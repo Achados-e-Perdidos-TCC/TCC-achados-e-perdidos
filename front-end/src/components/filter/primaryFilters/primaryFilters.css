@@ -1,6 +1,4 @@
-.input__container {
-    position: relative;
-}
+.input__container { position: relative }
 
 .text__filter{
     cursor: pointer;
@@ -32,22 +30,10 @@
 
 .input__filter:hover{ box-shadow: var(--shadow-hover) }
 
-@media( max-width: 768px){
-
-    .button__buscar{
-        display: flex;
-        justify-content: center;
-    }
-
-    .input__filter{
-        display: flex;
-        font-size: 1.2rem;
-        padding: 1.7rem 1.5rem 1.7rem 5rem;
-        width: 100%;
-    }
-}
+/* responsividade */
 
 @media( max-width: 1024px){
+    
      .button__buscar{
         display: flex;
         justify-content: center;
@@ -62,3 +48,18 @@
 
     .icon__filter{ left: 2% }
 } 
+
+@media( max-width: 768px){
+
+    .button__buscar{
+        display: flex;
+        justify-content: center;
+    }
+
+    .input__filter{
+        display: flex;
+        font-size: 1.2rem;
+        padding: 1.7rem 1.5rem 1.7rem 5rem;
+        width: 100%;
+    }
+}

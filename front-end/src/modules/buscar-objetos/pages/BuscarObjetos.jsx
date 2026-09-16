@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import './buscarObjetos.css';
 
-import FilterProvider from '../../../contexts/buscarObjetosContexts/filterContext.jsx';
+import FilterProvider from '../../../contexts/filterContexts/filterContext.jsx';
 
 import sumaryIcon from '../../../assets/icons/buscarObjetos/sumary.svg';
 import arrowGray from '../../../assets/icons/buscarObjetos/arrow-gray.png'
 
-import PrimaryFilters from '../components/primaryFilters/PrimaryFilters.jsx';
+import PrimaryFilters from '../../../components/filter/primaryFilters/PrimaryFilters.jsx';
 import SecondaryFilters from '../components/secondaryFilters/SecondaryFilters.jsx';
 import PrincipalCards from '../components/principalCards/PrincipalCards.jsx';
 
@@ -23,8 +23,8 @@ function BuscarObjetos() {
     const totalDePaginas = [];
     const totalDePaginasNumerico = Math.ceil(total / totalPorPagina)
     
-    for (let i = 1; i < totalDePaginasNumerico + 1; i++) {
-        totalDePaginas.push(i)
+    for (let i = 1; i < totalDePaginasNumerico + 1; i++) { 
+        totalDePaginas.push(i); 
     }
     
     let inicio = totalPorPagina * (paginaAtual - 1);
@@ -59,11 +59,11 @@ function BuscarObjetos() {
                 </div>
 
                 <div className='container__card'>
-                    {<PrimaryFilters key='' />}
+                    {<PrimaryFilters />}
                 </div>
 
                 <div className='container__card'>
-                    <SecondaryFilters key='' />
+                    <SecondaryFilters />
                 </div>
 
                 <div className='principal container__card'>
@@ -75,7 +75,7 @@ function BuscarObjetos() {
                         </div>
 
                         <div className='principal__cards'>
-                            <PrincipalCards key='' inicio={inicio} fim={fim} resultadosExibidos={resultadosExibidos} resultadoTotalEncontrados={resultadoTotalEncontrados} />
+                            <PrincipalCards inicio={inicio} fim={fim} resultadosExibidos={resultadosExibidos} resultadoTotalEncontrados={resultadoTotalEncontrados} />
                         </div>
 
                         <div className='principal__footer'>
@@ -89,14 +89,14 @@ function BuscarObjetos() {
 
                                 <div className='paginas__exibidas'>
                                     {totalDePaginas.slice(Math.floor((paginaAtual - 1) / 10) * 10, Math.floor((paginaAtual - 1) / 10) * 10 + 10).map((valor) => {
-                                        return (<p onClick={() => { alternarPagina(valor) }} className={paginaAtual === valor ? 'paginas pagina__ativa' : 'paginas'}> {valor} </p>)
+                                        return (<p key={valor}  onClick={() => { alternarPagina(valor) }} className={paginaAtual === valor ? 'paginas pagina__ativa' : 'paginas'}> {valor} </p>)
                                     })}
                                     <span>{totalDePaginas.length > 10 ? '...' : ''}</span>
                                 </div>
 
                                 <div className='paginas__responsivas'>
                                     {totalDePaginas.slice(Math.floor((paginaAtual - 1) / 5) * 5, Math.floor((paginaAtual - 1) / 5) * 5 + 5).map((valor) => {
-                                        return (<p onClick={() => { alternarPagina(valor) }} className={paginaAtual === valor ? 'paginas pagina__ativa' : 'paginas'}> {valor} </p>)
+                                        return (<p key={valor} onClick={() => { alternarPagina(valor) }} className={paginaAtual === valor ? 'paginas pagina__ativa' : 'paginas'}> {valor} </p>)
                                     })}
                                     <span>{totalDePaginas.length > 5 ? '...' : ''}</span>
                                 </div>

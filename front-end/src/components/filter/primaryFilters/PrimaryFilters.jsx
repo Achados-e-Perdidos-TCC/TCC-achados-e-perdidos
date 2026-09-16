@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { useFilter } from '../../../../hooks/buscarObjetos/filterHook.jsx';
+import { useFilter } from '../../../hooks/filters/filterHook.jsx';
 import './primaryFilters.css';
 
 import Dropdown from '../dropdown/Dropdown.jsx'; 
 import DateRange from '../dateRange/DateRange.jsx';
 
-import lupaIcon from '../../../../assets/icons/buscarObjetos/lupa.svg';
-import lupaGray from '../../../../assets/icons/buscarObjetos/lupa-gray.svg';
-import pinGray from '../../../../assets/icons/buscarObjetos/pin-gray.svg';
-import gridGray from '../../../../assets/icons/buscarObjetos/grid-gray.svg';
-import calendarGray from '../../../../assets/icons/buscarObjetos/calendar-gray.svg';
-import arrowGray from '../../../../assets/icons/buscarObjetos/arrow-gray.png';
-import closeGray from '../../../../assets/icons/buscarObjetos/x-gray.png';
+import lupaIcon from '../../../assets/icons/buscarObjetos/lupa.svg';
+import lupaGray from '../../../assets/icons/buscarObjetos/lupa-gray.svg';
+import pinGray from '../../../assets/icons/buscarObjetos/pin-gray.svg';
+import gridGray from '../../../assets/icons/buscarObjetos/grid-gray.svg';
+import calendarGray from '../../../assets/icons/buscarObjetos/calendar-gray.svg';
+import arrowGray from '../../../assets/icons/buscarObjetos/arrow-gray.png';
+import closeGray from '../../../assets/icons/buscarObjetos/x-gray.png';
 
 import filtros from './primaryFilters.json'; 
 
@@ -60,7 +60,7 @@ function BasicFilters(){
         <div className='filter'>
 
             {filtros.map((valor) => { 
-                return <div >
+                return <div key={valor.id}>
                             <label htmlFor={valor.categoria} className="text__filter" > {valor.categoria} </label>
                                     
                             <div className='input__container'>

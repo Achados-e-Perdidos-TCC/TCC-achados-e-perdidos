@@ -10,6 +10,8 @@
     width: 100%;
 }
 
+/* img */
+
 .image__card{
     border-radius: 1rem;
     height: 20rem;
@@ -18,10 +20,7 @@
     object-position: center center;
 }
 
-.titulo__principal{
-    color: var(--primary-color-text);
-    font-weight: 600;
-}
+/* meio */
 
 .principal__meio{
     display: flex;
@@ -30,21 +29,16 @@
     min-width: 0; /* faz com que não fuja do maximo do bloco, por padrao vem como auto quando display flex, por isso que quebra*/
 }
 
+/* meio encima */
+
+.titulo__principal{
+    color: var(--primary-color-text);
+    font-weight: 600;
+}
+
 .categoria__status{
     display: flex;
     gap: clamp(0.2rem, 2vw, 2rem);
-}
-
-.data__hora{
-    display: flex;
-    gap: 1rem;
-    font-size: clamp(1rem, 2vw, 1.3rem);
-}
-
-.data__principal, .hora__principal{
-    display: flex;
-    align-items: center;
-    gap: clamp(0.1rem, 1vw, 0.8rem);
 }
 
 .status__red, .status__orange, .status__green{
@@ -66,13 +60,6 @@
 .status__green{ background-color: var(--success-tag-color)}
 .status__green span { color: var(--success-text-color)}
 
-
-.descricao__principal{
-    font-size: 1.3rem;
-    margin-left: 0.5rem; 
-    color: var(--secondary-color-gray)
-}
-
 .image__principal{
     height:clamp(1.4rem, 2vw, 2rem);
     margin-bottom: 0.2rem;
@@ -89,6 +76,30 @@
     font-weight: 400;
     gap: 0.7rem;
 }
+
+/* meio embaixo */
+
+.endereco__principal, .divisoria{ color: var(--primary-color-text) }
+
+.data__hora{
+    display: flex;
+    gap: 1rem;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+}
+
+.data__principal, .hora__principal{
+    display: flex;
+    align-items: center;
+    gap: clamp(0.1rem, 1vw, 0.8rem);
+}
+
+.descricao__principal{
+    font-size: 1.3rem;
+    margin-left: 0.5rem; 
+    color: var(--secondary-color-gray)
+}
+
+/* direita */
 
 .principal__direita{
     display: flex;
@@ -109,18 +120,16 @@
     cursor: pointer;
 }
 
-.detalhes__principal{
-    color: var(--primary-color-blue)
-}
+.detalhes__principal{ color: var(--primary-color-blue) }
 
 .arrow__button__principal{
     margin-top: 0.25rem;
     height: 1.5rem;
 }
 
-.button__responsive, .endereco__responsive, .titulo__responsive{
-    display: none;
-}
+/* responsividade */
+
+.button__responsive, .endereco__responsive, .titulo__responsive{ display: none }
 
 @media ( max-width: 1024px ){
 
@@ -149,14 +158,10 @@
     }
 }
 
-
 @media ( max-width: 768px ){
 
     .descricao__principal, .principal__direita, .divisoria, .titulo__principal, .endereco__principal{ display: none}
-
-    .endereco__responsive{
-        display: flex;
-    }
+    .endereco__responsive{ display: flex }
 
     .categoria__status{
         flex-direction: column;
@@ -179,7 +184,6 @@
     }
 
     .categoria__principal span{ font-size: 12px }
-
     .image__principal{ margin-bottom: 0% }
 
     .status__red, .status__orange, .status__green{

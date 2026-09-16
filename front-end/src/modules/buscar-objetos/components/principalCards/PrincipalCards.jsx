@@ -1,4 +1,5 @@
-import { useFilter } from '../../../../hooks/buscarObjetos/filterHook.jsx';
+import { useEffect, useRef } from 'react'; 
+import { useFilter } from '../../../../hooks/filters/filterHook.jsx';
 import { NavLink } from 'react-router';
 
 import './principalCards.css';
@@ -13,141 +14,7 @@ import arrowBlue from '../../../../assets/icons/buscarObjetos/arrow-blue.svg';
 // falta adicionar logica de filtrar por periodo
 
 // Vai receber de buscarObjetos.jsx depois
-const objetos = [
-    {
-        id: 1,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker',
-        status: 'PERDIDO',
-        categoria: 'Bolas',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Jardim São Sebastião',
-        cidade: 'São José do Vale do Rio Preto',
-        dataOcorrencia: '14/09/2026, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker',
-        status: 'ENCONTRADO',
-        categoria: 'tacos',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
-        dataOcorrencia: '14/09/2026, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker',
-        status: 'ENCONTRADO',
-        categoria: 'eletronicos',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
-        dataOcorrencia: 'Hoje, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker',
-        status: 'ENCONTRADO',
-        categoria: 'Bolas',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
-        dataOcorrencia: 'Hoje, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker',
-        status: 'ENCONTRADO',
-        categoria: 'Bolas',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
-        dataOcorrencia: 'Hoje, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker',
-        status: 'ENCONTRADO',
-        categoria: 'Bolas',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
-        dataOcorrencia: 'Hoje, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker',
-        status: 'ENCONTRADO',
-        categoria: 'Bolas',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
-        dataOcorrencia: 'Hoje, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Carteira de Basquete Poker',
-        status: 'ENCONTRADO',
-        categoria: 'Bolas',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'RJ',
-        dataOcorrencia: 'Hoje, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Bola de Basquete Poker',
-        status: 'ENCONTRADO',
-        categoria: 'Bolas',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'sapucaia do sul',
-        cidade: 'Rio grande do sul',
-        dataOcorrencia: 'Hoje, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Carteira de Basquete Poker',
-        status: 'ENCONTRADO',
-        categoria: 'Bolas',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
-        dataOcorrencia: 'Hoje, 12:30'
-    },
-    {
-        id: 2,
-        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10',
-        nome: 'Carteira de Basquete Poker',
-        status: 'PERDIDO',
-        categoria: 'Bolas',
-        icon_url: 'https://img.icons8.com/?size=100&id=kK2OkfQGPS4B&format=png&color=737373',
-        descricaoBreve: 'Iphone 13 azul com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema verde',
-        endereco: 'Ipanema',
-        cidade: 'Rio de Janeiro',
-        dataOcorrencia: 'Hoje, 12:30'
-    }
-
-]
+import objetos from './objetos.json'; 
 
 function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultadoTotalEncontrados }) {
 
@@ -156,6 +23,24 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
     const { state } = useFilter();
     const { primaryFilters, secondaryFilters } = state;
+
+    // useRef = cria algo parecido com: { current: x } e guarda essa referencia, é usado tbm p/Acessar um elemento HTML diretamente
+    // funciona de forma semelhante ao useState, mas a diferença é que uma mudança no useState causa uma nova renderização,
+    // enquanto uma mudança no useRef não causa uma nova renderização.
+    const ultimosCards = useRef(0);
+    const ultimoTotal = useRef(0);
+
+    useEffect(() => {   
+        // Se a ultima referencia/valor do useRef for igual aos valores de cardsExibidos e totalEncontrados ele não atualiza, se for diferente, ele atualiza 
+        if ( ultimosCards.current !== cardsExibidos || ultimoTotal.current !== totalEncontrados) {
+
+            ultimosCards.current = cardsExibidos;
+            ultimoTotal.current = totalEncontrados;
+
+            resultadosExibidos(cardsExibidos);
+            resultadoTotalEncontrados(totalEncontrados);
+        }
+    });
 
     function objetosAprovados(objetos){
 
@@ -203,8 +88,8 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
                 // montar logica de periodo após req ao banco estiver funcionando
                 
-                const termosBusca = primaryFilters[valorCategorias].toUpperCase();
-                const nomeDoObjeto = objetos.dataOcorrencia.toUpperCase();
+                // const termosBusca = primaryFilters[valorCategorias].toUpperCase();
+                // const nomeDoObjeto = objetos.dataOcorrencia.toUpperCase();
 
                 // const objetosEncontrados = termosBusca.every((valorEncontrados) => {
                 //     return nomeDoObjeto.includes(valorEncontrados);
@@ -271,8 +156,7 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
                 cardsExibidos++
 
                 return (
-
-                    <div className='card__principal'>
+                    <div className='card__principal' key={valor.id}>
                         <img className='image__card ' src={valor.imagem} />
 
                         <div className='principal__meio'>
@@ -336,8 +220,6 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
                     </div>
 
                 )})}
-            {resultadosExibidos(cardsExibidos)}
-            {resultadoTotalEncontrados(totalEncontrados)}
         </div>
     )
 }

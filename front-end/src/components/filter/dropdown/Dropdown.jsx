@@ -21,7 +21,7 @@ function Dropdown({id, placeholder, options, arrow, close, change }){
 
             {options.map((value) => ( 
 
-                <div className='dropdown__itens' onClick={() => {alternarOption(value.nome), change('CATEGORIA', value.nome)}}>
+                <div key={''} className='dropdown__itens' onClick={() => {alternarOption(value.nome), change('CATEGORIA', value.nome)}}>
                        <p> {value.nome } </p>
                 </div>
                 
