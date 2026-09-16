@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1, 
+        "categoria": "Todos",
+        "iconWhite": "todosWhite",
+        "iconBlack": "todosBlack"
+    }, 
+    {
+        "id": 2, 
+        "categoria": "Perdidos",
+        "iconWhite": "perdidosWhite",
+        "iconBlack": "perdidosBlack"
+    }, 
+    {
+        "id": 3, 
+        "categoria": "Encontrados",
+        "iconWhite": "encontradosWhite",
+        "iconBlack": "encontradosBlack"
+    }, 
+    {
+        "id": 4, 
+        "categoria": "Mais recentes",
+        "iconWhite": "clockWhite",
+        "iconBlack": "clockBlack"
+    },
+    {
+        "id": 5, 
+        "categoria": "Mais relevantes",
+        "iconWhite": "starWhite",
+        "iconBlack": "starBlack"
+    }
+] 

@@ -55,7 +55,7 @@ function Hero() {
             {/* Lado Direito */}
 
           <div className="hero-imagem">
-            {tema === 'light' ? <img src={direitawhite} alt="Imagem ilustrativa" /> : <img src={direitablack} alt="Imagem ilustrativa" />}
+            {tema === 'light' ? <img src={direitawhite} alt="Direita-white" /> : <img src={direitablack} alt="Direitablack" />}
           </div>
 
             {/* Campo de Busca*/}
@@ -65,19 +65,19 @@ function Hero() {
             <h2>O que você está procurando?</h2>
 
             <div className="objeto">
-                {tema === 'light' ? <img src={objeto} alt="Imagem ilustrativa" /> : <img src={objeto} alt="Imagem ilustrativa" />}
+                {tema === 'light' ? <img src={objeto} alt="iconObjeto" /> : <img src={objeto} alt="iconObjeto" />}
                 <label htmlFor="objeto">Objeto</label>
                 <input type="text" placeholder="EX.: Carteira, Celular, Chave ..." />
             </div>
 
             <div className="localizacao">
-                {tema === 'light' ? <img src={localizacao} alt="Imagem ilustrativa" /> : <img src={localizacao} alt="Imagem ilustrativa" />}
+                {tema === 'light' ? <img src={localizacao} alt="iconLoc" /> : <img src={localizacao} alt="iconLoc" />}
                 <label htmlFor="localizacao">Localização</label>
                 <input type="text" placeholder="EX.: Porto Alegre, Rio Grande ..." />
             </div>
 
             <div className="categoria">
-                {tema === 'light' ? <img src={categoria} alt="Imagem ilustrativa" /> : <img src={categoria} alt="Imagem ilustrativa" />}
+                {tema === 'light' ? <img src={categoria} alt="iconCategoria" /> : <img src={categoria} alt="iconCategoria" />}
                 <label htmlFor="categoria">Categoria</label>
 
                 <select>
@@ -103,11 +103,11 @@ function Hero() {
         <div className="cadastro-estatisticas">
 
             <div className="cadastro-imagem">
-                {tema === 'light' ? <img src={CadastroaDevolucaoWhite} alt="Imagem ilustrativa" /> : <img src={CadastroaDevolucaoBlack} alt="Imagem ilustrativa" />}
+                {tema === 'light' ? <img src={CadastroaDevolucaoWhite} alt="CadastroaDevolucaoWhite" /> : <img src={CadastroaDevolucaoBlack} alt="CadastroaDevolucaoBlack" />}
             </div>
 
             <div className="estatisticas">
-               {tema === 'light' ? <img src={EstatisticasWhite} alt="Imagem ilustrativa" /> : <img src={EstatisticasBlack} alt="Imagem ilustrativa" />}
+               {tema === 'light' ? <img src={EstatisticasWhite} alt="estatisticasWhite" /> : <img src={EstatisticasBlack} alt="estatisticasBlack" />}
             </div>
         </div>
 

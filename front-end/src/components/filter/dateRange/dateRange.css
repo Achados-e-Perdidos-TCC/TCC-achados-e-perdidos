@@ -1,0 +1,38 @@
+.calendar{
+    display: flex;
+    align-items: center;
+    max-height: 5.3rem;
+}
+
+.date{ 
+    border: none;
+    background: transparent;
+    color: var(--primary-color-text)
+}
+
+.calendar .react-datepicker {
+    font-family: var(--font-principal);
+    font-weight: 600;
+    font-size: 1.5rem;
+    border: 0.1rem solid var(--border-color);
+    background-color: var(--card-color);
+    border-radius: 1.5rem;
+}
+
+.calendar .react-datepicker__day-name, .react-datepicker__day { color: var(--primary-color-text) }
+
+.calendar .react-datepicker__header {
+    padding-top: 1.2rem;
+    border-bottom: 0.1rem solid var(--border-color);
+    background-color: var(--card-color);
+}
+
+.calendar .react-datepicker__day {
+    width: 3.3rem;
+    line-height: 2.3rem;
+}
+
+.calendar .react-datepicker__current-month {
+    font-size: 1rem;
+    color: var(--primary-color-text); 
+}
