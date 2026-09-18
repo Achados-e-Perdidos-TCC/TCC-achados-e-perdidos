@@ -1,0 +1,35 @@
+.detalhe__objetos{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+/* img */
+
+.house__gray { height: 1.8rem;}
+
+/* caminho / voltar */
+
+.caminho__voltar{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.caminho, .voltar__navlink{
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer
+}
+
+.caminho__text{
+    font-size: 1.2rem;
+    color: var(--secondary-color-gray); 
+}
+
+.voltar__text{
+    font-size: 1.3rem;
+    color: var(--primary-color-blue)
+}
+
