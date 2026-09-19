@@ -77,19 +77,16 @@ class ItemControllerIT extends IntegrationTestSupport {
         mockMvc.perform(post("/api/v1/items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                // Sem header Authorization nenhum (nem "Bearer" inválido), o CsrfFilter
-                // intercepta antes mesmo da autenticação: POST fora de /api/v1/auth/**
-                // e sem "Authorization: Bearer ..." não está na lista de
-                // ignoringRequestMatchers do SecurityConfig, e sem cookie/; header
-                // XSRF-TOKEN a requisição é barrada com 403 (ver rainyDay abaixo com
-                // Bearer inválido, que já ignora CSRF e cai no redirect do oauth2Login).
+                // Sem header Authorization nenhum: cai no anyRequest().authenticated()
+                // e é barrada pelo Http403ForbiddenEntryPoint padrão (nenhum mecanismo
+                // de login baseado em sessão/redirect está configurado — só Bearer JWT).
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void rainyDay_deveRecusarConsultaDeMatchesSemAutenticacao() throws Exception {
         mockMvc.perform(get("/api/v1/items/" + UUID.randomUUID() + "/matches"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -251,7 +248,7 @@ class ItemControllerIT extends IntegrationTestSupport {
                         .header("Authorization", "Bearer isto-nao-eh-um-jwt")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isForbidden());
     }
 
     @Test

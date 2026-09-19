@@ -3,12 +3,9 @@ package com.achadosedevolvidos.user.model;
 import java.util.UUID;
 
 /**
- * Contrato comum implementado tanto por {@link User} (autenticação via Bearer JWT)
- * quanto por {@code CustomOAuth2User} (autenticação via OAuth2 Login/Google).
- *
- * <p>Isso permite que os Controllers dependam apenas de {@code @AuthenticationPrincipal
- * AuthenticatedUser currentUser}, sem precisar saber qual dos dois mecanismos, isolados
- * entre si, foi usado para autenticar a requisição.</p>
+ * Contrato implementado por {@link User}, usado pelos Controllers via
+ * {@code @AuthenticationPrincipal AuthenticatedUser currentUser} para obter o
+ * usuário autenticado (Bearer JWT) sem depender diretamente da entidade JPA.
  */
 public interface AuthenticatedUser {
 

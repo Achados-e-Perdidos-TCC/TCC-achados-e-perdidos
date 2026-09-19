@@ -28,10 +28,9 @@ import java.util.UUID;
  * Substitui os dois Controllers conflitantes do repositório original (um em
  * com.achadosedevolvidos.controller, outro em com.example.api.controller, ambos
  * mapeando /api/v1/items). O usuário autenticado agora vem de
- * {@code @AuthenticationPrincipal}, que funciona tanto para quem logou via Bearer
- * JWT quanto via OAuth2/Google — o Controller não sabe nem precisa saber qual dos
- * dois foi usado. Antes, {@code create()} lia um {@code @RequestAttribute("userId")}
- * que nenhum filtro no projeto chegava a preencher.
+ * {@code @AuthenticationPrincipal}. Antes, {@code create()} lia um
+ * {@code @RequestAttribute("userId")} que nenhum filtro no projeto chegava a
+ * preencher.
  */
 @RestController
 @RequestMapping("/api/v1/items")

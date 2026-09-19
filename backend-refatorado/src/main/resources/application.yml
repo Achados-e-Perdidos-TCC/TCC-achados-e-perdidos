@@ -28,17 +28,6 @@ spring:
     baseline-on-migrate: true
     baseline-version: 0
 
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${GOOGLE_CLIENT_ID:placeholder}
-            client-secret: ${GOOGLE_CLIENT_SECRET:placeholder}
-            scope:
-              - email
-              - profile
-
   mail:
     # Defaults apontam para o sandbox do Mailtrap (dev/teste, não envia de verdade
     # para caixas reais). Usuário/senha não têm default — mesmo tratamento de
@@ -63,11 +52,6 @@ app:
     secret: ${JWT_SECRET}
     access-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000}      # 15 minutos
     refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000} # 7 dias
-
-  oauth2:
-    # Para onde o navegador é redirecionado após login OU falha via Google.
-    redirect-uri: ${OAUTH2_REDIRECT_URI:http://localhost:5173/oauth2/callback}
-    failure-redirect-uri: ${OAUTH2_FAILURE_REDIRECT_URI:http://localhost:5173/login?erro=oauth2}
 
   password-reset:
     # Página do frontend para onde o link do e-mail de redefinição aponta

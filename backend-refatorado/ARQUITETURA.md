@@ -9,8 +9,7 @@ da responsabilidade do Hibernate.
 ```
 com.achadosedevolvidos
 ├── auth/          # Bearer JWT: controller, service, filtro, DTOs
-│   └── oauth2/    # OAuth2 Login (Google): isolado do JWT
-├── user/          # User + AuthenticatedUser (contrato comum aos dois logins)
+├── user/          # User, AuthenticatedUser, perfil (/users/me)
 ├── category/      # Categoria (entidade simples, CRUD de leitura)
 ├── item/          # Item, ItemImage, busca, DTOs, evento de criação
 ├── match/         # Match, motor de pontuação puro, orquestração
@@ -77,12 +76,13 @@ dá pra evoluir ou até substituir o motor de match sem tocar no módulo de iten
 
 ## 4. Autenticação e autorização
 
-Mantido o que foi entregue anteriormente (Bearer JWT + OAuth2 Google isolados
-entre si — detalhes em `README-AUTH.md`), com dois acréscimos deste refactor:
+Único mecanismo de login: Bearer JWT stateless (detalhes em `README-AUTH.md`).
+O login social via Google/OAuth2 existiu numa versão anterior deste refactor e
+foi removido do produto por decisão do time — o que resta abaixo já reflete
+esse estado atual.
 
 - **`ItemController.create()` corrigido**: lia `@RequestAttribute("userId")`, que
-  nenhum filtro preenchia. Agora usa `@AuthenticationPrincipal AuthenticatedUser`,
-  que funciona tanto para quem logou via JWT quanto via Google.
+  nenhum filtro preenchia. Agora usa `@AuthenticationPrincipal AuthenticatedUser`.
 - **WebSocket do chat, antes sem nenhuma autenticação**: `StompAuthChannelInterceptor`
   agora exige e valida um Bearer JWT no frame STOMP `CONNECT`, reaproveitando o
   mesmo `JwtService` do mecanismo REST (sem duplicar lógica de validação). O
@@ -116,8 +116,8 @@ combinável — o Controller e o Service não sabem como o filtro vira SQL.
 `id` (UUID) e `createdAt` deixaram de ser redeclarados em cada entidade. Uma
 `@MappedSuperclass` (`BaseEntity`) centraliza os dois campos, e `createdAt` é
 preenchido sozinho via `@PrePersist` — nenhum Service precisa mais lembrar de
-chamar `.createdAt(LocalDateTime.now())` na mão (o `AuthService` e o
-`CustomOAuth2UserService`, por exemplo, não fazem mais isso).
+chamar `.createdAt(LocalDateTime.now())` na mão (o `AuthService`, por exemplo,
+não faz mais isso).
 
 ## 8. `open-in-view: false` exige `@Transactional` explícito em toda leitura com relação lazy
 
@@ -139,13 +139,10 @@ Cobertura completa (unitária + integração) descrita em `README.md`, seção 2
 Resumo: testes unitários (Mockito, sem Spring/banco) para os Services com
 lógica de negócio; testes de integração (`@SpringBootTest` + Postgres real via
 Testcontainers) cobrindo os endpoints REST, o fluxo assíncrono
-item→evento→match, a conexão WebSocket/STOMP autenticada, e o callback do
-login Google simulado via WireMock. Pipeline de CI em
+item→evento→match, e a conexão WebSocket/STOMP autenticada. Pipeline de CI em
 `.github/workflows/backend-ci.yml`.
 
 ## 10. O que ainda fica para depois (fora do escopo deste refactor)
 
 - Rate limiting no `/api/v1/auth/login`.
 - Busca geográfica por raio (PostGIS).
-- Paginação em `/api/v1/items/search` (hoje retorna a lista inteira).
-- Publicação do app OAuth2 no Google Cloud Console (hoje em modo "Testing").
