@@ -36,8 +36,7 @@ import java.util.UUID;
 /**
  * Fluxo de autenticação "Bearer Token": cadastro, login e ciclo de vida do
  * refresh token (emissão/rotação/revogação) para o login local (e-mail/senha), mais
- * o fluxo de esqueci-minha-senha. Não possui nenhuma dependência do fluxo
- * OAuth2/Google.
+ * o fluxo de esqueci-minha-senha. Único mecanismo de login do app.
  */
 @Service
 @RequiredArgsConstructor
@@ -74,7 +73,6 @@ public class AuthService {
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .role(User.Role.USER)
-                .provider(User.AuthProvider.LOCAL)
                 .build();
 
         userRepository.save(user);
@@ -84,13 +82,6 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new BadCredentialsException("Credenciais inválidas"));
-
-        if (user.getProvider() == User.AuthProvider.GOOGLE) {
-            throw new AppException(
-                    "Esta conta usa login via Google. Utilize essa opção para entrar.",
-                    HttpStatus.CONFLICT
-            );
-        }
 
         // Lança BadCredentialsException se e-mail/senha não conferirem.
         authenticationManager.authenticate(
@@ -149,11 +140,10 @@ public class AuthService {
 
     /**
      * Nunca revela se o e-mail existe ou não na base — resposta idêntica em
-     * qualquer caso (e-mail inexistente, conta só-Google, ou sucesso de fato).
+     * qualquer caso (e-mail inexistente ou sucesso de fato).
      */
     public MessageResponse forgotPassword(ForgotPasswordRequest request) {
         userRepository.findByEmail(request.email())
-                .filter(user -> user.getProvider() != User.AuthProvider.GOOGLE)
                 .ifPresent(this::issuePasswordResetToken);
 
         return new MessageResponse(

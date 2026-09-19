@@ -168,18 +168,6 @@ class AuthServiceTest {
     }
 
     @Test
-    void rainyDay_deveLancarConflitoQuandoContaEhSomenteGoogle() {
-        User googleUser = localUser();
-        googleUser.setProvider(User.AuthProvider.GOOGLE);
-        googleUser.setPassword(null);
-        when(userRepository.findByEmail(googleUser.getEmail())).thenReturn(Optional.of(googleUser));
-
-        assertThatThrownBy(() -> authService.login(new LoginRequest(googleUser.getEmail(), "qualquer")))
-                .isInstanceOf(AppException.class)
-                .hasFieldOrPropertyWithValue("status", HttpStatus.CONFLICT);
-    }
-
-    @Test
     void rainyDay_devePropagarExcecaoQuandoSenhaNaoConfere() {
         User user = localUser();
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
@@ -323,19 +311,6 @@ class AuthServiceTest {
         verify(emailService, never()).sendPasswordResetEmail(eq("nao-cadastrado@teste.com"), anyString());
     }
 
-    @Test
-    void rainyDay_forgotPasswordNaoEmiteTokenParaContaSomenteGoogle() {
-        User googleUser = localUser();
-        googleUser.setProvider(User.AuthProvider.GOOGLE);
-        googleUser.setPassword(null);
-        when(userRepository.findByEmail(googleUser.getEmail())).thenReturn(Optional.of(googleUser));
-
-        authService.forgotPassword(new ForgotPasswordRequest(googleUser.getEmail()));
-
-        verify(passwordResetTokenRepository, never()).save(any());
-        verify(emailService, never()).sendPasswordResetEmail(anyString(), anyString());
-    }
-
     // ---------- resetPassword() ----------
 
     @Test
@@ -399,7 +374,6 @@ class AuthServiceTest {
                 .email("ana@teste.com")
                 .password("hash-da-senha")
                 .role(User.Role.USER)
-                .provider(User.AuthProvider.LOCAL)
                 .build();
     }
 }

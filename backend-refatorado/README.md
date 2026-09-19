@@ -12,15 +12,14 @@ Documentação relacionada:
 
 - **`ARQUITETURA.md`** — o que mudou no refactor e por quê (desacoplamento,
   Flyway, estrutura de pacotes).
-- **`README-AUTH.md`** — detalhes dos dois mecanismos de autenticação
-  (Bearer JWT e OAuth2/Google): endpoints, contratos, o que o front-end precisa
-  enviar/receber.
+- **`README-AUTH.md`** — detalhes do mecanismo de autenticação (Bearer JWT):
+  endpoints, contratos, o que o front-end precisa enviar/receber.
 - **`README-OPENAPI.md`** — como gerar tipos TypeScript automaticamente a
   partir da API real (Swagger UI + `openapi-typescript`/`orval`).
 
 ## Stack
 
-Java 21 · Spring Boot 3.3 · Spring Security 6 (JWT + OAuth2 Client) ·
+Java 21 · Spring Boot 3.3 · Spring Security 6 (Bearer JWT) ·
 Spring Data JPA · Hibernate 6 · PostgreSQL 16 · Flyway · WebSocket/STOMP ·
 Maven · Lombok · JJWT 0.12 · JUnit 5
 
@@ -137,18 +136,17 @@ cp .env.example .env
 ```
 
 O `.env` concentra **tudo que é sensível ou específico do seu ambiente**:
-credenciais de banco, chave de assinatura JWT, client secret do Google. Regras
-que valem para qualquer pessoa do time:
+credenciais de banco, chave de assinatura JWT. Regras que valem para qualquer
+pessoa do time:
 
 - **`.env` nunca é commitado.** Já está no `.gitignore` da raiz do repositório
   (regra `.env`). Só o `.env.example` (com campos vazios/valores de exemplo)
   fica versionado.
-- **Nunca cole valores reais de `JWT_SECRET`, `GOOGLE_CLIENT_SECRET`, senha de
-  banco de produção, etc. em PR, issue, chat da equipe ou neste README.** Se
-  um segredo vazar (ex.: colado por engano em um canal público), rotacione-o
-  imediatamente — gerar um novo client secret no Google Cloud Console ou um
-  novo `JWT_SECRET` é gratuito e não tem downtime além de invalidar sessões/
-  tokens ativos.
+- **Nunca cole valores reais de `JWT_SECRET`, senha de banco de produção, etc.
+  em PR, issue, chat da equipe ou neste README.** Se um segredo vazar (ex.:
+  colado por engano em um canal público), rotacione-o imediatamente — gerar
+  um novo `JWT_SECRET` é gratuito e não tem downtime além de invalidar
+  sessões/tokens ativos.
 - Gere o `JWT_SECRET` localmente, nunca reaproveite o de outro ambiente:
   ```bash
   openssl rand -base64 32
@@ -166,8 +164,6 @@ Preencha no `.env`:
 | `DB_URL` / `DB_USERNAME` / `DB_PASSWORD` | Sim | Como a aplicação Spring se conecta ao mesmo Postgres acima |
 | `JWT_SECRET` | Sim | Chave HS256 (Base64, ≥ 256 bits) para assinar os tokens Bearer. Sem valor padrão — a aplicação **não sobe** sem isso. |
 | `JWT_ACCESS_EXPIRATION_MS` / `JWT_REFRESH_EXPIRATION_MS` | Não | Têm default (15 min / 7 dias) |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Só para testar login Google | Sem essas credenciais reais, o login local (JWT) funciona normalmente; só o botão "Entrar com Google" falha. Veja `README-AUTH.md` para o passo a passo de criação no Google Cloud Console. |
-| `OAUTH2_REDIRECT_URI` / `OAUTH2_FAILURE_REDIRECT_URI` | Não | Para onde o navegador volta após o login Google (sucesso/falha) |
 | `MAIL_USERNAME` / `MAIL_PASSWORD` | Só para testar "esqueci minha senha" | Credenciais SMTP (ex.: Mailtrap). Sem valor padrão — sem elas, a aplicação **não sobe**. `MAIL_HOST`/`MAIL_PORT` têm default (sandbox do Mailtrap). Veja `README-AUTH.md`. |
 | `PASSWORD_RESET_REDIRECT_URI` / `PASSWORD_RESET_EXPIRATION_MINUTES` | Não | Página do front-end para onde aponta o link de redefinição, e validade do token (têm default) |
 | `SWAGGER_USERNAME` / `SWAGGER_PASSWORD` | Sim | Credencial (Basic Auth) para abrir `/swagger-ui` e `/v3/api-docs` — combine com o time (frontend + backend), não é conta de usuário do app. Sem valor padrão — a aplicação **não sobe** sem isso. Veja `README-OPENAPI.md`. |
@@ -200,9 +196,8 @@ não repete a outra:
 mvn test
 
 # Integração (classes *IT.java, via Failsafe) — sobem um Postgres real via
-# Testcontainers e simulam o Google via WireMock. Precisa do Docker rodando
-# (seção 1.3). "mvn verify" roda os unitários e os de integração juntos; para
-# rodar só os de integração:
+# Testcontainers. Precisa do Docker rodando (seção 1.3). "mvn verify" roda os
+# unitários e os de integração juntos; para rodar só os de integração:
 mvn verify -Dskip.unit.tests=true
 ```
 
@@ -213,13 +208,10 @@ inválidas, usuário/categoria/match inexistente, remetente que não participa d
 conversa, etc.).
 
 **Integração** (`@SpringBootTest` + Postgres real via Testcontainers):
-endpoints REST de auth/itens/categorias/chat, o fluxo assíncrono completo
+endpoints REST de auth/itens/categorias/chat/perfil, o fluxo assíncrono completo
 `item criado → evento → motor de match → match persistido`
-(`MatchFlowIT`), a conexão WebSocket/STOMP autenticada do chat
-(`ChatWebSocketIT`), e o callback do login Google com o provedor simulado via
-WireMock (`GoogleOAuth2LoginIT`) — cobrindo tanto o cadastro de usuário novo
-quanto a vinculação de uma conta local já existente, e as falhas do provedor
-(sem e-mail no retorno, `code` recusado).
+(`MatchFlowIT`), e a conexão WebSocket/STOMP autenticada do chat
+(`ChatWebSocketIT`).
 
 ### 2.5. Rodando a aplicação
 
@@ -268,23 +260,18 @@ Resumo funcional — a justificativa técnica de cada item está em
   `com.achadosedevolvidos`, dividido em `auth`, `user`, `category`, `item`,
   `match`, `chat`, `config` e `shared`, eliminando a duplicidade de
   controllers/entidades do protótipo original.
-- **Schema de banco versionado via Flyway** (`V1` a `V11`, em
+- **Schema de banco versionado via Flyway** (`V1` a `V14`, em
   `src/main/resources/db/migration`), com `ddl-auto: validate` — o Hibernate
   deixou de criar/alterar tabelas por conta própria.
-- **Autenticação dupla e isolada** (detalhes em `README-AUTH.md`):
-  - Bearer JWT stateless (`/api/v1/auth/register|login|refresh`), com
-    `JwtService` e `JwtAuthenticationFilter` próprios.
-  - OAuth2 Login via Google (`/oauth2/authorization/google`), baseado em
-    sessão HTTP, com find-or-create de usuário por e-mail
-    (`CustomOAuth2UserService`).
-  - Os dois mecanismos não têm dependência de código um com o outro — uma
-    falha em um não derruba o outro. Ambos convergem só na interface
-    `AuthenticatedUser`, usada pelos Controllers via
-    `@AuthenticationPrincipal`.
+- **Autenticação via Bearer JWT stateless** (detalhes em `README-AUTH.md`):
+  `/api/v1/auth/register|login|refresh`, com `JwtService` e
+  `JwtAuthenticationFilter` próprios. Único mecanismo de login do app (o login
+  social via Google/OAuth2 existiu numa versão anterior e foi removido).
+  Controllers acessam o usuário autenticado via
+  `@AuthenticationPrincipal AuthenticatedUser`.
 - **`ItemController` corrigido**: antes lia `@RequestAttribute("userId")`
   (nunca populado por nenhum filtro); agora usa
-  `@AuthenticationPrincipal AuthenticatedUser`, funcionando com os dois
-  mecanismos de login.
+  `@AuthenticationPrincipal AuthenticatedUser`.
 - **WebSocket do chat autenticado**: `StompAuthChannelInterceptor` passou a
   exigir e validar um Bearer JWT no `CONNECT` do STOMP; o remetente da
   mensagem vem do `Principal` da sessão autenticada, nunca de um campo
@@ -311,9 +298,9 @@ Resumo funcional — a justificativa técnica de cada item está em
   com volume nomeado, dados persistentes) + `.env.example` como template —
   ver seção 2 acima.
 - **Suíte de testes unitários e de integração** (ver seção 2.4) — os de
-  integração usam Postgres real via Testcontainers e simulam o Google via
-  WireMock, cobrindo autenticação (JWT e OAuth2/Google), itens, categorias,
-  chat e o fluxo assíncrono completo de match.
+  integração usam Postgres real via Testcontainers, cobrindo autenticação
+  (JWT), itens, categorias, perfil de usuário, chat e o fluxo assíncrono
+  completo de match.
 - **Pipeline de CI no GitHub Actions** (ver seção 3) — compila e roda as duas
   suítes de teste a cada push/PR.
 - **Campo `shortDescription` em `Item`** (migrations `V10`/`V11`): itens
@@ -343,9 +330,6 @@ Resumo funcional — a justificativa técnica de cada item está em
 
 - Rate limiting no `/api/v1/auth/login`.
 - Busca geográfica por raio (PostGIS ou Haversine em SQL nativo).
-- Paginação em `/api/v1/items/search`.
-- Publicação do app OAuth2 no Google (hoje em modo "Testing", só e-mails
-  cadastrados como test user conseguem logar via Google).
 
 ---
 
@@ -358,12 +342,15 @@ POST /api/v1/auth/refresh
 POST /api/v1/auth/logout
 POST /api/v1/auth/forgot-password
 POST /api/v1/auth/reset-password
-GET  /oauth2/authorization/google
+
+GET   /api/v1/users/me
+PATCH /api/v1/users/me
+PATCH /api/v1/users/me/password
 
 GET  /api/v1/categories
 
 POST /api/v1/items
-GET  /api/v1/items/search?type=&categoryId=&query=
+GET  /api/v1/items/search?type=&categoryId=&query=&locationText=&dateFrom=&dateTo=&page=&size=&sort=
 GET  /api/v1/items/{id}
 GET  /api/v1/items/{id}/matches
 
@@ -377,8 +364,7 @@ WS   /ws  →  SEND /app/chat.sendMessage/{matchId}
 ```
 com.achadosedevolvidos
 ├── auth/          # Bearer JWT: controller, service, filtro, DTOs
-│   └── oauth2/    # OAuth2 Login (Google): isolado do JWT
-├── user/          # User + AuthenticatedUser (contrato comum aos dois logins)
+├── user/          # User, AuthenticatedUser, perfil (/users/me)
 ├── category/      # Categoria (entidade simples, CRUD de leitura)
 ├── item/          # Item, ItemImage, busca, DTOs, evento de criação
 ├── match/         # Match, motor de pontuação puro, orquestração

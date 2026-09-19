@@ -18,9 +18,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Entidade central de autenticação. É a mesma tabela/entidade usada pelos dois
- * mecanismos de login (local + JWT e Google + OAuth2), mas cada mecanismo lê/grava
- * essa entidade de forma independente — nenhum dos dois depende do outro em runtime.
+ * Entidade central de autenticação. Único mecanismo de login é o Bearer JWT
+ * (e-mail/senha) — o login via Google (OAuth2) foi removido do produto.
  */
 @Entity
 @Table(name = "users")
@@ -36,16 +35,11 @@ public class User extends BaseEntity implements UserDetails, AuthenticatedUser {
     @Column(nullable = false, unique = true)
     private String email;
 
-    /** Nulo para contas que só entram via Google (provider = GOOGLE). */
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AuthProvider provider;
 
     // --- Implementação de UserDetails (usada pelo fluxo de Bearer JWT) ---
 
@@ -80,11 +74,4 @@ public class User extends BaseEntity implements UserDetails, AuthenticatedUser {
     }
 
     public enum Role { USER, ADMIN }
-
-    /**
-     * LOCAL_AND_GOOGLE cobre o caso de um usuário que se cadastrou com e-mail/senha
-     * e depois também entrou com o Google usando o mesmo e-mail: ele mantém a senha
-     * local (continua podendo logar via JWT) e passa a poder logar via Google também.
-     */
-    public enum AuthProvider { LOCAL, GOOGLE, LOCAL_AND_GOOGLE }
 }

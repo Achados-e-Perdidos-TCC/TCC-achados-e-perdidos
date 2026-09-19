@@ -1,16 +1,11 @@
 package com.achadosedevolvidos.config;
 
 import com.achadosedevolvidos.auth.filter.JwtAuthenticationFilter;
-import com.achadosedevolvidos.auth.oauth2.CustomOAuth2UserService;
-import com.achadosedevolvidos.auth.oauth2.OAuth2LoginFailureHandler;
-import com.achadosedevolvidos.auth.oauth2.OAuth2LoginSuccessHandler;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,9 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,23 +25,20 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 /**
- * Configura TRÊS mecanismos de autenticação lado a lado, propositalmente isolados:
+ * Configura DOIS mecanismos de autenticação lado a lado, propositalmente isolados:
  *
  * <ul>
  *   <li><b>Bearer JWT</b>: stateless, validado por {@link JwtAuthenticationFilter}.
- *   Não depende do Google nem de nenhuma sessão HTTP.</li>
- *   <li><b>OAuth2 Login (Google)</b>: baseado em sessão HTTP (cookie), tratado pelo
- *   próprio {@code oauth2Login()} do Spring Security. Não gera nem depende de JWT.</li>
+ *   Único mecanismo de login do app.</li>
  *   <li><b>Basic Auth do Swagger</b>: credencial única e fixa (env vars
  *   {@code SWAGGER_USERNAME}/{@code SWAGGER_PASSWORD}), independente das contas de
  *   usuário do app — só protege {@code /swagger-ui/**} e {@code /v3/api-docs/**},
- *   numa {@link SecurityFilterChain} própria e isolada das outras duas.</li>
+ *   numa {@link SecurityFilterChain} própria e isolada da outra.</li>
  * </ul>
  *
- * Se um dos mecanismos falhar (ex.: chave JWT inválida, Google fora do ar, ou a
- * credencial do Swagger não configurada), os outros continuam funcionando
- * normalmente — nenhuma requisição autenticada por um mecanismo passa pelo código
- * do outro.
+ * Se um dos mecanismos falhar (ex.: chave JWT inválida, ou a credencial do Swagger
+ * não configurada), o outro continua funcionando normalmente — nenhuma requisição
+ * autenticada por um mecanismo passa pelo código do outro.
  */
 @Configuration
 @EnableWebSecurity
@@ -59,9 +48,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${cors.allowed-origins}")
@@ -113,28 +99,31 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        RequestMatcher authEndpoints = new AntPathRequestMatcher("/api/v1/auth/**");
-        RequestMatcher bearerRequests = this::isBearerTokenRequest;
-
         http
-                // CSRF continua ATIVO (protege o fluxo baseado em sessão do OAuth2 Login).
-                // É dispensado apenas para os endpoints de emissão de token e para
-                // requisições que já chegam com um Bearer token — essas não são
-                // vulneráveis a CSRF, pois o header Authorization não é enviado
-                // automaticamente pelo navegador como um cookie seria.
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers(authEndpoints, bearerRequests)
-                )
+                // Sem login baseado em sessão/cookie (era só o caso do OAuth2 Login,
+                // removido) — só resta o Bearer JWT, que não é vulnerável a CSRF (o
+                // header Authorization não é enviado automaticamente pelo navegador
+                // como um cookie seria). API 100% stateless: nenhuma sessão HTTP é
+                // criada nem consultada.
+                //
+                // ⚠️ Essa segurança depende de uma suposição do front-end que o
+                // backend não controla: o token (access/refresh) NUNCA pode ser
+                // guardado em cookie enviado automaticamente pelo navegador (nem
+                // httpOnly). Se isso mudar um dia — ex.: front-end migrar para
+                // cookie httpOnly como mitigação de XSS — CSRF passa a ser
+                // explorável de novo (o cookie viajaria sozinho em requisições
+                // cross-site, sem essa proteção pra barrar) e este `.disable()`
+                // precisa ser revertido junto. Ver README-AUTH.md.
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         // Sem isso: qualquer sendError() (ex.: o 401 disparado pela chain do
                         // Swagger para paths fora do seu securityMatcher) gera um forward
                         // interno para /error, que cai aqui e — sem essa regra — seria
-                        // barrado por anyRequest().authenticated() e redirecionado para o
-                        // login do Google em vez de devolver o status de erro correto.
+                        // barrado por anyRequest().authenticated() em vez de devolver o
+                        // status de erro correto.
                         .requestMatchers("/error").permitAll()
                         // Handshake do WebSocket: a autenticação real acontece no
                         // STOMP CONNECT (StompAuthChannelInterceptor), não aqui.
@@ -148,21 +137,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
-                // Mecanismo 1 — Bearer JWT
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                // Mecanismo 2 — OAuth2 Login (Google)
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .successHandler(oAuth2LoginSuccessHandler)
-                        .failureHandler(oAuth2LoginFailureHandler)
-                );
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    private boolean isBearerTokenRequest(HttpServletRequest request) {
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        return header != null && header.startsWith("Bearer ");
     }
 
     @Bean

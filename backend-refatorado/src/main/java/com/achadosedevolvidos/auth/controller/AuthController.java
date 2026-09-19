@@ -19,8 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Endpoints do mecanismo "Bearer Token". O login via Google não passa por aqui —
- * ele é tratado pelo fluxo padrão do Spring Security em /oauth2/authorization/google.
+ * Endpoints do mecanismo "Bearer Token" — único mecanismo de login do app.
  */
 @RestController
 @RequestMapping("/api/v1/auth")

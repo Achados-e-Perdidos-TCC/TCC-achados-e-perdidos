@@ -62,7 +62,7 @@ class ItemServiceImplTest {
         itemService = new ItemServiceImpl(itemRepository, categoryRepository, userRepository, new ItemMapper(), eventPublisher);
 
         user = User.builder().id(UUID.randomUUID()).name("Ana").email("ana@teste.com")
-                .role(User.Role.USER).provider(User.AuthProvider.LOCAL).build();
+                .role(User.Role.USER).build();
         category = Category.builder().id(UUID.randomUUID()).name("Eletrônicos").build();
     }
 
