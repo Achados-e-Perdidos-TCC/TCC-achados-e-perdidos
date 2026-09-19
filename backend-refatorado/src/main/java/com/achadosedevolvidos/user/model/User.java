@@ -41,6 +41,13 @@ public class User extends BaseEntity implements UserDetails, AuthenticatedUser {
     @Column(nullable = false)
     private Role role;
 
+    private String phone;
+
+    private String city;
+
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
     // --- Implementação de UserDetails (usada pelo fluxo de Bearer JWT) ---
 
     @Override
