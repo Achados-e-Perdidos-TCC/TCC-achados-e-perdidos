@@ -10,6 +10,15 @@
 
 Documentação relacionada:
 
+- **`README-BACKEND-SETUP.md`** — se você é do time de backend: linguagem,
+  versões, dependências e ferramentas que precisam estar na sua máquina.
+  Comece por aqui.
+- **`README-BACKEND-ENDPOINTS.md`** — catálogo de todos os endpoints já
+  implementados (o que cada um faz e exige) e o que ainda falta fazer.
+- **`README-FRONTEND.md`** — guia único para o time de front-end: catálogo
+  completo de endpoints (request/response de cada um) e todas as regras de
+  segurança que o cliente precisa respeitar (armazenamento de token, CORS,
+  autenticação do WebSocket, etc.). Comece por aqui se você é do front-end.
 - **`ARQUITETURA.md`** — o que mudou no refactor e por quê (desacoplamento,
   Flyway, estrutura de pacotes).
 - **`README-AUTH.md`** — detalhes do mecanismo de autenticação (Bearer JWT):
@@ -320,6 +329,18 @@ Resumo funcional — a justificativa técnica de cada item está em
   `avatar_url`): atualização parcial (campo omitido = inalterado) e troca de
   senha exigindo a senha atual, revogando todos os refresh tokens da conta
   ao final — mesma lógica de segurança do reset de senha.
+- **Preferências de notificação** (`PATCH /users/me/preferences`; migration
+  `V16` cria a tabela `user_preferences`): liga/desliga notificações, alertas
+  de match e e-mails, numa tabela própria (não colunas em `users`) criada sob
+  demanda na primeira atualização — até lá `GET /users/me` devolve os valores
+  padrão (tudo habilitado).
+- **Exclusão de conta é soft delete** (`DELETE /users/me`; migration `V15`
+  adiciona `active` em `users`): marca `active = false` em vez de apagar a
+  linha, revoga todos os refresh tokens e marca os itens do próprio usuário
+  como `INATIVO`. `active = false` bloqueia login novo (`DisabledException` do
+  `DaoAuthenticationProvider`) **e** um access token já emitido antes da
+  exclusão (`JwtAuthenticationFilter` passou a checar `isEnabled()`, além da
+  validade do JWT). Detalhes em `ARQUITETURA.md`, seção 14.
 - **CRUD completo de `Item` além da criação**: `GET /items/me` ("meus
   objetos", com um filtro `status` combinado que aceita tanto `type`
   quanto `status` real), `PATCH /items/{id}` (edição parcial) e
@@ -372,9 +393,11 @@ POST /api/v1/auth/logout
 POST /api/v1/auth/forgot-password
 POST /api/v1/auth/reset-password
 
-GET   /api/v1/users/me
-PATCH /api/v1/users/me
-PATCH /api/v1/users/me/password
+GET    /api/v1/users/me
+PATCH  /api/v1/users/me
+PATCH  /api/v1/users/me/password
+PATCH  /api/v1/users/me/preferences
+DELETE /api/v1/users/me                        (soft delete — ver README-FRONTEND.md)
 
 GET  /api/v1/categories
 
