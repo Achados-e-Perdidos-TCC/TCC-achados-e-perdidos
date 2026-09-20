@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,8 +22,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(ex.getStatus()).body(new ApiError(ex.getStatus().value(), ex.getMessage()));
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex) {
+    /**
+     * Cobre tanto credenciais erradas (BadCredentialsException) quanto login de
+     * conta desativada via soft delete (DisabledException, lançada pelo
+     * DaoAuthenticationProvider quando User.isEnabled() retorna false) — ambas
+     * respondem com a mesma mensagem genérica para não revelar se o e-mail existe.
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiError(HttpStatus.UNAUTHORIZED.value(), "Credenciais inválidas"));
     }
