@@ -84,11 +84,11 @@ class ItemServiceImplTest {
 
         ItemResponse response = itemService.createAndAnalyze(user.getId(), request);
 
-        assertThat(response.title()).isEqualTo("Carteira preta");
-        assertThat(response.userId()).isEqualTo(user.getId());
-        assertThat(response.categoryId()).isEqualTo(category.getId());
-        assertThat(response.shortDescription()).isEqualTo("Carteira preta perdida");
-        assertThat(response.images()).hasSize(1);
+        assertThat(response.nome()).isEqualTo("Carteira preta");
+        assertThat(response.status()).isEqualTo("PERDIDO");
+        assertThat(response.categoria()).isEqualTo("Eletrônicos");
+        assertThat(response.descricao()).isEqualTo("Carteira preta perdida");
+        assertThat(response.imagensSecundarias()).hasSize(1);
 
         ArgumentCaptor<ItemCreatedEvent> eventCaptor = ArgumentCaptor.forClass(ItemCreatedEvent.class);
         verify(eventPublisher).publishEvent(eventCaptor.capture());
@@ -134,7 +134,7 @@ class ItemServiceImplTest {
         ItemResponse response = itemService.findById(item.getId());
 
         assertThat(response.id()).isEqualTo(item.getId());
-        assertThat(response.title()).isEqualTo("Chaveiro");
+        assertThat(response.nome()).isEqualTo("Chaveiro");
     }
 
     @Test
