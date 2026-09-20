@@ -101,6 +101,11 @@ public abstract class IntegrationTestSupport {
         // acima.
         registry.add("app.swagger.username", () -> "swagger-teste");
         registry.add("app.swagger.password", () -> "senha-swagger-teste");
+
+        // Diretório temporário da JVM em vez do "./uploads" real do projeto —
+        // os arquivos de teste do FileStorageService não devem sujar o
+        // working directory do repositório.
+        registry.add("app.upload.dir", () -> System.getProperty("java.io.tmpdir") + "/achados-uploads-teste");
     }
 
     @Autowired
