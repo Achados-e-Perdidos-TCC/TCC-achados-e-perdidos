@@ -59,7 +59,7 @@ public class StompAuthChannelInterceptor implements ChannelInterceptor {
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new AppException("Usuário do token não encontrado", HttpStatus.UNAUTHORIZED));
 
-            if (!jwtService.isTokenValid(token, user)) {
+            if (!jwtService.isTokenValid(token, user) || !user.isEnabled()) {
                 throw new AppException("Token expirado ou inválido na conexão WebSocket", HttpStatus.UNAUTHORIZED);
             }
 

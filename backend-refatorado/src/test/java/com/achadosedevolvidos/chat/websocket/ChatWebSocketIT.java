@@ -36,6 +36,8 @@ import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integração real de WebSocket/STOMP (não MockMvc — precisa de um servidor de
@@ -107,6 +109,26 @@ class ChatWebSocketIT extends IntegrationTestSupport {
 
         CompletableFuture<StompSession> connectFuture = stompClient.connectAsync(
                 wsUrl(), new WebSocketHttpHeaders(), new StompHeaders(), new StompSessionHandlerAdapter() {}
+        );
+
+        assertThatThrownBy(() -> connectFuture.get(5, TimeUnit.SECONDS))
+                .isInstanceOfAny(ExecutionException.class, TimeoutException.class);
+    }
+
+    @Test
+    void rainyDay_conexaoComTokenDeContaDesativadaDeveSerRecusada() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Conta Desativada WS");
+
+        mockMvc.perform(delete("/api/v1/users/me")
+                        .header("Authorization", user.authorizationHeader()))
+                .andExpect(status().isOk());
+
+        WebSocketStompClient stompClient = buildStompClient();
+        StompHeaders connectHeaders = new StompHeaders();
+        connectHeaders.add("Authorization", user.authorizationHeader());
+
+        CompletableFuture<StompSession> connectFuture = stompClient.connectAsync(
+                wsUrl(), new WebSocketHttpHeaders(), connectHeaders, new StompSessionHandlerAdapter() {}
         );
 
         assertThatThrownBy(() -> connectFuture.get(5, TimeUnit.SECONDS))
