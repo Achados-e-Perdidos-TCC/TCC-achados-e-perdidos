@@ -208,7 +208,9 @@ inválidas, usuário/categoria/match inexistente, remetente que não participa d
 conversa, etc.).
 
 **Integração** (`@SpringBootTest` + Postgres real via Testcontainers):
-endpoints REST de auth/itens/categorias/chat/perfil, o fluxo assíncrono completo
+endpoints REST de auth/itens/categorias/chat/perfil/upload (CRUD completo de
+item incluído: edição, exclusão, troca de status e o filtro combinado de
+`/items/me`), o fluxo assíncrono completo
 `item criado → evento → motor de match → match persistido`
 (`MatchFlowIT`), e a conexão WebSocket/STOMP autenticada do chat
 (`ChatWebSocketIT`).
@@ -307,6 +309,33 @@ Resumo funcional — a justificativa técnica de cada item está em
   passaram a ter uma descrição curta (`short_description`, até 100
   caracteres, obrigatória) usada em listagens, além da descrição completa
   (`description`), que também se tornou obrigatória — antes aceitava `NULL`.
+- **`ItemResponse` reestruturado** no formato acordado com o front-end
+  (`nome`, `categoria`, `status` = o `type` PERDIDO/ENCONTRADO,
+  `localizacao` e `data` aninhados) — usado tanto no detalhe/busca quanto no
+  retorno do cadastro. O status real de workflow (`Item.ItemStatus`) não
+  aparece nessa estrutura; é consultado via o filtro combinado de
+  `GET /items/me` (ver abaixo).
+- **Módulo `user/` — perfil do usuário** (`GET/PATCH /users/me`,
+  `PATCH /users/me/password`; migration `V14` adiciona `phone`/`city`/
+  `avatar_url`): atualização parcial (campo omitido = inalterado) e troca de
+  senha exigindo a senha atual, revogando todos os refresh tokens da conta
+  ao final — mesma lógica de segurança do reset de senha.
+- **CRUD completo de `Item` além da criação**: `GET /items/me` ("meus
+  objetos", com um filtro `status` combinado que aceita tanto `type`
+  quanto `status` real), `PATCH /items/{id}` (edição parcial) e
+  `PATCH /items/{id}/status`, ambos restritos ao dono (`403` pra quem não
+  é). `DELETE /items/{id}` é soft delete (`status = INATIVO`) em vez de
+  apagar a linha — evita quebrar `matches`/mensagens já vinculados ao item,
+  que não têm `ON DELETE CASCADE`; o item some da busca pública e do
+  detalhe, mas continua visível no histórico do próprio dono.
+- **Módulo `upload/` — envio de imagens**: `POST /api/v1/uploads/images`
+  (multipart) grava em disco local (`app.upload.dir`, default `./uploads`,
+  servido de volta em `/uploads/**`) e devolve a URL a ser usada em
+  `imageUrls` no cadastro de item ou como `avatarUrl` do perfil. Nome do
+  arquivo em disco é **sempre gerado por UUID** e a extensão é escolhida a
+  partir do `Content-Type` declarado contra uma lista fixa (JPEG/PNG/WEBP/
+  GIF) — nunca a partir do nome/tipo enviado pelo cliente, o que evita path
+  traversal e upload de arquivo disfarçado de imagem.
 - **3 bugs de correção encontrados e corrigidos ao escrever os testes de
   integração** (nenhum coberto antes, porque testes com mocks não exercitam
   proxies do Hibernate nem o ciclo de vida real de uma transação):
@@ -349,10 +378,17 @@ PATCH /api/v1/users/me/password
 
 GET  /api/v1/categories
 
-POST /api/v1/items
-GET  /api/v1/items/search?type=&categoryId=&query=&locationText=&dateFrom=&dateTo=&page=&size=&sort=
-GET  /api/v1/items/{id}
-GET  /api/v1/items/{id}/matches
+POST   /api/v1/items
+GET    /api/v1/items/search?type=&categoryId=&query=&locationText=&dateFrom=&dateTo=&page=&size=&sort=
+GET    /api/v1/items/{id}
+GET    /api/v1/items/{id}/matches
+GET    /api/v1/items/me?status=                (filtro aceita type OU status, ver ItemServiceImpl)
+PATCH  /api/v1/items/{id}                      (dono)
+DELETE /api/v1/items/{id}                      (dono — soft delete, status=INATIVO)
+PATCH  /api/v1/items/{id}/status               (dono)
+
+POST /api/v1/uploads/images                    (multipart, devolve { url })
+GET  /uploads/{arquivo}                        (serve a imagem enviada, público)
 
 GET  /api/v1/matches/{matchId}/messages        (histórico do chat)
 WS   /ws  →  SEND /app/chat.sendMessage/{matchId}
@@ -367,6 +403,7 @@ com.achadosedevolvidos
 ├── user/          # User, AuthenticatedUser, perfil (/users/me)
 ├── category/      # Categoria (entidade simples, CRUD de leitura)
 ├── item/          # Item, ItemImage, busca, DTOs, evento de criação
+├── upload/        # Upload de imagens (multipart) para disco local
 ├── match/         # Match, motor de pontuação puro, orquestração
 ├── chat/          # Mensagens por match, WebSocket autenticado
 ├── config/        # Security, WebSocket, Async, beans de autenticação
