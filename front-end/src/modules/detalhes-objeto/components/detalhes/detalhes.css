@@ -1,0 +1,91 @@
+.detalhes{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 2.5rem;
+}
+
+/* img */
+
+.icons{ height: 2.7rem }
+
+.circulo__blue{ height: 1.5rem }
+
+/* titulo/descricao */
+
+.detalhes__titulo{
+    font-size: 3.5rem;
+    color: var(--primary-color-text);
+    font-weight: 500;
+}
+
+.detalhes__descricao{
+    font-size: 1.5rem;
+    color: var(--secondary-color-gray);
+    max-width: 65ch;
+}
+
+.detalhes__descricao__adicional{
+    font-size: 1.5rem;
+    color: var(--primary-color-text);
+    max-width: 65ch;
+}
+
+.detalhes__infos{
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 1.8rem;
+}
+
+.infos__icons{
+    display: flex;
+    gap: 0.8rem;
+}
+
+.infos__categoria, .infos__text{
+    font-size: 1.4rem;
+    color: var(--secondary-color-gray); 
+}
+
+.infos__text{ 
+    font-size: 1.5rem;
+    max-width: 28ch;
+    color: var(--primary-color-text)
+}
+
+/* card */
+
+.card__infos{
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    border: 0.2rem solid var(--border-color);
+    background-color: var(--card-color);
+    border-radius: 1rem;
+    padding: 2.5rem;
+    flex: 1;
+    overflow: auto;
+}
+
+.detalhes__objeto__title{
+    color: var(--primary-color-text);
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.detalhes__objeto__subtitle{ 
+    color: var(--primary-color-text);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.detalhes__objeto__descricaoCompleta{
+    max-width: 65ch;
+}
+
+.informacoes__adicionais{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; 
+}

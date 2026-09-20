@@ -33,3 +33,14 @@
     color: var(--primary-color-blue)
 }
 
+/* principal */
+
+.container__detalhes{ 
+    display: flex;
+    gap: 7rem;
+}
+
+.esquerda{ width: 45% }
+
+.direita { max-height: 75rem }
+

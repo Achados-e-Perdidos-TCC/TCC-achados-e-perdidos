@@ -10,22 +10,9 @@ function ImagesCards(objeto) {
     const objetoEncontrado = objeto.objeto[0]
 
     const [imagemExibida, setImagemExibida] = useState(objetoEncontrado.imagemPrincipal);
-    const [imagensSecundarias, setImagensSecundarias] = useState(objetoEncontrado.imagensSecundarias);
+    const [imagensSecundarias] = useState([imagemExibida, ...objetoEncontrado.imagensSecundarias]);
 
-    function alternarImagem(imagemClicada) {
-
-        setImagensSecundarias((imagensAtuais) => {
-
-            const novasImagens = [...imagensAtuais];
-            const posicao = novasImagens.indexOf(imagemClicada);
-
-            novasImagens[posicao] = imagemExibida;
-
-            return novasImagens;
-        })
-
-        setImagemExibida(imagemClicada);
-    }
+    function alternarImagem(imagemClicada) { setImagemExibida(imagemClicada)}
 
     const [inicio, setInicio] = useState(0);
     const [fim, setFim] = useState(4);
@@ -56,7 +43,7 @@ function ImagesCards(objeto) {
                     {imagensSecundarias.slice(inicio, fim).map((imagens) => {
                         return (
                             <div onClick={() => { alternarImagem(imagens) }}>
-                                <img className='imagem__secundaria' src={imagens} />
+                                <img className={imagemExibida === imagens ? 'imagem__secundaria card__ativo' : 'imagem__secundaria'} src={imagens} />
                             </div>
                         )
                     })}

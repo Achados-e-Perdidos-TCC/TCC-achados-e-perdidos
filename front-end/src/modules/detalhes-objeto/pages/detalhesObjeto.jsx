@@ -9,6 +9,7 @@ import arrowGray from '../../../assets/icons/detalhesObjeto/arrow-gray.svg';
 import arrowBlue from '../../../assets/icons/detalhesObjeto/arrow-blue.svg'; 
 
 import ImagesCard from '../components/imagesCard/ImagesCard.jsx'; 
+import Detalhes from '../components/detalhes/Detalhes.jsx'; 
 
 function detalhesObjeto(){
 
@@ -37,14 +38,14 @@ function detalhesObjeto(){
                         </div>
                 </div>
 
-                <div className='container__principal'>
+                <div className='container__detalhes'>
 
                     <div className='esquerda'>
                         <ImagesCard objeto={objetoEncontrado} />
                     </div>
 
                     <div className='direita'>
-                        
+                        <Detalhes objeto={objetoEncontrado} />
                     </div>
 
                 </div>

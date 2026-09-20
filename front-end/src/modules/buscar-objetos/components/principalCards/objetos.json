@@ -7,7 +7,7 @@
         "status": "PERDIDO",
         "categoria": "Bolas",
         "icon_url": "https://img.icons8.com/?size=100&id=72717&format=png&color=737373",
-        "descricao": "Carteira de couro preta com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema.",
+        "descricao": "Carteira de couro preta com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema. Possui acabamento simples, tamanho compacto e alguns compartimentos internos. No momento em que foi encontrada, estava fechada e sem outros objetos aparentes em seu interior. A carteira apresenta marcas naturais de uso, mas permanece em bom estado de conservação.",
 
         "imagensSecundarias": [
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQccVjZCpeX0ckikG-yoV08Wuy6wmAp-ZX6qecKz4RGQZQyEdYxrPoGtTo&s=10",
@@ -19,16 +19,16 @@
         ],
 
         "localizacao": {
-            "endereco": "Ipanema",
-            "cidade": "Rio de Janeiro",
-            "estado": "RJ",
+            "endereco": "Centro",
+            "cidade": "São José do Rio Preto",
+            "estado": "SP",
            "latitude": -22.9875,
             "longitude": -43.2049,
             "complemento": "Região próxima ao Posto 8 da Praia de Ipanema."
         },
 
         "data": {
-            "data": "2026-09-17",
+            "data": "2026-09-16",
             "hora": "12:30"
         }
     },
