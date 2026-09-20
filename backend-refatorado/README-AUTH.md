@@ -77,6 +77,11 @@ Erros seguem o padrão já existente do resto da API: `ApiError { status, messag
   sucedido, qualquer `accessToken`/`refreshToken` emitido antes deixa de
   funcionar — inclusive o da própria aba que iniciou o fluxo, se ela estava
   logada. Espere ter que redirecionar para a tela de login após o reset.
+- **`DELETE /users/me` também invalida tudo, na hora**: é um soft delete (a
+  conta é desativada, não apagada), mas o efeito sobre os tokens é o mesmo de
+  um reset de senha — o `accessToken` atual para de funcionar já na próxima
+  requisição, `refreshToken` some, e login futuro com essa conta passa a
+  responder `401`. Detalhes de request/response em `README-FRONTEND.md`.
 - **Sem cookies/sessão**: a API é 100% stateless. Não é preciso `credentials:
   'include'`/`withCredentials: true`, nem lidar com CSRF — toda a segurança de
   estado é feita via o header `Authorization: Bearer <token>`.

@@ -30,7 +30,7 @@ subida da aplicação, se as entidades batem com o schema já existente. Ele nun
 cria, altera ou apaga uma tabela.
 
 Quem efetivamente cria e versiona o schema é o **Flyway**
-(`src/main/resources/db/migration/V1` a `V14`):
+(`src/main/resources/db/migration/V1` a `V16`):
 
 | Migration | Conteúdo |
 |---|---|
@@ -47,6 +47,8 @@ Quem efetivamente cria e versiona o schema é o **Flyway**
 | V12 | `icon_url` em `categories` |
 | V13 | remove a coluna `provider` de `users` (login via Google/OAuth2 removido) |
 | V14 | `phone`/`city`/`avatar_url` em `users` (perfil, `GET/PATCH /users/me`) |
+| V15 | `active` (boolean, default `true`) em `users` — soft delete de conta (`DELETE /users/me`) |
+| V16 | `user_preferences` (tabela separada — `notifications_enabled`/`match_alerts_enabled`/`emails_enabled`, `PATCH /users/me/preferences`) |
 
 Vantagens diretas: histórico de mudanças de schema versionado e revisável em PR,
 mesmo comportamento em dev/homologação/produção, e nenhuma surpresa de o Hibernate
@@ -216,7 +218,57 @@ e o upload de imagens), o fluxo assíncrono item→evento→match, e a conexão
 WebSocket/STOMP autenticada. Pipeline de CI em
 `.github/workflows/backend-ci.yml`.
 
-## 13. O que ainda fica para depois (fora do escopo deste refactor)
+## 14. Soft delete de conta e preferências de usuário (`user/`)
+
+- **Preferências em tabela própria, não colunas em `users`**: `UserPreferences`
+  é uma entidade separada (`@OneToOne` para `User` via `user_id` único),
+  decisão deliberada em vez de simplesmente adicionar três colunas booleanas
+  em `users` — mantém a tabela de autenticação enxuta e deixa mais natural
+  crescer o conjunto de preferências no futuro sem mexer em `User`. A linha
+  é criada sob demanda (find-or-create em `UserServiceImpl.updatePreferences`)
+  na primeira chamada a `PATCH /users/me/preferences`; até lá, `GET /users/me`
+  devolve os valores padrão (tudo habilitado) sem precisar de nenhuma linha
+  no banco — `UserMapper.toPreferencesResponse` trata `null` como "ainda não
+  configurado, usar default".
+- **`DELETE /users/me` é soft delete, não hard delete**: mesma motivação do
+  soft delete de `Item` (seção 10) — o usuário já pode ter itens, matches e
+  mensagens vinculados, sem `ON DELETE CASCADE`. Em vez de apagar a linha,
+  marca `active = false` em `User` e:
+  1. Revoga todos os refresh tokens da conta (`RefreshTokenRepository.revokeAllByUserId`,
+     mesmo mecanismo já usado por troca/reset de senha) — bloqueia
+     `POST /auth/refresh` dali em diante.
+  2. Marca todos os itens do usuário como `INATIVO`
+     (`ItemRepository.updateStatusForAllByUserId`, um `UPDATE` em massa —
+     não carrega os itens em memória um a um).
+- **`active = false` precisa bloquear em DOIS pontos, não só no login**: uma
+  conta desativada não pode continuar autenticada com um access token emitido
+  *antes* da exclusão (JWT continua criptograficamente válido até expirar,
+  independente do estado da conta no banco). Por isso a checagem de
+  `User.isEnabled()` (agora retorna `active` em vez de sempre `true`) foi
+  reforçada em dois lugares:
+  1. **Login novo**: `DaoAuthenticationProvider` já checa `isEnabled()`
+     sozinho antes de autenticar e lança `DisabledException` — só foi preciso
+     ampliar `GlobalExceptionHandler` de `BadCredentialsException` para o
+     supertipo `AuthenticationException`, senão a exceção caía no handler
+     genérico e virava `500` em vez do `401` esperado.
+  2. **Token já emitido**: `JwtAuthenticationFilter` validava só a assinatura/
+     expiração do JWT (`jwtService.isTokenValid`) e nunca olhava o estado da
+     conta — um usuário desativado continuava autenticado em qualquer
+     requisição até o token expirar. Agora o filtro também exige
+     `userDetails.isEnabled()` antes de popular o `SecurityContext`.
+- **`StompAuthChannelInterceptor` também checa `isEnabled()`**: o WebSocket do
+  chat validava só assinatura/expiração do JWT no `CONNECT`
+  (`jwtService.isTokenValid`) — mesmo gap que existia no
+  `JwtAuthenticationFilter` antes desta mudança. Uma conta desativada com um
+  access token ainda não expirado conseguia abrir uma nova conexão STOMP e
+  enviar mensagem. Corrigido somando `!user.isEnabled()` à condição que já
+  rejeita o `CONNECT` — mesmo tratamento (`401`/conexão recusada) de um token
+  inválido ou expirado. Coberto por
+  `ChatWebSocketIT.rainyDay_conexaoComTokenDeContaDesativadaDeveSerRecusada`
+  (desativa a conta via `DELETE /users/me` e tenta conectar com o mesmo
+  access token em seguida).
+
+## 15. O que ainda fica para depois (fora do escopo deste refactor)
 
 - Rate limiting no `/api/v1/auth/login`.
 - Busca geográfica por raio (PostGIS).
