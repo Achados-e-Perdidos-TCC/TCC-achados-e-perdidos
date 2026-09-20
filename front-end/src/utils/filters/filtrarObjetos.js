@@ -10,8 +10,8 @@ function objetosAprovados(objetos, primaryFilters){
         if (valorCategorias === 'LOCALIZAÇÃO') {
 
             const termosBusca = primaryFilters[valorCategorias].toUpperCase().split(' ');
-            const cidadeObjeto = objetos.cidade.toUpperCase();
-            const enderecoObjeto = objetos.endereco.toUpperCase();
+            const cidadeObjeto = objetos.localizacao.cidade.toUpperCase();
+            const enderecoObjeto = objetos.localizacao.endereco.toUpperCase();
 
             // every funciona igual o filter, a diferenca é que o filter retorna um novo array, o every retorna um boolean
             const objetosEncontrados = termosBusca.every((valorEncontrados) => {

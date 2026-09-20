@@ -94,7 +94,7 @@ o *comportamento* continuam no README dedicado de cada módulo.
 
 ## 4. Endpoints de auth já cobertos
 
-Os 7 endpoints documentados em `README-AUTH.md` (register, login, refresh,
-logout, forgot-password, reset-password, login Google) já aparecem na spec —
-confirmado rodando a aplicação localmente e conferindo `/v3/api-docs`. Não é
-necessário nenhum passo extra além do que está na seção 1 acima.
+Os 6 endpoints documentados em `README-AUTH.md` (register, login, refresh,
+logout, forgot-password, reset-password) já aparecem na spec — confirmado
+rodando a aplicação localmente e conferindo `/v3/api-docs`. Não é necessário
+nenhum passo extra além do que está na seção 1 acima.

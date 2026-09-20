@@ -81,9 +81,9 @@ class ChatHistoryControllerIT extends IntegrationTestSupport {
     }
 
     @Test
-    void rainyDay_semAutenticacaoDeveSerRedirecionado() throws Exception {
+    void rainyDay_semAutenticacaoDeveSerRecusado() throws Exception {
         mockMvc.perform(get("/api/v1/matches/" + UUID.randomUUID() + "/messages"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isForbidden());
     }
 
     private Match criarMatchEntre(AuthenticatedTestUser dono1, AuthenticatedTestUser dono2) {

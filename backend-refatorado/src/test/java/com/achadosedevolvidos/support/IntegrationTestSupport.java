@@ -70,10 +70,10 @@ public abstract class IntegrationTestSupport {
     static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16");
 
     /**
-     * Servidor SMTP fake em memória — mesmo papel que o WireMock cumpre para o
-     * Google OAuth2: o teste de reset de senha precisa do token BRUTO, que só
-     * existe no corpo do e-mail de verdade (no banco só fica o hash), então nada
-     * de mockar EmailService — precisamos interceptar o e-mail assíncrono real.
+     * Servidor SMTP fake em memória — o teste de reset de senha precisa do token
+     * BRUTO, que só existe no corpo do e-mail de verdade (no banco só fica o
+     * hash), então nada de mockar EmailService — precisamos interceptar o e-mail
+     * assíncrono real.
      */
     protected static final GreenMail GREEN_MAIL = new GreenMail(ServerSetupTest.SMTP);
 
@@ -85,8 +85,8 @@ public abstract class IntegrationTestSupport {
 
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {
-        // app.jwt.secret não tem valor default no application.yml (ao contrário de
-        // GOOGLE_CLIENT_ID/SECRET) — sem isso o contexto Spring nem sobe.
+        // app.jwt.secret não tem valor default no application.yml — sem isso o
+        // contexto Spring nem sobe.
         registry.add("app.jwt.secret", () -> TEST_JWT_SECRET);
 
         registry.add("spring.mail.host", () -> "localhost");
@@ -101,6 +101,11 @@ public abstract class IntegrationTestSupport {
         // acima.
         registry.add("app.swagger.username", () -> "swagger-teste");
         registry.add("app.swagger.password", () -> "senha-swagger-teste");
+
+        // Diretório temporário da JVM em vez do "./uploads" real do projeto —
+        // os arquivos de teste do FileStorageService não devem sujar o
+        // working directory do repositório.
+        registry.add("app.upload.dir", () -> System.getProperty("java.io.tmpdir") + "/achados-uploads-teste");
     }
 
     @Autowired

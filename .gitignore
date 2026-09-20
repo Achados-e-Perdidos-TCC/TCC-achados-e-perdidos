@@ -122,6 +122,9 @@ fabric.properties
 ### Maven ###
 target/
 
+### Uploads locais (POST /api/v1/uploads/images) ###
+backend-refatorado/uploads/
+
 ### Java ###
 # Compiled class file
 *.class

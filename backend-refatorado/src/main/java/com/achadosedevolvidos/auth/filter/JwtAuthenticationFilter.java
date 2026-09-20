@@ -23,8 +23,8 @@ import java.io.IOException;
 /**
  * Mecanismo de autorização "Bearer Token": roda em toda requisição, mas só age
  * quando existe um header Authorization: Bearer <jwt>. Se não houver, a requisição
- * simplesmente segue adiante (podendo ser autenticada pelo fluxo OAuth2/sessão,
- * ou barrada depois por authorizeHttpRequests caso nenhum dos dois se aplique).
+ * simplesmente segue adiante e é barrada depois por authorizeHttpRequests caso a
+ * rota exija autenticação.
  */
 @Component
 @RequiredArgsConstructor
@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+                if (jwtService.isTokenValid(jwt, userDetails) && userDetails.isEnabled()) {
                     var authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()
                     );

@@ -15,10 +15,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Gera e valida os JWT usados exclusivamente pelo fluxo de login local
- * (e-mail/senha). Este serviço não conhece nem depende do fluxo OAuth2/Google —
- * essa separação é proposital, para que uma falha aqui (ex.: chave de assinatura
- * mal configurada) não derrube o login via Google, e vice-versa.
+ * Gera e valida os JWT usados pelo fluxo de login local (e-mail/senha) — único
+ * mecanismo de login do app.
  */
 @Service
 public class JwtService {

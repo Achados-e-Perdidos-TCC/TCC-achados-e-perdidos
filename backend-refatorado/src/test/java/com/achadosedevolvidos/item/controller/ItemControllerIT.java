@@ -2,17 +2,22 @@ package com.achadosedevolvidos.item.controller;
 
 import com.achadosedevolvidos.item.dto.CreateItemRequest;
 import com.achadosedevolvidos.item.dto.ItemResponse;
+import com.achadosedevolvidos.item.dto.UpdateItemRequest;
+import com.achadosedevolvidos.item.dto.UpdateItemStatusRequest;
 import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.support.IntegrationTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,12 +47,12 @@ class ItemControllerIT extends IntegrationTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.title").value(marcador + " carteira preta"))
-                .andExpect(jsonPath("$.status").value("ANALISANDO"))
-                .andExpect(jsonPath("$.shortDescription").value("Carteira preta perdida"))
+                .andExpect(jsonPath("$.nome").value(marcador + " carteira preta"))
+                .andExpect(jsonPath("$.status").value("PERDIDO"))
+                .andExpect(jsonPath("$.descricao").value("Carteira preta perdida"))
                 .andReturn();
 
-        ItemResponse created = objectMapper.readValue(createResult.getResponse().getContentAsString(), ItemResponse.class);
+        ItemResponse created = objectMapper.readValue(createResult.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class);
 
         mockMvc.perform(get("/api/v1/items/" + created.id()))
                 .andExpect(status().isOk())
@@ -57,7 +62,7 @@ class ItemControllerIT extends IntegrationTestSupport {
                         .param("type", "PERDIDO")
                         .param("query", marcador))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[?(@.id == '" + created.id() + "')]").exists());
+                .andExpect(jsonPath("$.content[?(@.id == '" + created.id() + "')]").exists());
 
         // Endpoint autenticado (não é o dono de nada além do próprio item, mas
         // qualquer usuário logado pode consultar matches de um item público).
@@ -77,19 +82,16 @@ class ItemControllerIT extends IntegrationTestSupport {
         mockMvc.perform(post("/api/v1/items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                // Sem header Authorization nenhum (nem "Bearer" inválido), o CsrfFilter
-                // intercepta antes mesmo da autenticação: POST fora de /api/v1/auth/**
-                // e sem "Authorization: Bearer ..." não está na lista de
-                // ignoringRequestMatchers do SecurityConfig, e sem cookie/; header
-                // XSRF-TOKEN a requisição é barrada com 403 (ver rainyDay abaixo com
-                // Bearer inválido, que já ignora CSRF e cai no redirect do oauth2Login).
+                // Sem header Authorization nenhum: cai no anyRequest().authenticated()
+                // e é barrada pelo Http403ForbiddenEntryPoint padrão (nenhum mecanismo
+                // de login baseado em sessão/redirect está configurado — só Bearer JWT).
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void rainyDay_deveRecusarConsultaDeMatchesSemAutenticacao() throws Exception {
         mockMvc.perform(get("/api/v1/items/" + UUID.randomUUID() + "/matches"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -123,7 +125,7 @@ class ItemControllerIT extends IntegrationTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.shortDescription").value(descricaoCurtaNoLimite));
+                .andExpect(jsonPath("$.descricao").value(descricaoCurtaNoLimite));
     }
 
     @Test
@@ -251,13 +253,259 @@ class ItemControllerIT extends IntegrationTestSupport {
                         .header("Authorization", "Bearer isto-nao-eh-um-jwt")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isForbidden());
     }
 
     @Test
     void sunnyDay_buscaSemFiltrosNaoQuebra() throws Exception {
         mockMvc.perform(get("/api/v1/items/search"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$.content").isArray());
+    }
+
+    @Test
+    void sunnyDay_buscaComLocationTextEIntervaloDeDatasFiltraCorretamente() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Filtro Data e Local");
+        String marcador = "Marcador-" + UUID.randomUUID();
+        LocalDateTime ontem = LocalDateTime.now().minusDays(1);
+
+        CreateItemRequest request = new CreateItemRequest(
+                Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, marcador + " chaveiro",
+                "Perdido no centro", "Chaveiro perdido", "Praca Central, Bloco A", -23.5505, -46.6333,
+                ontem, null
+        );
+
+        MvcResult createResult = mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        ItemResponse created = objectMapper.readValue(createResult.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class);
+
+        mockMvc.perform(get("/api/v1/items/search")
+                        .param("locationText", "Praca Central")
+                        .param("dateFrom", ontem.toLocalDate().minusDays(1).toString())
+                        .param("dateTo", ontem.toLocalDate().plusDays(1).toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.id == '" + created.id() + "')]").exists());
+
+        mockMvc.perform(get("/api/v1/items/search")
+                        .param("locationText", "Praca Central")
+                        .param("dateFrom", ontem.toLocalDate().plusDays(5).toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.id == '" + created.id() + "')]").doesNotExist());
+    }
+
+    // ---------- GET /items/me ----------
+
+    @Test
+    void rainyDay_deveRecusarMeusObjetosSemAutenticacao() throws Exception {
+        mockMvc.perform(get("/api/v1/items/me"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void sunnyDay_deveListarApenasOsProprioObjetosEFiltrarPorTypeOuStatus() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Meus Objetos");
+        AuthenticatedTestUser outraPessoa = registerAndAuthenticate("Outra Pessoa Meus Objetos");
+        String marcador = "Marcador-" + UUID.randomUUID();
+
+        ItemResponse perdido = criarItem(dono, Item.ItemType.PERDIDO, marcador + " perdido");
+        ItemResponse encontrado = criarItem(dono, Item.ItemType.ENCONTRADO, marcador + " encontrado");
+        criarItem(outraPessoa, Item.ItemType.PERDIDO, marcador + " de outra pessoa");
+
+        // Sem filtro: só os itens do próprio dono, não o da outra pessoa.
+        mockMvc.perform(get("/api/v1/items/me")
+                        .header("Authorization", dono.authorizationHeader()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.id == '" + perdido.id() + "')]").exists())
+                .andExpect(jsonPath("$.content[?(@.id == '" + encontrado.id() + "')]").exists())
+                .andExpect(jsonPath("$.content[?(@.nome == '" + marcador + " de outra pessoa')]").doesNotExist());
+
+        // Filtro combinado por type (PERDIDO).
+        mockMvc.perform(get("/api/v1/items/me")
+                        .header("Authorization", dono.authorizationHeader())
+                        .param("status", "PERDIDO"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.id == '" + perdido.id() + "')]").exists())
+                .andExpect(jsonPath("$.content[?(@.id == '" + encontrado.id() + "')]").doesNotExist());
+
+        // Filtro combinado por status real (ANALISANDO — valor default na criação).
+        mockMvc.perform(get("/api/v1/items/me")
+                        .header("Authorization", dono.authorizationHeader())
+                        .param("status", "ANALISANDO"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.id == '" + perdido.id() + "')]").exists())
+                .andExpect(jsonPath("$.content[?(@.id == '" + encontrado.id() + "')]").exists());
+    }
+
+    @Test
+    void rainyDay_deveRecusarFiltroDeStatusInvalidoEmMeusObjetos() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Filtro Status Invalido");
+
+        mockMvc.perform(get("/api/v1/items/me")
+                        .header("Authorization", user.authorizationHeader())
+                        .param("status", "ISSO_NAO_EXISTE"))
+                .andExpect(status().isBadRequest());
+    }
+
+    // ---------- PATCH /items/{id} ----------
+
+    @Test
+    void sunnyDay_donoDeveEditarApenasOsCamposEnviados() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Edicao");
+        ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, "Titulo original");
+
+        UpdateItemRequest request = new UpdateItemRequest(null, "Titulo atualizado", null, null, null, null, null, null, null);
+
+        mockMvc.perform(patch("/api/v1/items/" + item.id())
+                        .header("Authorization", dono.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("Titulo atualizado"))
+                // Não enviado: preservado.
+                .andExpect(jsonPath("$.descricao").value(item.descricao()));
+    }
+
+    @Test
+    void rainyDay_naoDonoNaoPodeEditarItem() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Nao Pode Editar");
+        AuthenticatedTestUser outraPessoa = registerAndAuthenticate("Intruso Edicao");
+        ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, "Item de outro dono");
+
+        UpdateItemRequest request = new UpdateItemRequest(null, "Tentativa de sequestro", null, null, null, null, null, null, null);
+
+        mockMvc.perform(patch("/api/v1/items/" + item.id())
+                        .header("Authorization", outraPessoa.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void rainyDay_deveRecusarEdicaoSemAutenticacao() throws Exception {
+        UpdateItemRequest request = new UpdateItemRequest(null, "Qualquer coisa", null, null, null, null, null, null, null);
+
+        mockMvc.perform(patch("/api/v1/items/" + UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
+    }
+
+    // ---------- DELETE /items/{id} ----------
+
+    @Test
+    void sunnyDay_donoDeveExcluirItemQueDesaparecerDaBuscaEDoDetalheMasContinuarEmMeusObjetos() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Exclusao");
+        String marcador = "Marcador-" + UUID.randomUUID();
+        ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, marcador + " item a excluir");
+
+        mockMvc.perform(delete("/api/v1/items/" + item.id())
+                        .header("Authorization", dono.authorizationHeader()))
+                .andExpect(status().isNoContent());
+
+        // Some do detalhe público...
+        mockMvc.perform(get("/api/v1/items/" + item.id()))
+                .andExpect(status().isNotFound());
+
+        // ...e da busca pública...
+        mockMvc.perform(get("/api/v1/items/search").param("query", marcador))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.id == '" + item.id() + "')]").doesNotExist());
+
+        // ...mas continua no histórico do próprio dono, agora como INATIVO.
+        mockMvc.perform(get("/api/v1/items/me")
+                        .header("Authorization", dono.authorizationHeader())
+                        .param("status", "INATIVO"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.id == '" + item.id() + "')]").exists());
+    }
+
+    @Test
+    void rainyDay_naoDonoNaoPodeExcluirItem() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Protegido Exclusao");
+        AuthenticatedTestUser outraPessoa = registerAndAuthenticate("Intruso Exclusao");
+        ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, "Item protegido de exclusao");
+
+        mockMvc.perform(delete("/api/v1/items/" + item.id())
+                        .header("Authorization", outraPessoa.authorizationHeader()))
+                .andExpect(status().isForbidden());
+    }
+
+    // ---------- PATCH /items/{id}/status ----------
+
+    @Test
+    void sunnyDay_donoDeveMarcarItemComoResolvido() throws Exception {
+        // "status" no ItemResponse é o nosso "type" (PERDIDO/ENCONTRADO) — o
+        // status real de workflow não aparece nessa estrutura (ver ItemMapper),
+        // então a forma de confirmar a mudança é via o filtro combinado de
+        // /items/me, não lendo o corpo da resposta deste PATCH.
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Status");
+        ItemResponse item = criarItem(dono, Item.ItemType.ENCONTRADO, "Item a ser resolvido");
+
+        UpdateItemStatusRequest request = new UpdateItemStatusRequest(Item.ItemStatus.RESOLVIDO);
+
+        mockMvc.perform(patch("/api/v1/items/" + item.id() + "/status")
+                        .header("Authorization", dono.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/v1/items/me")
+                        .header("Authorization", dono.authorizationHeader())
+                        .param("status", "RESOLVIDO"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.id == '" + item.id() + "')]").exists());
+    }
+
+    @Test
+    void rainyDay_naoDonoNaoPodeAlterarStatus() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Status Protegido");
+        AuthenticatedTestUser outraPessoa = registerAndAuthenticate("Intruso Status");
+        ItemResponse item = criarItem(dono, Item.ItemType.ENCONTRADO, "Item com status protegido");
+
+        UpdateItemStatusRequest request = new UpdateItemStatusRequest(Item.ItemStatus.RESOLVIDO);
+
+        mockMvc.perform(patch("/api/v1/items/" + item.id() + "/status")
+                        .header("Authorization", outraPessoa.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void rainyDay_deveRecusarStatusInvalidoNoPayload() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Status Invalido Payload");
+        ItemResponse item = criarItem(dono, Item.ItemType.ENCONTRADO, "Item com status invalido");
+
+        String payloadInvalido = """
+                { "status": "ISSO_NAO_EXISTE" }
+                """;
+
+        mockMvc.perform(patch("/api/v1/items/" + item.id() + "/status")
+                        .header("Authorization", dono.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payloadInvalido))
+                .andExpect(status().isBadRequest());
+    }
+
+    private ItemResponse criarItem(AuthenticatedTestUser user, Item.ItemType type, String title) throws Exception {
+        CreateItemRequest request = new CreateItemRequest(
+                type, CATEGORIA_ELETRONICOS, title,
+                "Descrição completa", "Descrição curta", "Bloco A", -23.55, -46.63,
+                LocalDateTime.now().minusHours(1), null
+        );
+
+        MvcResult result = mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        return objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class);
     }
 }

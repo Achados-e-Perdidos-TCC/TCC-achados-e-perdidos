@@ -2,6 +2,7 @@ import { useFilter } from '../../../../hooks/filters/filterHook.jsx';
 import { useEffect, useRef} from 'react'; 
 import { NavLink } from 'react-router';
 
+import { hoje, ontem } from '../../../../utils/date/date.js'; 
 import filtros from '../../../../utils/filters/filtrarObjetos.js'; 
 
 import './principalCards.css';
@@ -56,6 +57,13 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
         if (status === 'ANALISE') { return 'status__orange' }
     }
 
+    function dataFormatada(data, hora){
+        if (data === hoje()) { return `Hoje, ${hora}`}
+        if (data === ontem()) { return `Ontem, ${hora}`}
+
+        return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}, ${hora}`; 
+    }
+
     return (
         <div>
             {objetos.filter((valor) => { return filtros(valor, primaryFilters, secondaryFilters)}).slice(inicio, fim).map((valor) => {
@@ -63,7 +71,7 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
                 return (
                     <div className='card__principal' key={valor.id}>
-                        <img className='image__card ' src={valor.imagem} />
+                        <img className='image__card ' src={valor.imagemPrincipal} />
 
                         <div className='principal__meio'>
 
@@ -74,10 +82,10 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
                                 <div className='categoria__status'>
                                     <div className='status__principal'>
-                                        <div className={adicionaClassNameStatus(valor.status)} >
+                                        <div className={adicionaClassNameStatus(valor.status.trim().toUpperCase())} >
 
-                                            <img className="image__principal" src={verificaIconStatus(valor.status)} />
-                                            <span>{valor.status}</span>
+                                            <img className="image__principal" src={verificaIconStatus(valor.status.trim().toUpperCase())} />
+                                            <span>{valor.status.trim().toUpperCase()}</span>
 
                                         </div>
                                     </div>
@@ -93,21 +101,23 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
                             <div className='principal__embaixo'>
 
                                 <div className='data__hora'>
+
                                     <div className='data__principal'>
                                         <img src={pinGray} />
-                                        <p className='endereco__principal'>{valor.cidade.length + valor.endereco.length < 50 ? `${valor.cidade}, ${valor.endereco}` : `${valor.cidade}, ${valor.endereco}`.slice(0, 50) + `...`}</p>
-                                        <span className='endereco__responsive'>{valor.cidade.length + valor.endereco.length < 32 ? `${valor.cidade}, ${valor.endereco}` : `${valor.cidade}, ${valor.endereco}`.slice(0, 32) + `...`}</span>
+                                        <p className='endereco__principal'>{valor.localizacao.estado + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 50 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 50) + `...`}</p>
+                                        <span className='endereco__responsive'>{valor.localizacao.estado + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 32 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 32) + `...`}</span>
                                     </div>
 
                                     <p className='divisoria'>|</p>
 
                                     <div className='hora__principal'>
                                         <img src={calendarGray} />
-                                        <span>{valor.dataOcorrencia}</span>
+                                        <span>{dataFormatada(valor.data.data.trim(), valor.data.hora.trim())}</span>
                                     </div>
+                                    
                                 </div>
 
-                                <p className='descricao__principal'>{valor.descricaoBreve}</p>
+                                <p className='descricao__principal'>{valor.descricao < 102 ? valor.descricao : `${valor.descricao.slice(0, 102)}...`}</p>
 
                                 <div className='button__responsive'>
                                     <NavLink className='detalhes__principal' to={`/buscar-objetos/${valor.id}`}>Ver detalhes</NavLink>

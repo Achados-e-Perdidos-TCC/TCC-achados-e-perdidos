@@ -97,14 +97,10 @@
             <version>2.6.0</version>
         </dependency>
 
-        <!-- Segurança: Bearer JWT (login local) + OAuth2 Login (Google) -->
+        <!-- Segurança: Bearer JWT (login local), único mecanismo de login do app -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
 
         <!-- JWT (biblioteca jjwt 0.12.x) -->
@@ -175,30 +171,10 @@
         </dependency>
 
         <!--
-          WireMock: o login via Google (OAuth2) faz chamadas HTTP reais ao token-uri
-          e ao user-info-uri do provedor durante o callback. Nos testes, apontamos
-          essas URLs (via @DynamicPropertySource) para um WireMock local, simulando
-          as respostas do Google sem depender de credenciais/rede externa reais.
-          Usamos o artefato "-standalone" (traz Jetty e todas as deps já shaded):
-          o artefato "wiremock" puro não embute mais um servidor HTTP por padrão a
-          partir da 3.x, e evita conflito de versão do Apache HttpClient5/HttpCore5
-          com o que o BOM do Spring Boot já gerencia para outras libs.
-          Versão fixada manualmente: não é gerenciada pelo BOM do Spring Boot.
-          Confirmada como o último release estável em repo1.maven.org/maven2/org/wiremock/wiremock/
-          (a versão "LATEST"/"RELEASE" do Maven aponta hoje para um pré-lançamento 4.0.0-beta).
-        -->
-        <dependency>
-            <groupId>org.wiremock</groupId>
-            <artifactId>wiremock-standalone</artifactId>
-            <version>3.13.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!--
-          GreenMail: servidor SMTP fake em memória, mesmo papel que o WireMock cumpre
-          para o Google OAuth2 acima — permite que os testes de integração do fluxo
-          de esqueci-minha-senha capturem o e-mail (e o token bruto nele) de verdade,
-          sem depender de credenciais/rede externa reais do Mailtrap.
+          GreenMail: servidor SMTP fake em memória — permite que os testes de
+          integração do fluxo de esqueci-minha-senha capturem o e-mail (e o token
+          bruto nele) de verdade, sem depender de credenciais/rede externa reais
+          do Mailtrap.
         -->
         <dependency>
             <groupId>com.icegreen</groupId>

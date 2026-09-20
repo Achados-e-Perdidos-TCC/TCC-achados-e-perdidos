@@ -58,11 +58,11 @@ class ChatServiceImplTest {
         chatService = new ChatServiceImpl(matchRepository, userRepository, messageRepository, new ChatMessageMapper());
 
         donoDoPerdido = User.builder().id(UUID.randomUUID()).name("Ana").email("ana@teste.com")
-                .role(User.Role.USER).provider(User.AuthProvider.LOCAL).build();
+                .role(User.Role.USER).build();
         donoDoEncontrado = User.builder().id(UUID.randomUUID()).name("Bruno").email("bruno@teste.com")
-                .role(User.Role.USER).provider(User.AuthProvider.LOCAL).build();
+                .role(User.Role.USER).build();
         estranho = User.builder().id(UUID.randomUUID()).name("Carlos").email("carlos@teste.com")
-                .role(User.Role.USER).provider(User.AuthProvider.LOCAL).build();
+                .role(User.Role.USER).build();
 
         Item lostItem = Item.builder().id(UUID.randomUUID()).user(donoDoPerdido).title("Carteira").build();
         Item foundItem = Item.builder().id(UUID.randomUUID()).user(donoDoEncontrado).title("Carteira achada").build();
