@@ -1,12 +1,25 @@
 package com.achadosedevolvidos.user.controller;
 
+import com.achadosedevolvidos.item.dto.CreateItemRequest;
+import com.achadosedevolvidos.item.dto.ItemResponse;
+import com.achadosedevolvidos.item.model.Item;
+import com.achadosedevolvidos.item.repository.ItemRepository;
 import com.achadosedevolvidos.support.IntegrationTestSupport;
 import com.achadosedevolvidos.user.dto.ChangePasswordRequest;
+import com.achadosedevolvidos.user.dto.UpdatePreferencesRequest;
 import com.achadosedevolvidos.user.dto.UpdateProfileRequest;
 import com.achadosedevolvidos.user.model.User;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -14,6 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserControllerIT extends IntegrationTestSupport {
+
+    private static final UUID CATEGORIA_ELETRONICOS = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Test
     void sunnyDay_deveRetornarPerfilDoUsuarioLogado() throws Exception {
@@ -129,5 +147,102 @@ class UserControllerIT extends IntegrationTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void sunnyDay_deveRetornarPreferenciasPadraoAntesDeQualquerAtualizacao() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Preferencias Padrao");
+
+        mockMvc.perform(get("/api/v1/users/me")
+                        .header("Authorization", user.authorizationHeader()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.preferences.notificationsEnabled").value(true))
+                .andExpect(jsonPath("$.preferences.matchAlertsEnabled").value(true))
+                .andExpect(jsonPath("$.preferences.emailsEnabled").value(true));
+    }
+
+    @Test
+    void sunnyDay_deveAtualizarApenasAsPreferenciasEnviadas() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Atualiza Preferencias");
+
+        UpdatePreferencesRequest primeiraAtualizacao = new UpdatePreferencesRequest(false, null, null);
+
+        mockMvc.perform(patch("/api/v1/users/me/preferences")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(primeiraAtualizacao)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.notificationsEnabled").value(false))
+                .andExpect(jsonPath("$.matchAlertsEnabled").value(true))
+                .andExpect(jsonPath("$.emailsEnabled").value(true));
+
+        UpdatePreferencesRequest segundaAtualizacao = new UpdatePreferencesRequest(null, false, false);
+
+        mockMvc.perform(patch("/api/v1/users/me/preferences")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(segundaAtualizacao)))
+                .andExpect(status().isOk())
+                // Não enviado na segunda chamada: preservado da primeira.
+                .andExpect(jsonPath("$.notificationsEnabled").value(false))
+                .andExpect(jsonPath("$.matchAlertsEnabled").value(false))
+                .andExpect(jsonPath("$.emailsEnabled").value(false));
+    }
+
+    @Test
+    void rainyDay_deveRecusarAtualizacaoDePreferenciasSemAutenticacao() throws Exception {
+        UpdatePreferencesRequest request = new UpdatePreferencesRequest(true, true, true);
+
+        mockMvc.perform(patch("/api/v1/users/me/preferences")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void sunnyDay_deveDesativarContaBloquearLoginEMarcarItensComoInativos() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Exclusao De Conta");
+
+        CreateItemRequest itemRequest = new CreateItemRequest(
+                Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item do usuario que vai excluir a conta",
+                "Descrição completa do item", "Descrição curta do item", null, -23.55, -46.63,
+                LocalDateTime.now(), null
+        );
+        MvcResult createResult = mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(itemRequest)))
+                .andExpect(status().isCreated())
+                .andReturn();
+        ItemResponse createdItem = objectMapper.readValue(
+                createResult.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class
+        );
+
+        mockMvc.perform(delete("/api/v1/users/me")
+                        .header("Authorization", user.authorizationHeader()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").exists());
+
+        // Login com a senha correta não funciona mais: DaoAuthenticationProvider
+        // lança DisabledException a partir de User.isEnabled()==false.
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"" + user.user().getEmail() + "\",\"password\":\"senha12345\"}"))
+                .andExpect(status().isUnauthorized());
+
+        // O access token já emitido antes da exclusão também para de valer:
+        // JwtAuthenticationFilter agora checa userDetails.isEnabled().
+        mockMvc.perform(get("/api/v1/users/me")
+                        .header("Authorization", user.authorizationHeader()))
+                .andExpect(status().isForbidden());
+
+        Item itemPersistido = itemRepository.findById(createdItem.id()).orElseThrow();
+        assertThat(itemPersistido.getStatus()).isEqualTo(Item.ItemStatus.INATIVO);
+    }
+
+    @Test
+    void rainyDay_deveRecusarExclusaoDeContaSemAutenticacao() throws Exception {
+        mockMvc.perform(delete("/api/v1/users/me"))
+                .andExpect(status().isForbidden());
     }
 }

@@ -2,12 +2,18 @@ package com.achadosedevolvidos.user.service;
 
 import com.achadosedevolvidos.auth.dto.MessageResponse;
 import com.achadosedevolvidos.auth.repository.RefreshTokenRepository;
+import com.achadosedevolvidos.item.model.Item;
+import com.achadosedevolvidos.item.repository.ItemRepository;
 import com.achadosedevolvidos.shared.exception.AppException;
 import com.achadosedevolvidos.user.dto.ChangePasswordRequest;
+import com.achadosedevolvidos.user.dto.PreferencesResponse;
+import com.achadosedevolvidos.user.dto.UpdatePreferencesRequest;
 import com.achadosedevolvidos.user.dto.UpdateProfileRequest;
 import com.achadosedevolvidos.user.dto.UserProfileResponse;
 import com.achadosedevolvidos.user.mapper.UserMapper;
 import com.achadosedevolvidos.user.model.User;
+import com.achadosedevolvidos.user.model.UserPreferences;
+import com.achadosedevolvidos.user.repository.UserPreferencesRepository;
 import com.achadosedevolvidos.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +28,8 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserPreferencesRepository userPreferencesRepository;
+    private final ItemRepository itemRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -29,7 +37,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserProfileResponse getProfile(UUID currentUserId) {
-        return userMapper.toResponse(findUserOrThrow(currentUserId));
+        User user = findUserOrThrow(currentUserId);
+        UserPreferences preferences = userPreferencesRepository.findByUserId(currentUserId).orElse(null);
+        return userMapper.toResponse(user, preferences);
     }
 
     @Override
@@ -53,7 +63,9 @@ public class UserServiceImpl implements UserService {
             user.setAvatarUrl(request.avatarUrl());
         }
 
-        return userMapper.toResponse(userRepository.save(user));
+        User saved = userRepository.save(user);
+        UserPreferences preferences = userPreferencesRepository.findByUserId(currentUserId).orElse(null);
+        return userMapper.toResponse(saved, preferences);
     }
 
     /**
@@ -76,6 +88,51 @@ public class UserServiceImpl implements UserService {
         refreshTokenRepository.revokeAllByUserId(user.getId());
 
         return new MessageResponse("Senha alterada com sucesso.");
+    }
+
+    /**
+     * find-or-create: a maioria dos usuários nunca chamou este endpoint antes,
+     * então a linha em user_preferences normalmente não existe ainda — é criada
+     * na primeira alteração, já partindo dos valores padrão (tudo habilitado).
+     */
+    @Override
+    @Transactional
+    public PreferencesResponse updatePreferences(UUID currentUserId, UpdatePreferencesRequest request) {
+        User user = findUserOrThrow(currentUserId);
+        UserPreferences preferences = userPreferencesRepository.findByUserId(currentUserId)
+                .orElseGet(() -> UserPreferences.builder().user(user).build());
+
+        if (request.notificationsEnabled() != null) {
+            preferences.setNotificationsEnabled(request.notificationsEnabled());
+        }
+        if (request.matchAlertsEnabled() != null) {
+            preferences.setMatchAlertsEnabled(request.matchAlertsEnabled());
+        }
+        if (request.emailsEnabled() != null) {
+            preferences.setEmailsEnabled(request.emailsEnabled());
+        }
+
+        return userMapper.toPreferencesResponse(userPreferencesRepository.save(preferences));
+    }
+
+    /**
+     * Soft delete: marca active=false (bloqueia login futuro e, via
+     * JwtAuthenticationFilter, também um access token já emitido), revoga
+     * todos os refresh tokens (bloqueia /auth/refresh) e marca os itens do
+     * próprio usuário como INATIVO em vez de apagar qualquer linha.
+     */
+    @Override
+    @Transactional
+    public MessageResponse deleteAccount(UUID currentUserId) {
+        User user = findUserOrThrow(currentUserId);
+
+        user.setActive(false);
+        userRepository.save(user);
+
+        refreshTokenRepository.revokeAllByUserId(currentUserId);
+        itemRepository.updateStatusForAllByUserId(currentUserId, Item.ItemStatus.INATIVO);
+
+        return new MessageResponse("Conta desativada com sucesso.");
     }
 
     private User findUserOrThrow(UUID userId) {

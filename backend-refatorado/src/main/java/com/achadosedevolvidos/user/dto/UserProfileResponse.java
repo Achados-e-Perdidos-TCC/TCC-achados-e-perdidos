@@ -13,5 +13,6 @@ public record UserProfileResponse(
         String city,
         String avatarUrl,
         User.Role role,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        PreferencesResponse preferences
 ) {}
