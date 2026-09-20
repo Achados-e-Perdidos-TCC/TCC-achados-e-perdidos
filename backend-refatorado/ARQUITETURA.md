@@ -12,6 +12,7 @@ com.achadosedevolvidos
 ├── user/          # User, AuthenticatedUser, perfil (/users/me)
 ├── category/      # Categoria (entidade simples, CRUD de leitura)
 ├── item/          # Item, ItemImage, busca, DTOs, evento de criação
+├── upload/        # Upload de imagens (multipart) para disco local
 ├── match/         # Match, motor de pontuação puro, orquestração
 ├── chat/          # Mensagens por match, WebSocket autenticado
 ├── config/        # Security, WebSocket, Async, beans de autenticação
@@ -29,7 +30,7 @@ subida da aplicação, se as entidades batem com o schema já existente. Ele nun
 cria, altera ou apaga uma tabela.
 
 Quem efetivamente cria e versiona o schema é o **Flyway**
-(`src/main/resources/db/migration/V1` a `V7`):
+(`src/main/resources/db/migration/V1` a `V14`):
 
 | Migration | Conteúdo |
 |---|---|
@@ -40,6 +41,12 @@ Quem efetivamente cria e versiona o schema é o **Flyway**
 | V5 | `matches` |
 | V6 | `messages` |
 | V7 | seed de categorias iniciais (DML separado do DDL) |
+| V8 | `refresh_tokens` |
+| V9 | `password_reset_tokens` |
+| V10/V11 | `short_description` obrigatória em `items`, e `description` deixa de aceitar `NULL` |
+| V12 | `icon_url` em `categories` |
+| V13 | remove a coluna `provider` de `users` (login via Google/OAuth2 removido) |
+| V14 | `phone`/`city`/`avatar_url` em `users` (perfil, `GET/PATCH /users/me`) |
 
 Vantagens diretas: histórico de mudanças de schema versionado e revisável em PR,
 mesmo comportamento em dev/homologação/produção, e nenhuma surpresa de o Hibernate
@@ -90,6 +97,16 @@ esse estado atual.
   nunca de um campo enviado pelo próprio cliente. `ChatServiceImpl` também
   verifica que o remetente é de fato um dos dois donos de item do match antes de
   aceitar a mensagem ou liberar o histórico.
+- **API 100% stateless, CSRF desabilitado**: com o login via sessão/cookie
+  (OAuth2) fora do produto, não sobra nenhum mecanismo de autenticação
+  ambiente (cookie enviado automaticamente pelo navegador) — só resta o
+  Bearer JWT, que exige o header `Authorization` ser montado explicitamente
+  pelo cliente. `SecurityConfig` reflete isso: `sessionCreationPolicy(STATELESS)`
+  e `.csrf(disable)`. Essa segurança depende de uma suposição que o backend
+  não controla — o front-end nunca guardar o token num cookie automático —
+  documentada com um alerta explícito em `README-AUTH.md` e no próprio
+  `SecurityConfig`, pra não virar um buraco de segurança silencioso se a
+  estratégia de armazenamento do token mudar no futuro.
 
 ## 5. Camadas e contratos (Controller → Service (interface) → Repository)
 
@@ -133,16 +150,75 @@ com Postgres real (`mvn verify` — ver `README.md`, seção 2.4): com mocks, o
 unitário não pega esse tipo de erro. Os quatro agora têm
 `@Transactional(readOnly = true)`.
 
-## 9. Testes automatizados
+## 9. Perfil de usuário (`user/`) segue o mesmo padrão do resto da API
+
+`GET/PATCH /users/me` e `PATCH /users/me/password` não introduziram nenhum
+conceito novo — reaproveitam o que já existia: `@AuthenticationPrincipal
+AuthenticatedUser` pra identificar o usuário, `AppException` com `HttpStatus`
+explícito, e a mesma lógica de segurança do reset de senha (revogar todos os
+refresh tokens da conta) reaplicada na troca de senha autenticada. A
+atualização de perfil é parcial por design (`UpdateProfileRequest` com todos
+os campos opcionais — campo omitido no JSON permanece inalterado), o mesmo
+padrão que `PATCH /items/{id}` (seção 10) usa.
+
+## 10. Extensão do CRUD de `Item`: dono, soft delete e filtro combinado
+
+- **Verificação de dono**: `PATCH /items/{id}`, `DELETE /items/{id}` e
+  `PATCH /items/{id}/status` comparam `item.getUser().getId()` com o usuário
+  autenticado e lançam `403` caso não bata — um helper simples
+  (`ensureOwner`) em `ItemServiceImpl`, sem necessidade de nenhuma anotação
+  de segurança a mais.
+- **`DELETE` é soft delete**: em vez de apagar a linha, marca
+  `status = INATIVO`. Motivo prático: `matches` e `messages` já podem estar
+  vinculados ao item e nenhuma das duas tabelas tem `ON DELETE CASCADE` —
+  apagar de verdade exigiria decidir o que fazer com esse histórico. Efeito
+  colateral que a busca pública e o detalhe (`GET /items/{id}`) precisaram
+  aprender: um item `INATIVO` passou a ser tratado como "não encontrado"
+  (`404`) pra quem não é o dono, embora continue visível no
+  `GET /items/me` do próprio dono.
+- **Filtro combinado em `GET /items/me?status=`**: o front-end pediu um único
+  filtro que mistura dois campos que no modelo são distintos — `type`
+  (PERDIDO/ENCONTRADO, fixo desde a criação) e `status` (ANALISANDO/
+  PROCURANDO/POSSIVEL_MATCH/RESOLVIDO/INATIVO, evolui com o tempo).
+  `ItemServiceImpl.parseCombinedStatusFilter` tenta o valor recebido primeiro
+  como `ItemType`, depois como `ItemStatus`, e devolve `400` se não bater com
+  nenhum dos dois — evita expor dois query params quando o front-end só
+  precisa de um.
+
+## 11. Upload de imagens (`upload/`): disco local com validação client-hostile
+
+`POST /api/v1/uploads/images` grava em disco local via `FileStorageService`
+— MVP deliberado (sem custo de conta externa), documentado como próximo
+passo natural trocar por S3/R2 mantendo a mesma interface. As decisões de
+segurança valem a pena registrar:
+
+- **Nome do arquivo em disco é sempre gerado por UUID**, nunca derivado do
+  nome original enviado pelo cliente — sozinho, isso já impede path
+  traversal (`../../application.yml`) e sobrescrita por coincidência de nome.
+- **Extensão escolhida a partir de uma tabela fixa** indexada pelo
+  `Content-Type` declarado (só `image/jpeg|png|webp|gif` são aceitos) — nunca
+  copiada do nome original. Um arquivo disfarçado (ex.: `.html` renomeado
+  pra `.jpg`) é salvo e servido de volta com a extensão/Content-Type de
+  imagem, então o navegador nunca o executa como script.
+- **`/uploads/**` é público** (`WebConfig` expõe o diretório como recurso
+  estático) — precisa ser, já que a URL devolvida aparece embutida em
+  respostas públicas (busca e detalhe de item). Só o endpoint de *upload*
+  (`POST /api/v1/uploads/images`) exige login, via a regra padrão
+  `anyRequest().authenticated()` do `SecurityConfig`.
+
+## 12. Testes automatizados
 
 Cobertura completa (unitária + integração) descrita em `README.md`, seção 2.4.
 Resumo: testes unitários (Mockito, sem Spring/banco) para os Services com
 lógica de negócio; testes de integração (`@SpringBootTest` + Postgres real via
-Testcontainers) cobrindo os endpoints REST, o fluxo assíncrono
-item→evento→match, e a conexão WebSocket/STOMP autenticada. Pipeline de CI em
+Testcontainers) cobrindo os endpoints REST (incluindo o CRUD completo de item
+e o upload de imagens), o fluxo assíncrono item→evento→match, e a conexão
+WebSocket/STOMP autenticada. Pipeline de CI em
 `.github/workflows/backend-ci.yml`.
 
-## 10. O que ainda fica para depois (fora do escopo deste refactor)
+## 13. O que ainda fica para depois (fora do escopo deste refactor)
 
 - Rate limiting no `/api/v1/auth/login`.
 - Busca geográfica por raio (PostGIS).
+- Trocar o storage de upload de disco local por S3/Cloudflare R2 (não
+  sobrevive a um redeploy do container hoje).
