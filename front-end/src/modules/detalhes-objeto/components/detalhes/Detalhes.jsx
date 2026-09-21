@@ -50,7 +50,7 @@ function Detalhes(objeto){
                         posicao++
 
                         return(
-                            <div className='infos__icons'>
+                            <div key={valor} className='infos__icons'>
 
                                 <img className="icons" src={valor} />
 
@@ -81,7 +81,7 @@ function Detalhes(objeto){
                         {
                             informacoesAdicionais.map((valor) => {
                                 return ( 
-                                    <div className='informacoes__adicionais'>
+                                    <div key={valor} className='informacoes__adicionais'>
                                         <img className="circulo__blue" src={circuloBlue} />
                                         <p className='detalhes__descricao__adicional'> {valor} </p>
                                     </div>

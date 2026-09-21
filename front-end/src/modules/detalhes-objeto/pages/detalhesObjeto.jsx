@@ -18,7 +18,7 @@ function detalhesObjeto(){
 
     const params = useParams(); 
 
-    const [tema] = useOutletContext()
+    const {tema} = useOutletContext()
 
     const objetoEncontrado = objetos.filter((objetos) => { if (objetos.id === Number(params.id)) { return objetos }} )
 

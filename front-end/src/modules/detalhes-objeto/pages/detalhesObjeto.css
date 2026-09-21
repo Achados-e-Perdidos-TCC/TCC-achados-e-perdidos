@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    min-height: 100dvh;
 }
 
 /* img */
@@ -82,7 +83,7 @@
 
 /* responsividade */
 
-@media( max-width: 768px ){
+@media( max-width: 768px  ){
 
     .esquerda, .botao__default, .botao__azul{ width: 100% }
 

@@ -33,7 +33,7 @@ const icons = {
 function SecondaryFilters(){
 
     const [ativo, setAtivo] = useState('Todos');
-    const [tema] = useOutletContext();
+    const {tema} = useOutletContext();
 
     const {dispatch} = useFilter();
 

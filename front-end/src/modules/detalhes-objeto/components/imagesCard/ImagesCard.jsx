@@ -42,7 +42,7 @@ function ImagesCards(objeto) {
 
                     {imagensSecundarias.slice(inicio, fim).map((imagens) => {
                         return (
-                            <div onClick={() => { alternarImagem(imagens) }}>
+                            <div key={imagens} onClick={() => { alternarImagem(imagens) }}>
                                 <img className={imagemExibida === imagens ? 'imagem__secundaria card__ativo' : 'imagem__secundaria'} src={imagens} />
                             </div>
                         )
