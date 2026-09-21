@@ -38,14 +38,12 @@
 .container__detalhes{ 
     display: flex;
     gap: 7rem;
+    max-height: 75rem;
 }
 
 .esquerda{ width: 46% }
 
-.direita { 
-    flex: 1;
-    max-height: 75rem 
-}
+.direita { flex: 1 }
 
 /* buttons */
 
@@ -82,5 +80,26 @@
     color: var(--primary-color-text);
 }
 
+/* responsividade */
 
+@media( max-width: 768px ){
 
+    .esquerda, .botao__default, .botao__azul{ width: 100% }
+
+    .detalhe__objetos{ gap: 1.5rem }
+
+    .container__detalhes{ 
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+         gap: 2.5rem;
+        max-height: 100%;
+    }
+
+    .container__botoes{
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .botoes p{ font-size: 1.3rem }
+}

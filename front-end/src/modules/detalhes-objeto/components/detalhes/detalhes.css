@@ -19,7 +19,7 @@
     font-weight: 500;
 }
 
-.detalhes__descricao{
+.detalhes__descricao, .detalhes__descricao__completa, .detalhes__descricao__complemento{
     font-size: 1.5rem;
     color: var(--secondary-color-gray);
     max-width: 65ch;
@@ -83,4 +83,23 @@
     display: flex;
     align-items: center;
     gap: 0.5rem; 
+}
+
+/* responsividade */
+
+.responsive {display: none}
+
+@media( max-width: 1032px){
+    .detalhes__descricao, .infos__text{display: none}
+    .responsive { display: flex }
+}
+
+@media( max-width: 768px ){
+    .detalhes__descricao, .infos__text, .detalhes__infos{display: none}
+    .responsive { display: flex }
+
+    .detalhes__titulo{
+        margin: 0.8rem 0;
+        line-height: 3.5rem;
+    }
 }

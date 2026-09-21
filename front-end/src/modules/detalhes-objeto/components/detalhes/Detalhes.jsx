@@ -43,6 +43,7 @@ function Detalhes(objeto){
 
                 <h1 className='detalhes__titulo'>{objetoEncontrado.nome}</h1>
                 <p className='detalhes__descricao'>{`${objetoEncontrado.descricao.slice(0, 70)}...`}</p>
+                <p className='detalhes__descricao responsive'>{`Informações para identificação do objeto.`}</p>
 
                 <div className='detalhes__infos'>
                     {icons.map((valor) => {
@@ -56,6 +57,7 @@ function Detalhes(objeto){
                                 <div>
                                     <span className='infos__categoria'> {infos[posicao]} </span>
                                     <p className='infos__text'> {descricaoInfo[posicao]} </p>
+                                    <p className='responsive infos__text'> {`${descricaoInfo[posicao].slice(0, 17)}...`} </p>
                                 </div>
                                 
                             </div>
@@ -69,7 +71,7 @@ function Detalhes(objeto){
 
                     <div>
                         <p className='detalhes__objeto__subtitle'>Descrição Completa</p>
-                        <p className='detalhes__descricao'>{objetoEncontrado.descricao}</p>
+                        <p className='detalhes__descricao__completa'>{objetoEncontrado.descricao}</p>
                     </div>
 
                     <hr />
@@ -92,7 +94,7 @@ function Detalhes(objeto){
 
                     <div>
                         <p className='detalhes__objeto__subtitle'>Complemento de localização</p>
-                        <p className='detalhes__descricao'>{objetoEncontrado.localizacao.complemento}</p>
+                        <p className='detalhes__descricao__complemento'>{objetoEncontrado.localizacao.complemento}</p>
                     </div>
                 </div>
         </div>

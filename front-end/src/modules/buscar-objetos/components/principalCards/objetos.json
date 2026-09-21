@@ -43,10 +43,9 @@
         "descricao": "Bola de couro preta com pequenos sinais de uso, encontrada próxima ao Posto 8 da praia de Ipanema.",
 
         "imagensSecundarias": [
-            "https://exemplo.com/Bola.jpg",
-            "https://exemplo.com/Bola-2.jpg",
-            "https://exemplo.com/Bola-3.jpg",
-            "https://exemplo.com/Bola-4.jpg"
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQccVjZCpeX0ckikG-yoV08Wuy6wmAp-ZX6qecKz4RGQZQyEdYxrPoGtTo&s=10",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrY_4KkPEHad6YFRowx4F7glLuwXbCigLZPQVC0I1P1pF5EFCB5zYq-8c&s=10",
+            "https://http2.mlstatic.com/D_NQ_NP_949803-MLB108238913395_032026-O-bola-de-basquete-poker-street-7-preto.webp"
         ],
 
         "localizacao": {
