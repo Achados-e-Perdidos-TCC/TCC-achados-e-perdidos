@@ -1,17 +1,17 @@
 import "./hero.css";
-import { useOutletContext } from "react-router";
-
+import { NavLink, useOutletContext } from "react-router";
 import direitawhite from "../../../assets/icons/home/direita-white.png";
 import direitablack from "../../../assets/icons/home/direita-black.png";
-import objeto from "../../../assets/icons/home/objeto.png";
-import localizacao from "../../../assets/icons/home/localizacao.png";
-import locIcon from "../../../assets/icons/home/loc-icon.png";
-import dataIcon from "../../../assets/icons/home/data-icon.png";
-import categoria from "../../../assets/icons/home/categoria.png";
-import CadastroaDevolucaoWhite from "../../../assets/icons/home/CadastroaDevolucao-white.png";
-import CadastroaDevolucaoBlack from "../../../assets/icons/home/CadastroaDevolucao-black.png";
-import EstatisticasWhite from "../../../assets/icons/home/Estatisticas-white.png";
-import EstatisticasBlack from "../../../assets/icons/home/Estatisticas-black.png";
+import localizacao from "../../../assets/icons/buscarObjetos/pin-gray.svg"
+import calendar from "../../../assets/icons/buscarObjetos/calendar-gray.svg"
+import warningRed from "../../../assets/icons/buscarObjetos/warning-red.svg";
+import checkGreen from "../../../assets/icons/buscarObjetos/check-green.svg";
+import hourglassOrange from "../../../assets/icons/buscarObjetos/hourglass-orange.svg";
+import { hoje, ontem } from "../../../utils/date/date.js";
+import objetos from "../../buscar-objetos/components/principalCards/objetos.json";
+import cadastrodevolucao from "../../../assets/icons/home/cadastroadevolucao.png";
+import comoencontramos from "../../../assets/icons/home/comoencontramos.png";
+import lupa from "../../../assets/icons/home/lupa.png"
 
 function Hero() {
     const { tema } = useOutletContext();
@@ -40,11 +40,11 @@ function Hero() {
 
                 <div className="hero-buttons">
 
-                    <button className="btn_perdiObjeto">
+                    <button id="btn_perdiObjeto">
                         Perdi um objeto
                     </button>
 
-                    <button className="btn_encontreiObjeto">
+                    <button id="btn_encontreiObjeto">
                         Encontrei um objeto
                     </button>
                 </div>
@@ -64,50 +64,33 @@ function Hero() {
             
             <h2>O que você está procurando?</h2>
 
-            <div className="objeto">
-                {tema === 'light' ? <img src={objeto} alt="iconObjeto" /> : <img src={objeto} alt="iconObjeto" />}
-                <label htmlFor="objeto">Objeto</label>
-                <input type="text" placeholder="EX.: Carteira, Celular, Chave ..." />
+            <div>
+                {tema === 'light' ? <img src={lupa} alt="lupawhite" /> : <img src={lupa} alt="lupablack" />}
             </div>
 
-            <div className="localizacao">
-                {tema === 'light' ? <img src={localizacao} alt="iconLoc" /> : <img src={localizacao} alt="iconLoc" />}
-                <label htmlFor="localizacao">Localização</label>
-                <input type="text" placeholder="EX.: Porto Alegre, Rio Grande ..." />
-            </div>
-
-            <div className="categoria">
-                {tema === 'light' ? <img src={categoria} alt="iconCategoria" /> : <img src={categoria} alt="iconCategoria" />}
-                <label htmlFor="categoria">Categoria</label>
-
-                <select>
-                    <option>Todas as Categorias</option>
-                    <option>Documentos</option>
-                    <option>Eletrônicos</option>
-                    <option>Roupas</option>
-                    <option>Chaves</option>
-                    <option>Outros</option>
-                </select>
-            </div>
+           <p>Encontre objetos cadastrados e veja possíveis
+            <br />
+            correspondências com o que você perdeu.
+           </p>
             
             <div>
-                <button className="btn_buscar">
+                <NavLink id="btn_buscar" to="/buscar-objetos">
                     Buscar
-                </button>
+                </NavLink>
             </div>
 
     </div>
 
-            {/* Seção de Cadastro e Estatísticas */}
+            {/* Seção de Cadastro e Como Encontramos */}
 
-        <div className="cadastro-estatisticas">
+        <div className="cadastro-ComoEncontramos">
 
-            <div className="cadastro-imagem">
-                {tema === 'light' ? <img src={CadastroaDevolucaoWhite} alt="CadastroaDevolucaoWhite" /> : <img src={CadastroaDevolucaoBlack} alt="CadastroaDevolucaoBlack" />}
+            <div id="cadastrodevolucao">
+                {tema === 'light' ? <img src={cadastrodevolucao} alt="cadastroadevolucaowhite" /> : <img src={cadastrodevolucao} alt="cadastroadevolucaoblack" />}
             </div>
 
-            <div className="estatisticas">
-               {tema === 'light' ? <img src={EstatisticasWhite} alt="estatisticasWhite" /> : <img src={EstatisticasBlack} alt="estatisticasBlack" />}
+            <div id="comoencontramos">
+               {tema === 'light' ? <img src={comoencontramos} alt="estatisticasWhite" /> : <img src={comoencontramos} alt="estatisticasBlack" />}
             </div>
         </div>
 
@@ -116,51 +99,62 @@ function Hero() {
         <div className="objetos-recentes">
             
             <h2>Objetos recentemente cadastrados</h2>
-            <a href="#">
+            <NavLink to="/buscar-objetos" end> 
             Ver todos →
-            </a>
+            </NavLink>
 
         </div>
 
         <div className="objetos-lista">
-            {objetos.map((objeto) => {
-                const correspondencia = getCorrespondenciaConfig(objeto);
+            {objetos.slice(0, 4).map((objeto) => {
+                const status = objeto.status.trim().toUpperCase();
 
                 return (
-                <div className="objeto-card" key={objeto.id}>
-                    <div className="objeto-topo">
-                        <div className="objeto-imagem">
-                            <div className="imagem-placeholder">
-                                FOTO
+                <div className="objeto-card card__principal" key={objeto.id}>
+                    <img className="image__card" src={objeto.imagemPrincipal} alt={objeto.nome} />
+
+                    <div className="principal__meio">
+                        <div className="principal__encima">
+                            <h3 className="titulo__principal">
+                                {objeto.nome.length < 35 ? objeto.nome : `${objeto.nome.slice(0, 35)}...`}
+                            </h3>
+
+                            <div className="categoria__status">
+                                <div className="status__principal">
+                                    <div className={adicionaClassNameStatus(status)}>
+                                        <img className="image__principal" src={verificaIconStatus(status)} alt="" />
+                                        <span>{status}</span>
+                                    </div>
+                                </div>
+
+                                <div className="categoria__principal">
+                                    <img className="icon__categoria" src={objeto.icon_url} alt="" />
+                                    <span>{objeto.categoria}</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="objeto-titulo-wrap">
-                            <h3>{objeto.nome}</h3>
-                            <span
-                                className={`status ${
-                                    objeto.status === "Perdido" ? "perdido" : "encontrado"
-                                }`}
-                            >
-                                {objeto.status}
-                            </span>
+                        <div className="principal__embaixo">
+                            <div className="data__hora">
+                                <div className="data__principal">
+                                    <img src={localizacao} alt="Localização" />
+                                    <span>{`${objeto.localizacao.estado} - ${objeto.localizacao.cidade}`}</span>
+                                </div>
+
+                                <p className="divisoria">|</p>
+
+                                <div className="hora__principal">
+                                    <img src={calendar} alt="Data" />
+                                    <span>{dataFormatada(objeto.data.data.trim(), objeto.data.hora.trim())}</span>
+                                </div>
+                            </div>
+
+                            <p className="descricao__principal">
+                                {objeto.descricao.length < 102 ? objeto.descricao : `${objeto.descricao.slice(0, 102)}...`}
+                            </p>
                         </div>
                     </div>
 
-                    <div className="objetos-info">
-                        <p>
-                            <img className="info-icone" src={locIcon} alt="Localização" />
-                            {objeto.localizacao}
-                        </p>
-                        <p>
-                            <img className="info-icone" src={dataIcon} alt="Data" />
-                            {objeto.data}
-                        </p>
-                    </div>
-
-                    <button className={`btn_correspondencia ${correspondencia.classe}`}>
-                        {correspondencia.texto}
-                    </button>
                 </div>
                 );
             })}
@@ -172,60 +166,23 @@ function Hero() {
     
 }
 
-const objetos = [
-    {
-        id: 1,
-        nome: "Carteira preta",
-        status: "Encontrado",
-        localizacao: "Porto Alegre",
-        data: "11/09/2026, 14:30",
-        match: false
-    },
-    {
-        id: 2,
-        nome: "Celular Samsung",
-        status: "Perdido",
-        localizacao: "Santo Antônio",
-        data: "10/09/2026, 09:15",
-        match: true
-    },
-    {
-        id: 3,
-        nome: "Chaveiro azul",
-        status: "Encontrado",
-        localizacao: "Centro",
-        data: "11/09/2026, 08:45",
-        match: false
-    },
-    {
-        id: 4,
-        nome: "Bolsa de viagem",
-        status: "Perdido",
-        localizacao: "Cidade Baixa",
-        data: "09/09/2026, 18:10",
-        match: false
-    }
-];
+function verificaIconStatus(status) {
+    if (status === "PERDIDO") return warningRed;
+    if (status === "ENCONTRADO") return checkGreen;
+    if (status === "ANALISE") return hourglassOrange;
+}
 
-const getCorrespondenciaConfig = (objeto) => {
-    if (objeto.status === "Encontrado") {
-        return {
-            texto: "Encontrado",
-            classe: "correspondencia-encontrado"
-        };
-    }
+function adicionaClassNameStatus(status) {
+    if (status === "PERDIDO") return "status__red";
+    if (status === "ENCONTRADO") return "status__green";
+    if (status === "ANALISE") return "status__orange";
+}
 
-    if (objeto.match) {
-        return {
-            texto: "Possível correspondência",
-            classe: "correspondencia-match"
-        };
-    }
+function dataFormatada(data, hora) {
+    if (data === hoje()) return `Hoje, ${hora}`;
+    if (data === ontem()) return `Ontem, ${hora}`;
 
-    return {
-        texto: "Sem correspondência",
-        classe: "correspondencia-sem"
-    };
-};
+    return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}, ${hora}`;
+}
 
 export default Hero;
