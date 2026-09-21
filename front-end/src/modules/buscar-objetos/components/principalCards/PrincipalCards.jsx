@@ -6,12 +6,10 @@ import { hoje, ontem } from '../../../../utils/date/date.js';
 import filtros from '../../../../utils/filters/filtrarObjetos.js'; 
 
 import './principalCards.css';
+import Status from '../../../../components/status/Status.jsx'; 
 
 import pinGray from '../../../../assets/icons/buscarObjetos/pin-gray.svg';
 import calendarGray from '../../../../assets/icons/buscarObjetos/calendar-gray.svg';
-import warningRed from '../../../../assets/icons/buscarObjetos/warning-red.svg';
-import checkGreen from '../../../../assets/icons/buscarObjetos/check-green.svg';
-import hourglassOrange from '../../../../assets/icons/buscarObjetos/hourglass-orange.svg';
 import arrowBlue from '../../../../assets/icons/buscarObjetos/arrow-blue.svg';
 
 // falta adicionar logica de filtrar por periodo
@@ -45,18 +43,6 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
         }
     });
 
-    function verificaIconStatus(status) {
-        if (status === 'PERDIDO') { return warningRed }
-        if (status === 'ENCONTRADO') { return checkGreen }
-        if (status === 'ANALISE') { return hourglassOrange }
-    }
-
-    function adicionaClassNameStatus(status) {
-        if (status === 'PERDIDO') { return 'status__red' }
-        if (status === 'ENCONTRADO') { return 'status__green' }
-        if (status === 'ANALISE') { return 'status__orange' }
-    }
-
     function dataFormatada(data, hora){
         if (data === hoje()) { return `Hoje, ${hora}`}
         if (data === ontem()) { return `Ontem, ${hora}`}
@@ -81,14 +67,7 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
                                 <h1 className='titulo__responsive'>{ valor.nome.length < 25 ? valor.nome : `${valor.nome.slice(0, 25)}...`}</h1>
 
                                 <div className='categoria__status'>
-                                    <div className='status__principal'>
-                                        <div className={adicionaClassNameStatus(valor.status.trim().toUpperCase())} >
-
-                                            <img className="image__principal" src={verificaIconStatus(valor.status.trim().toUpperCase())} />
-                                            <span>{valor.status.trim().toUpperCase()}</span>
-
-                                        </div>
-                                    </div>
+                                    <Status objeto={valor}/>
 
                                     <div className='categoria__principal'>
                                         <img className='icon__categoria' src={valor.icon_url} />
@@ -104,8 +83,8 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
                                     <div className='data__principal'>
                                         <img src={pinGray} />
-                                        <p className='endereco__principal'>{valor.localizacao.estado + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 50 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 50) + `...`}</p>
-                                        <span className='endereco__responsive'>{valor.localizacao.estado + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 32 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 32) + `...`}</span>
+                                        <p className='endereco__principal'>{valor.localizacao.estado.length + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 50 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 50) + `...`}</p>
+                                        <span className='endereco__responsive'>{valor.localizacao.estado.length + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 32 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 32) + `...`}</span>
                                     </div>
 
                                     <p className='divisoria'>|</p>

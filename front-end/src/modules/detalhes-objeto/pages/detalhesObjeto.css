@@ -1,0 +1,106 @@
+.detalhe__objetos{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    min-height: 100dvh;
+}
+
+/* img */
+
+.house__gray, .x__white { height: 1.8rem }
+
+/* caminho / voltar */
+
+.caminho__voltar{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.caminho, .voltar__navlink{
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer
+}
+
+.caminho__text{
+    font-size: 1.2rem;
+    color: var(--secondary-color-gray); 
+}
+
+.voltar__text{
+    font-size: 1.3rem;
+    color: var(--primary-color-blue)
+}
+
+/* principal */
+
+.container__detalhes{ 
+    display: flex;
+    gap: 7rem;
+    max-height: 75rem;
+}
+
+.esquerda{ width: 46% }
+
+.direita { flex: 1 }
+
+/* buttons */
+
+.container__botoes{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 4rem;
+    align-items: center;
+}
+
+.botoes{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.botao__azul{ 
+    flex: 1;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background-color: var(--primary-color-blue);
+    color: #ffff;
+}
+
+.botao__default{
+    flex: 1;
+    padding: 1.5rem;
+    border: 0.2rem solid var(--border-color);
+    border-radius: 1rem;
+    background-color: var(-card-color);
+    color: var(--primary-color-text);
+}
+
+/* responsividade */
+
+@media( max-width: 768px  ){
+
+    .esquerda, .botao__default, .botao__azul{ width: 100% }
+
+    .detalhe__objetos{ gap: 1.5rem }
+
+    .container__detalhes{ 
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+         gap: 2.5rem;
+        max-height: 100%;
+    }
+
+    .container__botoes{
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .botoes p{ font-size: 1.3rem }
+}

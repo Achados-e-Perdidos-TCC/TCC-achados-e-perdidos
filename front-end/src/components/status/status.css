@@ -1,0 +1,36 @@
+.status__red, .status__orange, .status__green{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-radius: 1rem;
+    font-size: 1.5rem; 
+    font-weight: 500;
+    padding: 0.4rem 1rem;
+}
+
+.status__red{ 
+    background-color: var(--error-tag-color);
+    width: clamp(10.5rem, 16vw, 12rem);
+}
+.status__red span { color: var(--error-text-color)}
+
+.status__orange{ 
+    background-color: var(--analysis-tag-color)
+    /* Se necessario, adicionar largura */
+}
+.status__orange span { color: var(--analysis-text-color)}
+
+.status__green{ 
+    background-color: var(--success-tag-color);
+    width: clamp(13.5rem, 16vw, 16rem);
+}
+.status__green span { color: var(--success-text-color)}
+
+.image__principal{
+    height:clamp(1.4rem, 2vw, 2rem);
+    margin-bottom: 0.2rem;
+}
+
+@media( max-width: 768px ){
+    .status__green span, .status__red span{ font-size: 1.2rem }
+}
