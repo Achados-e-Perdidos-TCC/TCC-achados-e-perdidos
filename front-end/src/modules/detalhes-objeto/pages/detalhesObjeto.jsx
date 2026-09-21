@@ -1,4 +1,4 @@
-import { useParams, NavLink } from 'react-router'; 
+import { useParams, NavLink, useOutletContext } from 'react-router'; 
 
 import './detalhesObjeto.css'; 
 
@@ -7,6 +7,9 @@ import objetos from '../../../modules/buscar-objetos/components/principalCards/o
 import houseGray from '../../../assets/icons/detalhesObjeto/house-gray.svg'; 
 import arrowGray from '../../../assets/icons/detalhesObjeto/arrow-gray.svg'; 
 import arrowBlue from '../../../assets/icons/detalhesObjeto/arrow-blue.svg'; 
+import chatWhite from '../../../assets/icons/detalhesObjeto/chat-white.svg';
+import xBlack from '../../../assets/icons/detalhesObjeto/x-black.svg';  
+import xWhite from '../../../assets/icons/detalhesObjeto/x-white.png';  
 
 import ImagesCard from '../components/imagesCard/ImagesCard.jsx'; 
 import Detalhes from '../components/detalhes/Detalhes.jsx'; 
@@ -14,6 +17,8 @@ import Detalhes from '../components/detalhes/Detalhes.jsx';
 function detalhesObjeto(){
 
     const params = useParams(); 
+
+    const [tema] = useOutletContext()
 
     const objetoEncontrado = objetos.filter((objetos) => { if (objetos.id === Number(params.id)) { return objetos }} )
 
@@ -48,6 +53,22 @@ function detalhesObjeto(){
                         <Detalhes objeto={objetoEncontrado} />
                     </div>
 
+                </div>
+
+                <div className='container__botoes'>
+                        <NavLink className='botao__azul' to='/' end> 
+                        <div className='botoes'>
+                            <img src={chatWhite}/>
+                            <p>Tenho informacoes sobre este objeto</p>
+                        </div>
+                        </ NavLink>
+
+                        <NavLink className='botao__default' to='/' end>
+                        <div className='botoes'>
+                            {tema === 'light' ? <img src={xBlack}/> : <img className='x__white' src={xWhite}/>}
+                            <p>Não é meu objeto</p>
+                        </div>
+                        </NavLink>
                 </div>
 
         </section>

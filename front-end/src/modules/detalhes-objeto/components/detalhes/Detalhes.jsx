@@ -42,7 +42,7 @@ function Detalhes(objeto){
                 </div>
 
                 <h1 className='detalhes__titulo'>{objetoEncontrado.nome}</h1>
-                <p className='detalhes__descricao'>{`${objetoEncontrado.descricao.slice(0, 50)}...`}</p>
+                <p className='detalhes__descricao'>{`${objetoEncontrado.descricao.slice(0, 70)}...`}</p>
 
                 <div className='detalhes__infos'>
                     {icons.map((valor) => {

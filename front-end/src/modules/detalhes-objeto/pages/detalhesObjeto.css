@@ -6,7 +6,7 @@
 
 /* img */
 
-.house__gray { height: 1.8rem;}
+.house__gray, .x__white { height: 1.8rem }
 
 /* caminho / voltar */
 
@@ -40,7 +40,47 @@
     gap: 7rem;
 }
 
-.esquerda{ width: 45% }
+.esquerda{ width: 46% }
 
-.direita { max-height: 75rem }
+.direita { 
+    flex: 1;
+    max-height: 75rem 
+}
+
+/* buttons */
+
+.container__botoes{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 4rem;
+    align-items: center;
+}
+
+.botoes{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.botao__azul{ 
+    flex: 1;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background-color: var(--primary-color-blue);
+    color: #ffff;
+}
+
+.botao__default{
+    flex: 1;
+    padding: 1.5rem;
+    border: 0.2rem solid var(--border-color);
+    border-radius: 1rem;
+    background-color: var(-card-color);
+    color: var(--primary-color-text);
+}
+
+
 

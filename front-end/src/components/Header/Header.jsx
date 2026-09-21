@@ -36,8 +36,6 @@ function Header({ tema, aoAlternarTema }) {
                         <NavLink className='nav__link' to='/buscar-objetos' end> <li> <p>Buscar objetos</p> </li> </NavLink>
                         <NavLink className='link__cadastrar nav__link' to='/' end ><li> <p>Cadastrar objeto</p> </li></NavLink>
                         <NavLink className='nav__link' to='/' end> <li> <p>Como funciona</p> </li> </NavLink>
-                        <NavLink className='nav__link' to='/' end> <li> <p>Achados</p> </li> </NavLink>
-                        <NavLink className='nav__link' to='/' end> <li> <p>Perdidos</p> </li> </NavLink>
 
                     </ul>
                 </nav>
