@@ -1,0 +1,82 @@
+.como__funciona {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    padding: 4rem 0;
+}
+
+.como__funciona__cabecalho {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.title__como__funciona {
+    font-size: 3.2rem;
+    color: var(--primary-color-text);
+}
+
+.como__funciona__passos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.passo__card {
+    background-color: var(--card-color);
+    border: 0.1rem solid var(--border-color);
+    border-radius: 1rem;
+    padding: 2.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.passo__card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.passo__numero {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color-blue);
+}
+
+.passo__icone {
+    width: 4rem;
+    height: 4rem;
+    object-fit: contain;
+}
+
+.passo__titulo {
+    font-size: 1.8rem;
+    color: var(--primary-color-text);
+}
+
+.como__funciona__cta {
+    display: flex;
+    justify-content: center;
+}
+
+#btn_buscar {
+    background-color: var(--primary-color-blue);
+    color: var(--secondary-color-white);
+    padding: 1.2rem 3.2rem;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+}
+
+@media (max-width: 1024px) {
+    .como__funciona__passos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .como__funciona__passos {
+        grid-template-columns: 1fr;
+    }
+}
