@@ -43,14 +43,15 @@ function Header({ tema, aoAlternarTema }) {
 
             <div className='cabecalho__buttons'>
 
-                <div className='button button__entrar'>
-                    <a className='entrar link' href="#">Entrar</a>
-                </div>
-
                 <div className='button button__cadastrar'>
                     <img className='cabecalho__icon' src={iconCadastrarObjeto} alt="Cadastrar objeto" />
-                    <a className='cadastrar link' href="#">Cadastrar objeto</a>
+                    <NavLink to='/' end className='cadastrar link' href="#">Cadastrar objeto</NavLink>
                 </div>
+                
+                <div className='button button__entrar'>
+                    <NavLink to='/login' end className='entrar link' href="#">Entrar</NavLink>
+                </div>
+
 
                 <div className='button button__tema' onClick={aoAlternarTema}>
                     {tema === 'light' ? <img className="tema" src={temaDark} alt="Ativar tema escuro" /> : <img className="tema" src={temaLight} alt="Ativar tema claro" />}

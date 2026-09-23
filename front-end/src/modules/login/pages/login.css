@@ -1,0 +1,143 @@
+.login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.navlink{ color: var(--primary-color-blue) }
+
+/* img */
+
+.login__logo{ 
+    align-self: center;
+    max-height: 80px;
+    max-width: 80px;
+}
+
+.email__icon, .password__icon{
+    position: absolute;
+    height: 27px;
+    top: 1rem;
+    left: 1.5rem;
+}
+
+.eye__icon{
+    position: absolute;
+    height: 18px;
+    right: 1.5rem;
+    top: 1.6rem; 
+    cursor: pointer
+}
+
+/* container form */
+
+.container__form{
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 2.5rem;
+    border: 0.1rem solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: var(--shadow-hover);
+    background-color: var(--card-color);
+    max-width: 52rem;
+    width: 100%;
+    gap: 2rem; 
+    color: var(--primary-color-text)
+}
+
+/* form */
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form__title{
+    font-weight: 600;
+    font-size: 3rem;
+    line-height: 3.5rem;
+    color: var(--primary-color-blue);
+    text-align: center;
+}
+
+.form__subtitle{
+    text-align: center;
+    color: var(--secondary-color-gray)
+}
+
+/* inputs */
+
+.container__inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.label{
+    font-size: 15px;
+    color: var(--primary-color-blue);
+    font-weight: 600;
+}
+
+.input{
+    font-size: 16px;
+    border-radius: 0.5rem;
+    padding: 1.4rem 5.3rem;
+    width: 100%;
+    border: 0.1rem solid var(--border-color);
+    color: var(--primary-color-text);
+    background-color: var(--card-color);
+}
+
+.input__checkbox{
+   width: 1.5rem;
+   height: 1.5rem;
+}
+
+.input__email, .input__password { position: relative }
+
+
+/* esqueci minha senha */
+
+.container__esqueci__senha{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.4rem;
+}
+
+.container__checkbox{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* button */
+
+.form__button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    gap: 0.8rem;
+    background-color: var(--primary-color-blue);
+    color: var(--secondary-color-white);
+    padding: 1.3rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+/* ainda não tem conta */
+
+hr{ border-color: rgba(0, 0, 0, 0.249) }
+
+.container__sem__conta{
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.sem__conta__text{ color: var(--secondary-color-gray) }
