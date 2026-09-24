@@ -7,4 +7,3 @@ const routerComoFunciona =
 }
 
 export default routerComoFunciona;
-blablabla

@@ -1,34 +1,35 @@
 import "./ComoFunciona.css";
 import { NavLink } from "react-router";
 
-import lupa from "../../../assets/icons/home/lupa.png";
-import cadastrodevolucao from "../../../assets/icons/home/cadastroadevolucao.png";
-import comoencontramos from "../../../assets/icons/home/comoencontramos.png";
+import signing from "../../../assets/icons/comoFunciona/signing.png";
+import zoom from "../../../assets/icons/comoFunciona/zoom.png";
+import connection from "../../../assets/icons/comoFunciona/connection.png";
+import notification from "../../../assets/icons/comoFunciona/notification.png";
 
 const passos = [
     {
         numero: "01",
         titulo: "Você cadastra",
         descricao: "Registre um objeto perdido ou encontrado.",
-        icone: cadastrodevolucao,
+        icone: signing,
     },
     {
         numero: "02",
         titulo: "Analisamos",
         descricao: "Nosso sistema compara características e informações.",
-        icone: lupa,
+        icone: zoom,
     },
     {
         numero: "03",
         titulo: "Conectamos",
         descricao: "Encontramos possíveis correspondências entre os registros.",
-        icone: comoencontramos,
+        icone: connection,
     },
     {
         numero: "04",
         titulo: "Notificamos",
         descricao: "Quando encontramos algo relevante, avisamos você.",
-        icone: cadastrodevolucao,
+        icone: notification,
     },
 ];
 
