@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState } from 'react'; 
+import { useOutletContext } from 'react-router'; 
 
 import './perfil.css'; 
 
@@ -11,6 +12,7 @@ import arrowWhite from '../../../../../../assets/icons/register/arrow-white.png'
 function Perfil({ proximaPagina }){
 
     const [foto, setFoto] = useState(); 
+    const { tema } = useOutletContext();
 
     return (
         <div className='perfil'>
@@ -36,7 +38,7 @@ function Perfil({ proximaPagina }){
 
                 <div className='register__selecionar__imagem'>
 
-                    <label htmlFor="uploadimage" className='upload__image__label'>Seleciona imagem</label>
+                    <label htmlFor="uploadimage" className='upload__image__label'>Selecionar imagem</label>
 
                     <input id='uploadimage' type="file" accept='.jpg,.png' onChange={(event) => { setFoto(event.target.files[0])}} hidden />
                 </div>
@@ -50,7 +52,7 @@ function Perfil({ proximaPagina }){
             <div className='container__buttons'>
 
                 <div className='register__button__voltar' onClick={() => { proximaPagina(1)}}>
-                    <img className="perfil__arrow__black" src={arrowBlack} />
+                    {tema === 'light' ? <img className="perfil__arrow__black" src={arrowBlack} /> : <img className="perfil__arrow__black" src={arrowWhite} /> }
                     <p>Voltar</p>
                 </div>
 
