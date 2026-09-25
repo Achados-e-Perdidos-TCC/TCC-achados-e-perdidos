@@ -1,5 +1,6 @@
 import { useState, useEffect} from 'react'; 
-import Header from './components/header/header.jsx';
+import Header from './components/header/header.jsx'; 
+import AuthProvider  from './contexts/authContexts/AuthContext.jsx';
 
 // Reaproveitamento de estrutura
 import { Outlet } from 'react-router';
@@ -24,15 +25,17 @@ const [tema, setTema] = useState(() => {
     }, [tema]); // É executado toda vez que o o useState (tema) muda
 
     return (
-        <div className='app'>
-            <header>
-                <Header tema={tema} aoAlternarTema={alternarTema} /> 
-            </header>
+        <AuthProvider>
+            <div className='app'>
+                    <header>
+                        <Header tema={tema} aoAlternarTema={alternarTema} /> 
+                    </header>
 
-            <main className="content">
-               <Outlet context={{tema}}/> {/* Aqui entra as paginas que estarão no roteador */}
-            </main>
-        </div>
+                    <main className="content">
+                    <Outlet context={{tema}}/> {/* Aqui entra as paginas que estarão no roteador */}
+                    </main>
+            </div>
+        </AuthProvider>
     )
 }
 

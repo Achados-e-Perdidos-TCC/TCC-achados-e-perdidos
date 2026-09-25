@@ -105,7 +105,7 @@
 
 .button__responsive, .endereco__responsive, .titulo__responsive{ display: none }
 
-@media ( max-width: 1024px ){
+@media ( max-width: 1032px ){
 
     .descricao__principal, .titulo__principal, .endereco__principal{ display: none}
     .endereco__responsive{ display: flex }

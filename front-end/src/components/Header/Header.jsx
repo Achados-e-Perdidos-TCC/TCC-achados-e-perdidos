@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { AuthContext } from '../../contexts/authContexts/AuthContext.jsx'; 
 import './Header.css';
 
 import { NavLink } from 'react-router'; 
@@ -19,9 +20,22 @@ function Header({ tema, aoAlternarTema }) {
     // Implementar funcionalidade para reconhecer se usuario está logado ou não (após implementacão do login)
 
     const [menuOpen, setMenuOpen] = useState(false);
+    const { isAuthenticated } = useContext(AuthContext); 
 
-    function toogleMenu() {
-        !menuOpen ? setMenuOpen(true) : setMenuOpen(false);
+    function toogleMenu() { !menuOpen ? setMenuOpen(true) : setMenuOpen(false) }
+
+    function person(){
+        if(tema === 'light' && !isAuthenticated) { 
+            return ( <NavLink to='/auth/entrar' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink> );
+        } else if(tema === 'light' && isAuthenticated){
+            return ( <NavLink to='/' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink> );
+        }
+
+        if(tema === 'dark' && !isAuthenticated) { 
+            return ( <NavLink to='/auth/entrar' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
+        } else if(tema === 'dark' && isAuthenticated){
+            return ( <NavLink to='/' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
+        } 
     }
 
     return (
@@ -36,7 +50,6 @@ function Header({ tema, aoAlternarTema }) {
                         <NavLink className='nav__link' to='/buscar-objetos' end> <li> <p>Buscar objetos</p> </li> </NavLink>
                         <NavLink className='link__cadastrar nav__link' to='/' end ><li> <p>Cadastrar objeto</p> </li></NavLink>
                         <NavLink className='nav__link' to='/' end> <li> <p>Como funciona</p> </li> </NavLink>
-
                     </ul>
                 </nav>
             </div>
@@ -49,7 +62,7 @@ function Header({ tema, aoAlternarTema }) {
                 </div>
                 
                 <div className='button button__entrar'>
-                    <NavLink to='/login' end className='entrar link' href="#">Entrar</NavLink>
+                    {isAuthenticated ? <NavLink to='/' end className='entrar link'>Meu Perfil</NavLink> : <NavLink to='/auth/login' end className='entrar link' href="#">Entrar</NavLink>}
                 </div>
 
 
@@ -58,11 +71,11 @@ function Header({ tema, aoAlternarTema }) {
                 </div>
 
                 <div className='button__person'>
-                    {tema === 'light' ? <a href="#"> <img className="person" src={personDark} alt="Acessar perfil" /> </a> : <a href="#"> <img className="person" src={personWhite} alt="Acessar perfil" /> </a>}
+                    {person()}
                 </div>
 
                 <div className='burguer__menu' onClick={toogleMenu}>
-                    {tema === 'light' ? <img className='burguer' src={burguerDark} alt="Abrir menu" /> : <img className='burguer' src={burguerWhite} alt="" />}
+                    {tema === 'light' ? <img className='burguer' src={burguerDark} alt="Abrir menu" /> : <img className='burguer' src={burguerWhite} alt="Abrir menu" />}
                 </div>
             </div>
         </header>

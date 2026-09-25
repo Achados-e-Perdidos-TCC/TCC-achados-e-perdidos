@@ -44,7 +44,7 @@
     max-width: 52rem;
     width: 100%;
     gap: 2rem; 
-    color: var(--primary-color-text)
+    color: var(--primary-color-text);
 }
 
 /* form */
@@ -141,3 +141,15 @@ hr{ border-color: rgba(0, 0, 0, 0.249) }
 }
 
 .sem__conta__text{ color: var(--secondary-color-gray) }
+
+/* error */
+
+.no__error{ display: none }
+
+.error{ line-height: 1rem }
+
+.error__message{
+    text-align: center;
+    font-size: 1.4rem;
+    color: #ed4337;
+}

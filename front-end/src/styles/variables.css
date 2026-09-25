@@ -24,7 +24,6 @@
     --error-tag-color: #FEA3A3;   
 
     --font-principal: 'Poppins', sans-serif;
-
 }
 
 [data-theme='dark']{
@@ -36,5 +35,4 @@
     --background-color: #181818; 
     --card-color: #191818;
     --border-color: #dddddd8e;
-    
 }
