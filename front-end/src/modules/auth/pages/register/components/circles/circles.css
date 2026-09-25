@@ -1,0 +1,63 @@
+.register__container__circles{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--secondary-color-gray);
+}
+
+.register__circle{
+    border: 0.1rem solid var(--border-color);
+    border-radius: 3rem;
+    padding: 0.6rem 1.5rem;
+}
+
+.register__circle__active{
+    background-color: var(--primary-color-blue);
+    color: var(--secondary-color-white); 
+}
+
+.register__subtitle__active{ color: var(--primary-color-blue)}
+
+.register__content__circles{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* linha entre os elementos */
+
+/* :not(:last-child) = pegue todos menos o ultimo filho (3) */
+.register__content__circles:not(:last-child)::after {
+    content: '';
+    height: 0.25rem;
+    width: clamp(4rem, 15vw, 10rem);
+    margin-left: 1rem;
+
+    background: linear-gradient(
+        90deg,
+        var(--border-color) 0%,
+        var(--border-color) 35%,
+        rgba(0, 100, 255, 0.35) 45%,
+        var(--primary-color-blue) 50%,
+        rgba(0, 100, 255, 0.35) 55%,
+        var(--border-color) 65%,
+        var(--border-color) 100%
+    );
+    background-size: 350% 100%;
+}
+
+/* anima só a linha do passo ativo */
+.register__content__circles.register__subtitle__active:not(:last-child)::after {
+    animation: linhaDePulsacao 4.2s ease infinite;
+}
+
+/* preencher a linha anterior  */
+.register__content__circles:has(+ .register__content__circles.register__subtitle__active)::after {
+    background: var(--primary-color-blue);
+    background-size: 100% 100%;
+    animation: none;
+}
+
+@keyframes linhaDePulsacao {
+    0% { background-position: 100% 0% }
+}

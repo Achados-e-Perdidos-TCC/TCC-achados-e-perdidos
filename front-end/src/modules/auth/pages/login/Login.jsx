@@ -33,7 +33,6 @@ function Login(){
             // faz chamada API
             await login(inputEmailState, inputPasswordState, lembrarUsuario); 
 
-
             return window.location.href = "/";
 
         } catch(error) { setError(error.message) }
@@ -45,12 +44,12 @@ function Login(){
             <div className='container__form'>
                 <img className="login__logo" src={logo} />
 
-                <form  className='form' action='POST' onSubmit={(evento) => { logarUsuario(evento) }}>
+                <div>
+                    <h1 className="form__title" >Bem-vindo de volta!</h1>
+                    <p className="form__subtitle">Faça login para continuar</p>
+                </div>
 
-                    <div>
-                        <h1 className="form__title" >Bem-vindo de volta!</h1>
-                        <p className="form__subtitle">Faça login para continuar</p>
-                    </div>
+                <form  className='form' action='POST' onSubmit={(evento) => { logarUsuario(evento) }}>
 
                     <div className={!error ? 'no__error' : 'error'}>
                         <p className='error__message'>{error}</p>
@@ -99,7 +98,7 @@ function Login(){
 
                 <div className='container__sem__conta'>
                     <p className='sem__conta__text'>Ainda não tem uma conta?</p>
-                    <NavLink to='/' end className='navlink' ><p> Criar conta </p></NavLink>
+                    <NavLink to='/auth/register' end className='navlink' ><p> Criar conta </p></NavLink>
                 </div>
             </div>
 
