@@ -57,7 +57,7 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
                 return (
                     <div className='card__principal' key={valor.id}>
-                        <img className='image__card ' src={valor.imagemPrincipal} />
+                        <img className='principal__cards__image__card ' src={valor.imagemPrincipal} />
 
                         <div className='principal__meio'>
 

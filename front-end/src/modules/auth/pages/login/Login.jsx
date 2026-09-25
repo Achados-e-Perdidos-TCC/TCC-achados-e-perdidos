@@ -31,11 +31,16 @@ function Login(){
             verificaEmailSenha(inputEmailState, inputPasswordState); 
     
             // faz chamada API
-            await login(inputEmailState, inputPasswordState, lembrarUsuario); 
+            await login(inputEmailState, inputPasswordState, lembrarUsuario);
 
             return window.location.href = "/";
 
-        } catch(error) { setError(error.message) }
+        } catch(erro) { 
+            if(erro.message === 'Credenciais inválidas' || error === null ){ return setError(`Credenciais inválidas`)}
+            if(erro.message === 'Email inválido') { return setError('Email inválido')}
+            if(erro.message === 'Senha inválida') { return setError('Senha inválida')}
+            else { return setError('Ocorreu um erro inesperado, verifique se os dados informados estão corretos e tente novamente mais tarde')}
+        }
     }
 
     return (

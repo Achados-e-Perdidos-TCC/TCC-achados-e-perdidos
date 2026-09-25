@@ -3,14 +3,14 @@ import './circles.css';
 function Circles({ paginaAtual }){
 
     const circles = [ 1, 2, 3, ]
-    const circlesDescription = [ 'Seus dados', 'Seu perfil', 'Preferências']
+    const circlesDescription = ['Seus dados', 'Seu perfil', 'Preferências']
 
     return (
         <div className='register__container__circles'>
             {circles.map((valor) => {
                         return (
-                                <div className={paginaAtual === valor ? 'register__subtitle__active register__content__circles' : 'register__content__circles'} key={valor}>
-                                    <div className={paginaAtual === valor ? 'register__circle__active register__circle' : 'register__circle'}>
+                                <div className={`register__content__circles ${paginaAtual === valor ? 'register__subtitle__active' : valor < paginaAtual  ? 'register__subtitle__actived' : ''}`} key={valor}>
+                                    <div className={`register__circle ${paginaAtual === valor ? 'register__circle__active' : valor < paginaAtual  ? 'register__circle__actived' : ''}` }>
                                         {valor}
                                     </div>
                                     {`${circlesDescription[valor - 1]}`}

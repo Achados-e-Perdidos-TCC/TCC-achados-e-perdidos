@@ -12,7 +12,7 @@
 
 /* img */
 
-.image__card{
+.principal__cards__image__card{
     border-radius: 1rem;
     height: 20rem;
     width: clamp(12rem, 16vw, 30rem);

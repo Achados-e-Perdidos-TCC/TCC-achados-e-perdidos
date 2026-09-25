@@ -11,12 +11,12 @@
     padding: 0.6rem 1.5rem;
 }
 
-.register__circle__active{
+.register__circle__active, .register__circle__actived{
     background-color: var(--primary-color-blue);
     color: var(--secondary-color-white); 
 }
 
-.register__subtitle__active{ color: var(--primary-color-blue)}
+.register__subtitle__active, .register__subtitle__actived{ color: var(--primary-color-blue)}
 
 .register__content__circles{
     display: flex;
@@ -48,14 +48,13 @@
 
 /* anima só a linha do passo ativo */
 .register__content__circles.register__subtitle__active:not(:last-child)::after {
-    animation: linhaDePulsacao 4.2s ease infinite;
+    animation: linhaDePulsacao 3.8s ease infinite;
 }
 
-/* preencher a linha anterior  */
-.register__content__circles:has(+ .register__content__circles.register__subtitle__active)::after {
+/* preencher a linha anterior e a penultima linha */
+.register__content__circles:has(+ .register__content__circles.register__subtitle__active)::after, 
+.register__content__circles:has(+ .register__content__circles.register__subtitle__actived)::after {
     background: var(--primary-color-blue);
-    background-size: 100% 100%;
-    animation: none;
 }
 
 @keyframes linhaDePulsacao {

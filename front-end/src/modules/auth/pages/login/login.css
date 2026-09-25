@@ -146,7 +146,7 @@ hr{ border-color: rgba(0, 0, 0, 0.249) }
 
 .no__error{ display: none }
 
-.error{ line-height: 1rem }
+.error{ line-height: 1.8rem }
 
 .error__message{
     text-align: center;
