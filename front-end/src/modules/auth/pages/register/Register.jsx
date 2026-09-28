@@ -72,7 +72,7 @@ function Register(){
                     <Circles paginaAtual={ paginaActive } />
                 </div>
 
-                <form  className='register__form' action='POST' onSubmit={(evento) => evento.preventDefault()}>
+                <form  className='register__form' action='POST' noValidate onSubmit={(evento) => evento.preventDefault()}>
 
                     <div className={!error ? 'register__no__error' : 'register__error'}>
                         <p className='register__error__message'>{error}</p>

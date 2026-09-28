@@ -15,8 +15,8 @@ import entrarWhite from '../../../../assets/icons/login/entrar-white.png';
 function Login(){
 
     const [eyeState, setEyeState] = useState(true);
-    const [inputEmailState, setInputEmailState] = useState()
-    const [inputPasswordState, setInputPasswordState] = useState()
+    const [inputEmailState, setInputEmailState] = useState('')
+    const [inputPasswordState, setInputPasswordState] = useState('')
     const [lembrarUsuario, setLembrarUsuario] = useState(false); 
     const [error, setError] = useState(null)
 
@@ -46,54 +46,54 @@ function Login(){
     return (
         <section className="login">
             
-            <div className='container__form'>
+            <div className='login__container__form'>
                 <img className="login__logo" src={logo} />
 
                 <div>
-                    <h1 className="form__title" >Bem-vindo de volta!</h1>
-                    <p className="form__subtitle">Faça login para continuar</p>
+                    <h1 className="login__form__title" >Bem-vindo de volta!</h1>
+                    <p className="login__form__subtitle">Faça login para continuar</p>
                 </div>
 
-                <form  className='form' action='POST' onSubmit={(evento) => { logarUsuario(evento) }}>
+                <form  className='login__form' action='POST' noValidate onSubmit={(evento) => { logarUsuario(evento) }}>
 
-                    <div className={!error ? 'no__error' : 'error'}>
-                        <p className='error__message'>{error}</p>
+                    <div className={!error ? 'login__no__error' : 'login__error'}>
+                        <p className='login__error__message'>{error}</p>
                     </div>
 
-                    <div className='container__inputs'>
+                    <div className='login__container__inputs'>
 
                         <div>
-                            <label className="label" htmlFor="email"> E-mail </label>
-                            <div className='input__email'>
-                                <img className='email__icon' src={emailGray}/>
-                                <input id='email' className='input' type="email" placeholder='Seu@email.com' onChange={(e) => {setInputEmailState(e.target.value)}} />
+                            <label className="login__label" htmlFor="email"> E-mail </label>
+                            <div className='login__input__email'>
+                                <img className='login__email__icon' src={emailGray}/>
+                                <input id='email' className='login__input' type="email" placeholder='Seu@email.com' onChange={(e) => {setInputEmailState(e.target.value)}} />
                             </div>
                         </div>
 
                         <div>
-                            <label className="label" htmlFor="password"> Senha </label>
-                            <div className='input__password'>
-                                <img className='password__icon' src={lockGray} />
-                                <input id='password' className='input' type={eyeState === true ? 'password' : 'text'} placeholder='Sua senha' onChange={(e) => {setInputPasswordState(e.target.value)}}/>
-                                <div className='eye__button' onClick={() => { setarEyeState() }}>
-                                   {eyeState === true ? <img className='eye__icon' src={openEyeGray} /> : <img className='eye__icon' src={closeEyeGray} />} 
+                            <label className="login__label" htmlFor="password"> Senha </label>
+                            <div className='login__input__password'>
+                                <img className='login__password__icon' src={lockGray} />
+                                <input id='password' className='login__input' type={eyeState === true ? 'password' : 'text'} placeholder='Sua senha' onChange={(e) => {setInputPasswordState(e.target.value)}}/>
+                                <div className='login__eye__button' onClick={() => { setarEyeState() }}>
+                                   {eyeState === true ? <img className='login__eye__icon' src={openEyeGray} /> : <img className='login__eye__icon' src={closeEyeGray} />} 
                                 </div>
                             </div>
                         </div>
 
                     </div>
 
-                    <div className='container__esqueci__senha'>
-                        <div className='container__checkbox'>
-                            <input className='input__checkbox' type="checkbox" onClick={() => {setLembrarUsuario((valor) => (valor === false ? true : false))}} />
+                    <div className='login__container__esqueci__senha'>
+                        <div className='login__container__checkbox'>
+                            <input className='login__input__checkbox' type="checkbox" onClick={() => {setLembrarUsuario((valor) => (valor === false ? true : false))}} />
                             <label htmlFor=""> Lembrar de mim </label>
                         </div>
 
-                        <NavLink to='/' end className='navlink'>Esqueci minha senha</NavLink>
+                        <NavLink to='/' end className='login__navlink'>Esqueci minha senha</NavLink>
                     </div>
 
-                    <button className='form__button' type='submit' >
-                        <img src={entrarWhite} />
+                    <button className='login__form__button' type='submit' >
+                        <img className="login__image__entrar" src={entrarWhite} />
                         <p>Entrar</p>
                     </button>
                     
@@ -101,9 +101,9 @@ function Login(){
 
                 <hr />
 
-                <div className='container__sem__conta'>
-                    <p className='sem__conta__text'>Ainda não tem uma conta?</p>
-                    <NavLink to='/auth/register' end className='navlink' ><p> Criar conta </p></NavLink>
+                <div className='login__container__sem__conta'>
+                    <p className='login__sem__conta__text'>Ainda não tem uma conta?</p>
+                    <NavLink to='/auth/register' end className='login__navlink' ><p> Criar conta </p></NavLink>
                 </div>
             </div>
 

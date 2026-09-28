@@ -56,8 +56,8 @@ function PreliminaryData({ proximaPagina, error, setInput }){
     function continuarCriacaoConta(){ 
         try{
             error(null);
-            if (inputNameState.trim().length < 3 || inputNameState.trim().length > 100) { return error('Nome inválido') }
             if (!inputEmailState.trim() || !inputPasswordState.trim() || !inputNameState.trim()) { return setObrigatorio(true)}
+            if (inputNameState.trim().length < 3 || inputNameState.trim().length > 100) { return error('Nome inválido') }
             if (inputCityState && !todasAsCidades.includes(inputCityState)) { return error('Cadastre uma cidade disponível na lista clicando nela. Caso não encontre a sua, selecione a opção mais próxima e entre em contato com o suporte da plataforma.')}
             if (inputTelephoneState) { verificaTelefone(inputTelephoneState) }
 
@@ -185,7 +185,7 @@ function PreliminaryData({ proximaPagina, error, setInput }){
 
             <div className='register__container__com__conta'>
                 <p className='register__com__conta__text'>Já possui uma conta?</p>
-                <NavLink to='/auth/login' end className='navlink' ><p> Entrar </p></NavLink>
+                <NavLink to='/auth/login' end className='register__navlink' ><p> Entrar </p></NavLink>
             </div>
         </div>
     )

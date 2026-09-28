@@ -6,7 +6,7 @@
     margin-top: 3rem;
 }
 
-.navlink{ color: var(--primary-color-blue) }
+.login__navlink{ color: var(--primary-color-blue) }
 
 /* img */
 
@@ -16,14 +16,14 @@
     max-width: 80px;
 }
 
-.email__icon, .password__icon{
+.login__email__icon, .login__password__icon{
     position: absolute;
     height: 27px;
     top: 1rem;
     left: 1.5rem;
 }
 
-.eye__icon{
+.login__eye__icon{
     position: absolute;
     height: 18px;
     right: 1.5rem;
@@ -33,7 +33,7 @@
 
 /* container form */
 
-.container__form{
+.login__container__form{
     display: flex;
     flex-direction: column;
     padding: 3rem 2.5rem;
@@ -49,41 +49,41 @@
 
 /* form */
 
-.form{
+.login__form{
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
-.form__title{
+.login__form__title{
     font-weight: 600;
-    font-size: 3rem;
+    font-size: clamp(2.5rem, 5vw, 3rem);
     line-height: 3.5rem;
     color: var(--primary-color-blue);
     text-align: center;
 }
 
-.form__subtitle{
+.login__form__subtitle{
     text-align: center;
     color: var(--secondary-color-gray)
 }
 
 /* inputs */
 
-.container__inputs{
+.login__container__inputs{
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
-.label{
-    font-size: 15px;
+.login__label{
+    font-size: 1.5rem;
     color: var(--primary-color-blue);
     font-weight: 600;
 }
 
-.input{
-    font-size: 16px;
+.login__input{
+    font-size: clamp(14px 2vw, 16px);
     border-radius: 0.5rem;
     padding: 1.4rem 5.3rem;
     width: 100%;
@@ -92,39 +92,39 @@
     background-color: var(--card-color);
 }
 
-.input__checkbox{
+.login__input__checkbox{
    width: 1.5rem;
    height: 1.5rem;
 }
 
-.input__email, .input__password { position: relative }
+.login__input__email, .login__input__password { position: relative }
 
 
 /* esqueci minha senha */
 
-.container__esqueci__senha{
+.login__container__esqueci__senha{
     display: flex;
     justify-content: space-between;
-    font-size: 1.4rem;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
 }
 
-.container__checkbox{
+.login__container__checkbox{
     display: flex;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
     align-items: center;
 }
 
 /* button */
 
-.form__button{
+.login__form__button{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.7rem;
+    font-size: clamp(1.5rem, 2vw, 1.7rem);
     gap: 0.8rem;
     background-color: var(--primary-color-blue);
     color: var(--secondary-color-white);
-    padding: 1.3rem;
+    padding: clamp(1rem, 2vw, 1.3rem);
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
@@ -134,22 +134,50 @@
 
 hr{ border-color: rgba(0, 0, 0, 0.249) }
 
-.container__sem__conta{
+.login__container__sem__conta{
     display: flex;
     justify-content: center;
     gap: 0.5rem;
 }
 
-.sem__conta__text{ color: var(--secondary-color-gray) }
+.login__sem__conta__text{ color: var(--secondary-color-gray) }
 
 /* error */
 
-.no__error{ display: none }
+.login__no__error{ display: none }
 
-.error{ line-height: 1.8rem }
+.login__error{ line-height: 1.8rem }
 
-.error__message{
+.login__error__message{
     text-align: center;
     font-size: 1.4rem;
     color: #ed4337;
+}
+
+/* responsividade */
+
+@media( max-width: 768px){ 
+
+    /* img */
+
+    .login__email__icon, .login__password__icon, .login__image__entrar { height: 20px }
+
+    .login__eye__icon{
+        height: 14px;
+        top: 1.4rem; 
+    }
+
+    .login__logo{ 
+        max-height: 70px;
+        max-width: 70px;
+    }
+
+    /* login area */
+
+    .login__form__subtitle { font-size: 1.4rem }
+    .login__sem__conta__text, .login__navlink{ font-size: 1.25rem }
+    .login__label { font-size: 1.35rem }
+
+    .login__input{ padding: 1.2rem 4.5rem }
+    
 }
