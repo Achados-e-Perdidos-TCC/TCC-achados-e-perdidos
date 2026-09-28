@@ -64,6 +64,16 @@
   transition: 0.4s;
 }
 
+.register__container__preferences__image{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.1rem solid var(--border-color);
+    padding: 1rem; 
+    border-radius: 15rem;
+    background-color: #0659ff35;
+}
+
 .preference__button.ativo1, .preference__button.ativo2 { background: var(--primary-color-blue) }
 
 .preference__button.ativo1 span, .preference__button.ativo2 span { transform: translateX(2.2rem) }
@@ -125,4 +135,6 @@
         font-size: 1.1rem;
         line-height: 1.5rem;
     }
+
+    .register__container__preferences__image{ padding: 0.7rem }
 }

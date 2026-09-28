@@ -16,8 +16,8 @@ function Preferences({ proximaPagina, error, criarConta }){
     const { tema } = useOutletContext();
 
     const preferenciasCards = [ 
-        { img: bellBlue, titulo: 'notificações', mensagem: 'receba notificações importante sobre sua conta e seus objetos.'},
-        { img: emailBlue, titulo: 'E-mails', mensagem: 'receba novidade e atualizações importantes por e-mail.'} 
+        { img: bellBlue, titulo: 'notificações', mensagem: 'receba notificações importantes sobre sua conta e seus objetos.'},
+        { img: emailBlue, titulo: 'E-mails', mensagem: 'receba novidades e atualizações importantes por e-mail.'} 
     ]
 
     async function finalizarCriacaoConta(){
@@ -48,7 +48,9 @@ function Preferences({ proximaPagina, error, criarConta }){
                         return (
                             <div className='preferences__card'>
                                 <div className='preferences__card__content'>
-                                    <img className='preferences__image__card' src={valor.img}/>
+                                    <div className='register__container__preferences__image'>
+                                        <img className='preferences__image__card' src={valor.img}/>
+                                    </div>
 
                                     <div>
                                         <h3 className='preferences__card__title'>{valor.titulo}</h3>
