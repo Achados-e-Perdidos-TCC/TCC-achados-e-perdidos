@@ -40,15 +40,15 @@
 
 .register__form__title{
     font-weight: 600;
-    font-size: 4.5rem;
-    line-height: 5rem;
+    font-size: clamp(3rem, 4vw, 4.5rem);
+    line-height: clamp(3rem, 5vw, 5rem);
     color: var(--primary-color-blue);
     text-align: center;
 }
 
 .register__form__subtitle{
     text-align: center;
-    font-size: 1.4rem;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
     color: var(--secondary-color-gray)
 }
 
@@ -66,4 +66,25 @@
     text-align: center;
     font-size: 1.4rem;
     color: #ed4337;
+}
+
+/* responsividade */
+
+@media( max-width: 768px ){ .register__container__form{ padding: 3rem 2.5rem; } }
+
+@media( max-width: 767px ){
+
+    /* img */
+
+    .register__logo{ 
+        max-height: 70px;
+        max-width: 70px;
+    }
+
+    .register__container__form{ padding: 3rem 1.5rem }
+
+    .personalize__perfil__title{ font-size: 2.5rem }
+    .personalize__perfil__subtitle, .preferencias__subtitle{ font-size: 1rem;}
+
+    .preferencias__title{ font-size: 2rem}
 }

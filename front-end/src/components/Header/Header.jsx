@@ -26,13 +26,13 @@ function Header({ tema, aoAlternarTema }) {
 
     function person(){
         if(tema === 'light' && !isAuthenticated) { 
-            return ( <NavLink to='/auth/entrar' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink> );
+            return ( <NavLink to='/auth/login' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink> );
         } else if(tema === 'light' && isAuthenticated){
             return ( <NavLink to='/' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink> );
         }
 
         if(tema === 'dark' && !isAuthenticated) { 
-            return ( <NavLink to='/auth/entrar' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
+            return ( <NavLink to='/auth/login' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
         } else if(tema === 'dark' && isAuthenticated){
             return ( <NavLink to='/' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
         } 

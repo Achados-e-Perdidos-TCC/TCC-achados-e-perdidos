@@ -45,3 +45,27 @@
     cursor: pointer;
 }
 
+/* responsividade */
+
+@media (max-width: 767px) {
+    
+    .success__image {
+        max-width: 280px;
+        width: 100%;
+        height: auto;
+    }
+
+    .success__title {
+        font-size: clamp(2rem, 8vw, 2.5rem);
+        line-height: 2.9rem;
+    }
+
+    .success__subtitle {
+        justify-self: center ;
+        font-size: 1.1rem;
+        line-height: 1.5rem;
+    }
+
+    .success__button {width: 100% }
+}
+

@@ -109,6 +109,7 @@ hr{ border-color: rgba(0, 0, 0, 0.249) }
 
 .requisito__cumprido {
     color: var(--success-text-color);
+    font-size: 1.5rem;
     text-decoration: line-through;
 }
 
@@ -138,4 +139,34 @@ hr{ border-color: rgba(0, 0, 0, 0.249) }
 .register__obrigatorio__message{
     font-size: 1.25rem;
     color: #ed4337f5; 
+}
+
+/* responsividade */
+
+@media ( max-width: 768px ){
+
+    /* img */
+
+    .register__icon { height: 20px }
+
+    .register__eye__icon{
+        height: 14px;
+        top: 1.4rem; 
+    }
+
+    /* preliminary */
+
+    .register__label{ font-size: 1.35rem }
+
+    .register__input{ 
+        font-size: 1.4rem;
+        padding: 1.2rem 4.5rem 
+    }
+
+    .info__subtitle{ font-size: 1.2rem }
+
+    .register__container__com__conta{ 
+        margin-top: -0.5rem; 
+        font-size: 1.35rem 
+    }
 }

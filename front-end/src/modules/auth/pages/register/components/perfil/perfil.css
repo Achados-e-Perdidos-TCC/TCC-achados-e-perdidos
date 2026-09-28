@@ -58,13 +58,13 @@
     justify-content: space-between;
     border: 0.1rem solid #0659ff35; 
     border-radius: 1rem;
-    padding: 1.5rem;
+    padding: clamp(1rem, 2vw, 1.5rem);
 }
 
 .register__upload__container{
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: clamp(0.5rem, 2vw, 2rem);
     font-size: 1.4rem;
 }
 
@@ -90,6 +90,7 @@
     padding: 0.7rem;
     font-size: 1.4rem; 
     color: var(--primary-color-blue);
+    white-space: noWrap;
     cursor: pointer 
 }
 
@@ -131,3 +132,57 @@
     color: var(--secondary-color-white); 
 }
 
+/* responsividade */
+
+.responsive{ display: none }
+
+@media (max-width: 768px){
+
+     /* Esconde o subtítulo e o botão desktop */
+    .register__upload__subtitle, .no__responsive { display: none }
+
+    .register__responsive { margin-top: -1rem }
+
+    .upload__image {
+        padding: 0.8rem;
+        height: 35px;
+    }
+
+    .register__perfil__skip img { height: 22px }
+
+    .register__foto__subtitle {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .register__upload {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1.2rem;
+    }
+
+    /* Parte do ícone + texto */
+    .register__upload__container { gap: 1rem }
+
+    .register__upload__title {
+        text-align: start;
+        font-size: 1.3rem;
+    }
+
+    .upload__image__label {
+        text-align: center;
+        font-size: 1.2rem;
+    }
+
+    .register__perfil__skip {
+        font-size: 1.3rem;
+        margin-top: -1.5rem;
+        padding: 0.5rem;
+    }
+
+    .register__button__voltar, .register__button__continuar {
+        padding: 0.9rem 1.3rem;
+        gap: 1rem;
+        font-size: 1.3rem;
+    }
+}

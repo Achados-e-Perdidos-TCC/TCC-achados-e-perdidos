@@ -67,3 +67,62 @@
 .preference__button.ativo1, .preference__button.ativo2 { background: var(--primary-color-blue) }
 
 .preference__button.ativo1 span, .preference__button.ativo2 span { transform: translateX(2.2rem) }
+
+/* responsividade */
+
+@media(max-width: 767px){
+
+    .preferences__card {
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .preferences__card__content { gap: 0.7rem } 
+
+    /* img */
+
+    .preferences__image__card {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* preferences */
+    .preferences__card__title {
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+
+    .preferences__card__subtitle {
+        font-size: 1.1rem;
+        line-height: 1.4rem;
+        max-width: 30ch
+    }
+
+    .preference__button {
+        width: 44px;
+        height: 25px;
+        padding: 0.25rem;
+        flex-shrink: 0;
+    }
+
+    .preference__button span {
+        width: 19px;
+        height: 19px;
+    }
+
+    .preference__button.ativo1 span, .preference__button.ativo2 span {
+        transform: translateX(1.9rem);
+    }
+
+    .register__container__info { gap: 0.7rem }
+
+    .info__image {
+        width: 18px;
+        height: 18px;
+    }
+
+    .info__subtitle {
+        font-size: 1.1rem;
+        line-height: 1.5rem;
+    }
+}

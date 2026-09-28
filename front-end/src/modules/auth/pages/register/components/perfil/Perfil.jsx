@@ -53,13 +53,15 @@ function Perfil({ proximaPagina, error, setInput }){
                 </div>
 
                 <div className='register__selecionar__imagem'>
-                    {foto ? (<p className='upload__image__label' onClick={() => { setFoto('') }}> Excluir imagem </p>) 
-                    : (<label htmlFor="uploadimage" className='upload__image__label'>Selecionar imagem</label>)}
+                    {foto ? (<p className='upload__image__label no__responsive' onClick={() => { setFoto('') }}> Excluir imagem </p>) 
+                    : (<label htmlFor="uploadimage" className='upload__image__label no__responsive'>Selecionar imagem</label>)}
 
                     <input id='uploadimage' type="file" accept='.jpg,.png' onChange={(event) => { setFoto(event.target.files[0])}} hidden />
                 </div>
-
             </div>
+
+            {foto ? (<p className='upload__image__label register__responsive' onClick={() => { setFoto('') }}> Excluir imagem </p>) 
+            : (<label htmlFor="uploadimage" className='upload__image__label register__responsive'>Selecionar imagem</label>)}
 
             <div className='register__perfil__skip' onClick={() => { pularProximaPagina() }}>
                 <img src={skipGray}  />

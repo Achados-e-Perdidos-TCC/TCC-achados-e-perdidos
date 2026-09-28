@@ -1,0 +1,13 @@
+.register__logado{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -2rem
+}
+
+.success__link__voltar { cursor: pointer }
+
+@media( max-width: 767px ){
+    .register__ja__logado{ font-size: 2.8rem }
+    .register__ja__logado__subtitle{ font-size: 1.1rem }
+}

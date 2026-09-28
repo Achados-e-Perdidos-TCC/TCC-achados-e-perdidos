@@ -4,11 +4,14 @@ function verificaEmailSenha(email, senha){
     if (typeof senha !== 'string' || !senha || senha.length < 8){  throw new Error('Senha inválida') }
 }
 
-function verificaTelefone(telefone) {
+function verificaTelefone(telefoneCadastrado) {
+
+    const telefone = telefoneCadastrado.replace(/\D/g, '');
+
     const tem11Digitos = telefone.length === 11;
     const temApenasNumeros = !isNaN(telefone);
 
-    return tem11Digitos && temApenasNumeros;
+    if (!tem11Digitos || !temApenasNumeros){ throw new Error('Telefone inválido') };
 }
 
 function verificaSenhaCadastro(senha) {

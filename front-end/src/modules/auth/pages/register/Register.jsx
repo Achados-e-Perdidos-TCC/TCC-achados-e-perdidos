@@ -15,7 +15,7 @@ import logo from '../../../../assets/logo_iniciais.png';
 
 function Register(){
 
-    const acessToken = localStorage.getItem('accessToken');
+    const acessToken = localStorage.getItem('accessToken') || sessionStorage.getItem('temporaryToken');
     const logado = !acessToken ? false : true;
 
     const [paginaActive, setPaginaActive] = useState(1); 
@@ -59,13 +59,13 @@ function Register(){
                 </div>
 
                 <div className={paginaActive === 2 ? '' : 'register__none' }>
-                    <h1 className="register__form__title" >Personalize seu perfil</h1>
-                    <p className="register__form__subtitle">Adicione uma foto para deixar seu perfil mais pessoal.</p>
+                    <h1 className="register__form__title personalize__perfil__title" >Personalize seu perfil</h1>
+                    <p className="register__form__subtitle personalize__perfil__subtitle">Adicione uma foto para deixar seu perfil mais pessoal.</p>
                 </div>
 
                 <div className={paginaActive === 3 ? '' : 'register__none' }>
-                    <h1 className="register__form__title" >Configure suas preferências</h1>
-                    <p className="register__form__subtitle">Escolha como deseja receber avisos e atualizações</p>
+                    <h1 className="register__form__title preferencias__title" >Configure suas preferências</h1>
+                    <p className="register__form__subtitle preferencias__subtitle">Escolha como deseja receber avisos e atualizações</p>
                 </div>
 
                 <div className={paginaActive === 4 ? 'register__none' : ''}>

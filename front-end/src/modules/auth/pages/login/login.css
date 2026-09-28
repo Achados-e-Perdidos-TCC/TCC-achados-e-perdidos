@@ -43,7 +43,7 @@
     background-color: var(--card-color);
     max-width: 52rem;
     width: 100%;
-    gap: 2rem; 
+    gap: 1.5rem; 
     color: var(--primary-color-text);
 }
 
@@ -73,7 +73,7 @@
 .login__container__inputs{
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: clamp(1rem, 2vw, 2rem);
 }
 
 .login__label{
@@ -83,7 +83,7 @@
 }
 
 .login__input{
-    font-size: clamp(14px 2vw, 16px);
+    font-size: 1.6rem;
     border-radius: 0.5rem;
     padding: 1.4rem 5.3rem;
     width: 100%;
@@ -178,6 +178,9 @@ hr{ border-color: rgba(0, 0, 0, 0.249) }
     .login__sem__conta__text, .login__navlink{ font-size: 1.25rem }
     .login__label { font-size: 1.35rem }
 
-    .login__input{ padding: 1.2rem 4.5rem }
+    .login__input{ 
+        font-size: 1.4rem;
+        padding: 1.2rem 4.5rem 
+    }
     
 }

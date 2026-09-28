@@ -3,6 +3,7 @@
     justify-content: space-between;
     align-items: center;
     color: var(--secondary-color-gray);
+    width: 100%;
 }
 
 .register__circle{
@@ -60,4 +61,32 @@
 
 @keyframes linhaDePulsacao {
     0% { background-position: 100% 0% }
+}
+
+/* responsividade */
+
+@media( max-width: 767px ){
+
+     .register__container__circles {
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .register__content__circles {
+        position: relative;
+        flex: 1;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .register__circle { padding: 0.5rem 1.2rem }
+
+    .register__content__circles:not(:last-child)::after {
+        position: absolute;
+        top: 1.2rem;
+        left: calc(50% + 1.5rem);
+    }
+
 }

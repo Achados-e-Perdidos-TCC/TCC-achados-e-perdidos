@@ -86,6 +86,7 @@ function PreliminaryData({ proximaPagina, error, setInput }){
             if(erro.message === 'Credenciais inválidas'){ return error(`Credenciais inválidas`)}
             if(erro.message === 'Email inválido') { return error('Email inválido')}
             if(erro.message === 'Senha inválida') { return error('Senha inválida')}
+            if(erro.message === 'Telefone inválido') { return error('Telefone inválido')}
             else { return error('Ocorreu um erro inesperado, verifique se os dados informados estão corretos e tente novamente mais tarde')}
         }
     }
