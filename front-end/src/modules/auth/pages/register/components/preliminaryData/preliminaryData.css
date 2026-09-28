@@ -17,6 +17,11 @@
 
 .info__image{ height: 23px }
 
+.register__cidades__sugestoes img {
+    width: 18px;
+    height: 18px;
+}
+
 /* inputs */
 
 .register__label{
@@ -86,3 +91,51 @@ hr{ border-color: rgba(0, 0, 0, 0.249) }
 }
 
 .register__com__conta__text{ color: var(--secondary-color-gray) }
+
+/* senha */
+
+.register__password__requerimentos {
+    padding: 1rem;
+    background-color: var(--card-color);
+    border: 0.1rem solid var(--border-color);
+    border-radius: 0.5rem; 
+}
+
+.requisito__pendente{
+    margin: 0.3rem 0;
+    font-size: 1.5rem;
+    color: #ed4337;
+}
+
+.requisito__cumprido {
+    color: var(--success-text-color);
+    text-decoration: line-through;
+}
+
+/* cidades */
+
+.register__container__sugestoes {
+    max-height: 30rem;
+    background-color: var(--card-color);
+    border: 0.1rem solid var(--border-color);
+    border-radius: 0.8rem;
+    overflow: auto;
+}
+
+.register__cidades__sugestoes {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.4rem;
+    cursor: pointer;
+}
+
+.register__cidades__sugestoes:hover { background-color: #edecec76 }
+.register__cidades__sugestoes span { font-size: 1.4rem }
+
+/* error: obrigatorio */
+
+.register__obrigatorio__message{
+    font-size: 1.25rem;
+    color: #ed4337f5; 
+}

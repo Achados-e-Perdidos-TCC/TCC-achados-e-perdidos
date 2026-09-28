@@ -58,7 +58,7 @@
 
 .register__no__error, .register__none{ display: none }
 
-.register__error{ line-height: 1rem }
+.register__error{ line-height: 1.8rem }
 
 .register__error__message{
     text-align: center;

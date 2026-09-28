@@ -1,6 +1,3 @@
-import { useState } from 'react'; 
-import { useOutletContext, NavLink } from 'react-router'; 
-
 import './contaCriada.css'; 
 
 import success from '../../../../../../assets/icons/register/success.png'; 

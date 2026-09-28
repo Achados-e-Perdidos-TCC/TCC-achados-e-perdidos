@@ -79,15 +79,19 @@
 }
 
 .register__selecionar__imagem{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.upload__image__label{ 
     border: 0.1rem solid var(--primary-color-blue); 
     border-radius: 0.5rem;
     padding: 0.7rem;
     font-size: 1.4rem; 
     color: var(--primary-color-blue);
-    cursor: pointer
+    cursor: pointer 
 }
-
-.upload__image__label{ cursor: pointer }
 
 /* skip */
 

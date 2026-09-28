@@ -3,19 +3,19 @@
 import { ENDPOINTS } from "./endpoints";
 
 async function request(url, options = {}, tentouRefresh = false) {
-    const acessToken = localStorage.getItem("acessToken");
+    const accessToken = localStorage.getItem("accessToken");
 
     const response = await fetch(url, {
         ...options, 
         headers: {
             // Content-Type é um header HTTP que informa ao servidor que o conteúdo que estou enviando está neste formato
             "content-Type": "application/json",
-            ...acessToken ? { Authorization: `Bearer ${acessToken}` } : {},
+            ...accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
             ...options.headers,
         }, 
     }); 
 
-    if (response.status === 401 && acessToken && !tentouRefresh){
+    if (response.status === 401 && accessToken && !tentouRefresh){
 
         const renovou = await tentarRefresh();
 
@@ -40,13 +40,13 @@ async function tentarRefresh(){
     }); 
 
     if (!response.ok) {
-        localStorage.removeItem("acessToken");
+        localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         return false; 
     }
 
     const data = await response.json();
-    localStorage.setItem("acessToken", data.acessToken);
+    localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
     return true;
 }

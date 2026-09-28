@@ -55,6 +55,7 @@
 .register__content__circles:has(+ .register__content__circles.register__subtitle__active)::after, 
 .register__content__circles:has(+ .register__content__circles.register__subtitle__actived)::after {
     background: var(--primary-color-blue);
+    transition: 0.8s;
 }
 
 @keyframes linhaDePulsacao {

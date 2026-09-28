@@ -17,5 +17,7 @@ export const ENDPOINTS = {
     item: {
         items: `${API_BASE_URL}/items`, // POST
         // fazer o resto
-    }
+    },
+    uploads: `${API_BASE_URL}/uploads/images`
+
 }

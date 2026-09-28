@@ -9,10 +9,26 @@ import skipGray from '../../../../../../assets/icons/register/skip-Gray.png';
 import arrowBlack from '../../../../../../assets/icons/register/arrow-black.png'
 import arrowWhite from '../../../../../../assets/icons/register/arrow-white.png'
 
-function Perfil({ proximaPagina }){
+function Perfil({ proximaPagina, error, setInput }){
 
-    const [foto, setFoto] = useState(); 
+    const [foto, setFoto] = useState(''); 
     const { tema } = useOutletContext();
+
+    async function continuarCriacaoConta(){
+        error(null)
+        if (!foto) {return error('Adicione uma foto para continuar ou clique em “Pular por enquanto”.')}
+
+        setInput((valorAntigo) => ({...valorAntigo, avatarUrl: foto }))
+
+        return proximaPagina(3)
+    }
+
+    function pularProximaPagina(){
+        error(null)
+        setInput((valorAntigo) => ({...valorAntigo, avatarUrl: '' }));
+
+        return proximaPagina(3); 
+    }
 
     return (
         <div className='perfil'>
@@ -37,26 +53,27 @@ function Perfil({ proximaPagina }){
                 </div>
 
                 <div className='register__selecionar__imagem'>
-
-                    <label htmlFor="uploadimage" className='upload__image__label'>Selecionar imagem</label>
+                    {foto ? (<p className='upload__image__label' onClick={() => { setFoto('') }}> Excluir imagem </p>) 
+                    : (<label htmlFor="uploadimage" className='upload__image__label'>Selecionar imagem</label>)}
 
                     <input id='uploadimage' type="file" accept='.jpg,.png' onChange={(event) => { setFoto(event.target.files[0])}} hidden />
                 </div>
+
             </div>
 
-            <div className='register__perfil__skip' onClick={() => { proximaPagina(3) }}>
+            <div className='register__perfil__skip' onClick={() => { pularProximaPagina() }}>
                 <img src={skipGray}  />
                 <p>Pular por enquanto</p>
             </div>
 
             <div className='container__buttons'>
 
-                <div className='register__button__voltar' onClick={() => { proximaPagina(1)}}>
+                <div className='register__button__voltar' onClick={() => { proximaPagina(1); error(null)}}>
                     {tema === 'light' ? <img className="perfil__arrow__black" src={arrowBlack} /> : <img className="perfil__arrow__black" src={arrowWhite} /> }
                     <p>Voltar</p>
                 </div>
 
-                <div className='register__button__continuar' onClick={() => { proximaPagina(3)}}>
+                <div className='register__button__continuar' onClick={() => { continuarCriacaoConta() }}>
                     <img className="perfil__arrow__white" src={arrowWhite}/>
                     <p>Continuar</p>
                 </div>
