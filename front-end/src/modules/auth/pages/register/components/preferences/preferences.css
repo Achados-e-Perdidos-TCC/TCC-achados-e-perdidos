@@ -1,0 +1,140 @@
+.preferencias{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* img */
+
+.preferences__image__card{
+    height: 35px;
+    width: 35px;
+}
+
+/* cards */
+
+.preferences__card{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 0.1rem solid var(--border-color);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.preferences__card__content{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.preferences__card__title{
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 1.7rem;
+    font-size: 1.7rem;
+}
+
+.preferences__card__subtitle{
+    color: var(--secondary-color-gray); 
+    font-size: 1.3rem;
+}
+
+/* button preferencias */
+
+.preference__button {
+  width: 50px;
+  height: 28px;
+  border: none;
+  border-radius: 2rem;
+  background: #ccc;
+  padding: 0.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: 0.4s;
+}
+
+.preference__button span {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: white;
+  transition: 0.4s;
+}
+
+.register__container__preferences__image{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.1rem solid var(--border-color);
+    padding: 1rem; 
+    border-radius: 15rem;
+    background-color: #0659ff35;
+}
+
+.preference__button.ativo1, .preference__button.ativo2 { background: var(--primary-color-blue) }
+
+.preference__button.ativo1 span, .preference__button.ativo2 span { transform: translateX(2.2rem) }
+
+/* responsividade */
+
+@media(max-width: 767px){
+
+    .preferences__card {
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .preferences__card__content { gap: 0.7rem } 
+
+    /* img */
+
+    .preferences__image__card {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* preferences */
+    .preferences__card__title {
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+
+    .preferences__card__subtitle {
+        font-size: 1.1rem;
+        line-height: 1.4rem;
+        max-width: 30ch
+    }
+
+    .preference__button {
+        width: 44px;
+        height: 25px;
+        padding: 0.25rem;
+        flex-shrink: 0;
+    }
+
+    .preference__button span {
+        width: 19px;
+        height: 19px;
+    }
+
+    .preference__button.ativo1 span, .preference__button.ativo2 span {
+        transform: translateX(1.9rem);
+    }
+
+    .register__container__info { gap: 0.7rem }
+
+    .info__image {
+        width: 18px;
+        height: 18px;
+    }
+
+    .info__subtitle {
+        font-size: 1.1rem;
+        line-height: 1.5rem;
+    }
+
+    .register__container__preferences__image{ padding: 0.7rem }
+}

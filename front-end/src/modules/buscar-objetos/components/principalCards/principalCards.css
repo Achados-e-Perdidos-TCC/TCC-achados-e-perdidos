@@ -12,7 +12,7 @@
 
 /* img */
 
-.image__card{
+.principal__cards__image__card{
     border-radius: 1rem;
     height: 20rem;
     width: clamp(12rem, 16vw, 30rem);
@@ -105,7 +105,7 @@
 
 .button__responsive, .endereco__responsive, .titulo__responsive{ display: none }
 
-@media ( max-width: 1024px ){
+@media ( max-width: 1032px ){
 
     .descricao__principal, .titulo__principal, .endereco__principal{ display: none}
     .endereco__responsive{ display: flex }
