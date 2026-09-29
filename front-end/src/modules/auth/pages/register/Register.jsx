@@ -1,4 +1,5 @@
-import { useState} from 'react';
+import { useContext, useState} from 'react';
+import { AuthContext } from '../../../../contexts/authContexts/AuthContext.jsx'; 
 
 import { imageUpload, register, updateProfile, updatePreferences } from '../../auth.service.js'; 
 
@@ -15,8 +16,7 @@ import logo from '../../../../assets/logo_iniciais.png';
 
 function Register(){
 
-    const acessToken = localStorage.getItem('accessToken') || sessionStorage.getItem('temporaryToken');
-    const logado = !acessToken ? false : true;
+    const { isAuthenticated } = useContext(AuthContext); 
 
     const [paginaActive, setPaginaActive] = useState(1); 
     const [input, setInput] = useState({
@@ -50,7 +50,7 @@ function Register(){
 
         <section className="register">
 
-            {logado ? (<Logado />) : (<div className='register__container__form'>
+            {isAuthenticated && paginaActive !== 4 ? (<Logado />) : (<div className='register__container__form'>
                 <img className={paginaActive === 4 ? 'register__none' : "register__logo"} src={logo} />
 
                 <div className={paginaActive === 1 ? '' : 'register__none' }>

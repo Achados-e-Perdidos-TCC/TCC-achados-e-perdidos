@@ -5,9 +5,18 @@
     margin-top: -2rem
 }
 
-.success__link__voltar { cursor: pointer }
-
-@media( max-width: 767px ){
-    .register__ja__logado{ font-size: 2.8rem }
-    .register__ja__logado__subtitle{ font-size: 1.1rem }
+.register__ja__logado{
+    font-weight: 600;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: clamp(3rem, 5vw, 5rem);
+    color: var(--primary-color-blue);
+    text-align: center;
 }
+
+.register__ja__logado__subtitle{
+    text-align: center;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+    color: var(--secondary-color-gray)
+}
+
+.success__link__voltar { cursor: pointer }

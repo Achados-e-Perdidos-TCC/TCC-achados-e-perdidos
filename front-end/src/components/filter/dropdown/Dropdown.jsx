@@ -16,6 +16,15 @@ function Dropdown({id, placeholder, options, arrow, close, change }){
         setSelectedOption(value);
     }
 
+    // evento.currentTarget = dropdown inteiro
+    // evento.relatedTarget = elemento que recebeu foco depois 
+    function fecharDropdown(evento) {
+        // Se o elemento que recebeu o foco ainda estiver dentro do dropdown
+        if (!evento.currentTarget.contains(evento.relatedTarget)) {
+            setDropdownVisible(false);
+        }
+    }
+
     const dropdownContent = (
         <div className='dropdown__content'>
 
@@ -30,8 +39,9 @@ function Dropdown({id, placeholder, options, arrow, close, change }){
         </div>
     )
 
+    // tabIndex={-1} = serve para permitir que a <div> participe do sistema de foco
     return (
-            <div className={'arrow__icon'}>
+            <div className={'arrow__icon'}  tabIndex={-1} onBlur={fecharDropdown} >
 
                 <button id={id} className="input__filter button__filter" onClick={alternarDropdown} type='button'> 
                     <span className={!selectedOption ? 'category' : ''}> {selectedOption || placeholder} </span>

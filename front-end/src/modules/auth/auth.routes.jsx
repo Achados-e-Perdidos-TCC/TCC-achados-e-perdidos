@@ -14,7 +14,7 @@ const routerAuth = {
             element: <Register />
         },
         {
-            path: 'esqueci-senha', 
+            path: 'forgot-password', 
             element: <EsqueciSenha />
         }
     ]

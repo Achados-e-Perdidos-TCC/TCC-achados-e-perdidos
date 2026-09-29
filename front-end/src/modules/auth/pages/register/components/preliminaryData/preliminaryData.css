@@ -44,7 +44,10 @@
     border: 0.1rem solid var(--border-color);
     color: var(--primary-color-text);
     background-color: var(--card-color);
+    transition: 0.45s ease;
 }
+
+.register__input:focus{ box-shadow: var(--shadow-hover) }
 
 .register__input__container { position: relative }
 
@@ -98,18 +101,17 @@ hr{ border-color: rgba(0, 0, 0, 0.249) }
     padding: 1rem;
     background-color: var(--card-color);
     border: 0.1rem solid var(--border-color);
+    font-size: 1.5rem;
     border-radius: 0.5rem; 
 }
 
 .requisito__pendente{
     margin: 0.3rem 0;
-    font-size: 1.5rem;
     color: #ed4337;
 }
 
 .requisito__cumprido {
     color: var(--success-text-color);
-    font-size: 1.5rem;
     text-decoration: line-through;
 }
 
@@ -133,6 +135,33 @@ hr{ border-color: rgba(0, 0, 0, 0.249) }
 
 .register__cidades__sugestoes:hover { background-color: #edecec76 }
 .register__cidades__sugestoes span { font-size: 1.4rem }
+
+/* estados */
+
+.register__estado {
+    position: absolute;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6rem;
+    height: 3rem;
+    border: none;
+    outline: none;
+    border: 0.1rem solid var(--secondary-color-gray); 
+    border-radius: 0.6rem;
+    color: var(--secondary-color-gray); 
+    background: var(--card-color);
+    appearance: none;
+    font-size: 1.2rem;
+    font-weight: 400;
+    text-align: center;
+    cursor: pointer;
+}
+
+.register__estado:focus {
+    color: var(--primary-color-blue);
+    border-color: var(--primary-color-blue);
+}
 
 /* error: obrigatorio */
 
@@ -168,5 +197,16 @@ hr{ border-color: rgba(0, 0, 0, 0.249) }
     .register__container__com__conta{ 
         margin-top: -0.5rem; 
         font-size: 1.35rem 
+    }
+
+    /* requerimentos */
+
+    .register__password__requerimentos{ font-size: 1.2rem }
+
+    /* estados */
+
+    .register__estado { 
+        width: 6.5rem;
+        font-size: 1.1rem;
     }
 }

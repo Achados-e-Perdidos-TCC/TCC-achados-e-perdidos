@@ -46,7 +46,7 @@ function Preferences({ proximaPagina, error, criarConta }){
                 <div>
                     {preferenciasCards.map((valor) => {
                         return (
-                            <div className='preferences__card'>
+                            <div className='preferences__card' key={valor.titulo}>
                                 <div className='preferences__card__content'>
                                     <div className='register__container__preferences__image'>
                                         <img className='preferences__image__card' src={valor.img}/>

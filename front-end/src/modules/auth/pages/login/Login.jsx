@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../../../contexts/authContexts/AuthContext.jsx'; 
 import { NavLink } from 'react-router'; 
 import { verificaEmailSenha } from '../../../../utils/inputs/inputs.js';
 import { login } from '../../auth.service.js';
+
+import Logado from '../register/components/logado/logado.jsx'; 
 
 import './login.css'; 
 
@@ -13,6 +16,8 @@ import closeEyeGray from '../../../../assets/icons/login/close-eye-gray.png';
 import entrarWhite from '../../../../assets/icons/login/entrar-white.png'; 
 
 function Login(){
+
+    const { isAuthenticated } = useContext(AuthContext); 
 
     const [eyeState, setEyeState] = useState(true);
     const [inputEmailState, setInputEmailState] = useState('')
@@ -45,9 +50,9 @@ function Login(){
     }
 
     return (
-        <section className="login">
-            
-            <div className='login__container__form'>
+            <section className="login">
+
+            { isAuthenticated ? (<Logado />) : ( <div className='login__container__form'>
                 <img className="login__logo" src={logo} />
 
                 <div>
@@ -90,7 +95,7 @@ function Login(){
                             <label htmlFor=""> Lembrar de mim </label>
                         </div>
 
-                        <NavLink to='/auth/esqueci-senha' end className='login__navlink'>Esqueci minha senha</NavLink>
+                        <NavLink to='/auth/forgot-password' end className='login__navlink'>Esqueci minha senha</NavLink>
                     </div>
 
                     <button className='login__form__button' type='submit' >
@@ -107,6 +112,7 @@ function Login(){
                     <NavLink to='/auth/register' end className='login__navlink' ><p> Criar conta </p></NavLink>
                 </div>
             </div>
+            )}
 
         </section>
     )

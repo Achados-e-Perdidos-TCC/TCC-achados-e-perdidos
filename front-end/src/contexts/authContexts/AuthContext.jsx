@@ -4,9 +4,9 @@ export const AuthContext = createContext();
 
 function AuthProvider({ children }){
 
-    const acessToken = localStorage.getItem("acessToken") || sessionStorage.getItem("temporaryToken"); 
+    const accessToken = localStorage.getItem("accessToken") || sessionStorage.getItem("temporaryToken"); 
 
-    const [ isAuthenticated, setIsAuthenticated ] = useState(acessToken ? true : false); 
+    const [ isAuthenticated, setIsAuthenticated ] = useState(accessToken ? true : false); 
 
     return (
         <AuthContext.Provider value={ { isAuthenticated, setIsAuthenticated } }>

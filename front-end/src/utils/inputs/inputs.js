@@ -33,4 +33,15 @@ function verificaSenhaCadastro(senha) {
     if (!/[^A-Za-z0-9]/.test(senha)) { throw new Error('Senha inválida') }
 }
 
+export function validaCidade(cidade, estado, todasAsCidades){
+
+    if (!cidade.trim()) { return true }
+
+    if (!estado) { throw new Error('Estado não selecionado') }
+
+    const cidadeValida = todasAsCidades.some((item) => item.cidade === cidade.trim() && item.estado === estado);
+
+    if (!cidadeValida) { throw new Error('Cidade inválida') }
+}
+
 export { verificaEmailSenha, verificaTelefone, verificaSenhaCadastro }

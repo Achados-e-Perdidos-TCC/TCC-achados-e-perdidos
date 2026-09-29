@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router';
 import { IMaskInput } from 'react-imask';
-import { verificaEmailSenha, verificaTelefone, verificaSenhaCadastro } from '../../../../../../utils/inputs/inputs.js';
+import { verificaEmailSenha, verificaTelefone, verificaSenhaCadastro, validaCidade } from '../../../../../../utils/inputs/inputs.js';
 
 import './preliminaryData.css'; 
 
@@ -26,12 +26,17 @@ function PreliminaryData({ proximaPagina, error, setInput }){
     const [inputEmailState, setInputEmailState] = useState('');
     const [inputPasswordState, setInputPasswordState] = useState('');
     const [inputTelephoneState, setInputTelephoneState] = useState('');
+
     const [inputCityState, setInputCityState] = useState('');
+    const [inputState, setInputState] = useState('UF');
     
     const [cidadesFiltradas, setCidadesFiltradas] = useState([]); 
 
     const todasAsCidades = [];
-    cidadesBrasil.estados.forEach((estado) => { estado.cidades.forEach((cidade) => { todasAsCidades.push(cidade) })});
+    cidadesBrasil.estados.forEach((estado) => { estado.cidades.forEach((cidade) => { todasAsCidades.push({
+        cidade: cidade,
+        estado: estado.sigla
+    }) })});
 
     const requisitosSenha = {
         tamanho: inputPasswordState.length >= 8,
@@ -49,7 +54,14 @@ function PreliminaryData({ proximaPagina, error, setInput }){
             return;
         }
 
-        const resultado = todasAsCidades.filter((cidade) => { return cidade.toLowerCase().startsWith(valor.toLowerCase())});
+        const resultado = todasAsCidades.filter((cidade) => {
+            const mesmaCidade = cidade.cidade.toLowerCase().startsWith(valor.toLowerCase());
+
+            const mesmoEstado = inputState ? cidade.estado === inputState : true;
+
+            return mesmaCidade && mesmoEstado;   
+        });
+
         setCidadesFiltradas(resultado);
     }
 
@@ -58,10 +70,10 @@ function PreliminaryData({ proximaPagina, error, setInput }){
             error(null);
             if (!inputEmailState.trim() || !inputPasswordState.trim() || !inputNameState.trim()) { return setObrigatorio(true)}
             if (inputNameState.trim().length < 3 || inputNameState.trim().length > 100) { return error('Nome inválido') }
-            if (inputCityState && !todasAsCidades.includes(inputCityState)) { return error('Cadastre uma cidade disponível na lista clicando nela. Caso não encontre a sua, selecione a opção mais próxima e entre em contato com o suporte da plataforma.')}
+            validaCidade(inputCityState, inputState, todasAsCidades)
             if (inputTelephoneState) { verificaTelefone(inputTelephoneState) }
 
-            verificaEmailSenha(inputEmailState.toLowerCase(), inputPasswordState); 
+            verificaEmailSenha(inputEmailState.trim().toLowerCase(), inputPasswordState); 
             verificaSenhaCadastro(inputPasswordState); 
 
             const nome = inputNameState.trim();
@@ -87,6 +99,8 @@ function PreliminaryData({ proximaPagina, error, setInput }){
             if(erro.message === 'Email inválido') { return error('Email inválido')}
             if(erro.message === 'Senha inválida') { return error('Senha inválida')}
             if(erro.message === 'Telefone inválido') { return error('Telefone inválido')}
+            if (erro.message === 'Estado não selecionado') { return error('Selecione o estado da cidade') }
+            if (erro.message === 'Cidade inválida') { return error('Selecione uma cidade disponível na lista') }
             else { return error('Ocorreu um erro inesperado, verifique se os dados informados estão corretos e tente novamente mais tarde')}
         }
     }
@@ -156,8 +170,20 @@ function PreliminaryData({ proximaPagina, error, setInput }){
             <div>
                 <label className="register__label" htmlFor="cidade"> Cidade </label>
                 <div className='register__input__container'>
+
                     <img className='register__icon' src={pinGray}/>
-                    <input id='cidade' className='register__input' type="text" placeholder='Ex: Porto Alegre' onChange={(e) => {buscarCidades(e.target.value)}} value={inputCityState} />
+                    <input id='cidade' className='register__input' type="text" placeholder='Sua Cidade' onChange={(e) => {buscarCidades(e.target.value)}} value={inputCityState} />
+
+                    <select value={inputState}  className="register__estado"  onChange={(event) => setInputState(event.target.value)}>
+                        <option value=""> UF </option>
+
+                        {cidadesBrasil.estados.map((estado) => (
+                            <option key={estado.sigla} value={estado.sigla}>
+                                {estado.sigla}
+                            </option>
+                        ))}
+                    </select>
+
                 </div>
 
                 {cidadesFiltradas.length > 0 ? (
@@ -165,8 +191,8 @@ function PreliminaryData({ proximaPagina, error, setInput }){
 
                     {cidadesFiltradas.map((cidade) => (
 
-                        <div className="register__cidades__sugestoes" onClick={() => { setInputCityState(cidade); setCidadesFiltradas([]) }}>
-                            <span>{cidade}</span>
+                        <div className="register__cidades__sugestoes" key={`${cidade.cidade}-${cidade.estado}`} onClick={() => { setInputCityState(cidade.cidade); setInputState(cidade.estado); setCidadesFiltradas([]) }}>
+                             <span>{cidade.cidade} </span>
                         </div>
                     ))}
                 </div> ) : ''}

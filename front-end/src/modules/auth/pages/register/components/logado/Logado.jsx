@@ -9,8 +9,8 @@ function Logado(){
             <img className="register__logo" src={logo} />
 
             <div>
-                <h1 className="register__form__title register__ja__logado" >Você já está logado</h1>
-                <p className="register__form__subtitle register__ja__logado__subtitle">Sua conta está ativa. não é preciso criar uma nova conta.</p>
+                <h1 className="register__ja__logado" >Você já está logado</h1>
+                <p className="register__ja__logado__subtitle">Sua conta já está ativa.</p>
             </div>
 
             <div className='register__logado'>

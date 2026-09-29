@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../../../contexts/authContexts/AuthContext.jsx'; 
 import { NavLink } from 'react-router'; 
 import { verificaEmailSenha } from '../../../../utils/inputs/inputs.js'; 
 import { forgetPassword } from '../../auth.service.js';
+
+import Logado from '../register/components/logado/logado.jsx'; 
 
 import './esqueciSenha.css'; 
 
@@ -10,6 +13,8 @@ import emailGray from '../../../../assets/icons/login/email-gray.png';
 import sentWhite from '../../../../assets/icons/esqueciSenha/sent-white.png'; 
 
 function EsqueciSenha(){
+
+    const { isAuthenticated } = useContext(AuthContext);
 
     const [inputEmailState, setInputEmailState] = useState('')
     const [error, setError] = useState(null)
@@ -40,7 +45,7 @@ function EsqueciSenha(){
     return(
         <section className="esqueci__senha">
 
-                <div className='esqueci__container__form'>
+            {isAuthenticated ? (<Logado />) : (<div className='esqueci__container__form'>
                 <img className="esqueci__logo" src={logo} />
 
                 <div>
@@ -84,7 +89,8 @@ function EsqueciSenha(){
                     <NavLink to='/auth/login' end className='esqueci__navlink' ><p> Entrar </p></NavLink>
                 </div>
             </div>
-
+            ) }
+                
         </section>
     )
 }
