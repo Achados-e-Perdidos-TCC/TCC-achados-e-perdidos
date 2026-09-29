@@ -1,7 +1,13 @@
-function verificaEmailSenha(email, senha){
-    if (typeof email !== 'string' || !email || !email.includes('@')){ throw new Error('Email inválido') }
+function verificaEmailSenha(email = false, senha = false){
+    if(email){
+        if (typeof email !== 'string' || !email || !email.includes('@')){ throw new Error('Email inválido') }
+    }
 
-    if (typeof senha !== 'string' || !senha || senha.length < 8){  throw new Error('Senha inválida') }
+    if(senha){
+        if (typeof senha !== 'string' || !senha || senha.length < 8){  throw new Error('Senha inválida') }
+    }
+
+    if(senha === '' || email === '') { throw new Error('campos precisam estar preenchidos')}
 }
 
 function verificaTelefone(telefoneCadastrado) {

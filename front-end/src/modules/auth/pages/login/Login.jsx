@@ -39,6 +39,7 @@ function Login(){
             if(erro.message === 'Credenciais inválidas'){ return setError(`Credenciais inválidas`)}
             if(erro.message === 'Email inválido') { return setError('Email inválido')}
             if(erro.message === 'Senha inválida') { return setError('Senha inválida')}
+            if(erro.message === 'campos precisam estar preenchidos') {return setError('Todos os campos precisam estar preenchidos')}
             else { return setError('Ocorreu um erro inesperado, verifique se os dados informados estão corretos e tente novamente mais tarde')}
         }
     }
@@ -89,7 +90,7 @@ function Login(){
                             <label htmlFor=""> Lembrar de mim </label>
                         </div>
 
-                        <NavLink to='/' end className='login__navlink'>Esqueci minha senha</NavLink>
+                        <NavLink to='/auth/esqueci-senha' end className='login__navlink'>Esqueci minha senha</NavLink>
                     </div>
 
                     <button className='login__form__button' type='submit' >

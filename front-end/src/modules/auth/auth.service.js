@@ -74,6 +74,16 @@ export async function updatePreferences( preferences ){
     return data; 
 }
 
+export async function forgetPassword( email ){
+
+     const data = await request(ENDPOINTS.auth.forgotpassword, {
+        method: 'POST',
+        body: JSON.stringify( email )
+    })
+
+    return data; 
+}
+
 export function logout() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
