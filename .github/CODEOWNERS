@@ -1,0 +1,11 @@
+# Dono de código por área: define quem PRECISA aprovar uma PR para main
+# antes dela poder ser mesclada (Settings → Branches → main → Require
+# review from Code Owners).
+#
+# A última regra que casa com o caminho alterado é quem vale — por isso a
+# regra geral (*) vem primeiro, e as mais específicas depois.
+
+* @KauanSerafim
+
+/backend-refatorado/ @KauanSerafim
+/front-end/ @gabriellimaavila
