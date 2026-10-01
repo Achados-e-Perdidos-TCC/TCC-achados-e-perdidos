@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router';
 
 import { userInformation } from '../../private.service.js'; 
 
+import './user.css'; 
+
 import Sidebar from '../components/sidebar/Sidebar.jsx';
+import UserObjects from '../components/user-objects/UserObjects.jsx';
 
 function User(){
 
     const [userInfos, setUserInfos] = useState(null);
+    const [pageActive, setPageActive] = useState(1);
 
     useEffect(() => {
 
@@ -22,14 +25,18 @@ function User(){
 
     if (!userInfos) { return ( <p> Carregando... </p> )}
 
+    console.log(pageActive)
+
     return (
         <section className='user__area'>
 
             <div className='user__area__sidebar'>
-                <Sidebar userInfos={userInfos} />
+                <Sidebar userInfos={userInfos} pageActive={ pageActive } setPageActive={ setPageActive } />
             </div>
 
-            <Outlet />
+            <div className={`user__area__objects ${pageActive === 1 ? '' : 'user__none' }`} >
+                <UserObjects userInfos={userInfos} />
+            </div>
             
         </section>
     )

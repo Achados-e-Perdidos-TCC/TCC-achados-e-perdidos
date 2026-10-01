@@ -12,13 +12,13 @@ import bellBlue from '../../../../../assets/icons/register/bell-blue.png';
 import helpBlue from '../../../../../assets/icons/userArea/help-blue.png';
 import arrowBlue from '../../../../../assets/icons/detalhesObjeto/arrow-blue.svg'; 
 
-function Sidebar({ userInfos }){
+function Sidebar({ userInfos, pageActive, setPageActive}){
 
     const initialName = `${userInfos.name.slice(0 , 1)}${userInfos.name.split(' ')[1][0].toUpperCase()}`; 
 
-    const [routeActive, setRouteActive] = useState(1);
     const [open, setOpen] = useState(true);
     const [avatar, setAvatar] = useState(null); 
+    const [avatarError, setAvatarError] = useState(null);
 
     useEffect(() => {
 
@@ -32,7 +32,7 @@ function Sidebar({ userInfos }){
                 setAvatar(avatarUrl);
 
             } catch (error) {
-                return (<p> { initialName } </p>)
+                setAvatarError(true); 
             }
         }
 
@@ -50,8 +50,8 @@ function Sidebar({ userInfos }){
 
                 <NavLink end >
                     <div className='sidebar__profile__container'>
-                        <div className={!userInfos.avatarUrl ? 'sidebar__without__photo' : 'sidebar__with__photo'}>
-                            {!userInfos.avatarUrl ? <p> { initialName } </p> : <img className='photo' src={`${avatar}`}/> } 
+                        <div className={!userInfos.avatarUrl || avatarError === true ? 'sidebar__without__photo' : 'sidebar__with__photo'}>
+                            {!userInfos.avatarUrl || avatarError === true ? <p> { initialName } </p> : <img className='photo' src={`${avatar}`}/> } 
                         </div>
 
                         <div>
@@ -62,15 +62,15 @@ function Sidebar({ userInfos }){
                 </NavLink>
 
                 <div className='sidebar__links__container' >
-                    <NavLink  end className={`sidebar__link ${routeActive === 1 ? 'link__active' : ''}`} onClick={() => { setRouteActive(1) } } >
-                            {routeActive === 1 ? <img  src={inboxBlue} /> : <img  src={inboxGray}  />}
+                    <div className={`sidebar__link ${pageActive === 1 ? 'link__active' : ''}`} onClick={() => { setPageActive(1) } } >
+                            {pageActive === 1 ? <img  src={inboxBlue} /> : <img  src={inboxGray}  />}
                             <p>Meus objetos</p>
-                    </NavLink>
+                    </div>
 
-                    <NavLink  end className={`sidebar__link ${routeActive === 2 ? 'link__active' : ''}`} onClick={() => { setRouteActive(2) } }>
-                            {routeActive === 2 ? <img  className='sidebar__bell' src={bellBlue} /> : <img  className='sidebar__bell' src={bellGray} /> } 
+                    <div className={`sidebar__link ${pageActive === 2 ? 'link__active' : ''}`} onClick={() => { setPageActive(2) } }>
+                            {pageActive === 2 ? <img  className='sidebar__bell' src={bellBlue} /> : <img  className='sidebar__bell' src={bellGray} /> } 
                             <p>Notificações</p>
-                    </NavLink>
+                    </div>
 
                 </div>
 
