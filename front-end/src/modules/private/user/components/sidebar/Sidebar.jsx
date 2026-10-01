@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router';
+
+import { loadAvatar } from '../../../private.service.js';
 
 import './sidebar.css'; 
 
@@ -16,6 +18,27 @@ function Sidebar({ userInfos }){
 
     const [routeActive, setRouteActive] = useState(1);
     const [open, setOpen] = useState(true);
+    const [avatar, setAvatar] = useState(null); 
+
+    useEffect(() => {
+
+          async function findAvatar() {
+
+            if (!userInfos.avatarUrl) { return }
+
+            try {
+                const avatarUrl = await loadAvatar(userInfos.avatarUrl);
+
+                setAvatar(avatarUrl);
+
+            } catch (error) {
+                return (<p> { initialName } </p>)
+            }
+        }
+
+        findAvatar();
+    }, [userInfos.avatarUrl])
+    
 
     return (
         <div className={`${open ? 'user__sidebar__open' : 'user__sidebar__close'}`}>
@@ -28,12 +51,12 @@ function Sidebar({ userInfos }){
                 <NavLink end >
                     <div className='sidebar__profile__container'>
                         <div className={!userInfos.avatarUrl ? 'sidebar__without__photo' : 'sidebar__with__photo'}>
-                            {!userInfos.avatarUrl ? <p> { initialName } </p> : <img className='photo' src={userInfos.avatarUrl}/> } 
+                            {!userInfos.avatarUrl ? <p> { initialName } </p> : <img className='photo' src={`${avatar}`}/> } 
                         </div>
 
                         <div>
-                            <p className='sidebar__profile__name'>{userInfos.name}</p>
-                            <p className='sidebar__profile__email'>{userInfos.email}</p>
+                            <p className='sidebar__profile__name'>{userInfos.name.length >= 24 ? `${userInfos.name.slice(0, 24)}...` : userInfos.name}</p>
+                            <p className='sidebar__profile__email'>{userInfos.email.length >= 29 ? `${userInfos.email.slice(0,24)}...` : userInfos.email}</p>
                         </div>
                     </div>
                 </NavLink>
