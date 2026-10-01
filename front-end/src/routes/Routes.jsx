@@ -9,6 +9,8 @@ import routesDetalhesObjeto from '../modules/detalhes-objeto/detalhesObjeto.rout
 import routesHome from '../modules/home/home.routes.jsx';
 import routesAuth from '../modules/auth/auth.routes.jsx';
 
+import routesPrivate from '../modules/private/private.routes.jsx';
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -19,6 +21,7 @@ const router = createBrowserRouter([
             routesBuscarObjetos,
             routesDetalhesObjeto,
             routesAuth,
+            routesPrivate
         ]                
     }
 ])

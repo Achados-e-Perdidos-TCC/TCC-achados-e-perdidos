@@ -14,6 +14,7 @@ export async function login(email, password, lembrarDeMim = false) {
     }
 
     sessionStorage.setItem("temporaryToken", data.accessToken); 
+    sessionStorage.setItem("refreshToken", data.accessToken);
 
     return data
 }

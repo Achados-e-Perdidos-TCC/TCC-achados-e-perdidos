@@ -1,11 +1,14 @@
 :root{
     --primary-color-blue: #0048E8;
+    --primary-color-blue-light: #E3ECFF;
     --primary-color-green: #09ACA9;
 
     --secondary-color-gray: #7B8794;
     --secondary-color-black: #000000; /* cor que não muda ao trocar tema*/
     --secondary-color-white: #FFFFFF;
 
+
+    --subtle-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
     --shadow-hover: 0 4px 15px rgba(0, 0, 0, 0.12);
 
     --border-color: #ddd; 
@@ -30,6 +33,9 @@
     --primary-color-text: #FFFFFF; 
     --secondary-color-text: #000000;
 
+    --primary-color-blue-light: #1A2744;
+
+    --subtle-shadow: 0 0 10px rgba(246, 245, 245, 0.12);
     --shadow-hover: 0 4px 15px rgba(246, 245, 245, 0.12);
 
     --background-color: #181818; 

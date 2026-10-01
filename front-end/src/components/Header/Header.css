@@ -1,4 +1,4 @@
-.header{
+.header{ 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -7,7 +7,7 @@
 .cabecalho_content{
     max-width: 1700px;
     margin: 0 auto;
-    padding: 1.6rem;
+    padding: 1.6rem
 }
 
 /* img */
@@ -44,7 +44,7 @@ li{ list-style: none }
 
 .nav__link{
     text-decoration: none;
-    color: var(--secondary-color-gray);
+    color: var(--primary-color-text);
     font-size: clamp(1.4rem, 2vw, 1.65rem); 
     font-weight: 600;
     transition: 0.25s; 

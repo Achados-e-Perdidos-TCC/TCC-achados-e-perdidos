@@ -7,7 +7,7 @@ import { Outlet } from 'react-router';
 
 function App() {
     
-    // alternar tema 
+// alternar tema 
   
 const [tema, setTema] = useState(() => {
         let preferencia = localStorage.getItem('tema');
@@ -32,7 +32,7 @@ const [tema, setTema] = useState(() => {
                     </header>
 
                     <main className="content">
-                    <Outlet context={{tema}}/> {/* Aqui entra as paginas que estarão no roteador */}
+                        <Outlet context={{tema}}/> {/* Aqui entra as paginas que estarão no roteador */}
                     </main>
             </div>
         </AuthProvider>

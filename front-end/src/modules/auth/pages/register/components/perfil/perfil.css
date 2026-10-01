@@ -134,7 +134,7 @@
 
 /* responsividade */
 
-.responsive{ display: none }
+.register__responsive{ display: none }
 
 @media (max-width: 768px){
 

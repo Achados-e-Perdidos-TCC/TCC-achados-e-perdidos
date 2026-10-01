@@ -28,7 +28,7 @@ function PreliminaryData({ proximaPagina, error, setInput }){
     const [inputTelephoneState, setInputTelephoneState] = useState('');
 
     const [inputCityState, setInputCityState] = useState('');
-    const [inputState, setInputState] = useState('UF');
+    const [inputState, setInputState] = useState('');
     
     const [cidadesFiltradas, setCidadesFiltradas] = useState([]); 
 

@@ -1,6 +1,6 @@
 import Login from './pages/login/Login.jsx';
 import Register from './pages/register/Register.jsx'; 
-import EsqueciSenha from './pages/esqueci-senha/EsqueciSenha.jsx'; 
+import ForgotPassword from './pages/forgot-password/Forgot-password.jsx'; 
 
 const routerAuth = {
     path: '/auth',
@@ -15,7 +15,7 @@ const routerAuth = {
         },
         {
             path: 'forgot-password', 
-            element: <EsqueciSenha />
+            element: <ForgotPassword />
         }
     ]
 }
