@@ -57,7 +57,7 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
                 return (
                     <div className='card__principal' key={valor.id}>
-                        <img className='image__card ' src={valor.imagemPrincipal} />
+                        <img className='principal__cards__image__card ' src={valor.imagemPrincipal} />
 
                         <div className='principal__meio'>
 
@@ -84,7 +84,7 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
                                     <div className='data__principal'>
                                         <img src={pinGray} />
                                         <p className='endereco__principal'>{valor.localizacao.estado.length + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 50 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 50) + `...`}</p>
-                                        <span className='endereco__responsive'>{valor.localizacao.estado.length + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 32 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 32) + `...`}</span>
+                                        <span className='endereco__responsive'>{valor.localizacao.estado.length + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 27 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 27) + `...`}</span>
                                     </div>
 
                                     <p className='divisoria'>|</p>

@@ -8,6 +8,7 @@ import routesBuscarObjetos from '../modules/buscar-objetos/buscarObjetos.routes.
 import routesDetalhesObjeto from '../modules/detalhes-objeto/detalhesObjeto.routes.jsx'; 
 import routesHome from '../modules/home/home.routes.jsx';
 import routesComoFunciona from '../modules/como-funciona/ComoFunciona.routes.jsx'
+import routesAuth from '../modules/auth/auth.routes.jsx';
 
 const router = createBrowserRouter([
     {
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
             routesBuscarObjetos,
             routesDetalhesObjeto,
             routesComoFunciona,
+            routesAuth,
         ]                
     }
 ])

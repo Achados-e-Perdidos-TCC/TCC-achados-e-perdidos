@@ -1,0 +1,186 @@
+.login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.login__navlink{ color: var(--primary-color-blue) }
+
+/* img */
+
+.login__logo{ 
+    align-self: center;
+    max-height: 80px;
+    max-width: 80px;
+}
+
+.login__email__icon, .login__password__icon{
+    position: absolute;
+    height: 27px;
+    top: 1rem;
+    left: 1.5rem;
+}
+
+.login__eye__icon{
+    position: absolute;
+    height: 18px;
+    right: 1.5rem;
+    top: 1.6rem; 
+    cursor: pointer
+}
+
+/* container form */
+
+.login__container__form{
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 2.5rem;
+    border: 0.1rem solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: var(--shadow-hover);
+    background-color: var(--card-color);
+    max-width: 52rem;
+    width: 100%;
+    gap: 1.5rem; 
+    color: var(--primary-color-text);
+}
+
+/* form */
+
+.login__form{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.login__form__title{
+    font-weight: 600;
+    font-size: clamp(2.5rem, 5vw, 3rem);
+    line-height: 3.5rem;
+    color: var(--primary-color-blue);
+    text-align: center;
+}
+
+.login__form__subtitle{
+    text-align: center;
+    color: var(--secondary-color-gray)
+}
+
+/* inputs */
+
+.login__container__inputs{
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 2vw, 2rem);
+}
+
+.login__label{
+    font-size: 1.5rem;
+    color: var(--primary-color-blue);
+    font-weight: 600;
+}
+
+.login__input{
+    font-size: 1.6rem;
+    border-radius: 0.5rem;
+    padding: 1.4rem 5.3rem;
+    width: 100%;
+    border: 0.1rem solid var(--border-color);
+    color: var(--primary-color-text);
+    background-color: var(--card-color);
+}
+
+.login__input__checkbox{
+   width: 1.5rem;
+   height: 1.5rem;
+}
+
+.login__input__email, .login__input__password { position: relative }
+
+
+/* esqueci minha senha */
+
+.login__container__esqueci__senha{
+    display: flex;
+    justify-content: space-between;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+}
+
+.login__container__checkbox{
+    display: flex;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    align-items: center;
+}
+
+/* button */
+
+.login__form__button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1.5rem, 2vw, 1.7rem);
+    gap: 0.8rem;
+    background-color: var(--primary-color-blue);
+    color: var(--secondary-color-white);
+    padding: clamp(1rem, 2vw, 1.3rem);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+/* ainda não tem conta */
+
+hr{ border-color: rgba(0, 0, 0, 0.249) }
+
+.login__container__sem__conta{
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.login__sem__conta__text{ color: var(--secondary-color-gray) }
+
+/* error */
+
+.login__no__error{ display: none }
+
+.login__error{ line-height: 1.8rem }
+
+.login__error__message{
+    text-align: center;
+    font-size: 1.4rem;
+    color: #ed4337;
+}
+
+/* responsividade */
+
+@media( max-width: 768px){ 
+
+    /* img */
+
+    .login__email__icon, .login__password__icon, .login__image__entrar { height: 20px }
+
+    .login__eye__icon{
+        height: 14px;
+        top: 1.4rem; 
+    }
+
+    .login__logo{ 
+        max-height: 70px;
+        max-width: 70px;
+    }
+
+    /* login area */
+
+    .login__form__subtitle { font-size: 1.4rem }
+    .login__sem__conta__text, .login__navlink{ font-size: 1.25rem }
+    .login__label { font-size: 1.35rem }
+
+    .login__input{ 
+        font-size: 1.4rem;
+        padding: 1.2rem 4.5rem 
+    }
+    
+}
