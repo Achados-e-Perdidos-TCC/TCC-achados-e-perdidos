@@ -3,7 +3,7 @@
 import { ENDPOINTS } from "./endpoints";
 
 async function request(url, options = {}, tentouRefresh = false) {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken") || sessionStorage.getItem("temporaryToken");
 
     const response = await fetch(url, {
         ...options, 
@@ -15,7 +15,7 @@ async function request(url, options = {}, tentouRefresh = false) {
         }, 
     }); 
 
-    if (response.status === 401 && accessToken && !tentouRefresh){
+    if ((response.status === 401 || response.status === 403) && accessToken && !tentouRefresh){
 
         const renovou = await tentarRefresh();
 
@@ -24,14 +24,19 @@ async function request(url, options = {}, tentouRefresh = false) {
 
     const data = await response.json().catch(() => { return null });
 
-    if(!response.ok) { throw new Error(data.message || "Erro na requisicao") }
+    if(!response.ok) { throw new Error((data ? data.message : undefined) || "Erro na requisicao") }
 
     return data; 
 }
 
 async function tentarRefresh(){
-    const refreshToken = localStorage.getItem("refreshToken");
-    if(!refreshToken) { return false }
+    const refreshToken = localStorage.getItem("refreshToken") || sessionStorage.getItem("refreshToken") ;
+
+    if(!refreshToken) { 
+        localStorage.removeItem("accessToken");
+        sessionStorage.removeItem('temporaryToken'); 
+        window.location.reload(); 
+        return false }
 
     const response = await fetch(ENDPOINTS.auth.refresh, {
         method: "POST",
@@ -42,12 +47,24 @@ async function tentarRefresh(){
     if (!response.ok) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        sessionStorage.removeItem('temporaryToken'); 
+        sessionStorage.removeItem('refreshToken'); 
+        window.location.reload(); 
         return false; 
     }
 
     const data = await response.json();
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
+
+    if (localStorage.getItem("refreshToken")) {
+
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+
+    } else {
+        sessionStorage.setItem("temporaryToken", data.accessToken);
+        sessionStorage.setItem("refreshToken", data.refreshToken);
+    }
+
     return true;
 }
 

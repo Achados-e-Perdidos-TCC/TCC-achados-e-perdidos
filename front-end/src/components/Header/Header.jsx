@@ -17,8 +17,6 @@ import personDark from '../../assets/icons/header/cabecalho_person_dark.png';
 
 function Header({ tema, aoAlternarTema }) {
 
-    // Implementar funcionalidade para reconhecer se usuario está logado ou não (após implementacão do login)
-
     const [menuOpen, setMenuOpen] = useState(false);
     const { isAuthenticated } = useContext(AuthContext); 
 
@@ -28,13 +26,13 @@ function Header({ tema, aoAlternarTema }) {
         if(tema === 'light' && !isAuthenticated) { 
             return ( <NavLink to='/auth/login' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink> );
         } else if(tema === 'light' && isAuthenticated){
-            return ( <NavLink to='/' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink> );
+            return ( <NavLink to='/user-area' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink> );
         }
 
         if(tema === 'dark' && !isAuthenticated) { 
             return ( <NavLink to='/auth/login' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
         } else if(tema === 'dark' && isAuthenticated){
-            return ( <NavLink to='/' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
+            return ( <NavLink to='/user-area' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
         } 
     }
 
@@ -62,7 +60,7 @@ function Header({ tema, aoAlternarTema }) {
                 </div>
                 
                 <div className='button button__entrar'>
-                    {isAuthenticated ? <NavLink to='/' end className='entrar link'>Meu Perfil</NavLink> : <NavLink to='/auth/login' end className='entrar link' href="#">Entrar</NavLink>}
+                    {isAuthenticated ? <NavLink to='/user-area' end className='entrar link'>Meu Perfil</NavLink> : <NavLink to='/auth/login' end className='entrar link' href="#">Entrar</NavLink>}
                 </div>
 
 

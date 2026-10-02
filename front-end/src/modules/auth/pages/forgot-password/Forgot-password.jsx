@@ -6,7 +6,7 @@ import { forgetPassword } from '../../auth.service.js';
 
 import Logado from '../register/components/logado/logado.jsx'; 
 
-import './esqueciSenha.css'; 
+import './forgot-password.css'; 
 
 import logo from '../../../../assets/logo_iniciais.png';
 import emailGray from '../../../../assets/icons/login/email-gray.png'; 

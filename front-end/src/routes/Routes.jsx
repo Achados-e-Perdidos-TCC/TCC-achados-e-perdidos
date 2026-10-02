@@ -10,6 +10,8 @@ import routesHome from '../modules/home/home.routes.jsx';
 import routesComoFunciona from '../modules/como-funciona/ComoFunciona.routes.jsx'
 import routesAuth from '../modules/auth/auth.routes.jsx';
 
+import routesPrivate from '../modules/private/private.routes.jsx';
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -21,6 +23,7 @@ const router = createBrowserRouter([
             routesDetalhesObjeto,
             routesComoFunciona,
             routesAuth,
+            routesPrivate
         ]                
     }
 ])

@@ -22,7 +22,7 @@
 
 .status__green{ 
     background-color: var(--success-tag-color);
-    width: clamp(13.5rem, 16vw, 16rem);
+    width: clamp(13.5rem, 16vw, 15rem);
 }
 .status__green span { color: var(--success-text-color)}
 

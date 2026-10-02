@@ -1,7 +1,7 @@
 .card__principal{
     display: flex;
     gap: clamp(1rem, 2vw, 3rem);
-    border: 0.1rem solid #999999;
+    border: 0.1rem solid var(--border-color);
     background-color: var(--card-color);
     border-radius: 1rem;
     margin-bottom: clamp(1.5rem, 2vw, 2.5rem);

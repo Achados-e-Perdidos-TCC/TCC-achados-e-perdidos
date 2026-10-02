@@ -6,7 +6,7 @@ function AuthProvider({ children }){
 
     const accessToken = localStorage.getItem("accessToken") || sessionStorage.getItem("temporaryToken"); 
 
-    const [ isAuthenticated, setIsAuthenticated ] = useState(accessToken ? true : false); 
+    const [ isAuthenticated, setIsAuthenticated ] = useState(!accessToken ? false : true); 
 
     return (
         <AuthContext.Provider value={ { isAuthenticated, setIsAuthenticated } }>
