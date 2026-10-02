@@ -8,6 +8,7 @@
     width: 320px;
     padding: 5rem 3rem 2.5rem 3rem;
     height: 100vh;
+    background-color: var(--card-color);
     transition: 1.3s ease;
 }
 
@@ -139,7 +140,7 @@
     background-color: var(--primary-color-blue-light);
     padding: 1rem;
     width: 3.5rem;
-    height: 4.3%;
+    height: 3.85rem;
     border-radius: 1rem;
     cursor: pointer;
     transition: 1.2s ease;
@@ -152,7 +153,7 @@
     background-color: var(--primary-color-blue-light);
     padding: 1rem;
     width: 3.5rem;
-    height: 4.3%;
+    height: 3.85rem;
     border-radius: 1rem;
     cursor: pointer;
     transition: 1.2s ease;
@@ -178,4 +179,31 @@
 
 .user__area { transition: padding-left 1.3s ease }
 
-.user__area:has(.user__sidebar__open) { padding-left: 22rem }
+.user__area:has(.user__sidebar__open) { padding-left: 21rem }
+
+/* responsive */
+
+@media (max-width: 1032px){
+    .user__area:has(.user__sidebar__open) { padding-left: 0 }
+
+    .user__sidebar__open{
+        width: 280px;
+        padding: 3rem 1.5rem 0 1.5rem;
+        height: 100vh;
+        transition: 1.3s ease;
+        z-index: 1;
+    }
+}
+
+@media (max-width: 768px ){
+
+    .user__area:has(.user__sidebar__open) { padding-left: 0 }
+
+    .user__sidebar__open{
+        width: 280px;
+        padding: 3rem 1.5rem 0 1.5rem;
+        height: 100vh;
+        transition: 1.3s ease;
+        z-index: 1;
+    }
+}

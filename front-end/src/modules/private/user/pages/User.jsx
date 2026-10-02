@@ -25,8 +25,6 @@ function User(){
 
     if (!userInfos) { return ( <p> Carregando... </p> )}
 
-    console.log(pageActive)
-
     return (
         <section className='user__area'>
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { NavLink } from 'react-router';
 
 import { hoje, ontem } from '../../../../../utils/date/date.js'; 
@@ -27,10 +27,21 @@ function PrincipalCards() {
     }
 
     const [paginaAtual, setPaginaAtual] = useState(1);
+    const [totalPorPagina, setTotalPorPagina] = useState( window.innerWidth >= 960 && window.innerWidth <= 1032  ? 5 : window.innerWidth <= 768 ? 3 : 8  );
 
+    useEffect(() => {
+
+        function atualizarTotalPorPagina() { setTotalPorPagina( window.innerWidth >= 960 && window.innerWidth <= 1032  ? 5 : window.innerWidth <= 768 ? 3 : 8 ) }
+
+        // Adiciona listener 
+        window.addEventListener('resize', atualizarTotalPorPagina);
+
+        // remove listener com callback para ser chamado só depois de desmotado o componente
+        return () => { window.removeEventListener('resize', atualizarTotalPorPagina) };
+
+    }, []);
     
     const total = objetos.length
-    const totalPorPagina = 8;
     const totalDePaginas = [];
     const totalDePaginasNumerico = Math.ceil(total / totalPorPagina)
     
@@ -44,8 +55,8 @@ function PrincipalCards() {
     return (
         <div className='user__objects'>
             <div>
-                <h1 className='user__objects__text'>Meus Objetos</h1>
-                <p className='user__objects__subtitle'>Gerencie os objetos que voce perdeu ou encontrou </p>
+                <h1 className='user__objects__text'>Meus objetos</h1>
+                <p className='user__objects__subtitle'>Gerencie os objetos que voce perdeu ou encontrou. </p>
             </div>
 
             <div className='user__objects__principal'>
@@ -63,7 +74,7 @@ function PrincipalCards() {
 
                                 <div className='user__principal__encima'>
 
-                                    <h1 className='user__titulo__principal'>{ valor.nome.length < 16 ? valor.nome : `${valor.nome.slice(0, 16)}...` }</h1>
+                                    <h1 className='user__titulo__principal'>{ valor.nome.length < 16 ? valor.nome : `${valor.nome.slice(0, 15)}...` }</h1>
                                     <h1 className='user__titulo__responsive'>{ valor.nome.length < 25 ? valor.nome : `${valor.nome.slice(0, 25)}...`}</h1>
 
                                     <div className='user__categoria__status'>
