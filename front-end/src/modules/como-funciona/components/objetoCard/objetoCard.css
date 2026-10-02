@@ -1,0 +1,70 @@
+.objeto__card {
+    background-color: var(--card-color);
+    border: 0.1rem solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    width: 100%;
+    max-width: 26rem;
+}
+
+.objeto__badge {
+    align-self: flex-start;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0.3rem 1rem;
+    border-radius: 1rem;
+}
+
+.objeto__card--perdido .objeto__badge {
+    background-color: var(--error-tag-color);
+    color: var(--error-text-color);
+}
+
+.objeto__card--encontrado .objeto__badge {
+    background-color: var(--success-tag-color);
+    color: var(--success-text-color);
+}
+
+.objeto__imagem {
+    width: 100%;
+    height: 12rem;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    background-color: var(--background-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.objeto__imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.objeto__imagem__placeholder {
+    width: 3.6rem;
+    height: 3.6rem;
+    color: var(--secondary-color-gray);
+}
+
+.objeto__nome {
+    font-size: 1.6rem;
+    color: var(--primary-color-text);
+}
+
+.objeto__info {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.3rem;
+    color: var(--secondary-color-gray);
+}
+
+.objeto__info img {
+    width: 1.4rem;
+    height: 1.4rem;
+}
