@@ -73,7 +73,13 @@
     gap: 1rem;
     border: 0.1rem solid var(--border-color);
     box-shadow: var(--subtle-shadow);
-    border-radius: 1rem
+    border-radius: 1rem;
+    transition: 0.4s ease;
+}
+
+.profile__active{
+    transition: 0.4s ease;
+    transform: scale(1.04);
 }
 
 .sidebar__without__photo{
@@ -129,7 +135,10 @@
     background-color: var(--primary-color-blue-light);
     color: var(--primary-color-blue); 
     border-radius: 0.8rem;
+    transition: 0.2s ease;
 }
+
+.none__active{ border-radius: 0.8rem }
 
 /* sidebar button close/open */
 

@@ -1,0 +1,72 @@
+.user__profile__label{
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.user__profile__input{
+    font-size: 1.6rem;
+    border-radius: 0.5rem;
+    padding: 1.4rem 2rem;
+    width: 100%;
+    border: 0.1rem solid var(--border-color);
+    color: var(--primary-color-text);
+    background-color: var(--card-color);
+}
+
+.user__profile__phone__city{
+    display: flex;
+    gap: 3rem;
+}
+
+.user__profile__input__phone, .user__profile__input__city{ 
+    position: relative;
+    flex: 1; 
+}
+
+.user__profile__estado {
+    position: absolute;
+    right: 1.2rem;
+    top: 67%;
+    transform: translateY(-50%);
+    width: 6rem;
+    height: 3rem;
+    border: none;
+    outline: none;
+    border: 0.1rem solid var(--secondary-color-gray); 
+    border-radius: 0.6rem;
+    color: var(--secondary-color-gray); 
+    background: var(--card-color);
+    appearance: none;
+    font-size: 1.2rem;
+    font-weight: 400;
+    text-align: center;
+    cursor: pointer;
+}
+
+.user__profile__container__sugestoes {
+    position: absolute;
+    right: 0;
+    left: 0;
+    max-height: 15rem;
+    background-color: var(--card-color);
+    border: 0.1rem solid var(--border-color);
+    border-radius: 0.8rem;
+    overflow: auto;
+}
+
+.user__profile__cidades__sugestoes {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.4rem;
+    cursor: pointer;
+}
+
+.user__profile__cidades__sugestoes:hover { background-color: #edecec76 }
+.user__profile__cidades__sugestoes span { font-size: 1.4rem }
+
+.user__profile__inputs__container{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}

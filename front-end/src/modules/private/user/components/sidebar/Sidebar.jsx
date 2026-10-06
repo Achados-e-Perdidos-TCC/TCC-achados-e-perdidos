@@ -49,7 +49,7 @@ function Sidebar({ userInfos, pageActive, setPageActive}){
                 </div>
 
                 <NavLink end >
-                    <div className='sidebar__profile__container'>
+                    <div className={`sidebar__profile__container ${pageActive === 1 ? 'profile__active' : '' }`} onClick={() => { setPageActive(1) }}>
                         <div className={!userInfos.avatarUrl || avatarError === true ? 'sidebar__without__photo' : 'sidebar__with__photo'}>
                             {!userInfos.avatarUrl || avatarError === true ? <p> { initialName } </p> : <img className='photo' src={`${avatar}`}/> } 
                         </div>
@@ -62,13 +62,13 @@ function Sidebar({ userInfos, pageActive, setPageActive}){
                 </NavLink>
 
                 <div className='sidebar__links__container' >
-                    <div className={`sidebar__link ${pageActive === 1 ? 'link__active' : ''}`} onClick={() => { setPageActive(1) } } >
-                            {pageActive === 1 ? <img  src={inboxBlue} /> : <img  src={inboxGray}  />}
+                    <div className={`sidebar__link ${pageActive === 2 ? 'link__active' : 'none__active'}`} onClick={() => { setPageActive(2) } } >
+                            {pageActive === 2 ? <img  src={inboxBlue} /> : <img  src={inboxGray}  />}
                             <p>Meus objetos</p>
                     </div>
 
-                    <div className={`sidebar__link ${pageActive === 2 ? 'link__active' : ''}`} onClick={() => { setPageActive(2) } }>
-                            {pageActive === 2 ? <img  className='sidebar__bell' src={bellBlue} /> : <img  className='sidebar__bell' src={bellGray} /> } 
+                    <div className={`sidebar__link ${pageActive === 3 ? 'link__active' : 'none__active'}`} onClick={() => { setPageActive(3) } }>
+                            {pageActive === 3 ? <img  className='sidebar__bell' src={bellBlue} /> : <img  className='sidebar__bell' src={bellGray} /> } 
                             <p>Notificações</p>
                     </div>
 

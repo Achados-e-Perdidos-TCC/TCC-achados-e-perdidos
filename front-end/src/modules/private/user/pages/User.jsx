@@ -6,6 +6,7 @@ import './user.css';
 
 import Sidebar from '../components/sidebar/Sidebar.jsx';
 import UserObjects from '../components/user-objects/UserObjects.jsx';
+import UserProfile from '../components/user-profile/UserProfile.jsx'; 
 
 function User(){
 
@@ -32,7 +33,11 @@ function User(){
                 <Sidebar userInfos={userInfos} pageActive={ pageActive } setPageActive={ setPageActive } />
             </div>
 
-            <div className={`user__area__objects ${pageActive === 1 ? '' : 'user__none' }`} >
+            <div className={`user__area__profile ${pageActive === 1 ? '' : 'user__none' }`}>
+                <UserProfile userInfos={userInfos} />
+            </div>
+
+            <div className={`user__area__objects ${pageActive === 2 ? '' : 'user__none' }`} >
                 <UserObjects userInfos={userInfos} />
             </div>
             
