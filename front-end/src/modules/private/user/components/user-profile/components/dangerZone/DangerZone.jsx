@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
-import { logout } from '../../../../../private.service';
+import { NavLink } from 'react-router';
+import { logout, deleteAccount } from '../../../../../private.service';
 import {AuthContext } from '../../../../../../../contexts/authContexts/AuthContext.jsx'; 
 
 import './dangerZone.css';
@@ -11,16 +12,16 @@ function DangerZone(){
 
     function userLogout(){
         logout()
-        setIsAuthenticated(false);
+        return setIsAuthenticated(false);
     }
 
-    function deleteAccount(){ 
+    async function deleteUserAccount(){ 
 
         setAttempts( attempts <= 0 ? 1 : 0 )
 
         if (attempts === 1){
-            return console.log('conta excluida');
-            // return window.location.reload(); 
+            await deleteAccount();
+            return setIsAuthenticated(false);
         }
     }
 
@@ -33,9 +34,9 @@ function DangerZone(){
                     <p className='user__danger__subtitle'>Você poderá logar novamente se quiser.</p>
                 </div>
 
-                <button className='user__danger__button' onClick={() => { userLogout() }}>
+                <NavLink className='user__danger__button' to='/' end onClick={() => { userLogout() }}>
                     <span>Deslogar</span>
-                </button>
+                </NavLink>
             </div>
 
             <hr />
@@ -57,9 +58,9 @@ function DangerZone(){
                     <p className='user__danger__subtitle'>Esta ação é permanente e não pode ser desfeita.</p>
                 </div>
 
-                <button className='user__danger__button' onClick={() => { deleteAccount() }}>
+                <NavLink className='user__danger__button' to={attempts === 1 ? '/' : ''} onClick={() => { deleteUserAccount() }}>
                     {attempts === 1 ? <span>Exclua minha conta</span> : <span>Excluir Conta</span>}
-                </button>
+                </NavLink>
             </div>
         </div>
     )

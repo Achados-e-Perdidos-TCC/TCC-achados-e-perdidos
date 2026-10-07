@@ -40,29 +40,40 @@ function PhotoCard({ userInfos, photo, setPhoto, avatar,  setAvatar, setError}){
         
         return `${formattedMonth} de ${formattedYear}`; 
     }
+
+    function formattedNameMobile(){
+
+        let initialName = userInfos.name; 
+
+        if(userInfos.name.includes(' ')){ initialName = `${userInfos.name.split(' ')[0]} ${userInfos.name.split(' ')[1]}` }
+
+        return initialName
+    }
     
     return (
         <div className='user__profile__photo__container'>
                 <div className='user__profile__photo__content'>
-                    {!photo ? <img className={!avatar ? 'sem__foto' : 'com__foto'} src={!avatar ? userBlue : avatar}/> : 
-                     <img className={!photo ? 'sem__foto' : 'com__foto'} src={!photo ? userBlue : URL.createObjectURL(photo)} />}
+                    {!photo ? <img className={!avatar ? 'user__sem__foto' : 'user__com__foto'} src={!avatar ? userBlue : avatar}/> : 
+                     <img className={!photo ? 'user__sem__foto' : 'user__com__foto'} src={!photo ? userBlue : URL.createObjectURL(photo)} />}
 
-                    <div>
-                        <h1 className='user__profile__name' >{userInfos.name}</h1>
-                        <p className='user__profile__email'>{userInfos.email}</p>
+                    <div className='user__profile__texts__content'>
+                        <h1 className='user__profile__name user__no__responsive' >{userInfos.name}</h1>
+                        <p className='user__profile__email user__no__responsive'>{userInfos.email}</p>
+
+                        <h1 className='user__profile__name user__responsive' >{formattedNameMobile()}</h1>
+                        <p className='user__profile__email user__responsive'>{(`${userInfos.email}...`).length > 27 ? `${userInfos.email.slice(0, 27)}...` : userInfos.email}</p>
 
                         <div className='user__profile__photo__calendar__content'>
                             <img className='user__profile__calendar' src={calendarGray} />
                             <p>Membro desde {formattedDate()}</p>
                         </div>
-
                     </div>
                 </div>
 
                 <div className='user__profile__edit__photo__container'>
 
                     <div className='user__profile__edit__photo__content'>
-                        <img src={tema === 'light' ? pencilBlack : pencilWhite} />
+                        <img className='user__profile__pencil' src={tema === 'light' ? pencilBlack : pencilWhite} />
                         <label htmlFor="uploadimage" className='user__profile__photo__upload'>Editar foto</label>
                         <input id='uploadimage' type="file" accept='.jpg,.png' onChange={(event) => { setPhoto(event.target.files[0])}} hidden />
                     </div>

@@ -94,3 +94,17 @@
     font-size: 1.4rem;
     color: #ed4337;
 }
+
+/* responsividade */
+
+.user__responsive{ display: none }
+
+@media(max-width: 769px){
+    .user__no__responsive{ display: none}
+    .user__responsive{ display: flex }
+
+    .user__profile__container__contents{
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

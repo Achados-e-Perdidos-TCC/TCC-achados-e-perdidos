@@ -74,3 +74,32 @@
     flex-direction: column;
     gap: 1.5rem;
 }
+
+@media(max-width: 1032px){
+    .user__profile__phone__city{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media(max-width: 769px){
+
+    .user__profile__input{
+        font-size: 1.3rem;
+        padding: 1rem 1.5rem;
+    }
+
+    .user__profile__phone__city{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user__profile__estado {
+        position: absolute;
+        right: 1.2rem;
+        top: 67%;
+        transform: translateY(-50%);
+        width: 5rem;
+        height: 2.5rem;
+    }
+}

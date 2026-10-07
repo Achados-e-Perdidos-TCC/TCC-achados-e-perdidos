@@ -30,6 +30,8 @@
     color: var(--error-text-color);
     border: 0.1rem solid var(--error-text-color);
     border-radius: 1rem;
+    font-size: 1.15rem;
+    white-space: noWrap;
     cursor: pointer;
 }
 
@@ -75,4 +77,29 @@
     color: #626569a9;
     font-size: 1.1rem;
     margin-left: 0.1rem;
+}
+
+@media(max-width: 769px){
+
+    .user__danger__container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+
+    .user__danger__title{ font-size: 1.3rem }
+    .user__danger__subtitle{ font-size: 1rem }
+
+    .user__danger__button{
+        padding: 1rem 1rem;
+        font-size: 1rem;
+    }
+
+    .user__delete__confirmation { padding: 1rem }
+
+    .user__delete__confirmation__title {
+        font-size: 1.2rem;
+        line-height: 1.2rem;
+    }
 }

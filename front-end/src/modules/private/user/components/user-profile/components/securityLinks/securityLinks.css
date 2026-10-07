@@ -3,7 +3,7 @@
     flex-direction: column;
     border: 0.1rem solid var(--border-color);
     border-radius: 1rem;
-    margin-top: 4.5rem;
+    margin-top: 3.5rem;
 }
 
 .user__security hr{
@@ -41,4 +41,8 @@
 .user__security__subtitle{
     font-size: 1.2rem;
     color: var(--secondary-color-gray);
+}
+
+@media(max-width: 769px){
+    .user__security{ margin-top: 3rem }
 }

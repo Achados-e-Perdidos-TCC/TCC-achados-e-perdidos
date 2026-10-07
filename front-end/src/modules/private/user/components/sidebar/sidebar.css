@@ -24,6 +24,7 @@
     height: 100vh;
     transition: 1.3s ease;
     transform: translateX(-32rem);
+    z-index: 10;
 }
 
 /* img */

@@ -30,9 +30,7 @@
 /* select */
 
 .preferences__theme__title{ margin-bottom: 0.5rem }
-
 .user__profile__select__container { width: 100% }
-
 .custom__select { position: relative }
 
 .custom__select__button {
@@ -50,7 +48,6 @@
     font-size: 1.4rem;
     cursor: pointer;
 }
-
 
 /* arrow */
 
@@ -104,4 +101,19 @@
     cursor: pointer;
 }
 
-.custom-select__option:hover { background-color: var(--border-color); }
+.custom-select__option:hover { background-color: var(--border-color) }
+
+@media(max-width: 769px){
+
+    .user__profile__preferences__container{
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .user__profile__preferences__subtitle{
+        color: var(--secondary-color-gray);
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}

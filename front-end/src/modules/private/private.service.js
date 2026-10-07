@@ -24,6 +24,14 @@ export async function loadAvatar(avatarUrl){
     return URL.createObjectURL(blob);
 }
 
+export async function deleteAccount(){
+     const data = await request(ENDPOINTS.users.me, {
+        method: "DELETE"
+    }); 
+
+    return data
+}
+
 export function logout() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");

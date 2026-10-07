@@ -4,7 +4,6 @@ import { useOutletContext } from 'react-router';
 import './userPreferences.css';
 
 function UserPreferences({ ativo1, ativo2, setAtivo1, setAtivo2 }){
-
     
     const [temaAberto, setTemaAberto] = useState(false);
 
