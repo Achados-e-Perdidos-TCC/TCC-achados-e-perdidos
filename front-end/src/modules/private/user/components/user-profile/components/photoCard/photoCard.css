@@ -1,7 +1,7 @@
 .user__profile__text{
     font-weight: 500;
     color: var(--primary-color-text); 
-    line-height: 4rem;
+    line-height: 4rem
 }
 
 .user__profile__subtitle{

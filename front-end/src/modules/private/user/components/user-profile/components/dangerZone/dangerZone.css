@@ -1,0 +1,78 @@
+.user__danger__zone{
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    margin-top: 2.7rem 
+}
+
+.user__danger__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.user__danger__title{
+    font-size: 1.5rem; 
+    font-weight: 500;
+    line-height: 2rem;
+    color: var(--error-text-color)
+}
+
+.user__danger__subtitle{
+    font-size: 1.2rem; 
+    font-weight: 500;
+    color: #626569a9;
+}
+
+.user__danger__button{
+    padding: 1rem 1.5rem;
+    background-color: transparent;
+    color: var(--error-text-color);
+    border: 0.1rem solid var(--error-text-color);
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+/* delete message */
+
+.user__delete__confirmation {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border: 0.1rem solid var(--error-text-color);
+    border-radius: 1rem;
+    background-color: rgba(255, 0, 0, 0.05);
+}
+
+.user__delete__confirmation__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: var(--error-text-color);
+    color: #ffffff;
+    font-size: 1.3rem;
+}
+
+.user__delete__confirmation__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.user__delete__confirmation__title {
+    color: var(--error-text-color);
+    font-size: 1.3rem;
+    line-height: 1rem;
+    font-weight: 500;
+}
+
+.user__delete__confirmation__subtitle {
+    color: #626569a9;
+    font-size: 1.1rem;
+    margin-left: 0.1rem;
+}

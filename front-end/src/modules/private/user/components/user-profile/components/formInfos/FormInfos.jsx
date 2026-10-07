@@ -6,15 +6,9 @@ import cidadesBrasil from '../../../../../../../utils/json/cidade-estados.json';
 import './formInfos.css';
 
 function FormInfos({ inputState, inputCityState, inputEmailState, setInputNameState, inputNameState, inputTelephoneState, setInputCityState, 
-setInputEmailState, setInputTelephoneState, setInputState }){
+setInputEmailState, setInputTelephoneState, setInputState, todasAsCidades }){
 
     const [cidadesFiltradas, setCidadesFiltradas] = useState([]); 
-    
-    const todasAsCidades = [];
-    cidadesBrasil.estados.forEach((estado) => { estado.cidades.forEach((cidade) => { todasAsCidades.push({
-        cidade: cidade,
-        estado: estado.sigla
-    })})});
 
     function buscarCidades(valor) {
         setInputCityState(valor);
@@ -47,7 +41,7 @@ setInputEmailState, setInputTelephoneState, setInputState }){
             <div>
                 <label className="user__profile__label" htmlFor="email"> E-mail </label>
                 <div>
-                    <input id='email' className='user__profile__input' type="email" value={inputEmailState} onChange={(e) => {setInputEmailState(e.target.value)}} />
+                    <input id='email' className='user__profile__input user__just__read' type="email" value={inputEmailState}  onChange={(e) => {setInputEmailState(e.target.value)}} disabled />
                 </div>
             </div>
 

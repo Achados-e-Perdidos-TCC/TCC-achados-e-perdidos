@@ -10,6 +10,7 @@
     height: 100vh;
     background-color: var(--card-color);
     transition: 1.3s ease;
+    z-index: 10;
 }
 
 .user__sidebar__close{
@@ -200,7 +201,6 @@
         padding: 3rem 1.5rem 0 1.5rem;
         height: 100vh;
         transition: 1.3s ease;
-        z-index: 1;
     }
 }
 
@@ -213,6 +213,5 @@
         padding: 3rem 1.5rem 0 1.5rem;
         height: 100vh;
         transition: 1.3s ease;
-        z-index: 1;
     }
 }

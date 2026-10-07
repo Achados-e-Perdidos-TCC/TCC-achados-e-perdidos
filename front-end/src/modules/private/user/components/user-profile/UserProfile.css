@@ -8,6 +8,7 @@
 
 .user__profile__user{ height: 3.5rem }
 .user__profile__shield, .user__profile__danger, .user__profile__bell{ height: 2.7rem }
+.user__profile__save { height: 2rem }
 
 /* container default */
 
@@ -21,10 +22,10 @@
 }
 
 .user__profile__container__default__danger{
-    background: #fea3a3d2;
-    border: 0.2rem solid #fea3a3d2;
+    background: var(--error-background-color);
+    border: 0.2rem solid var(--error-border-color);
     border-radius: 1rem;
-    box-shadow: 0 0 0.5rem #fea3a3d2;
+    box-shadow: 0 0 0.5rem var(--error-background-color);
     color: var(--primary-color-text); 
     padding: 2.2rem
 }
@@ -57,3 +58,39 @@
     gap: 1.5rem;
 }
 
+/* buttons */
+
+.user__profile__buttons{
+    display: flex;
+    gap: 1rem;
+}
+
+.user__profile__save__button{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #ffffff;
+    border: none;
+    background-color: var(--primary-color-blue);
+    padding: 0.9rem 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer
+}
+
+.user__profile__cancel__button{
+    gap: 1rem;
+    color: var(--primary-color-text);
+    border: 0.1rem solid var(--border-color);
+    background-color: var(--card-color);
+    padding: 0.9rem 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer
+}
+
+/* error */
+
+.user__error__message{
+    /* text-align: center; */
+    font-size: 1.4rem;
+    color: #ed4337;
+}

@@ -23,3 +23,10 @@ export async function loadAvatar(avatarUrl){
 
     return URL.createObjectURL(blob);
 }
+
+export function logout() {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken"); 
+}

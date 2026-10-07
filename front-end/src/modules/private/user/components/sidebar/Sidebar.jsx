@@ -14,7 +14,11 @@ import arrowBlue from '../../../../../assets/icons/detalhesObjeto/arrow-blue.svg
 
 function Sidebar({ userInfos, pageActive, setPageActive}){
 
-    const initialName = `${userInfos.name.slice(0 , 1)}${userInfos.name.split(' ')[1][0].toUpperCase()}`; 
+    let initialName = userInfos.name
+    
+    if(userInfos.name.includes(' ')){
+        initialName = `${userInfos.name.slice(0 , 1)}${userInfos.name.split(' ')[1][0].toUpperCase()}`; 
+    }
 
     const [open, setOpen] = useState(true);
     const [avatar, setAvatar] = useState(null); 

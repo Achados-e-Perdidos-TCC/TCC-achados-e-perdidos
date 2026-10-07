@@ -10,7 +10,7 @@ import calendarGray from '../../../../../../../assets/icons/userArea/calendar-gr
 import pencilBlack from '../../../../../../../assets/icons/userArea/pencil-black.png';  
 import pencilWhite from '../../../../../../../assets/icons/userArea/pencil-white.png';
 
-function PhotoCard({ userInfos, photo, setPhoto, avatar,  setAvatar, setAvatarError}){
+function PhotoCard({ userInfos, photo, setPhoto, avatar,  setAvatar, setError}){
 
     const {tema} = useOutletContext(); 
 
@@ -25,7 +25,7 @@ function PhotoCard({ userInfos, photo, setPhoto, avatar,  setAvatar, setAvatarEr
                 setAvatar(avatarUrl);
 
             } catch (error) {
-                setAvatarError(true); 
+                setError(true); 
             }
         }
 
@@ -44,7 +44,8 @@ function PhotoCard({ userInfos, photo, setPhoto, avatar,  setAvatar, setAvatarEr
     return (
         <div className='user__profile__photo__container'>
                 <div className='user__profile__photo__content'>
-                    <img className={!avatar ? 'sem__foto' : 'com__foto'} src={!avatar ? userBlue : avatar} />
+                    {!photo ? <img className={!avatar ? 'sem__foto' : 'com__foto'} src={!avatar ? userBlue : avatar}/> : 
+                     <img className={!photo ? 'sem__foto' : 'com__foto'} src={!photo ? userBlue : URL.createObjectURL(photo)} />}
 
                     <div>
                         <h1 className='user__profile__name' >{userInfos.name}</h1>
