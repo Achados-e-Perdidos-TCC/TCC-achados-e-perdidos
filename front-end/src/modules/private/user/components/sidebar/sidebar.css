@@ -132,13 +132,31 @@
     cursor: pointer;
 }
 
+.sidebar__notification{
+    display: flex;
+    align-items: center;
+    gap: 5.7rem
+ }
+
+.notification__sidebar__text{
+    font-size: 1.3rem;
+    background-color: var(--primary-color-blue-light);
+    border-radius: 50%;
+    color: var(--primary-color-blue);
+ }
+
+.one{ padding: 0.4rem 1rem }
+.two{ padding: 0.4rem 0.7rem }
+.three{ padding: 0.5rem 0.3rem }
+
 .link__active{ 
     border-left: 0.4rem solid var(--primary-color-blue); 
     background-color: var(--primary-color-blue-light);
-    color: var(--primary-color-blue); 
     border-radius: 0.8rem;
     transition: 0.2s ease;
 }
+
+.link__active p { color: var(--primary-color-blue) }
 
 .none__active{ border-radius: 0.8rem }
 
@@ -215,4 +233,6 @@
         height: 100vh;
         transition: 1.3s ease;
     }
+
+    .sidebar__notification{ gap: 4.8rem }
 }

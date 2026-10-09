@@ -11,7 +11,11 @@ import editProfileWhite from '../../../../../assets/icons/userArea/editprofile-w
 import pencilWhite from '../../../../../assets/icons/userArea/pencil-white.png';
 import emailBlue from '../../../../../assets/icons/userArea/email-blue.png';
 
-function UserNotifications(){
+function UserNotifications({ setNotifications }){
+
+    const notificationsDisplayed = notificationsJsonTest.filter((value) => value.read === false).length
+
+    setNotifications(notificationsDisplayed); 
 
      const notificationsByDate = notificationsJsonTest.reduce((value, array) => {
 

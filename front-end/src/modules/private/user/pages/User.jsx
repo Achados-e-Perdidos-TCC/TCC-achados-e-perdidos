@@ -12,7 +12,12 @@ import UserNotifications from '../components/user-notifications/UserNotification
 function User(){
 
     const [userInfos, setUserInfos] = useState(null);
-    const [pageActive, setPageActive] = useState(1);
+    const [notifications, setNotifications] = useState(0);
+    
+    const [pageActive, setPageActive] = useState( () => {
+        const savedPage = localStorage.getItem('lastUserPage'); 
+        return savedPage ? Number(savedPage) : 1;
+    });
 
     useEffect(() => {
 
@@ -25,13 +30,17 @@ function User(){
 
     }, []); 
 
+    useEffect(() => { 
+        localStorage.setItem('lastUserPage', pageActive) 
+    }, [pageActive]); 
+
     if (!userInfos) { return ( <p> Carregando... </p> )}
 
     return (
         <section className='user__area'>
 
             <div className='user__area__sidebar'>
-                <Sidebar userInfos={userInfos} pageActive={ pageActive } setPageActive={ setPageActive } />
+                <Sidebar userInfos={userInfos} pageActive={ pageActive } setPageActive={ setPageActive } notifications={notifications}/>
             </div>
 
             <div className={`user__area__profile ${pageActive === 1 ? '' : 'user__none' }`}>
@@ -43,7 +52,7 @@ function User(){
             </div>
 
             <div className={`user__area__objects ${pageActive === 3 ? '' : 'user__none' }`} >
-                <UserNotifications userInfos={userInfos} />
+                <UserNotifications setNotifications={setNotifications}/>
             </div>
             
         </section>

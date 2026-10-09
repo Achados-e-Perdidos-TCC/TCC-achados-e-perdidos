@@ -12,17 +12,25 @@ import bellBlue from '../../../../../assets/icons/register/bell-blue.png';
 import helpBlue from '../../../../../assets/icons/userArea/help-blue.png';
 import arrowBlue from '../../../../../assets/icons/detalhesObjeto/arrow-blue.svg'; 
 
-function Sidebar({ userInfos, pageActive, setPageActive}){
+function Sidebar({ userInfos, pageActive, setPageActive, notifications}){
 
     let initialName = userInfos.name.slice(0, 2).toUpperCase(); 
     
-    if(userInfos.name.includes(' ')){
+    if(userInfos.name.includes(' ')){ 
         initialName = `${userInfos.name.slice(0 , 1)}${userInfos.name.split(' ')[1][0].toUpperCase()}`; 
     }
 
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(() => {
+        const sideOpen = localStorage.getItem('sidebarPreference');
+        return sideOpen === null ? true : sideOpen === 'true' ? true : false;
+    });
+
     const [avatar, setAvatar] = useState(null); 
     const [avatarError, setAvatarError] = useState(null);
+
+    useEffect(() => { 
+        localStorage.setItem('sidebarPreference', open) 
+    }, [open]); 
 
     useEffect(() => {
 
@@ -71,9 +79,16 @@ function Sidebar({ userInfos, pageActive, setPageActive}){
                             <p>Meus objetos</p>
                     </div>
 
-                    <div className={`sidebar__link ${pageActive === 3 ? 'link__active' : 'none__active'}`} onClick={() => { setPageActive(3) } }>
+                    <div className={`sidebar__notification  ${pageActive === 3 ? 'link__active' : 'none__active'}`} onClick={() => { setPageActive(3) } }>
+                        <div className={`sidebar__link `}>
                             {pageActive === 3 ? <img  className='sidebar__bell' src={bellBlue} /> : <img  className='sidebar__bell' src={bellGray} /> } 
                             <p>Notificações</p>
+                        </div>
+
+                        <div>
+                            {notifications > 0 && notifications < 51 ? <p className={`notification__sidebar__text ${notifications < 10 ? 'one' : 'two'}`}>{notifications}</p> : ''} 
+                            {notifications > 50 ? <p className={`notification__sidebar__text three`}>+50</p> : ''}
+                        </div>
                     </div>
 
                 </div>
