@@ -1,0 +1,178 @@
+.user__notifications{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.user__notifications__principal__container{ margin-bottom: 4rem }
+
+.user__notifications__text{
+    font-weight: 500;
+    color: var(--primary-color-text); 
+    line-height: 4rem;
+}
+
+.user__notifications__subtitle{
+    color: var(--secondary-color-gray);
+    font-size: 1.6rem;
+}
+
+.user__notifications__header__container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.read__pending{ background-color: #0049e80c }
+
+.user__notifications__read{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 0.1rem solid var(--primary-color-blue);
+    border-radius: 1rem; 
+    color: var(--primary-color-blue);
+    cursor: pointer;
+    font-size: 1.4rem
+}
+
+/* img */
+
+.notifications__email{ height: 2.5rem }
+
+.notification__img{ height: 5rem}
+
+.notification__green__bg, .notification__orange__bg, .notification__blue__bg{ 
+    padding: 1.2rem;
+    border-radius: 50%;
+}
+
+.notification__green__bg{ background-color: var(--primary-color-green) }
+.notification__orange__bg{ background-color: #FD930C }
+.notification__blue__bg{ background-color: var(--primary-color-blue) }
+
+/* content */
+
+.user__notifications__container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    padding-right: 5rem;
+    border: 0.2rem solid var(--border-color);
+    margin-top: 0.6rem;
+    border-radius: 1rem;
+}
+
+.notifications__date{ font-weight: 600 }
+
+.notification__dateTime{ 
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.user__notifications__content, .user__notifications__extra__infos{
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.notification__content__title{
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--primary-color-text)
+}
+
+.notification__content__subtitle{
+    font-size: 1.4rem;
+    color: var(--secondary-color-gray)
+}
+
+.notification__content__hour{ color: var(--secondary-color-gray) }
+
+.notification__pending{ 
+    background-color: var(--primary-color-blue);
+    padding: 0.4rem;
+    border-radius: 50%;
+    animation: notification-pulse 3.5s ease-in-out infinite;
+}
+
+.notification__no__pending{ padding: 0.4rem }
+
+@keyframes notification-pulse{
+    0%, 100% { 
+        opacity: 0.6; 
+        transform: scale(0.8);
+    }
+
+    50% { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+}
+
+@media(max-width: 767px){
+
+    .user__notifications { gap: 2rem; } 
+    .user__notifications__principal__container { margin-bottom: 2rem; } 
+
+    .user__notifications__header__container { 
+        flex-direction: column; 
+        gap: 1.5rem; 
+    } 
+    
+    .user__notifications__text { 
+        font-size: 2.4rem; 
+        line-height: 1.3; 
+    } 
+    
+    .user__notifications__subtitle { 
+        font-size: 1.4rem; 
+        line-height: 1.5; 
+    } 
+    
+    .user__notifications__read { 
+        width: 100%; 
+        box-sizing: border-box; 
+        justify-content: center; 
+        font-size: 1.3rem; 
+    } 
+    
+    .user__notifications__container { 
+        padding: 1.5rem; 
+        gap: 1rem; 
+        align-items: flex-start; 
+    } 
+    
+    .user__notifications__content { 
+        align-items: flex-start; 
+        gap: 1rem; 
+    } 
+    
+    .notification__img { height: 4rem } 
+    
+    .notification__green__bg, .notification__orange__bg, .notification__blue__bg { padding: 0.9rem } 
+    
+    .notification__content__title { 
+        font-size: 1.5rem; 
+        line-height: 1.4; 
+    } 
+    
+    .notification__content__subtitle { 
+        font-size: 1.3rem; 
+        line-height: 1.5; 
+    } 
+    
+    .user__notifications__extra__infos { gap: 0.6rem } 
+    
+    .notification__content__hour { 
+        font-size: 1.2rem; 
+        white-space: nowrap; 
+    } 
+    
+    .notification__dateTime { 
+        font-size: 1.7rem; 
+        margin-bottom: 1rem; 
+    }
+}

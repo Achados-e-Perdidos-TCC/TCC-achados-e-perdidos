@@ -1,0 +1,26 @@
+[
+  {
+    "id": "notif-001",
+    "type": "ITEM_UPDATED",
+    "title": "Objeto atualizado",
+    "message": "O status do seu objeto \"Carteira preta\" foi atualizado.",
+    "createdAt": "2026-10-08T14:30:00-03:00",
+    "read": false
+  },
+  {
+    "id": "notif-002",
+    "type": "POSSIBLE_MATCH",
+    "title": "Possível correspondência encontrada",
+    "message": "Encontramos uma possível correspondência para o objeto \"Carteira preta\".",
+    "createdAt": "2026-10-06T13:15:00-03:00",
+    "read": false
+  },
+  {
+    "id": "notif-003",
+    "type": "PROFILE_UPDATED",
+    "title": "Perfil atualizado",
+    "message": "Seus dados de perfil foram atualizados com sucesso.",
+    "createdAt": "2026-10-08T12:00:00-03:00",
+    "read": true
+  }
+]

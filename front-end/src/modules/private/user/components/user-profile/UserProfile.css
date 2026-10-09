@@ -103,6 +103,16 @@
     .user__no__responsive{ display: none}
     .user__responsive{ display: flex }
 
+    .user__profile__text { 
+        font-size: 2.4rem; 
+        line-height: 1.3; 
+    } 
+    
+    .user__profile__subtitle { 
+        font-size: 1.4rem; 
+        line-height: 1.5; 
+    } 
+
     .user__profile__container__contents{
         display: grid;
         grid-template-columns: repeat(1, 1fr);
