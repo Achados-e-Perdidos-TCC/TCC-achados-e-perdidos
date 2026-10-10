@@ -4,7 +4,7 @@
     "type": "ITEM_UPDATED",
     "title": "Objeto atualizado",
     "message": "O status do seu objeto \"Carteira preta\" foi atualizado.",
-    "createdAt": "2026-10-08T14:30:00-03:00",
+    "createdAt": "2026-10-06T14:30:00-03:00",
     "read": false
   },
   {
@@ -12,7 +12,7 @@
     "type": "POSSIBLE_MATCH",
     "title": "Possível correspondência encontrada",
     "message": "Encontramos uma possível correspondência para o objeto \"Carteira preta\".",
-    "createdAt": "2026-10-06T13:15:00-03:00",
+    "createdAt": "2026-10-08T13:15:00-03:00",
     "read": false
   },
   {

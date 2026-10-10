@@ -100,13 +100,13 @@ function PrincipalCards() {
                                     </div>
 
                                     <div className='user__button__responsive'>
-                                        <NavLink className='user__detalhes__principal' to={`/buscar-objetos/${valor.id}`}>Ver detalhes</NavLink>
+                                        <NavLink className='user__detalhes__principal' to={`/buscar-objetos/user/${valor.id}`}>Ver detalhes</NavLink>
                                         <img className='user__arrow__button__principal' src={arrowBlue} alt="" />
                                     </div>
 
                                     <div className='user__principal__direita'>
                                         <div className='user__button__principal'>
-                                            <NavLink className='user__detalhes__principal' to={`/buscar-objetos/${valor.id}`}>Ver detalhes</NavLink>
+                                            <NavLink className='user__detalhes__principal' to={`/buscar-objetos/user/${valor.id}`}>Ver detalhes</NavLink>
                                             <img className='user__arrow__button__principal' src={arrowBlue} alt="" />
                                         </div>
                                     </div>

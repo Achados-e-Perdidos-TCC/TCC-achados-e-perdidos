@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { hoje, ontem } from '../../../../../utils/date/date';
 
 import './userNotifications.css'; 
@@ -36,8 +35,9 @@ function UserNotifications({ setNotifications }){
 
         const grupos = [];
 
-        for (const data in notificationsByDate) {
+        for (const data in notificationsByDate) {   
     
+            // Depende de como vai vir do banco, se vir em ordem asc usar unshift invés de push
             grupos.push(
                 <div className='user__notifications__principal__container'>
                     <h2 className='notification__dateTime'>{data === hoje() ? 'Hoje' : data === ontem() ? 'Ontem' : `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)} `}</h2>
