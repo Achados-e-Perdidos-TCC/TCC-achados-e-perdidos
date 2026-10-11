@@ -32,6 +32,15 @@ export async function deleteAccount(){
     return data
 }
 
+export async function changeNewUserPassword( currentPassword, newPassword ){
+     const data = await request(ENDPOINTS.users.password, {
+        method: "PATCH",
+        body: JSON.stringify({ currentPassword, newPassword })
+    }); 
+
+    return data; 
+}
+
 export function logout() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");

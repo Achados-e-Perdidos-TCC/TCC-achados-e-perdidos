@@ -16,6 +16,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 1.3rem;
+    color: var(--primary-color-text);
     cursor: pointer;
 }
 
