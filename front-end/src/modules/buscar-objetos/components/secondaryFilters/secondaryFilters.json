@@ -22,11 +22,5 @@
         "categoria": "Mais recentes",
         "iconWhite": "clockWhite",
         "iconBlack": "clockBlack"
-    },
-    {
-        "id": 5, 
-        "categoria": "Mais relevantes",
-        "iconWhite": "starWhite",
-        "iconBlack": "starBlack"
     }
 ] 

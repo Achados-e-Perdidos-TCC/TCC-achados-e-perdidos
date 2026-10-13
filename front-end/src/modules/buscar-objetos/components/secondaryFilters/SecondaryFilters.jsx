@@ -13,7 +13,6 @@ import todosBlack from '../../../../assets/icons/buscarObjetos/grid-black.png';
 import perdidosBlack from '../../../../assets/icons/buscarObjetos/warning-black.png';
 import encontradosBlack from '../../../../assets/icons/buscarObjetos/lupa-black.svg';
 import clockBlack from '../../../../assets/icons/buscarObjetos/clock-black.svg';
-import starBlack from '../../../../assets/icons/buscarObjetos/star-black.png';
 
 import filtros from './secondaryFilters.json';
 
@@ -26,8 +25,7 @@ const icons = {
     todosBlack,
     perdidosBlack,
     encontradosBlack,
-    clockBlack,
-    starBlack
+    clockBlack
 }
 
 function SecondaryFilters(){

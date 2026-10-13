@@ -86,18 +86,18 @@ function ChangePassword(){
                     <div className='esqueci__container__inputs change__password__user'>
 
                         <div>
-                            <label className="esqueci__label" htmlFor="email"> Senha atual </label>
+                            <label className="esqueci__label" htmlFor="oldPassword"> Senha atual </label>
                             <div>
-                                <input id='password' className='esqueci__input__change' type="text" placeholder='Sua senha' onChange={(e) => {setInputSenhaAtual(e.target.value)}} />
+                                <input id='oldPassword' className='esqueci__input__change' type="text" placeholder='Sua senha' onChange={(e) => {setInputSenhaAtual(e.target.value)}} />
                             </div>
                         </div>
 
                         <div>
-                            <label className="register__label" htmlFor="password"> Nova senha </label>
+                            <label className="register__label" htmlFor="newPassword"> Nova senha </label>
 
                                 <div className='register__input__container'>
 
-                                    <input id='password' className='esqueci__input__change' type='text' placeholder='Sua nova senha' onChange={(e) => {setInputNewPasswordState(e.target.value)}} onFocus={() => setRequisitosSenhaPreenchido(true)} onBlur={() => setRequisitosSenhaPreenchido(false)}/>
+                                    <input id='newPassword' className='esqueci__input__change' type='text' placeholder='Sua nova senha' onChange={(e) => {setInputNewPasswordState(e.target.value)}} onFocus={() => setRequisitosSenhaPreenchido(true)} onBlur={() => setRequisitosSenhaPreenchido(false)}/>
 
                                     </div>
 

@@ -12,18 +12,13 @@ import bellBlue from '../../../../../assets/icons/register/bell-blue.png';
 import helpBlue from '../../../../../assets/icons/userArea/help-blue.png';
 import arrowBlue from '../../../../../assets/icons/detalhesObjeto/arrow-blue.svg'; 
 
-function Sidebar({ userInfos, pageActive, setPageActive, notifications}){
+function Sidebar({ userInfos, pageActive, setPageActive, notifications, open, setOpen}){
 
     let initialName = userInfos.name.slice(0, 2).toUpperCase(); 
     
     if(userInfos.name.includes(' ')){ 
         initialName = `${userInfos.name.slice(0 , 1)}${userInfos.name.split(' ')[1][0].toUpperCase()}`; 
     }
-
-    const [open, setOpen] = useState(() => {
-        const sideOpen = localStorage.getItem('sidebarPreference');
-        return sideOpen === null ? true : sideOpen === 'true' ? true : false;
-    });
 
     const [avatar, setAvatar] = useState(null); 
     const [avatarError, setAvatarError] = useState(null);

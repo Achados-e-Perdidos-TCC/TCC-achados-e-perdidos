@@ -14,7 +14,7 @@ import arrowGray from '../../../../../assets/icons/buscarObjetos/arrow-gray.png'
 // Vai receber de buscarObjetos.jsx depois
 import objetos from './objetos.json'; 
 
-function PrincipalCards() {
+function UserObjects({ open }) {
 
     function dataFormatada(data, hora){
 
@@ -74,7 +74,9 @@ function PrincipalCards() {
 
                                 <div className='user__principal__encima'>
 
-                                    <h1 className='user__titulo__principal'>{ valor.nome.length < 16 ? valor.nome : `${valor.nome.slice(0, 15)}...` }</h1>
+                                    {open ? <h1 className='user__titulo__principal'>{ valor.nome.length < 15 ? valor.nome : `${valor.nome.slice(0, 15)}...` }</h1>
+                                    : <h1 className='user__titulo__principal'>{ valor.nome.length < 50 ? valor.nome : `${valor.nome.slice(0, 15)}...` }</h1> }
+
                                     <h1 className='user__titulo__responsive'>{ valor.nome.length < 25 ? valor.nome : `${valor.nome.slice(0, 25)}...`}</h1>
 
                                     <div className='user__categoria__status'>
@@ -149,4 +151,4 @@ function PrincipalCards() {
     )
 }
 
-export default PrincipalCards;
+export default UserObjects;

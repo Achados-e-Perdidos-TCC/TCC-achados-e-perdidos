@@ -9,24 +9,24 @@ import Logado from '../register/components/logado/logado.jsx';
 import './login.css'; 
 
 import logo from '../../../../assets/logo_iniciais.png';
-import emailGray from '../../../../assets/icons/login/email-gray.png'; 
-import lockGray from '../../../../assets/icons/login/lock-gray.png'; 
-import openEyeGray from '../../../../assets/icons/login/open-eye-gray.png'; 
-import closeEyeGray from '../../../../assets/icons/login/close-eye-gray.png'; 
-import entrarWhite from '../../../../assets/icons/login/entrar-white.png'; 
+import emailGray from '../../../../assets/icons/login/email-gray.png';
+import lockGray from '../../../../assets/icons/login/lock-gray.png';
+import openEyeGray from '../../../../assets/icons/login/open-eye-gray.png';
+import closeEyeGray from '../../../../assets/icons/login/close-eye-gray.png';
+import entrarWhite from '../../../../assets/icons/login/entrar-white.png';
 
 function Login(){
 
-    const { isAuthenticated } = useContext(AuthContext); 
+    const { isAuthenticated } = useContext(AuthContext);
 
     const [eyeState, setEyeState] = useState(true);
-    const [inputEmailState, setInputEmailState] = useState('')
-    const [inputPasswordState, setInputPasswordState] = useState('')
+    const [inputEmailState, setInputEmailState] = useState('');
+    const [inputPasswordState, setInputPasswordState] = useState('');
     const [lembrarUsuario, setLembrarUsuario] = useState(false); 
-    const [error, setError] = useState(null)
+    const [error, setError] = useState(null);
 
     function setarEyeState(){
-        setEyeState( (estadoAtual) => { return estadoAtual === true ? false : true } )
+        setEyeState( (estadoAtual) => { return estadoAtual === true ? false : true } );
     }
 
     async function logarUsuario(evento){

@@ -19,6 +19,12 @@ function User(){
         return savedPage ? Number(savedPage) : 1;
     });
 
+    // sidebar
+    const [open, setOpen] = useState(() => {
+        const sideOpen = localStorage.getItem('sidebarPreference');
+        return sideOpen === null ? true : sideOpen === 'true' ? true : false;
+    });
+
     useEffect(() => {
 
         async function getUserInformation() {
@@ -40,7 +46,8 @@ function User(){
         <section className='user__area'>
 
             <div className='user__area__sidebar'>
-                <Sidebar userInfos={userInfos} pageActive={ pageActive } setPageActive={ setPageActive } notifications={notifications}/>
+                <Sidebar userInfos={userInfos} pageActive={ pageActive } setPageActive={ setPageActive } notifications={notifications} open={open}
+                setOpen={setOpen}/>
             </div>
 
             <div className={`user__area__profile ${pageActive === 1 ? '' : 'user__none' }`}>
@@ -48,7 +55,7 @@ function User(){
             </div>
 
             <div className={`user__area__objects ${pageActive === 2 ? '' : 'user__none' }`} >
-                <UserObjects userInfos={userInfos} />
+                <UserObjects open={open} />
             </div>
 
             <div className={`user__area__objects ${pageActive === 3 ? '' : 'user__none' }`} >

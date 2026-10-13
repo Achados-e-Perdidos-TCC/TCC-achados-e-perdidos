@@ -5,7 +5,7 @@ import './userNotifications.css';
 import notificationsJsonTest from './notifications.json'; 
 
 import magnifyingGlassWhite from '../../../../../assets/icons/userArea/magnifyingglass-white.png';
-import messageWhite from '../../../../../assets/icons/userArea/message-white.png';
+// import messageWhite from '../../../../../assets/icons/userArea/message-white.png';
 import editProfileWhite from '../../../../../assets/icons/userArea/editprofile-white.png';
 import pencilWhite from '../../../../../assets/icons/userArea/pencil-white.png';
 import emailBlue from '../../../../../assets/icons/userArea/email-blue.png';
