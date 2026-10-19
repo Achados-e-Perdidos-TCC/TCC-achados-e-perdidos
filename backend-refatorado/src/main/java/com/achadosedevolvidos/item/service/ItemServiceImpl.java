@@ -7,6 +7,7 @@ import com.achadosedevolvidos.item.dto.ItemResponse;
 import com.achadosedevolvidos.item.dto.ItemSearchFilter;
 import com.achadosedevolvidos.item.dto.UpdateItemRequest;
 import com.achadosedevolvidos.item.event.ItemCreatedEvent;
+import com.achadosedevolvidos.item.event.ItemStatusChangedEvent;
 import com.achadosedevolvidos.item.mapper.ItemMapper;
 import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.item.model.ItemImage;
@@ -184,7 +185,11 @@ public class ItemServiceImpl implements ItemService {
         ensureOwner(item, currentUserId);
 
         item.setStatus(newStatus);
-        return itemMapper.toResponse(itemRepository.save(item));
+        Item saved = itemRepository.save(item);
+
+        eventPublisher.publishEvent(new ItemStatusChangedEvent(saved.getId(), currentUserId, saved.getTitle()));
+
+        return itemMapper.toResponse(saved);
     }
 
     private Specification<Item> parseCombinedStatusFilter(String rawStatus) {

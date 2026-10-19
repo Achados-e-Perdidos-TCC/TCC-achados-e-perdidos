@@ -62,6 +62,22 @@ class MatchEngineServiceTest {
         assertThat(score).isEqualTo(20.0); // só o ponto de categoria
     }
 
+    @Test
+    void naoDeveLancarExcecaoQuandoCoordenadasOuDataForemNulas() {
+        MatchCandidate perdidoSemCoordenadas = new MatchCandidate(
+                UUID.randomUUID(), Item.ItemType.PERDIDO, CATEGORY_ELETRONICOS,
+                null, null, null, "Carteira preta"
+        );
+        MatchCandidate encontrado = candidato(Item.ItemType.ENCONTRADO, CATEGORY_ELETRONICOS,
+                -23.5505, -46.6333, LocalDateTime.now(), "Carteira preta achada");
+
+        double score = engine.calculateMatchScore(perdidoSemCoordenadas, encontrado);
+
+        // Sem coordenadas/data pra comparar, só os pontos de categoria (20) e
+        // título em comum (15) entram na conta — nada de NullPointerException.
+        assertThat(score).isEqualTo(35.0);
+    }
+
     private MatchCandidate candidato(
             Item.ItemType type, UUID categoryId, double lat, double lng, LocalDateTime eventDate, String title
     ) {

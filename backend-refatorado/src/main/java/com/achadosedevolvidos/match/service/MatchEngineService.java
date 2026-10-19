@@ -23,23 +23,33 @@ public class MatchEngineService {
 
         double score = 20.0; // Mesma categoria garante 20%
 
-        // Proximidade geográfica (peso de 40%)
-        double distanceKm = calculateDistance(
-                lost.latitude(), lost.longitude(),
-                found.latitude(), found.longitude()
-        );
+        // Proximidade geográfica (peso de 40%) — latitude/longitude são
+        // colunas opcionais no banco (CreateItemRequest exige via @NotNull,
+        // mas nada impede uma linha antiga/criada fora da API de não ter),
+        // então sem as quatro coordenadas essa parte simplesmente não soma
+        // pontos, em vez de lançar NullPointerException.
+        if (lost.latitude() != null && lost.longitude() != null
+                && found.latitude() != null && found.longitude() != null) {
+            double distanceKm = calculateDistance(
+                    lost.latitude(), lost.longitude(),
+                    found.latitude(), found.longitude()
+            );
 
-        if (distanceKm <= 1.0) score += 40.0;
-        else if (distanceKm <= 5.0) score += 30.0;
-        else if (distanceKm <= 15.0) score += 15.0;
-        else if (distanceKm <= 30.0) score += 5.0;
+            if (distanceKm <= 1.0) score += 40.0;
+            else if (distanceKm <= 5.0) score += 30.0;
+            else if (distanceKm <= 15.0) score += 15.0;
+            else if (distanceKm <= 30.0) score += 5.0;
+        }
 
-        // Proximidade temporal (peso de 25%)
-        long diffDays = Math.abs(Duration.between(lost.eventDate(), found.eventDate()).toDays());
+        // Proximidade temporal (peso de 25%) — mesmo raciocínio: eventDate
+        // também é opcional no banco.
+        if (lost.eventDate() != null && found.eventDate() != null) {
+            long diffDays = Math.abs(Duration.between(lost.eventDate(), found.eventDate()).toDays());
 
-        if (diffDays <= 1) score += 25.0;
-        else if (diffDays <= 3) score += 18.0;
-        else if (diffDays <= 7) score += 10.0;
+            if (diffDays <= 1) score += 25.0;
+            else if (diffDays <= 3) score += 18.0;
+            else if (diffDays <= 7) score += 10.0;
+        }
 
         // Correspondência de título (peso de 15%)
         String[] lostTitleWords = lost.title().toLowerCase().split("\\s+");
