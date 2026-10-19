@@ -32,7 +32,7 @@ const [tema, setTema] = useState(() => {
                     </header>
 
                     <main className="content">
-                        <Outlet context={{tema}}/> {/* Aqui entra as paginas que estarão no roteador */}
+                        <Outlet context={{tema, setTema}}/> {/* Aqui entra as paginas que estarão no roteador */}
                     </main>
             </div>
         </AuthProvider>

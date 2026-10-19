@@ -6,11 +6,24 @@ import './user.css';
 
 import Sidebar from '../components/sidebar/Sidebar.jsx';
 import UserObjects from '../components/user-objects/UserObjects.jsx';
+import UserProfile from '../components/user-profile/UserProfile.jsx'; 
+import UserNotifications from '../components/user-notifications/UserNotifications.jsx'; 
 
 function User(){
 
     const [userInfos, setUserInfos] = useState(null);
-    const [pageActive, setPageActive] = useState(1);
+    const [notifications, setNotifications] = useState(0);
+    
+    const [pageActive, setPageActive] = useState( () => {
+        const savedPage = localStorage.getItem('lastUserPage'); 
+        return savedPage ? Number(savedPage) : 1;
+    });
+
+    // sidebar
+    const [open, setOpen] = useState(() => {
+        const sideOpen = localStorage.getItem('sidebarPreference');
+        return sideOpen === null ? true : sideOpen === 'true' ? true : false;
+    });
 
     useEffect(() => {
 
@@ -23,17 +36,30 @@ function User(){
 
     }, []); 
 
+    useEffect(() => { 
+        localStorage.setItem('lastUserPage', pageActive) 
+    }, [pageActive]); 
+
     if (!userInfos) { return ( <p> Carregando... </p> )}
 
     return (
         <section className='user__area'>
 
             <div className='user__area__sidebar'>
-                <Sidebar userInfos={userInfos} pageActive={ pageActive } setPageActive={ setPageActive } />
+                <Sidebar userInfos={userInfos} pageActive={ pageActive } setPageActive={ setPageActive } notifications={notifications} open={open}
+                setOpen={setOpen}/>
             </div>
 
-            <div className={`user__area__objects ${pageActive === 1 ? '' : 'user__none' }`} >
-                <UserObjects userInfos={userInfos} />
+            <div className={`user__area__profile ${pageActive === 1 ? '' : 'user__none' }`}>
+                <UserProfile userInfos={userInfos} />
+            </div>
+
+            <div className={`user__area__objects ${pageActive === 2 ? '' : 'user__none' }`} >
+                <UserObjects open={open} />
+            </div>
+
+            <div className={`user__area__objects ${pageActive === 3 ? '' : 'user__none' }`} >
+                <UserNotifications setNotifications={setNotifications}/>
             </div>
             
         </section>

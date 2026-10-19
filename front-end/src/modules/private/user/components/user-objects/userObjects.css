@@ -202,6 +202,16 @@
 
 @media ( max-width: 767px ){
 
+    .user__objects__text { 
+        font-size: 2.4rem; 
+        line-height: 1.3; 
+    } 
+    
+    .user__objects__subtitle { 
+        font-size: 1.4rem; 
+        line-height: 1.5; 
+    } 
+
     .user__descricao__principal, .user__principal__direita, .user__divisoria, .user__titulo__principal, .user__endereco__principal{ display: none}
     .user__endereco__responsive, .user__paginas__responsivas { display: flex }
 

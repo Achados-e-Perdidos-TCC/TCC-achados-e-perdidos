@@ -59,7 +59,7 @@ function detalhesObjeto(){
                         <NavLink className='botao__azul' to='/' end> 
                         <div className='botoes'>
                             <img src={chatWhite}/>
-                            <p>Tenho informacoes sobre este objeto</p>
+                            <p>Tenho informações sobre este objeto</p>
                         </div>
                         </ NavLink>
 

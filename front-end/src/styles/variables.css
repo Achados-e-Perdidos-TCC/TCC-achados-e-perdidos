@@ -7,6 +7,7 @@
     --secondary-color-black: #000000; /* cor que não muda ao trocar tema*/
     --secondary-color-white: #FFFFFF;
 
+    --input-blocked: #F7F7F7;
 
     --subtle-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
     --shadow-hover: 0 4px 15px rgba(0, 0, 0, 0.12);
@@ -26,12 +27,17 @@
     --analysis-tag-color: #FFC39D; 
     --error-tag-color: #FEA3A3;   
 
+    --error-background-color: #FFE5E5;
+    --error-border-color: #fea3a387;
+
     --font-principal: 'Poppins', sans-serif;
 }
 
 [data-theme='dark']{
     --primary-color-text: #FFFFFF; 
     --secondary-color-text: #000000;
+
+    --input-blocked: #202020; 
 
     --primary-color-blue-light: #1A2744;
 
@@ -41,4 +47,7 @@
     --background-color: #181818; 
     --card-color: #191818;
     --border-color: #dddddd8e;
+
+    --error-background-color: #332225;
+    --error-border-color: #704047;
 }

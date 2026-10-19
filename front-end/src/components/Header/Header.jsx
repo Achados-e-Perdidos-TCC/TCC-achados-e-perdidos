@@ -6,8 +6,8 @@ import { NavLink } from 'react-router';
 
 import logo from '../../assets/logo_completa.png';
 import iconCadastrarObjeto from '../../assets/icons/header/cabecalho_cadastrar_objeto.svg';
-import temaDark from '../../assets/icons/header/cabecalho_tema_dark.svg';
-import temaLight from '../../assets/icons/header/cabecalho_tema_light.svg';
+// import temaDark from '../../assets/icons/header/cabecalho_tema_dark.svg';
+// import temaLight from '../../assets/icons/header/cabecalho_tema_light.svg';
 import burguerWhite from '../../assets/icons/header/cabecalho_burguer_white.svg';
 import burguerDark from '../../assets/icons/header/cabecalho_burguer_black.svg';
 import closeWhite from '../../assets/icons/header/cabecalho_close_white.svg';
@@ -64,9 +64,9 @@ function Header({ tema, aoAlternarTema }) {
                 </div>
 
 
-                <div className='button button__tema' onClick={aoAlternarTema}>
+                {/* <div className='button button__tema' onClick={aoAlternarTema}>
                     {tema === 'light' ? <img className="tema" src={temaDark} alt="Ativar tema escuro" /> : <img className="tema" src={temaLight} alt="Ativar tema claro" />}
-                </div>
+                </div> */}
 
                 <div className='button__person'>
                     {person()}

@@ -23,3 +23,27 @@ export async function loadAvatar(avatarUrl){
 
     return URL.createObjectURL(blob);
 }
+
+export async function deleteAccount(){
+     const data = await request(ENDPOINTS.users.me, {
+        method: "DELETE"
+    }); 
+
+    return data
+}
+
+export async function changeNewUserPassword( currentPassword, newPassword ){
+     const data = await request(ENDPOINTS.users.password, {
+        method: "PATCH",
+        body: JSON.stringify({ currentPassword, newPassword })
+    }); 
+
+    return data; 
+}
+
+export function logout() {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken"); 
+}

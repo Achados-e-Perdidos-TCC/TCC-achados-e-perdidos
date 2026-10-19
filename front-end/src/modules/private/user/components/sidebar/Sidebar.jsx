@@ -12,13 +12,20 @@ import bellBlue from '../../../../../assets/icons/register/bell-blue.png';
 import helpBlue from '../../../../../assets/icons/userArea/help-blue.png';
 import arrowBlue from '../../../../../assets/icons/detalhesObjeto/arrow-blue.svg'; 
 
-function Sidebar({ userInfos, pageActive, setPageActive}){
+function Sidebar({ userInfos, pageActive, setPageActive, notifications, open, setOpen}){
 
-    const initialName = `${userInfos.name.slice(0 , 1)}${userInfos.name.split(' ')[1][0].toUpperCase()}`; 
+    let initialName = userInfos.name.slice(0, 2).toUpperCase(); 
+    
+    if(userInfos.name.includes(' ')){ 
+        initialName = `${userInfos.name.slice(0 , 1)}${userInfos.name.split(' ')[1][0].toUpperCase()}`; 
+    }
 
-    const [open, setOpen] = useState(true);
     const [avatar, setAvatar] = useState(null); 
     const [avatarError, setAvatarError] = useState(null);
+
+    useEffect(() => { 
+        localStorage.setItem('sidebarPreference', open) 
+    }, [open]); 
 
     useEffect(() => {
 
@@ -49,7 +56,7 @@ function Sidebar({ userInfos, pageActive, setPageActive}){
                 </div>
 
                 <NavLink end >
-                    <div className='sidebar__profile__container'>
+                    <div className={`sidebar__profile__container ${pageActive === 1 ? 'profile__active' : '' }`} onClick={() => { setPageActive(1) }}>
                         <div className={!userInfos.avatarUrl || avatarError === true ? 'sidebar__without__photo' : 'sidebar__with__photo'}>
                             {!userInfos.avatarUrl || avatarError === true ? <p> { initialName } </p> : <img className='photo' src={`${avatar}`}/> } 
                         </div>
@@ -62,14 +69,21 @@ function Sidebar({ userInfos, pageActive, setPageActive}){
                 </NavLink>
 
                 <div className='sidebar__links__container' >
-                    <div className={`sidebar__link ${pageActive === 1 ? 'link__active' : ''}`} onClick={() => { setPageActive(1) } } >
-                            {pageActive === 1 ? <img  src={inboxBlue} /> : <img  src={inboxGray}  />}
+                    <div className={`sidebar__link ${pageActive === 2 ? 'link__active' : 'none__active'}`} onClick={() => { setPageActive(2) } } >
+                            {pageActive === 2 ? <img  src={inboxBlue} /> : <img  src={inboxGray}  />}
                             <p>Meus objetos</p>
                     </div>
 
-                    <div className={`sidebar__link ${pageActive === 2 ? 'link__active' : ''}`} onClick={() => { setPageActive(2) } }>
-                            {pageActive === 2 ? <img  className='sidebar__bell' src={bellBlue} /> : <img  className='sidebar__bell' src={bellGray} /> } 
+                    <div className={`sidebar__notification  ${pageActive === 3 ? 'link__active' : 'none__active'}`} onClick={() => { setPageActive(3) } }>
+                        <div className={`sidebar__link `}>
+                            {pageActive === 3 ? <img  className='sidebar__bell' src={bellBlue} /> : <img  className='sidebar__bell' src={bellGray} /> } 
                             <p>Notificações</p>
+                        </div>
+
+                        <div>
+                            {notifications > 0 && notifications < 51 ? <p className={`notification__sidebar__text ${notifications < 10 ? 'one' : 'two'}`}>{notifications}</p> : ''} 
+                            {notifications > 50 ? <p className={`notification__sidebar__text three`}>+50</p> : ''}
+                        </div>
                     </div>
 
                 </div>

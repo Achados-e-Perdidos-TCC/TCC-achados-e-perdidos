@@ -84,8 +84,3 @@ export async function forgetPassword( email ){
 
     return data; 
 }
-
-export function logout() {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-}

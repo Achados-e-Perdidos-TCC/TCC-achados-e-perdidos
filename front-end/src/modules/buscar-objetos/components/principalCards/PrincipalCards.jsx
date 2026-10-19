@@ -7,6 +7,7 @@ import filtros from '../../../../utils/filters/filtrarObjetos.js';
 
 import './principalCards.css';
 import Status from '../../../../components/status/Status.jsx'; 
+import NotObjects from '../../../../pages/errors/notObjects/NotObjects.jsx';
 
 import pinGray from '../../../../assets/icons/buscarObjetos/pin-gray.svg';
 import calendarGray from '../../../../assets/icons/buscarObjetos/calendar-gray.svg';
@@ -21,9 +22,10 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
     const { state } = useFilter();
     const { primaryFilters, secondaryFilters } = state;
+    const objetosFiltrados = objetos.filter((valor) => { return filtros(valor, primaryFilters, secondaryFilters) });
 
     let cardsExibidos = 0;
-    const totalEncontrados = objetos.filter((valor) => { return filtros(valor, primaryFilters, secondaryFilters) }).length; 
+    const totalEncontrados = objetosFiltrados.length; 
 
     // useRef = cria algo parecido com: { current: x } e guarda essa referencia, é usado tbm p/Acessar um elemento HTML diretamente
     // funciona de forma semelhante ao useState, mas a diferença é que uma mudança no useState causa uma nova renderização,
@@ -52,7 +54,7 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
 
     return (
         <div>
-            {objetos.filter((valor) => { return filtros(valor, primaryFilters, secondaryFilters)}).slice(inicio, fim).map((valor) => {
+            { objetosFiltrados.length === 0 ? <NotObjects /> : objetosFiltrados.slice(inicio, fim).map((valor) => {
                 cardsExibidos++
 
                 return (
