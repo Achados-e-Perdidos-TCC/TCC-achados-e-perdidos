@@ -329,6 +329,35 @@ Não existe `senderId` no payload de envio — o remetente vem da autenticação
 da conexão, nunca de um campo que o cliente manda (isso é proposital, evita
 alguém mandar mensagem se passando por outro usuário).
 
+### 4.7. Notificações (`/api/v1/notifications`) — 🔒
+
+Sem endpoint de criação — uma notificação nasce sozinha no backend (troca de
+status de um item seu, match encontrado, perfil atualizado). O shape já bate
+com o que a tela de notificações espera.
+
+| Método | Path | Body | Resposta | Ação |
+|---|---|---|---|---|
+| GET | `/` | — | `200` `NotificationResponse[]` | Lista as notificações do usuário logado, mais recentes primeiro. Sem paginação hoje. |
+| PATCH | `/{id}/read` | — | `200` `NotificationResponse` | Marca uma notificação específica como lida. `403` se não for sua. |
+| PATCH | `/read-all` | — | `200` `{ message }` | Marca todas como lidas de uma vez. |
+
+```ts
+// NotificationResponse
+{
+  id: string;
+  type: "ITEM_UPDATED" | "POSSIBLE_MATCH" | "PROFILE_UPDATED";
+  title: string;
+  message: string;
+  createdAt: string; // ISO datetime
+  read: boolean;
+}
+```
+
+Se o usuário desligou `notificationsEnabled` (ou `matchAlertsEnabled`, no
+caso de `POSSIBLE_MATCH`) em `PATCH /users/me/preferences`, a notificação
+correspondente nem é criada — não é algo pra filtrar no front, ela
+simplesmente não aparece na lista.
+
 ---
 
 ## 5. Formato de erro
