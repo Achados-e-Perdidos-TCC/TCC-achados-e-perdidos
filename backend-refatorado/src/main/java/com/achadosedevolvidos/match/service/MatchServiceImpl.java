@@ -4,10 +4,12 @@ import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.item.repository.ItemRepository;
 import com.achadosedevolvidos.match.dto.MatchCandidate;
 import com.achadosedevolvidos.match.dto.MatchResponse;
+import com.achadosedevolvidos.match.event.MatchCreatedEvent;
 import com.achadosedevolvidos.match.mapper.MatchMapper;
 import com.achadosedevolvidos.match.model.Match;
 import com.achadosedevolvidos.match.repository.MatchRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class MatchServiceImpl implements MatchService {
     private final MatchRepository matchRepository;
     private final MatchEngineService matchEngineService;
     private final MatchMapper matchMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -72,7 +75,13 @@ public class MatchServiceImpl implements MatchService {
                 .score(score)
                 .build();
 
-        matchRepository.save(match);
+        Match saved = matchRepository.save(match);
+
+        eventPublisher.publishEvent(new MatchCreatedEvent(
+                saved.getId(),
+                lostItem.getUser().getId(), lostItem.getTitle(),
+                foundItem.getUser().getId(), foundItem.getTitle()
+        ));
     }
 
     private MatchCandidate toCandidate(Item item) {
