@@ -340,7 +340,7 @@ Resumo funcional — a justificativa técnica de cada item está em
   como `INATIVO`. `active = false` bloqueia login novo (`DisabledException` do
   `DaoAuthenticationProvider`) **e** um access token já emitido antes da
   exclusão (`JwtAuthenticationFilter` passou a checar `isEnabled()`, além da
-  validade do JWT). Detalhes em `ARQUITETURA.md`, seção 14.
+  validade do JWT). Detalhes em `ARQUITETURA.md`, seção 13.
 - **CRUD completo de `Item` além da criação**: `GET /items/me` ("meus
   objetos", com um filtro `status` combinado que aceita tanto `type`
   quanto `status` real), `PATCH /items/{id}` (edição parcial) e
@@ -349,6 +349,13 @@ Resumo funcional — a justificativa técnica de cada item está em
   apagar a linha — evita quebrar `matches`/mensagens já vinculados ao item,
   que não têm `ON DELETE CASCADE`; o item some da busca pública e do
   detalhe, mas continua visível no histórico do próprio dono.
+- **Módulo `notification/` — notificações** (`GET/PATCH /api/v1/notifications`;
+  migration `V17` cria a tabela): nascem sozinhas, disparadas por evento de
+  domínio de outros módulos (troca de status de item, match encontrado,
+  perfil atualizado) — nenhum deles conhece o módulo `notification`
+  diretamente, mesmo desacoplamento já usado entre `item` e `match`. Cada
+  criação respeita a preferência do usuário (`notificationsEnabled`/
+  `matchAlertsEnabled`). Detalhes em `ARQUITETURA.md`, seção 14.
 - **Módulo `upload/` — envio de imagens**: `POST /api/v1/uploads/images`
   (multipart) grava em disco local (`app.upload.dir`, default `./uploads`,
   servido de volta em `/uploads/**`) e devolve a URL a ser usada em
@@ -416,6 +423,10 @@ GET  /uploads/{arquivo}                        (serve a imagem enviada, público
 GET  /api/v1/matches/{matchId}/messages        (histórico do chat)
 WS   /ws  →  SEND /app/chat.sendMessage/{matchId}
              SUBSCRIBE /topic/conversation/{matchId}
+
+GET    /api/v1/notifications
+PATCH  /api/v1/notifications/{id}/read
+PATCH  /api/v1/notifications/read-all
 ```
 
 ## Estrutura de pacotes
@@ -429,6 +440,7 @@ com.achadosedevolvidos
 ├── upload/        # Upload de imagens (multipart) para disco local
 ├── match/         # Match, motor de pontuação puro, orquestração
 ├── chat/          # Mensagens por match, WebSocket autenticado
+├── notification/  # Notificações criadas por evento (item/match/user)
 ├── config/        # Security, WebSocket, Async, beans de autenticação
 └── shared/        # BaseEntity, exceções e resposta de erro padrão
 ```

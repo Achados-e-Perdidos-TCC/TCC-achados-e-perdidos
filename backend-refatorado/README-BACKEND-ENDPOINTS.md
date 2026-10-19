@@ -111,14 +111,29 @@ nenhuma ação manual do usuário.
 
 ---
 
-## 7. O que ainda falta fazer
+## 7. Notificações (`/api/v1/notifications`) — `notification/` — todos 🔒
 
-Nenhum endpoint implementado ainda para estes três módulos:
+| Endpoint | O que faz | Exigências / regras |
+|---|---|---|
+| `GET /` | Lista as notificações do usuário logado, mais recentes primeiro. | — |
+| `PATCH /{id}/read` | Marca uma notificação específica como lida. | `404` se não existir, `403` se não for do usuário logado. |
+| `PATCH /read-all` | Marca todas as notificações do usuário como lidas de uma vez. | `UPDATE` em massa (`NotificationRepository.markAllAsReadByUserId`), não carrega uma a uma. |
 
-1. **Notificações** — ex.: listar notificações do usuário, marcar como lida.
-2. **Favoritos** — ex.: favoritar/desfavoritar item, listar favoritos do
-   usuário.
-3. **Dashboard** — ex.: métricas/estatísticas do usuário ou do sistema.
+Não existem endpoints de criação — uma notificação nasce sozinha, disparada
+por evento de domínio de outros módulos (mesmo desacoplamento já usado entre
+`item` e `match`):
+
+- `ItemServiceImpl.updateStatus` → `ITEM_UPDATED`
+- `MatchServiceImpl.persistMatch` → `POSSIBLE_MATCH` (os dois donos de item)
+- `UserServiceImpl.updateProfile` → `PROFILE_UPDATED`
+
+Cada criação respeita a preferência do usuário (`notificationsEnabled`/
+`matchAlertsEnabled` em `user_preferences`) — ver `ARQUITETURA.md`, seção 14.
+Migration: `V17`.
+
+---
+
+## 8. O que ainda falta fazer
 
 Fora de escopo por decisão do time (não confundir com "esquecido"):
 

@@ -15,6 +15,7 @@ com.achadosedevolvidos
 ├── upload/        # Upload de imagens (multipart) para disco local
 ├── match/         # Match, motor de pontuação puro, orquestração
 ├── chat/          # Mensagens por match, WebSocket autenticado
+├── notification/  # Notificações criadas por evento (item/match/user)
 ├── config/        # Security, WebSocket, Async, beans de autenticação
 └── shared/        # BaseEntity, exceções e resposta de erro padrão
 ```
@@ -30,7 +31,7 @@ subida da aplicação, se as entidades batem com o schema já existente. Ele nun
 cria, altera ou apaga uma tabela.
 
 Quem efetivamente cria e versiona o schema é o **Flyway**
-(`src/main/resources/db/migration/V1` a `V16`):
+(`src/main/resources/db/migration/V1` a `V17`):
 
 | Migration | Conteúdo |
 |---|---|
@@ -49,6 +50,7 @@ Quem efetivamente cria e versiona o schema é o **Flyway**
 | V14 | `phone`/`city`/`avatar_url` em `users` (perfil, `GET/PATCH /users/me`) |
 | V15 | `active` (boolean, default `true`) em `users` — soft delete de conta (`DELETE /users/me`) |
 | V16 | `user_preferences` (tabela separada — `notifications_enabled`/`match_alerts_enabled`/`emails_enabled`, `PATCH /users/me/preferences`) |
+| V17 | `notifications` (`/api/v1/notifications` — ver `README-BACKEND-ENDPOINTS.md`, seção 7) |
 
 Vantagens diretas: histórico de mudanças de schema versionado e revisável em PR,
 mesmo comportamento em dev/homologação/produção, e nenhuma surpresa de o Hibernate
@@ -218,7 +220,7 @@ e o upload de imagens), o fluxo assíncrono item→evento→match, e a conexão
 WebSocket/STOMP autenticada. Pipeline de CI em
 `.github/workflows/backend-ci.yml`.
 
-## 14. Soft delete de conta e preferências de usuário (`user/`)
+## 13. Soft delete de conta e preferências de usuário (`user/`)
 
 - **Preferências em tabela própria, não colunas em `users`**: `UserPreferences`
   é uma entidade separada (`@OneToOne` para `User` via `user_id` único),
@@ -267,6 +269,38 @@ WebSocket/STOMP autenticada. Pipeline de CI em
   `ChatWebSocketIT.rainyDay_conexaoComTokenDeContaDesativadaDeveSerRecusada`
   (desativa a conta via `DELETE /users/me` e tenta conectar com o mesmo
   access token em seguida).
+
+## 14. Notificações (`notification/`): criadas por evento, nunca por chamada direta
+
+Não existe um `NotificationController` que outros módulos chamam — a geração
+de notificação segue o mesmo desacoplamento por evento já usado entre `item`
+e `match` (seção 3), aplicado agora a três origens diferentes:
+
+- `ItemServiceImpl.updateStatus` publica `ItemStatusChangedEvent`.
+- `MatchServiceImpl.persistMatch` publica `MatchCreatedEvent` (com os dados
+  dos dois donos de item, pra cada um receber a notificação citando o próprio
+  objeto).
+- `UserServiceImpl.updateProfile` publica `ProfileUpdatedEvent`.
+
+Cada evento vive no pacote do módulo que o publica (`item.event`,
+`match.event`, `user.event`) — nenhum desses três módulos importa nada de
+`notification`. Um listener dedicado por evento, dentro de
+`notification.listener`, escuta e cria a notificação, com o mesmo padrão
+`@Async("taskExecutor")` + `@TransactionalEventListener(phase = AFTER_COMMIT)`
+do listener de match: só roda depois do commit de quem publicou, numa thread
+separada, e uma falha aqui nunca derruba a ação original (só loga).
+
+**Centralização da regra de preferência**: em vez de cada listener checar
+`user_preferences` antes de chamar o Service, a checagem mora dentro de
+`NotificationServiceImpl.create` — um único lugar decide se a notificação é
+criada (`POSSIBLE_MATCH` respeita `matchAlertsEnabled`; os demais tipos
+respeitam `notificationsEnabled`, o interruptor geral). Sem isso, a lógica de
+preferência se repetiria em três listeners diferentes.
+
+Migration `V17` cria a tabela `notifications`. Shape de resposta (`id`,
+`type`, `title`, `message`, `createdAt`, `read`) foi definido pelo mock que o
+front-end já tinha construído (`UserNotifications.jsx`), não inventado do
+lado do backend — mesmo cuidado já tomado com `ItemResponse`.
 
 ## 15. O que ainda fica para depois (fora do escopo deste refactor)
 
