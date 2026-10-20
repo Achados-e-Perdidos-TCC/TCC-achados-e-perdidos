@@ -302,9 +302,39 @@ Migration `V17` cria a tabela `notifications`. Shape de resposta (`id`,
 front-end já tinha construído (`UserNotifications.jsx`), não inventado do
 lado do backend — mesmo cuidado já tomado com `ItemResponse`.
 
-## 15. O que ainda fica para depois (fora do escopo deste refactor)
+## 15. Rate limiting em `POST /api/v1/auth/login`
 
-- Rate limiting no `/api/v1/auth/login`.
+Duas defesas independentes, cada uma cobrindo um cenário que a outra não
+cobre (ver javadoc de `LoginRateLimiter`):
+
+- **Por IP** (`LoginRateLimitFilter`): limite largo/volumétrico (`60`
+  tentativas por minuto, por padrão) — barra um único cliente inundando o
+  endpoint. Registrado via `FilterRegistrationBean` escopado só a
+  `/api/v1/auth/login` (não um `@Component` aplicado a toda rota por
+  padrão), com `Ordered.HIGHEST_PRECEDENCE` — roda antes até da cadeia do
+  Spring Security, então uma requisição já bloqueada aqui nunca chega a
+  tocar JWT, Controller ou banco. Considera `X-Forwarded-For` (primeiro IP
+  da lista) antes de `request.getRemoteAddr()`, necessário atrás de um
+  proxy/load balancer.
+- **Por e-mail** (dentro de `AuthService.login`): a defesa de verdade contra
+  força bruta/credential stuffing numa conta específica, mesmo que as
+  tentativas venham de IPs diferentes (`5` tentativas falhas por `15`
+  minutos, por padrão). Só consome 1 tentativa do bucket quando a
+  autenticação falha — um login certo de primeira nunca é penalizado — e
+  **reseta** o contador da conta em caso de sucesso. A checagem
+  (`isEmailRateLimited`) roda antes até de comparar a senha, então uma
+  conta já no limite é rejeitada sem tocar no banco.
+
+Implementado com `bucket4j-core` (token bucket) em memória — suficiente
+para uma única instância da aplicação; numa implantação com múltiplas
+instâncias, o limite só valeria por instância, não globalmente, a menos que
+o backend dos buckets mude para algo compartilhado (ex.: Redis).
+
+Os dois limites são configuráveis por variável de ambiente, nenhuma
+obrigatória (todas com default) — ver `.env.example`.
+
+## 16. O que ainda fica para depois (fora do escopo deste refactor)
+
 - Busca geográfica por raio (PostGIS).
 - Trocar o storage de upload de disco local por S3/Cloudflare R2 (não
   sobrevive a um redeploy do container hoje).
