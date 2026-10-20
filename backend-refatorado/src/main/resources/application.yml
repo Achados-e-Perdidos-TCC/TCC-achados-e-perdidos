@@ -80,5 +80,19 @@ app:
     # sobreviver a um redeploy do container — trocar por S3/R2 é o próximo passo.
     dir: ${UPLOAD_DIR:./uploads}
 
+  rate-limit:
+    login:
+      # Limite "largo" por IP (volumétrico) em POST /auth/login — ver
+      # LoginRateLimitFilter. Não é a defesa principal contra força bruta
+      # (um atacante distribuído usa vários IPs), só barra um único cliente
+      # inundando o endpoint.
+      ip-capacity: ${LOGIN_RATE_LIMIT_IP_CAPACITY:60}
+      ip-refill-minutes: ${LOGIN_RATE_LIMIT_IP_REFILL_MINUTES:1}
+      # Defesa de verdade contra força bruta numa conta específica — ver
+      # AuthService.login. Só conta tentativa falha; login certo não consome
+      # e reseta o contador.
+      email-capacity: ${LOGIN_RATE_LIMIT_EMAIL_CAPACITY:5}
+      email-refill-minutes: ${LOGIN_RATE_LIMIT_EMAIL_REFILL_MINUTES:15}
+
 cors:
   allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}

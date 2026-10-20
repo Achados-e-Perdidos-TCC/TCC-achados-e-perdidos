@@ -10,6 +10,7 @@ import com.achadosedevolvidos.auth.dto.RegisterRequest;
 import com.achadosedevolvidos.auth.dto.ResetPasswordRequest;
 import com.achadosedevolvidos.auth.model.PasswordResetToken;
 import com.achadosedevolvidos.auth.model.RefreshToken;
+import com.achadosedevolvidos.auth.ratelimit.LoginRateLimiter;
 import com.achadosedevolvidos.auth.repository.PasswordResetTokenRepository;
 import com.achadosedevolvidos.auth.repository.RefreshTokenRepository;
 import com.achadosedevolvidos.auth.util.TokenHasher;
@@ -76,13 +77,21 @@ class AuthServiceTest {
     @Mock
     private EmailService emailService;
 
+    // Instância real (não mock): é um utilitário em memória simples, e os
+    // testes de login() precisam que o estado do bucket evolua de verdade
+    // entre chamadas (ver LoginRateLimiterTest para a lógica isolada).
+    // Limites bem acima do que qualquer teste aqui chama, para não
+    // interferir — exceto no teste dedicado que usa uma instância própria
+    // com limite baixo de propósito.
+    private final LoginRateLimiter loginRateLimiter = new LoginRateLimiter(1000, 1, 1000, 15);
+
     private AuthService authService;
 
     @BeforeEach
     void setUp() {
         authService = new AuthService(
                 userRepository, passwordEncoder, jwtService, authenticationManager,
-                refreshTokenRepository, passwordResetTokenRepository, emailService
+                refreshTokenRepository, passwordResetTokenRepository, emailService, loginRateLimiter
         );
         ReflectionTestUtils.setField(authService, "accessExpirationMs", ACCESS_EXPIRATION_MS);
         ReflectionTestUtils.setField(authService, "refreshExpirationMs", REFRESH_EXPIRATION_MS);
@@ -175,6 +184,30 @@ class AuthServiceTest {
 
         assertThatThrownBy(() -> authService.login(new LoginRequest(user.getEmail(), "senha-errada")))
                 .isInstanceOf(BadCredentialsException.class);
+    }
+
+    @Test
+    void rainyDay_deveLancarTooManyRequestsQuandoEmailExcedeLimiteDeTentativas() {
+        // Instância própria com capacidade 1, só pra este teste — o
+        // loginRateLimiter padrão da classe tem limite alto de propósito.
+        LoginRateLimiter limiteBaixo = new LoginRateLimiter(1000, 1, 1, 15);
+        AuthService authServiceComLimiteBaixo = new AuthService(
+                userRepository, passwordEncoder, jwtService, authenticationManager,
+                refreshTokenRepository, passwordResetTokenRepository, emailService, limiteBaixo
+        );
+
+        User user = localUser();
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(authenticationManager.authenticate(any())).thenThrow(new BadCredentialsException("Credenciais inválidas"));
+
+        // Primeira falha consome o único token da capacidade 1.
+        assertThatThrownBy(() -> authServiceComLimiteBaixo.login(new LoginRequest(user.getEmail(), "errada")))
+                .isInstanceOf(BadCredentialsException.class);
+
+        // Segunda tentativa nem chega a comparar senha — bloqueada antes, pelo rate limit.
+        assertThatThrownBy(() -> authServiceComLimiteBaixo.login(new LoginRequest(user.getEmail(), "senha12345")))
+                .isInstanceOf(AppException.class)
+                .hasFieldOrPropertyWithValue("status", HttpStatus.TOO_MANY_REQUESTS);
     }
 
     // ---------- refreshToken() ----------

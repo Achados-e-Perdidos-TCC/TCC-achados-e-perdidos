@@ -27,7 +27,7 @@ Nenhum destes exige autenticação (fazem parte do próprio fluxo de login).
 | Endpoint | O que faz | Exigências / regras |
 |---|---|---|
 | `POST /register` | Cria a conta e já devolve `accessToken`/`refreshToken` (login automático). | E-mail precisa ser único (`409` se já existir); senha ≥ 8 caracteres. |
-| `POST /login` | Autentica e-mail/senha via `AuthenticationManager` → `DaoAuthenticationProvider`. | Credenciais inválidas ou conta desativada (`active=false`) → `401` genérico (não diferencia os dois casos, de propósito). |
+| `POST /login` | Autentica e-mail/senha via `AuthenticationManager` → `DaoAuthenticationProvider`. | Credenciais inválidas ou conta desativada (`active=false`) → `401` genérico (não diferencia os dois casos, de propósito). **Rate limiting**: `429` se o IP exceder 60 req/min (`LoginRateLimitFilter`, roda antes até do Spring Security) ou se a conta exceder 5 tentativas falhas em 15 min (`AuthService.login` — só conta falha, reseta no sucesso). Ver `ARQUITETURA.md`, seção 15. |
 | `POST /refresh` | Renova o `accessToken`, rotacionando o `refreshToken` (o antigo é revogado). | Precisa de um `refreshToken` assinado, não expirado e presente/válido em `refresh_tokens` (não revogado). |
 | `POST /logout` | Revoga um `refreshToken` específico. | Idempotente — sempre `200`, mesmo com token já revogado/inexistente. |
 | `POST /forgot-password` | Se o e-mail existir, envia link de redefinição por e-mail (token de uso único, expira em `PASSWORD_RESET_EXPIRATION_MINUTES`). | Resposta idêntica exista ou não o e-mail — nunca revelar isso ao chamador. |
@@ -111,21 +111,35 @@ nenhuma ação manual do usuário.
 
 ---
 
-## 7. O que ainda falta fazer
+## 7. Notificações (`/api/v1/notifications`) — `notification/` — todos 🔒
 
-Nenhum endpoint implementado ainda para estes três módulos:
+| Endpoint | O que faz | Exigências / regras |
+|---|---|---|
+| `GET /` | Lista as notificações do usuário logado, mais recentes primeiro. | — |
+| `PATCH /{id}/read` | Marca uma notificação específica como lida. | `404` se não existir, `403` se não for do usuário logado. |
+| `PATCH /read-all` | Marca todas as notificações do usuário como lidas de uma vez. | `UPDATE` em massa (`NotificationRepository.markAllAsReadByUserId`), não carrega uma a uma. |
 
-1. **Notificações** — ex.: listar notificações do usuário, marcar como lida.
-2. **Favoritos** — ex.: favoritar/desfavoritar item, listar favoritos do
-   usuário.
-3. **Dashboard** — ex.: métricas/estatísticas do usuário ou do sistema.
+Não existem endpoints de criação — uma notificação nasce sozinha, disparada
+por evento de domínio de outros módulos (mesmo desacoplamento já usado entre
+`item` e `match`):
+
+- `ItemServiceImpl.updateStatus` → `ITEM_UPDATED`
+- `MatchServiceImpl.persistMatch` → `POSSIBLE_MATCH` (os dois donos de item)
+- `UserServiceImpl.updateProfile` → `PROFILE_UPDATED`
+
+Cada criação respeita a preferência do usuário (`notificationsEnabled`/
+`matchAlertsEnabled` em `user_preferences`) — ver `ARQUITETURA.md`, seção 14.
+Migration: `V17`.
+
+---
+
+## 8. O que ainda falta fazer
 
 Fora de escopo por decisão do time (não confundir com "esquecido"):
 
 - Endpoints de **ação manual sobre Matching** (aceitar/rejeitar um match
   manualmente) — hoje o match é só criado automaticamente e consultado via
   `GET /items/{id}/matches`. Não implementar sem alinhar com o time antes.
-- Rate limiting no `/api/v1/auth/login`.
 - Busca geográfica por raio de verdade (PostGIS ou Haversine).
 - Troca do storage de upload de disco local por S3/Cloudflare R2.
 

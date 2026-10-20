@@ -70,6 +70,7 @@ Passo a passo de instalação de cada um (Windows/macOS/Linux) está em
 | `springdoc-openapi-starter-webmvc-ui` | 2.6.0 | Gera a spec OpenAPI e o Swagger UI em runtime, sem YAML escrito à mão — ver `README-OPENAPI.md`. |
 | `spring-boot-starter-security` | (BOM) | Bearer JWT, único mecanismo de login. |
 | `jjwt-api` / `jjwt-impl` / `jjwt-jackson` | 0.12.6 | Geração/validação dos tokens JWT (`JwtService`). |
+| `bucket4j-core` | 8.10.1 | Rate limiting (token bucket) de `POST /api/v1/auth/login`, por IP e por conta — ver `ARQUITETURA.md`, seção 15. |
 | `lombok` | (BOM) | Reduz boilerplate (getters/setters/builders/construtores). |
 | `spring-boot-starter-test` | (BOM, escopo `test`) | JUnit 5, Mockito, AssertJ, MockMvc. |
 | `spring-security-test` | (BOM, escopo `test`) | Utilitários de teste do Spring Security. |
