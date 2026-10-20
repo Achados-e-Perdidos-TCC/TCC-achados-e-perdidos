@@ -27,7 +27,7 @@ Nenhum destes exige autenticação (fazem parte do próprio fluxo de login).
 | Endpoint | O que faz | Exigências / regras |
 |---|---|---|
 | `POST /register` | Cria a conta e já devolve `accessToken`/`refreshToken` (login automático). | E-mail precisa ser único (`409` se já existir); senha ≥ 8 caracteres. |
-| `POST /login` | Autentica e-mail/senha via `AuthenticationManager` → `DaoAuthenticationProvider`. | Credenciais inválidas ou conta desativada (`active=false`) → `401` genérico (não diferencia os dois casos, de propósito). |
+| `POST /login` | Autentica e-mail/senha via `AuthenticationManager` → `DaoAuthenticationProvider`. | Credenciais inválidas ou conta desativada (`active=false`) → `401` genérico (não diferencia os dois casos, de propósito). **Rate limiting**: `429` se o IP exceder 60 req/min (`LoginRateLimitFilter`, roda antes até do Spring Security) ou se a conta exceder 5 tentativas falhas em 15 min (`AuthService.login` — só conta falha, reseta no sucesso). Ver `ARQUITETURA.md`, seção 15. |
 | `POST /refresh` | Renova o `accessToken`, rotacionando o `refreshToken` (o antigo é revogado). | Precisa de um `refreshToken` assinado, não expirado e presente/válido em `refresh_tokens` (não revogado). |
 | `POST /logout` | Revoga um `refreshToken` específico. | Idempotente — sempre `200`, mesmo com token já revogado/inexistente. |
 | `POST /forgot-password` | Se o e-mail existir, envia link de redefinição por e-mail (token de uso único, expira em `PASSWORD_RESET_EXPIRATION_MINUTES`). | Resposta idêntica exista ou não o e-mail — nunca revelar isso ao chamador. |
@@ -140,7 +140,6 @@ Fora de escopo por decisão do time (não confundir com "esquecido"):
 - Endpoints de **ação manual sobre Matching** (aceitar/rejeitar um match
   manualmente) — hoje o match é só criado automaticamente e consultado via
   `GET /items/{id}/matches`. Não implementar sem alinhar com o time antes.
-- Rate limiting no `/api/v1/auth/login`.
 - Busca geográfica por raio de verdade (PostGIS ou Haversine).
 - Troca do storage de upload de disco local por S3/Cloudflare R2.
 

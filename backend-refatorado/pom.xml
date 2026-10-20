@@ -103,6 +103,19 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!--
+          Rate limiting de POST /api/v1/auth/login (ver auth/ratelimit e
+          config/RateLimitConfig). Buckets em memória (token bucket), adequado
+          para uma única instância da aplicação; numa implantação com múltiplas
+          instâncias, precisaria de um backend compartilhado (ex.: Redis) para o
+          limite valer entre instâncias.
+        -->
+        <dependency>
+            <groupId>com.bucket4j</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>8.10.1</version>
+        </dependency>
+
         <!-- JWT (biblioteca jjwt 0.12.x) -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

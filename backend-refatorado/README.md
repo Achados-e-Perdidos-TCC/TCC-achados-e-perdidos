@@ -383,9 +383,16 @@ Resumo funcional — a justificativa técnica de cada item está em
     `match.getLostItem()`, etc.) fora de uma transação. Faltava
     `@Transactional(readOnly = true)` nos quatro.
 
+- **Rate limiting em `POST /api/v1/auth/login`** (Bucket4j, em memória): duas
+  defesas independentes — um limite largo por IP (volumétrico, `60`/min por
+  padrão) via `LoginRateLimitFilter`, e o limite de verdade contra força
+  bruta por conta, `5` tentativas falhas por `15` minutos, dentro de
+  `AuthService.login`. Login certo nunca consome esse segundo limite e
+  reseta tentativas falhas anteriores. Ambos configuráveis por env var, sem
+  exigir nenhuma — ver `.env.example`.
+
 ### Fora do escopo desta refatoração (próximos passos conhecidos)
 
-- Rate limiting no `/api/v1/auth/login`.
 - Busca geográfica por raio (PostGIS ou Haversine em SQL nativo).
 
 ---
