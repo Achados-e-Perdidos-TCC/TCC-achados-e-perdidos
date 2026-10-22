@@ -46,7 +46,7 @@ function Header({ tema, aoAlternarTema }) {
                     <ul>
                         <NavLink className='nav__link' to='/'end><li> <p>início</p> </li> </NavLink>
                         <NavLink className='nav__link' to='/buscar-objetos' end> <li> <p>Buscar objetos</p> </li> </NavLink>
-                        <NavLink className='link__cadastrar nav__link' to='/' end ><li> <p>Cadastrar objeto</p> </li></NavLink>
+                        {/* <NavLink className='nav__link' to='/cadastrar-objetos' end> <li> <p>Cadastrar objeto</p> </li></NavLink> */}
                         <NavLink className='nav__link' to='/como-funciona' end> <li> <p>Como funciona</p> </li> </NavLink>
                     </ul>   
                 </nav>
@@ -56,7 +56,7 @@ function Header({ tema, aoAlternarTema }) {
 
                 <div className='button button__cadastrar'>
                     <img className='cabecalho__icon' src={iconCadastrarObjeto} alt="Cadastrar objeto" />
-                    <NavLink to='/' end className='cadastrar link' href="#">Cadastrar objeto</NavLink>
+                    <NavLink to='/cadastrar-objetos' end className='cadastrar link' href="#">Cadastrar objeto</NavLink>
                 </div>
                 
                 <div className='button button__entrar'>

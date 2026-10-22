@@ -40,13 +40,13 @@ function Hero() {
 
                 <div className="hero-buttons">
 
-                    <button id="btn_perdiObjeto">
+                    <NavLink id="btn_perdiObjeto" to="/cadastrar-objetos">
                         Perdi um objeto
-                    </button>
+                    </NavLink>
 
-                    <button id="btn_encontreiObjeto">
+                    <NavLink id="btn_encontreiObjeto" to="/cadastrar-objetos">
                         Encontrei um objeto
-                    </button>
+                    </NavLink>
                 </div>
 
             </div>

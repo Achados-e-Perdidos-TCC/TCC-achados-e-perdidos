@@ -1,0 +1,503 @@
+/* ==========================================================
+   CADASTRAR OBJETO
+   Escala: 1rem = 10px (html { font-size: 62.5% }), igual ao
+   resto do projeto.
+   Tudo está dentro de .cadastrar-page para não vazar para
+   outras telas.
+   ========================================================== */
+
+/* ---------- 1. Variáveis (apelidos das variáveis globais) ---------- */
+.cadastrar-page {
+    --cad-blue: var(--primary-color-blue);
+    --cad-blue-light: var(--primary-color-blue-light);
+    --cad-green: var(--primary-color-green);
+    --cad-green-light: color-mix(in srgb, var(--primary-color-green) 15%, transparent);
+    --cad-title: var(--primary-color-text);
+    --cad-text: var(--primary-color-text);
+    --cad-muted: var(--secondary-color-gray);
+    --cad-border: var(--border-color);
+    --cad-surface: var(--card-color);
+    --cad-radius: 0.8rem;
+
+    /* azul dos ícones: no escuro o azul puro perde contraste */
+    --cad-icon-blue: var(--primary-color-blue);
+
+    /* container fluido: ocupa 100% e para de crescer em 940px */
+    width: 100%;
+    max-width: 94rem;
+    margin: 0 auto;
+    padding: clamp(1.6rem, 3vw, 2.8rem) clamp(1.6rem, 3vw, 2rem) 4rem;
+
+    font-family: var(--font-principal);
+    font-size: 1.4rem;
+    color: var(--cad-text);
+}
+
+[data-theme="dark"] .cadastrar-page {
+    --cad-icon-blue: color-mix(in srgb, var(--primary-color-blue) 55%, white);
+
+    /* faz o seletor nativo de data/hora abrir escuro */
+    color-scheme: dark;
+}
+
+/* garante que padding/borda não aumentem a largura dos elementos */
+.cadastrar-page *,
+.cadastrar-page *::before,
+.cadastrar-page *::after {
+    box-sizing: border-box;
+}
+
+/* ---------- 2. Título e subtítulo ---------- */
+.cadastrar-page .page__title {
+    margin: 0;
+    text-align: center;
+    font-size: clamp(2.8rem, 4vw, 3.6rem);
+    line-height: 1.2;
+    font-weight: 700;
+    color: var(--cad-title);
+}
+
+.cadastrar-page .page__subtitle {
+    max-width: 64rem;
+    margin: 0.6rem auto 2.8rem;
+    text-align: center;
+    color: var(--cad-muted);
+    font-size: clamp(1.4rem, 2vw, 1.5rem);
+    line-height: 1.5;
+}
+
+/* ---------- 3. Card (o formulário) ---------- */
+.cadastrar-page .card {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* espaço entre TODAS as seções */
+    padding: clamp(1.6rem, 3vw, 2.8rem);
+    background: var(--cad-surface);
+    border: 1px solid var(--cad-border);
+    border-radius: 1.2rem;
+    box-shadow: var(--subtle-shadow);
+}
+
+.cadastrar-page .card__heading {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--cad-title);
+}
+
+/* ---------- 4. Opções: Perdi / Encontrei ---------- */
+.cadastrar-page .options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* minmax(0,…) evita overflow */
+    gap: 2rem;
+}
+
+.cadastrar-page .option {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    min-width: 0;
+    padding: 2.4rem;
+    border: 1px solid var(--cad-border);
+    border-radius: var(--cad-radius);
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cadastrar-page .option:hover {
+    border-color: var(--cad-blue);
+}
+
+/* estado selecionado (classe aplicada pelo React) */
+.cadastrar-page .option--active {
+    border-color: var(--cad-blue);
+    box-shadow: 0 0 0 1px var(--cad-blue);
+}
+
+/* o radio nativo é o primeiro item da linha, alinhado ao topo */
+.cadastrar-page .option input[type="radio"] {
+    flex-shrink: 0;
+    align-self: flex-start;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: 0;
+    accent-color: var(--cad-blue);
+}
+
+.cadastrar-page .option__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 5.2rem;
+    height: 5.2rem;
+    border-radius: 50%;
+}
+
+.cadastrar-page .option__icon svg {
+    width: 2.4rem;
+    height: 2.4rem;
+}
+
+.cadastrar-page .option__icon--blue {
+    background: var(--cad-blue-light);
+    color: var(--cad-icon-blue);
+}
+
+.cadastrar-page .option__icon--green {
+    background: var(--cad-green-light);
+    color: var(--cad-green);
+}
+
+.cadastrar-page .option__title {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--cad-title);
+}
+
+.cadastrar-page .option__desc {
+    display: block;
+    margin-top: 0.6rem;
+    color: var(--cad-muted);
+    line-height: 1.4;
+}
+
+/* ---------- 5. Grids dos campos ---------- */
+.cadastrar-page .grid {
+    display: grid;
+    gap: 1.6rem;
+}
+
+.cadastrar-page .grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cadastrar-page .grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* ---------- 6. Campo (label + controle) ---------- */
+.cadastrar-page .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    min-width: 0;
+}
+
+.cadastrar-page .field label,
+.cadastrar-page .field__label {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--cad-title);
+}
+
+.cadastrar-page .optional {
+    color: var(--cad-muted);
+    font-weight: 400;
+}
+
+/* ---------- 7. Controle: caixa com borda + ícone + input ----------
+   A BORDA fica no .control (e não no input). Assim o ícone entra como
+   um item flex ao lado do input, sem position: absolute. */
+.cadastrar-page .control {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+    min-height: 4.4rem;
+    padding: 0 1.4rem;
+    background: var(--cad-surface);
+    border: 1px solid var(--cad-border);
+    border-radius: var(--cad-radius);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cadastrar-page .control input,
+.cadastrar-page .control select {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 4rem;
+    border: none;
+    outline: none;
+    background: transparent;
+    font: inherit;
+    color: var(--cad-text);
+}
+
+/* remove a seta nativa do select (usamos o ícone de chevron) */
+.cadastrar-page .control select {
+    appearance: none;
+    cursor: pointer;
+    text-overflow: ellipsis;
+}
+
+/* opções do select herdam o fundo do tema (evita lista branca no escuro) */
+.cadastrar-page .control select option {
+    background: var(--cad-surface);
+    color: var(--cad-text);
+}
+
+/* placeholder do select (opção vazia selecionada) em cinza */
+.cadastrar-page .control select:has(option[value=""]:checked) {
+    color: var(--cad-muted);
+}
+
+/* ícones diretos do controle (esquerda e chevron) */
+.cadastrar-page .control > svg {
+    flex-shrink: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+    color: var(--cad-muted);
+}
+
+/* esconde o ícone nativo de data/hora (Chrome, Edge, Safari) */
+.cadastrar-page .control input[type="date"]::-webkit-calendar-picker-indicator,
+.cadastrar-page .control input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+/* foco: o destaque aparece na caixa inteira, não só no input */
+.cadastrar-page .control:focus-within,
+.cadastrar-page .textarea:focus-within {
+    border-color: var(--cad-blue);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cad-blue) 15%, transparent);
+}
+
+.cadastrar-page ::placeholder {
+    color: var(--cad-muted);
+}
+
+/* ---------- 8. Upload ---------- */
+.cadastrar-page .upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap; /* em telas pequenas o texto desce em vez de estourar */
+    gap: 1.6rem;
+    min-height: 9.2rem;
+    padding: 1.6rem;
+    text-align: left;
+    border: 1.5px dashed var(--cad-border);
+    border-radius: var(--cad-radius);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.cadastrar-page .upload:hover {
+    background: var(--cad-blue-light);
+    border-color: var(--cad-blue);
+}
+
+.cadastrar-page .upload__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 4.6rem;
+    height: 4.6rem;
+    border-radius: 50%;
+    background: var(--cad-blue-light);
+    color: var(--cad-icon-blue);
+}
+
+.cadastrar-page .upload__icon svg {
+    width: 2.4rem;
+    height: 2.4rem;
+}
+
+.cadastrar-page .upload strong {
+    display: block;
+    font-size: 1.4rem;
+    color: var(--cad-title);
+}
+
+.cadastrar-page .upload small {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 1.2rem;
+    color: var(--cad-muted);
+}
+
+/* ---------- 9. Textareas com contador ----------
+   A borda fica no wrapper .textarea. O contador é o segundo item de
+   uma coluna flex, alinhado à direita (sem position: absolute). */
+.cadastrar-page .textarea {
+    display: flex;
+    flex-direction: column;
+    padding: 1.2rem 1.4rem 0.8rem;
+    background: var(--cad-surface);
+    border: 1px solid var(--cad-border);
+    border-radius: var(--cad-radius);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cadastrar-page .textarea textarea {
+    width: 100%;
+    min-height: 5.6rem;
+    border: none;
+    outline: none;
+    background: transparent;
+    font: inherit;
+    color: var(--cad-text);
+    resize: vertical;
+}
+
+.cadastrar-page .textarea__counter {
+    align-self: flex-end;
+    margin-top: 0.4rem;
+    font-size: 1.2rem;
+    color: var(--cad-muted);
+}
+
+/* ---------- 10. Botões ---------- */
+.cadastrar-page .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    min-height: 4.4rem;
+    padding: 0 2rem;
+    border: 1px solid transparent;
+    border-radius: var(--cad-radius);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.cadastrar-page .btn svg {
+    flex-shrink: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.cadastrar-page .btn--primary {
+    background: var(--cad-blue);
+    color: var(--secondary-color-white);
+}
+
+.cadastrar-page .btn--primary:hover {
+    background: color-mix(in srgb, var(--cad-blue) 85%, black);
+}
+
+.cadastrar-page .btn--outline {
+    background: var(--cad-surface);
+    color: var(--cad-title);
+    border-color: var(--cad-border);
+}
+
+.cadastrar-page .btn--outline:hover {
+    background: var(--cad-blue-light);
+}
+
+.cadastrar-page .btn--lg {
+    min-height: 4.6rem;
+    min-width: 19rem;
+}
+
+.cadastrar-page .actions {
+    display: flex;
+    flex-wrap: wrap; /* se faltar espaço, o botão desce sozinho */
+    justify-content: flex-end;
+    gap: 1.2rem;
+}
+
+/* ---------- 11. Aviso de privacidade ---------- */
+.cadastrar-page .privacy {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 2rem 0 0;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    color: var(--cad-muted);
+}
+
+.cadastrar-page .privacy > svg {
+    flex-shrink: 0;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-top: 0.1rem;
+    color: var(--cad-icon-blue);
+}
+
+.cadastrar-page .privacy a {
+    color: var(--cad-blue);
+    font-weight: 500;
+}
+
+[data-theme="dark"] .cadastrar-page .privacy a {
+    color: var(--cad-icon-blue);
+}
+
+/* ==========================================================
+   RESPONSIVIDADE
+   ========================================================== */
+
+/* ---------- Até 1024px: reduzir espaços, manter layout horizontal ---------- */
+@media (max-width: 1024px) {
+    .cadastrar-page .options {
+        gap: 1.6rem;
+    }
+
+    .cadastrar-page .option {
+        padding: 2rem;
+        gap: 1.4rem;
+    }
+
+    .cadastrar-page .grid {
+        gap: 1.2rem;
+    }
+}
+
+/* ---------- Até 768px: layout vertical ---------- */
+@media (max-width: 768px) {
+    .cadastrar-page .options,
+    .cadastrar-page .grid--3,
+    .cadastrar-page .grid--2 {
+        grid-template-columns: 1fr;
+    }
+
+    .cadastrar-page .option {
+        padding: 1.6rem;
+    }
+
+    .cadastrar-page .option__icon {
+        width: 4.4rem;
+        height: 4.4rem;
+    }
+
+    .cadastrar-page .option__icon svg {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .cadastrar-page .upload {
+        justify-content: flex-start;
+    }
+
+    /* botões empilhados, "Cadastrar" em cima (ação principal) */
+    .cadastrar-page .actions {
+        flex-direction: column-reverse;
+    }
+
+    .cadastrar-page .btn--lg {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .cadastrar-page .privacy {
+        text-align: left;
+    }
+}
+
+/* ---------- Até 480px: só ajustes finos ---------- */
+@media (max-width: 480px) {
+    .cadastrar-page .card {
+        border-radius: 0.8rem;
+    }
+
+    .cadastrar-page .option__title {
+        font-size: 1.5rem;
+    }
+}

@@ -1,3 +1,10 @@
+.hero,
+.hero *,
+.hero *::before,
+.hero *::after {
+    box-sizing: border-box;
+}
+
 .hero {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5,6 +12,13 @@
     background-color: var(--background-color);
 }
 
+/* reset leve: parágrafos da hero não herdam margem do navegador */
+.hero p {
+    margin: 0;
+    font-family: var(--font-principal);
+}
+
+/* ---------- Lado esquerdo (texto) ---------- */
 .hero-content,
 .hero-imagem {
     min-width: 0;
@@ -15,63 +29,57 @@
     grid-row: 1;
 }
 
-.hero-imagem {
-    grid-column: 2;
-    grid-row: 1;
-    min-width: 0;
-}
-
-.hero h1 {
+.hero-content h1 {
+    margin: 0;
+    padding: 0;
     color: var(--primary-color-text);
     font-family: var(--font-principal);
     font-size: clamp(2.8rem, 4vw, 4.4rem);
     font-weight: 630;
-    padding: 0;
-    margin: 0;
+    line-height: 1.15;
 }
 
 .hero span#perto {
     color: var(--primary-color-blue);
     font-family: var(--font-principal);
-    padding: 0px 6px 0px 6px;
+    padding: 0 6px;
 }
 
 .hero span#imagina {
     color: var(--primary-color-green);
     font-family: var(--font-principal);
-    padding: 0px 6px 0px 6px;
+    padding: 0 6px;
 }
 
-.hero p {
+.hero-content p {
     color: var(--secondary-color-gray);
-    font-family: var(--font-principal);
     font-size: 14px;
+    line-height: 1.5;
     padding: 12px 0;
-    margin: 0;
 }
 
 .hero-buttons {
     display: flex;
-    gap: 16px;
+    flex-wrap: wrap;
     align-items: center;
+    gap: 16px;
 }
 
 #btn_perdiObjeto {
-    background-color: var(--primary-color-blue);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     padding: 12px 18px;
-    border: 1px solid var(--primary-color-white);
+    background-color: var(--primary-color-blue);
+    color: var(--secondary-color-white);
+    border: 1px solid var(--primary-color-blue);
     border-radius: 5px;
     font-family: var(--font-principal);
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
-    color: var(--secondary-color-white);
-    margin-left: 0;
 }
 
 #btn_encontreiObjeto {
@@ -91,11 +99,13 @@
     transition: all 0.2s ease;
 }
 
+/* ---------- Lado direito (imagem) ---------- */
 .hero-imagem {
+    grid-column: 2;
+    grid-row: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 0;
 }
 
 .hero-imagem img {
@@ -106,121 +116,95 @@
     object-fit: contain;
 }
 
-
+/* ---------- Card de busca ---------- */
 .hero-busca {
     grid-column: 1 / -1;
     grid-row: 2;
     width: 100%;
-    min-height: 140px;
+    min-height: 14rem;
+    margin-top: 25px;
+    padding: clamp(1.6rem, 2.5vw, 2.5rem) clamp(1.6rem, 2.8vw, 2.8rem);
 
     display: grid;
-    grid-template-columns: 110px 1fr 200px;
+    grid-template-columns: clamp(7rem, 10vw, 11rem) minmax(0, 1fr) minmax(14rem, 22rem);
     grid-template-rows: auto auto;
     grid-template-areas:
         "lupa titulo botao"
         "lupa texto botao";
-
     align-items: center;
+    column-gap: clamp(1rem, 2vw, 2rem);
 
     background-color: var(--card-color);
-
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-
-    border-color: var(--border-color);
-
-    padding: 25px 28px;
-
-    box-sizing: border-box;
-
-    margin-top: 25px;
 }
 
 .hero-busca h2 {
     grid-area: titulo;
-
-    margin: 0 0 6px 0;
-    width: 100%;
     justify-self: start;
-
-    font-size: 28px;
-    font-weight: 700;
-
+    width: 100%;
+    margin: 0 0 6px 0;
     color: var(--primary-color-text);
-
+    font-size: clamp(2rem, 2.6vw, 2.8rem);
+    font-weight: 700;
     line-height: 1.2;
 }
 
 .hero-busca > div:nth-of-type(1) {
     grid-area: lupa;
-
     display: flex;
-
     justify-content: center;
     align-items: center;
 }
 
-
 .hero-busca > div:nth-of-type(1) img {
-    width: 86px;
-    height: 86px;
-
     display: block;
-
+    width: 100%;
+    max-width: 8.6rem;
+    height: auto;
     object-fit: contain;
 }
 
-
 .hero-busca p {
     grid-area: texto;
-
-    margin: 0;
-    width: 100%;
     justify-self: start;
+    width: 100%;
     text-align: left;
-
-    font-size: 18px;
-    font-weight: 400;
-
-    line-height: 1.45;
-
     color: var(--secondary-color-gray);
+    font-size: clamp(1.4rem, 1.6vw, 1.8rem);
+    font-weight: 400;
+    line-height: 1.45;
 }
 
 .hero-busca > div:nth-of-type(2) {
     grid-area: botao;
-
     display: flex;
-
     justify-content: flex-end;
     align-items: center;
+    min-width: 0;
 }
-
 
 #btn_buscar,
 .btn_buscar {
-    width: 220px;
-    height: 56px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
-    border-radius: 6px;
-    border-color: var(--border-color);
-
+    width: 100%;
+    max-width: 22rem;
+    min-height: 56px;
+    padding: 0 1.6rem;
     background-color: var(--primary-color-blue);
-
     color: var(--secondary-color-white);
-
+    border: 1px solid var(--primary-color-blue);
+    border-radius: 6px;
     font-size: 16px;
     font-weight: 600;
     text-decoration: none;
-
     cursor: pointer;
-
     transition: 0.2s ease;
 }
 
+/* ---------- Como encontramos (imagens) ---------- */
 .cadastro-ComoEncontramos {
     grid-column: 1 / -1;
     grid-row: 3;
@@ -230,28 +214,30 @@
     gap: clamp(1rem, 2vw, 1.5rem);
 }
 
-
 .cadastro-ComoEncontramos > div {
     flex: 1 1 0;
     min-width: 0;
 }
 
 .cadastro-ComoEncontramos img {
+    display: block;
     width: 100%;
     max-width: 100%;
     height: auto;
-
     border: 1px solid var(--border-color);
     border-radius: 20px;
 }
 
+/* ---------- Objetos recentes (título + link) ---------- */
 .objetos-recentes {
     grid-column: 1 / -1;
     grid-row: 4;
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    gap: 0.8rem;
     margin-top: 28px;
     padding: 0 4px;
 }
@@ -260,7 +246,7 @@
     margin: 0;
     color: var(--primary-color-text);
     font-family: var(--font-principal);
-    font-size: 22px;
+    font-size: clamp(1.8rem, 2vw, 2.2rem);
     font-weight: 700;
 }
 
@@ -272,6 +258,7 @@
     text-decoration: none;
 }
 
+/* ---------- Lista de cards ---------- */
 .objetos-lista {
     grid-column: 1 / -1;
     grid-row: 5;
@@ -281,17 +268,17 @@
     gap: 12px;
 }
 
+/* card simples (versão antiga) */
 .objeto-card {
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 12px;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
-    box-sizing: border-box;
     min-width: 0;
+    padding: 12px;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
 }
 
 .objeto-topo {
@@ -301,15 +288,15 @@
 }
 
 .objeto-imagem {
-    width: 100px;
-    height: 76px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background-color: var(--background-color);
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    width: 100px;
+    aspect-ratio: 100 / 76;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
 }
 
 .imagem-placeholder {
@@ -322,8 +309,9 @@
 .objeto-titulo-wrap {
     display: flex;
     flex-direction: column;
-    gap: 6px;
     flex: 1;
+    min-width: 0;
+    gap: 6px;
 }
 
 .objeto-titulo-wrap h3 {
@@ -347,23 +335,23 @@
 }
 
 .info-icone {
+    flex-shrink: 0;
     width: 12px;
     height: 12px;
     object-fit: contain;
-    flex-shrink: 0;
 }
 
 .status {
     display: inline-flex;
     align-items: center;
     justify-content: flex-start;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
     font-family: var(--font-principal);
     font-size: 13px;
     font-weight: 700;
-    padding: 0;
-    border-radius: 0;
-    border: none;
-    background: transparent;
 }
 
 .status.perdido {
@@ -375,39 +363,38 @@
 }
 
 .objetos-dados p {
-    margin: 0;
     color: var(--secondary-color-gray);
-    font-family: var(--font-principal);
     font-size: 13px;
 }
 
 .btn_correspondencia {
-    background-color: var(--primary-color-blue);
-    border: 1px solid var(--primary-color-white);
-    border-radius: 6px;
+    align-self: stretch;
+    margin-top: auto;
     padding: 10px 14px;
-    color: var(--primary-color-text);
+    background-color: var(--primary-color-blue);
+    color: var(--secondary-color-white);
+    border: 1px solid var(--primary-color-blue);
+    border-radius: 6px;
     font-family: var(--font-principal);
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
-    align-self: stretch;
-    margin-top: auto;
 }
 
 .btn_correspondencia.correspondencia-encontrado {
     background-color: var(--primary-color-green);
-    border-color: var(--border-color);
+    border-color: var(--primary-color-green);
     color: var(--secondary-color-white);
 }
 
 .btn_correspondencia.correspondencia-perdido {
     background-color: var(--error-text-color);
-    border-color: var(--border-color);
+    border-color: var(--error-text-color);
     color: var(--secondary-color-white);
 }
 
+/* card principal (versão com tags) */
 .objetos-lista .card__principal {
     height: auto;
     min-height: 360px;
@@ -416,8 +403,10 @@
 }
 
 .objetos-lista .image__card {
+    display: block;
     width: 100%;
-    height: 140px;
+    height: auto;
+    aspect-ratio: 2 / 1;
     border-radius: 8px;
     object-fit: cover;
 }
@@ -453,8 +442,8 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    border-radius: 999px;
     padding: 4px 8px;
+    border-radius: 999px;
     font-size: 11px;
     font-weight: 600;
 }
@@ -487,6 +476,7 @@
 .objetos-lista .icon__categoria,
 .objetos-lista .data__principal img,
 .objetos-lista .hora__principal img {
+    flex-shrink: 0;
     width: 14px;
     height: 14px;
     object-fit: contain;
@@ -548,27 +538,14 @@
     height: 12px;
 }
 
+/* ==========================================================
+   RESPONSIVIDADE
+   ========================================================== */
+
+/* ---------- Até 1024px ---------- */
 @media (max-width: 1024px) {
     .hero {
         gap: 1.6rem;
-    }
-
-    .hero-busca {
-        grid-template-columns: 8rem minmax(0, 1fr) minmax(14rem, 18rem);
-        padding: 2rem;
-    }
-
-    .hero-busca h2 {
-        font-size: clamp(2.2rem, 3vw, 2.8rem);
-    }
-
-    .hero-busca p {
-        font-size: clamp(1.5rem, 1.8vw, 1.8rem);
-    }
-
-    .hero-busca > div:nth-of-type(1) img {
-        width: 7rem;
-        height: 7rem;
     }
 
     .objetos-lista {
@@ -576,10 +553,10 @@
     }
 }
 
+/* ---------- Até 768px: layout vertical ---------- */
 @media (max-width: 768px) {
     .hero {
         grid-template-columns: minmax(0, 1fr);
-        gap: 1.6rem;
     }
 
     .hero-content,
@@ -598,27 +575,18 @@
         align-items: flex-start;
     }
 
-    .hero h1 {
+    .hero-content h1 {
         font-size: clamp(2.6rem, 8vw, 3.8rem);
-    }
-
-    .hero p {
-        max-width: 100%;
     }
 
     .hero-buttons {
         width: 100%;
         flex-direction: column;
         align-items: stretch;
-        gap: 1rem;
     }
 
     #btn_perdiObjeto,
     #btn_encontreiObjeto {
-        width: 100%;
-    }
-
-    .hero-imagem {
         width: 100%;
     }
 
@@ -630,15 +598,6 @@
             "lupa texto"
             "lupa botao";
         min-height: 0;
-        padding: 1.6rem;
-    }
-
-    .hero-busca h2 {
-        font-size: clamp(2rem, 6vw, 2.6rem);
-    }
-
-    .hero-busca p {
-        font-size: clamp(1.4rem, 4vw, 1.7rem);
     }
 
     .hero-busca > div:nth-of-type(2) {
@@ -646,27 +605,8 @@
         padding-top: 1rem;
     }
 
-    #btn_buscar,
-    .btn_buscar {
-        width: min(100%, 22rem);
-    }
-
     .cadastro-ComoEncontramos {
         flex-direction: column;
         align-items: stretch;
-    }
-
-    .cadastro-ComoEncontramos > div {
-        width: 100%;
-    }
-
-    .objetos-recentes {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 0.8rem;
-    }
-
-    .objetos-lista {
-        grid-template-columns: minmax(0, 1fr);
     }
 }
