@@ -110,9 +110,6 @@ public class UserServiceImpl implements UserService {
         if (request.notificationsEnabled() != null) {
             preferences.setNotificationsEnabled(request.notificationsEnabled());
         }
-        if (request.matchAlertsEnabled() != null) {
-            preferences.setMatchAlertsEnabled(request.matchAlertsEnabled());
-        }
         if (request.emailsEnabled() != null) {
             preferences.setEmailsEnabled(request.emailsEnabled());
         }

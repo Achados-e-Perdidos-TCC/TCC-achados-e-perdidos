@@ -6,6 +6,5 @@ package com.achadosedevolvidos.user.dto;
  */
 public record UpdatePreferencesRequest(
         Boolean notificationsEnabled,
-        Boolean matchAlertsEnabled,
         Boolean emailsEnabled
 ) {}

@@ -69,5 +69,5 @@ public class Item extends BaseEntity {
 
     public enum ItemType { PERDIDO, ENCONTRADO }
 
-    public enum ItemStatus { ANALISANDO, PROCURANDO, POSSIVEL_MATCH, RESOLVIDO, INATIVO }
+    public enum ItemStatus { ANALISANDO, PROCURANDO, RESOLVIDO, INATIVO }
 }
