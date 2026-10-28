@@ -30,11 +30,10 @@ public class UserMapper {
 
     public PreferencesResponse toPreferencesResponse(UserPreferences preferences) {
         if (preferences == null) {
-            return new PreferencesResponse(true, true, true);
+            return new PreferencesResponse(true, true);
         }
         return new PreferencesResponse(
                 preferences.isNotificationsEnabled(),
-                preferences.isMatchAlertsEnabled(),
                 preferences.isEmailsEnabled()
         );
     }

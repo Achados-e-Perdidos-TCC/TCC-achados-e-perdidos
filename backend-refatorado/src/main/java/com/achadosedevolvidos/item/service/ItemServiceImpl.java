@@ -6,7 +6,6 @@ import com.achadosedevolvidos.item.dto.CreateItemRequest;
 import com.achadosedevolvidos.item.dto.ItemResponse;
 import com.achadosedevolvidos.item.dto.ItemSearchFilter;
 import com.achadosedevolvidos.item.dto.UpdateItemRequest;
-import com.achadosedevolvidos.item.event.ItemCreatedEvent;
 import com.achadosedevolvidos.item.event.ItemStatusChangedEvent;
 import com.achadosedevolvidos.item.mapper.ItemMapper;
 import com.achadosedevolvidos.item.model.Item;
@@ -29,13 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Propositalmente NÃO depende de MatchService (nem de nada do módulo match):
- * ao criar um item, só publica {@link ItemCreatedEvent} e segue em frente. Quem
- * reage a esse evento (o motor de match) é decidido em outro módulo, de forma
- * assíncrona e após o commit da transação — ver
- * {@code match.listener.ItemCreatedEventListener}.
- */
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
@@ -48,7 +40,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemResponse createAndAnalyze(UUID currentUserId, CreateItemRequest request) {
+    public ItemResponse create(UUID currentUserId, CreateItemRequest request) {
         User user = userRepository.findById(currentUserId)
                 .orElseThrow(() -> new AppException("Usuário não encontrado", HttpStatus.UNAUTHORIZED));
 
@@ -71,8 +63,6 @@ public class ItemServiceImpl implements ItemService {
         item.setImages(buildImages(item, request.imageUrls()));
 
         Item saved = itemRepository.save(item);
-
-        eventPublisher.publishEvent(new ItemCreatedEvent(saved.getId()));
 
         return itemMapper.toResponse(saved);
     }
@@ -164,9 +154,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Soft delete: marca como INATIVO em vez de apagar a linha — o item pode já
-     * ter matches e mensagens de chat vinculados, e não há ON DELETE CASCADE
-     * pra essas tabelas.
+     * Soft delete: marca como INATIVO em vez de apagar a linha, pra o item
+     * continuar visível no histórico do próprio dono (GET /items/me) mesmo
+     * depois de "excluído" da busca pública e do detalhe.
      */
     @Override
     @Transactional

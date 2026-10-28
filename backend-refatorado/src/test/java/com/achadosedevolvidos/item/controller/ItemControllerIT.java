@@ -63,13 +63,6 @@ class ItemControllerIT extends IntegrationTestSupport {
                         .param("query", marcador))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[?(@.id == '" + created.id() + "')]").exists());
-
-        // Endpoint autenticado (não é o dono de nada além do próprio item, mas
-        // qualquer usuário logado pode consultar matches de um item público).
-        mockMvc.perform(get("/api/v1/items/" + created.id() + "/matches")
-                        .header("Authorization", user.authorizationHeader()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
     }
 
     @Test
@@ -85,12 +78,6 @@ class ItemControllerIT extends IntegrationTestSupport {
                 // Sem header Authorization nenhum: cai no anyRequest().authenticated()
                 // e é barrada pelo Http403ForbiddenEntryPoint padrão (nenhum mecanismo
                 // de login baseado em sessão/redirect está configurado — só Bearer JWT).
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void rainyDay_deveRecusarConsultaDeMatchesSemAutenticacao() throws Exception {
-        mockMvc.perform(get("/api/v1/items/" + UUID.randomUUID() + "/matches"))
                 .andExpect(status().isForbidden());
     }
 

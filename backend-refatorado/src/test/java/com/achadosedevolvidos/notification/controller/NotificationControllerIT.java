@@ -26,14 +26,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Cobre tanto os endpoints REST de notificação quanto os três gatilhos
- * assíncronos que as criam (troca de status de item, atualização de perfil e
- * match encontrado) — mesmo padrão de {@code @Async} + {@code AFTER_COMMIT}
- * já usado pelo motor de match (ver MatchFlowIT).
+ * Cobre tanto os endpoints REST de notificação quanto os dois gatilhos
+ * assíncronos que as criam (troca de status de item e atualização de
+ * perfil) — padrão {@code @Async} + {@code AFTER_COMMIT}.
  *
- * <p>Usa a categoria "Animais de Estimação" (fixa, semeada pelo Flyway) com exclusividade
- * nesta classe, pelo mesmo motivo do MatchFlowIT: evitar concorrência com itens
- * de outras classes de teste na mesma categoria.</p>
+ * <p>Usa a categoria "Animais de Estimação" (fixa, semeada pelo Flyway) com
+ * exclusividade nesta classe, para evitar concorrência com itens de outras
+ * classes de teste na mesma categoria.</p>
  */
 class NotificationControllerIT extends IntegrationTestSupport {
 
@@ -80,7 +79,7 @@ class NotificationControllerIT extends IntegrationTestSupport {
         mockMvc.perform(patch("/api/v1/users/me/preferences")
                         .header("Authorization", user.authorizationHeader())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new UpdatePreferencesRequest(false, null, null))))
+                        .content(objectMapper.writeValueAsString(new UpdatePreferencesRequest(false, null))))
                 .andExpect(status().isOk());
 
         mockMvc.perform(patch("/api/v1/users/me")
@@ -115,30 +114,6 @@ class NotificationControllerIT extends IntegrationTestSupport {
             List<NotificationResponse> notificacoes = listarNotificacoes(dono);
             assertThat(notificacoes)
                     .anyMatch(n -> n.type() == com.achadosedevolvidos.notification.model.Notification.NotificationType.ITEM_UPDATED);
-        });
-    }
-
-    @Test
-    void sunnyDay_matchDeveCriarNotificacaoParaOsDoisDonos() throws Exception {
-        AuthenticatedTestUser donoPerdido = registerAndAuthenticate("Dono Perdido Notif");
-        AuthenticatedTestUser donoEncontrado = registerAndAuthenticate("Dono Encontrado Notif");
-        String marcador = "Pet-" + UUID.randomUUID();
-        LocalDateTime agora = LocalDateTime.now().minusHours(1);
-
-        criarItem(donoPerdido, new CreateItemRequest(
-                Item.ItemType.PERDIDO, CATEGORIA_ANIMAIS, marcador + " Coleira perdida",
-                "Perdido na rua", "Coleira perdida", "Rua B, 200", -23.55, -46.63, agora, null
-        ));
-        criarItem(donoEncontrado, new CreateItemRequest(
-                Item.ItemType.ENCONTRADO, CATEGORIA_ANIMAIS, marcador + " Coleira encontrada",
-                "Encontrado na rua", "Coleira encontrada", "Rua B, 210", -23.5501, -46.6301, agora.plusHours(1), null
-        ));
-
-        await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> {
-            assertThat(listarNotificacoes(donoPerdido))
-                    .anyMatch(n -> n.type() == com.achadosedevolvidos.notification.model.Notification.NotificationType.POSSIBLE_MATCH);
-            assertThat(listarNotificacoes(donoEncontrado))
-                    .anyMatch(n -> n.type() == com.achadosedevolvidos.notification.model.Notification.NotificationType.POSSIBLE_MATCH);
         });
     }
 

@@ -42,12 +42,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Necessário para o ChatController (WebSocket) já existente no projeto -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-
         <!-- Envio de e-mail (fluxo de esqueci-minha-senha) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

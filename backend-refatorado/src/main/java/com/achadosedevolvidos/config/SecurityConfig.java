@@ -125,20 +125,15 @@ public class SecurityConfig {
                         // barrado por anyRequest().authenticated() em vez de devolver o
                         // status de erro correto.
                         .requestMatchers("/error").permitAll()
-                        // Handshake do WebSocket: a autenticação real acontece no
-                        // STOMP CONNECT (StompAuthChannelInterceptor), não aqui.
-                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
                         // Arquivos estáticos servidos localmente (imagens enviadas via
                         // POST /api/v1/uploads/images) — precisam ser públicos, já que a
                         // URL aparece embutida em respostas públicas (busca/detalhe de item).
                         .requestMatchers("/uploads/**").permitAll()
-                        // Regras específicas ANTES da regra genérica de /items/**:
-                        // busca e detalhe são públicos, mas /me e matches exigem login.
+                        // Regra específica ANTES da regra genérica de /items/**:
+                        // busca e detalhe são públicos, mas /me exige login.
                         .requestMatchers(HttpMethod.GET, "/api/v1/items/me").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/items/*/matches").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/items/**").permitAll()
-                        .requestMatchers("/api/v1/matches/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)

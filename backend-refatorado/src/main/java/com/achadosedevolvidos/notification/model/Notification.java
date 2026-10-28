@@ -42,5 +42,5 @@ public class Notification extends BaseEntity {
     @Builder.Default
     private boolean read = false;
 
-    public enum NotificationType { ITEM_UPDATED, POSSIBLE_MATCH, PROFILE_UPDATED }
+    public enum NotificationType { ITEM_UPDATED, PROFILE_UPDATED }
 }

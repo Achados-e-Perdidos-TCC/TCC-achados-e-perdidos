@@ -7,18 +7,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface ItemRepository extends JpaRepository<Item, UUID>, JpaSpecificationExecutor<Item> {
-
-    /**
-     * Usado pelo motor de match para achar candidatos do tipo oposto na mesma
-     * categoria, excluindo itens já inativos.
-     */
-    List<Item> findByTypeAndCategoryIdAndStatusNot(
-            Item.ItemType type, UUID categoryId, Item.ItemStatus excludedStatus
-    );
 
     /**
      * Usado por DELETE /users/me (soft delete de conta): marca todos os itens
