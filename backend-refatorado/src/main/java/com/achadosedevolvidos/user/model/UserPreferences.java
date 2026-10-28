@@ -29,10 +29,6 @@ public class UserPreferences extends BaseEntity {
     @Builder.Default
     private boolean notificationsEnabled = true;
 
-    @Column(name = "match_alerts_enabled", nullable = false)
-    @Builder.Default
-    private boolean matchAlertsEnabled = true;
-
     @Column(name = "emails_enabled", nullable = false)
     @Builder.Default
     private boolean emailsEnabled = true;

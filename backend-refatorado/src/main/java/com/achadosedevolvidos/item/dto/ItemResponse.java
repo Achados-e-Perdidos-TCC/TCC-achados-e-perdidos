@@ -11,7 +11,7 @@ import java.util.UUID;
  *
  * <p>"status" aqui é o nosso {@code Item.ItemType} (PERDIDO/ENCONTRADO) — o
  * frontend não pediu o status de workflow real ({@code Item.ItemStatus}:
- * ANALISANDO/PROCURANDO/POSSIVEL_MATCH/RESOLVIDO/INATIVO), então ele não aparece
+ * ANALISANDO/PROCURANDO/RESOLVIDO/INATIVO), então ele não aparece
  * nesta estrutura.</p>
  *
  * <p>"cidade"/"estado"/"complemento" de {@link LocalizacaoResponse} ainda não

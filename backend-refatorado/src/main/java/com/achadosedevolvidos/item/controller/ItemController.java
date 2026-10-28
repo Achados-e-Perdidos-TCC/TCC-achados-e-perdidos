@@ -7,8 +7,6 @@ import com.achadosedevolvidos.item.dto.UpdateItemRequest;
 import com.achadosedevolvidos.item.dto.UpdateItemStatusRequest;
 import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.item.service.ItemService;
-import com.achadosedevolvidos.match.dto.MatchResponse;
-import com.achadosedevolvidos.match.service.MatchService;
 import com.achadosedevolvidos.user.model.AuthenticatedUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -48,14 +45,13 @@ import java.util.UUID;
 public class ItemController {
 
     private final ItemService itemService;
-    private final MatchService matchService;
 
     @PostMapping
     public ResponseEntity<ItemResponse> create(
             @AuthenticationPrincipal AuthenticatedUser currentUser,
             @Valid @RequestBody CreateItemRequest request
     ) {
-        ItemResponse created = itemService.createAndAnalyze(currentUser.getId(), request);
+        ItemResponse created = itemService.create(currentUser.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -89,14 +85,9 @@ public class ItemController {
         return ResponseEntity.ok(itemService.findById(id));
     }
 
-    @GetMapping("/{id}/matches")
-    public ResponseEntity<List<MatchResponse>> getMatches(@PathVariable UUID id) {
-        return ResponseEntity.ok(matchService.findMatchesForItem(id));
-    }
-
     /**
      * "status" aceita valor de type (PERDIDO/ENCONTRADO) OU de status
-     * (ANALISANDO/PROCURANDO/POSSIVEL_MATCH/RESOLVIDO/INATIVO) — ver
+     * (ANALISANDO/PROCURANDO/RESOLVIDO/INATIVO) — ver
      * {@code ItemServiceImpl.parseCombinedStatusFilter}.
      */
     @GetMapping("/me")

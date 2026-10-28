@@ -57,8 +57,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     /**
-     * POSSIBLE_MATCH respeita matchAlertsEnabled; os demais tipos respeitam
-     * notificationsEnabled (o "interruptor geral"). Sem linha em
+     * Respeita notificationsEnabled (o "interruptor geral"). Sem linha em
      * user_preferences ainda = tudo habilitado (mesmo default usado em
      * GET /users/me) — não bloqueia a criação só porque o usuário nunca abriu
      * a tela de preferências.
@@ -68,9 +67,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void create(UUID userId, Notification.NotificationType type, String title, String message) {
         UserPreferences preferences = userPreferencesRepository.findByUserId(userId).orElse(null);
 
-        boolean enabled = type == Notification.NotificationType.POSSIBLE_MATCH
-                ? preferences == null || preferences.isMatchAlertsEnabled()
-                : preferences == null || preferences.isNotificationsEnabled();
+        boolean enabled = preferences == null || preferences.isNotificationsEnabled();
 
         if (!enabled) {
             return;

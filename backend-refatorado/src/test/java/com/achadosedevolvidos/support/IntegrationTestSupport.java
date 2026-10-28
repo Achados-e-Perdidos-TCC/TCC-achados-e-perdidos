@@ -14,7 +14,6 @@ import org.awaitility.Awaitility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -37,10 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Base para todos os testes de integração (sufixo *IT). Sobe um Postgres real via
- * Testcontainers — nada de banco em memória — e roda o contexto Spring completo
- * numa porta real ({@code WebEnvironment.RANDOM_PORT}), necessário para os testes
- * de WebSocket/STOMP que precisam de uma conexão de verdade, não só do
- * MockMvc.
+ * Testcontainers — nada de banco em memória — e roda o contexto Spring completo.
  *
  * <p>O container é iniciado uma única vez (bloco estático, nunca parado
  * explicitamente — o Ryuk do Testcontainers cuida da limpeza ao fim da JVM) e
@@ -49,14 +45,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * o Postgres só sobe e as migrations do Flyway só rodam uma vez por execução de
  * {@code mvn verify}, não uma vez por classe de teste.
  *
- * <p>Propositalmente NÃO há {@code @Transactional} aqui: o fluxo de match usa um
- * listener {@code @TransactionalEventListener(phase = AFTER_COMMIT)}, que nunca
- * dispararia se cada teste rodasse dentro de uma transação que o Spring Test
- * sempre desfaz ao final (nunca chega a commitar de verdade). Por isso os dados
- * de um teste persistem para os próximos — cada teste usa e-mails/títulos únicos
- * (via UUID) para não colidir com dados de outros testes.
+ * <p>Propositalmente NÃO há {@code @Transactional} aqui: os listeners de
+ * notificação usam {@code @TransactionalEventListener(phase = AFTER_COMMIT)},
+ * que nunca disparariam se cada teste rodasse dentro de uma transação que o
+ * Spring Test sempre desfaz ao final (nunca chega a commitar de verdade). Por
+ * isso os dados de um teste persistem para os próximos — cada teste usa
+ * e-mails/títulos únicos (via UUID) para não colidir com dados de outros
+ * testes.
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @AutoConfigureMockMvc
 public abstract class IntegrationTestSupport {
 
@@ -117,9 +114,6 @@ public abstract class IntegrationTestSupport {
     @Autowired
     protected UserRepository userRepository;
 
-    @LocalServerPort
-    protected int port;
-
     protected record AuthenticatedTestUser(User user, String accessToken) {
 
         public String authorizationHeader() {
@@ -157,8 +151,9 @@ public abstract class IntegrationTestSupport {
     /**
      * Espera o e-mail assíncrono de redefinição de senha chegar (via Awaitility,
      * mesmo padrão já usado no projeto para aguardar efeitos de métodos @Async —
-     * ver o listener de match) e extrai o token bruto do link no corpo — o único
-     * lugar onde ele existe em texto puro, já que o banco só guarda o hash.
+     * ver os listeners de notificação) e extrai o token bruto do link no corpo
+     * — o único lugar onde ele existe em texto puro, já que o banco só guarda
+     * o hash.
      */
     protected String waitForPasswordResetToken(String email) {
         Awaitility.await().atMost(Duration.ofSeconds(5)).untilAsserted(() ->
