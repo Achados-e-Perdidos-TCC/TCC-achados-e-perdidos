@@ -50,6 +50,7 @@ class ItemControllerIT extends IntegrationTestSupport {
                 .andExpect(jsonPath("$.nome").value(marcador + " carteira preta"))
                 .andExpect(jsonPath("$.status").value("PERDIDO"))
                 .andExpect(jsonPath("$.descricao").value("Carteira preta perdida"))
+                .andExpect(jsonPath("$.icon_url").isNotEmpty())
                 .andReturn();
 
         ItemResponse created = objectMapper.readValue(createResult.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class);

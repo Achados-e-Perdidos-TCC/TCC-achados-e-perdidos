@@ -23,6 +23,17 @@ class CategoryControllerIT extends IntegrationTestSupport {
                 .andExpect(jsonPath("$[?(@.name == 'Chaves')]").exists());
     }
 
+    /**
+     * V12 adicionou a coluna icon_url mas nunca a populou (V18 corrigiu) —
+     * sem este teste, uma futura categoria nova sem icon_url passaria batido.
+     */
+    @Test
+    void sunnyDay_todaCategoriaDeveTerIconUrlPreenchido() throws Exception {
+        mockMvc.perform(get("/api/v1/categories"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[?(@.iconUrl == null)]").doesNotExist());
+    }
+
     @Test
     void rainyDay_caminhoInexistenteSobPrefixoDeCategoriasDeveRetornar404() throws Exception {
         // Rota GET liberada ao security por /api/v1/categories/** (permitAll),
