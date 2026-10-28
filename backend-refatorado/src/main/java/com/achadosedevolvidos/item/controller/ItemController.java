@@ -87,7 +87,7 @@ public class ItemController {
 
     /**
      * "status" aceita valor de type (PERDIDO/ENCONTRADO) OU de status
-     * (ANALISANDO/PROCURANDO/POSSIVEL_MATCH/RESOLVIDO/INATIVO) — ver
+     * (ANALISANDO/PROCURANDO/RESOLVIDO/INATIVO) — ver
      * {@code ItemServiceImpl.parseCombinedStatusFilter}.
      */
     @GetMapping("/me")

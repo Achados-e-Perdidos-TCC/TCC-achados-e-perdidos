@@ -93,7 +93,7 @@ public class ItemServiceImpl implements ItemService {
     /**
      * "status" aqui aceita tanto um valor de {@code Item.ItemType}
      * (PERDIDO/ENCONTRADO) quanto de {@code Item.ItemStatus}
-     * (ANALISANDO/PROCURANDO/POSSIVEL_MATCH/RESOLVIDO/INATIVO) — um único filtro
+     * (ANALISANDO/PROCURANDO/RESOLVIDO/INATIVO) — um único filtro
      * combinado, como pedido pelo front-end pra tela "Meus objetos". Ao
      * contrário da busca pública, itens INATIVO (excluídos pelo próprio dono)
      * continuam visíveis aqui, já que é o histórico do próprio usuário.
