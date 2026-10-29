@@ -1,0 +1,65 @@
+# Blueprint do Render (https://render.com/docs/blueprint-spec) — define o
+# Web Service da API e o banco Postgres juntos, versionado com o código.
+#
+# IMPORTANTE depois do primeiro deploy (coisa que o Render não consegue
+# compor sozinho a partir do databases: abaixo):
+#   1. Abra o recurso "achados-e-devolvidos-db" e copie a "Internal Database
+#      URL" (formato postgresql://usuario:senha@host:porta/banco).
+#   2. No Web Service "achados-e-devolvidos-api" → Environment, defina
+#      DB_URL = jdbc:postgresql://host:porta/banco (mesma host/porta/banco
+#      da Internal Database URL, só trocando o prefixo "postgresql://" por
+#      "jdbc:postgresql://" e tirando usuário/senha — eles já vêm por
+#      DB_USERNAME/DB_PASSWORD abaixo).
+#   3. Preencha as variáveis marcadas "sync: false" — o Render não aceita
+#      segredo versionado em texto puro no render.yaml.
+
+databases:
+  - name: achados-e-devolvidos-db
+    plan: free
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: achados-e-devolvidos-api
+    runtime: docker
+    plan: free
+    rootDir: backend-refatorado
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/categories
+    envVars:
+      # Preenchido manualmente após o primeiro deploy — ver instruções acima.
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        fromDatabase:
+          name: achados-e-devolvidos-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: achados-e-devolvidos-db
+          property: password
+
+      # Gerado automaticamente pelo Render (valor aleatório forte) na criação
+      # do serviço — nunca reaproveite o JWT_SECRET de desenvolvimento local.
+      - key: JWT_SECRET
+        generateValue: true
+
+      # Credencial do Swagger (Basic Auth) — defina manualmente.
+      - key: SWAGGER_USERNAME
+        sync: false
+      - key: SWAGGER_PASSWORD
+        sync: false
+
+      # SMTP real (ou Mailtrap) para o fluxo de esqueci-minha-senha.
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+
+      # URL pública do front-end hospedado — ajustar quando ele também
+      # estiver em produção.
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: PASSWORD_RESET_REDIRECT_URI
+        sync: false
