@@ -5,6 +5,8 @@ import { NavLink } from 'react-router';
 import { hoje, ontem } from '../../../../utils/date/date.js'; 
 import filtros from '../../../../utils/filters/filtrarObjetos.js'; 
 
+import NoImage from './components/noImage/NoImage.jsx'; 
+
 import './principalCards.css';
 import Status from '../../../../components/status/Status.jsx'; 
 import NotObjects from '../../../../pages/errors/notObjects/NotObjects.jsx';
@@ -16,9 +18,9 @@ import arrowBlue from '../../../../assets/icons/buscarObjetos/arrow-blue.svg';
 // falta adicionar logica de filtrar por periodo
 
 // Vai receber de buscarObjetos.jsx depois
-import objetos from './objetos.json'; 
+// import objetos from './objetos.json'; 
 
-function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultadoTotalEncontrados }) {
+function PrincipalCards({ objetos, inicio, fim, resultadosExibidos, resultadoTotalEncontrados }) {
 
     const { state } = useFilter();
     const { primaryFilters, secondaryFilters } = state;
@@ -57,16 +59,26 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
             { objetosFiltrados.length === 0 ? <NotObjects /> : objetosFiltrados.slice(inicio, fim).map((valor) => {
                 cardsExibidos++
 
+                const nome = valor.nome || 'Objeto sem nome'; //obrigatorio
+                const descricao = valor.descricao || 'Sem descrição disponível'; //obrigatorio
+
+                const cidade = valor.localizacao.cidade || ''; //obrigatorio
+                const endereco = valor.localizacao.endereco || ''; //obrigatorio
+                const estado = valor.localizacao.estado || ''; //obrigatorio
+
+                const data = valor.data.data.trim() ; 
+                const hora = valor.data.hora.trim();
+
                 return (
                     <div className='card__principal' key={valor.id}>
-                        <img className='principal__cards__image__card ' src={valor.imagemPrincipal} />
+                        { valor.imagemPrincipal === null ? <NoImage /> : <img className='principal__cards__image__card ' src={valor.imagemPrincipal} />}
 
                         <div className='principal__meio'>
 
                             <div className='principal__encima'>
 
-                                <h1 className='titulo__principal'>{ valor.nome.length < 35 ? valor.nome : `${valor.nome.slice(0, 35)}...` }</h1>
-                                <h1 className='titulo__responsive'>{ valor.nome.length < 25 ? valor.nome : `${valor.nome.slice(0, 25)}...`}</h1>
+                                <h1 className='titulo__principal'>{ nome.length < 35 ? nome : `${nome.slice(0, 35)}...` }</h1>
+                                <h1 className='titulo__responsive'>{ nome.length < 25 ? nome : `${nome.slice(0, 25)}...`}</h1>
 
                                 <div className='categoria__status'>
                                     <Status objeto={valor}/>
@@ -84,21 +96,25 @@ function PrincipalCards({/* objetos */ inicio, fim, resultadosExibidos, resultad
                                 <div className='data__hora'>
 
                                     <div className='data__principal'>
-                                        <img src={pinGray} />
-                                        <p className='endereco__principal'>{valor.localizacao.estado.length + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 50 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 50) + `...`}</p>
-                                        <span className='endereco__responsive'>{valor.localizacao.estado.length + valor.localizacao.cidade.length + valor.localizacao.endereco.length < 27 ? `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}` : `${valor.localizacao.estado} - ${valor.localizacao.cidade}, ${valor.localizacao.endereco}`.slice(0, 27) + `...`}</span>
+                                        <img src={pinGray} />         
+                                        {!cidade || !endereco || !estado ? <p className='endereco__principal'>Endereço não informado</p> : 
+                                        <p className='endereco__principal'>{estado.length + cidade.length + endereco.length < 50 ? `${estado} - ${cidade}, ${endereco}` : `${estado} - ${cidade}, ${endereco}`.slice(0, 50) + `...`}</p>}
+
+                                        {!cidade || !endereco || !estado ? <p className='endereco__responsive'>Endereço não informado</p> : 
+                                        <span className='endereco__responsive'>{estado.length + cidade.length + endereco.length < 27 ? `${estado} - ${cidade}, ${endereco}` : `${estado} - ${cidade}, ${endereco}`.slice(0, 27) + `...`}</span>}
+                                        
                                     </div>
 
                                     <p className='divisoria'>|</p>
 
                                     <div className='hora__principal'>
                                         <img src={calendarGray} />
-                                        <span>{dataFormatada(valor.data.data.trim(), valor.data.hora.trim())}</span>
+                                        <span>{dataFormatada(data.trim(), hora.trim())}</span>
                                     </div>
                                     
                                 </div>
 
-                                <p className='descricao__principal'>{valor.descricao < 102 ? valor.descricao : `${valor.descricao.slice(0, 102)}...`}</p>
+                                <p className='descricao__principal'>{descricao.length < 102 ? descricao : `${descricao.slice(0, 102)}...`}</p>
 
                                 <div className='button__responsive'>
                                     <NavLink className='detalhes__principal' to={`/buscar-objetos/${valor.id}`}>Ver detalhes</NavLink>

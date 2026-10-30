@@ -12,7 +12,8 @@ function DangerZone(){
 
     function userLogout(){
         logout()
-        return setIsAuthenticated(false);
+        setIsAuthenticated(false);
+        return;
     }
 
     async function deleteUserAccount(){ 

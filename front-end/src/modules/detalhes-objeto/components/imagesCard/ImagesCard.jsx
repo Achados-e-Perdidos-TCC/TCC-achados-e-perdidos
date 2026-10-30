@@ -3,13 +3,13 @@ import { useState } from 'react';
 import './imagesCard.css';
 
 import arrowButton from '../../../../assets/icons/detalhesObjeto/arrow-gray.svg';
+import imageOpcional from '../../../../assets/icons/noImage/no-picture.svg'
 
 function ImagesCards(objeto) {
 
-    // temporario
-    const objetoEncontrado = objeto.objeto[0]
+    const objetoEncontrado = objeto.objeto
 
-    const [imagemExibida, setImagemExibida] = useState(objetoEncontrado.imagemPrincipal);
+    const [imagemExibida, setImagemExibida] = useState(objetoEncontrado.imagemPrincipal || imageOpcional );
     const [imagensSecundarias] = useState([imagemExibida, ...objetoEncontrado.imagensSecundarias]);
 
     function alternarImagem(imagemClicada) { setImagemExibida(imagemClicada)}
@@ -30,7 +30,7 @@ function ImagesCards(objeto) {
     return (
         <div>
             <div className='container__images'>
-                <img className='imagem__principal' src={imagemExibida} />
+                <img className={!objetoEncontrado.imagemPrincipal ? `image__opcional` : 'imagem__principal'} src={imagemExibida} />
 
                 <div className={imagensSecundarias.length <= 4 ? 'imagens__secundarias__limitadas' : 'imagens__secundarias__ilimitadas'}>
 

@@ -11,8 +11,8 @@ import infoBlue from '../../../../../../assets/icons/register/info-blue.png';
 
 function Preferences({ proximaPagina, error, criarConta }){
 
-    const [ativo1, setAtivo1] = useState(false);
-    const [ativo2, setAtivo2] = useState(false);
+    const [ativo1, setAtivo1] = useState(true);
+    const [ativo2, setAtivo2] = useState(true);
     const { tema } = useOutletContext();
 
     const preferenciasCards = [ 
@@ -38,7 +38,6 @@ function Preferences({ proximaPagina, error, criarConta }){
             error('Ocorreu um erro durante a criacão da sua conta, verifique se todos os dados estão preenchidos corretamente.');
         }
     }
-
 
     return (
         <div className='preferencias'>

@@ -15,23 +15,33 @@ const infos = ['categorias', 'Localização', 'Data']
 function Detalhes(objeto){
 
     let posicao = -1;
-    const objetoEncontrado = objeto.objeto[0];
-    const localizacaoFormatada = `${objetoEncontrado.localizacao.estado} - ${objetoEncontrado.localizacao.cidade}, ${objetoEncontrado.localizacao.endereco}`
+    const objetoEncontrado = objeto.objeto;
 
-    function dataFormatada(data, hora){
-        if (data === hoje()) { return `Hoje, ${hora}`}
-        if (data === ontem()) { return `Ontem, ${hora}`}
+    const nome = objetoEncontrado.nome || 'Objeto sem nome'; //obrigatorio
+    const descricao = objetoEncontrado.descricao || 'Descrição indisponível'; //obrigatorio
+
+    const cidade = objetoEncontrado.localizacao.cidade || `Não informado`; //obrigatorio
+    const endereco = objetoEncontrado.localizacao.endereco || `Não informado`; //obrigatorio
+    const estado = objetoEncontrado.localizacao.estado || `Não informado`; //obrigatorio
+    const complemento = objetoEncontrado.localizacao.complemento || `Sem complemento`
+
+    const localizacaoFormatada = !objetoEncontrado.localizacao.cidade || !objetoEncontrado.localizacao.endereco || 
+    !objetoEncontrado.localizacao.estado ? 'Endereço não informado' : `${estado} - ${cidade}, ${endereco}`
+
+    function dataFormatada(data){
+
+        if (data === hoje()) { return `Hoje`}
+        if (data === ontem()) { return `Ontem`}
         
-        return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}, ${hora}`; 
+        return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`; 
     }
 
     const descricaoInfo = [objetoEncontrado.categoria, localizacaoFormatada, dataFormatada(objetoEncontrado.data.data, objetoEncontrado.data.hora)]
 
     
-    const informacoesAdicionais = [ `Categoria: ${objetoEncontrado.categoria}`, `Localização: ${objetoEncontrado.localizacao.endereco}`,
-    `Cidade: ${objetoEncontrado.localizacao.cidade}`, `Estado: ${objetoEncontrado.localizacao.estado}`, `Data: ${dataFormatada(objetoEncontrado.data.data).slice(0, 10)}`,
-    `Horário: ${objetoEncontrado.data.hora}`
-    ]
+    const informacoesAdicionais = [ `Categoria: ${objetoEncontrado.categoria}`, `Localização: ${endereco}`,
+    `Cidade: ${cidade}`, `Estado: ${estado}`, `Data: ${dataFormatada(objetoEncontrado.data.data).slice(0, 10)}`,
+    `Horário: ${objetoEncontrado.data.hora}`]; 
 
     return(
         <div className='detalhes'>
@@ -41,8 +51,8 @@ function Detalhes(objeto){
                     <Status objeto={objetoEncontrado}/>
                 </div>
 
-                <h1 className='detalhes__titulo'>{objetoEncontrado.nome}</h1>
-                <p className='detalhes__descricao'>{`${objetoEncontrado.descricao.slice(0, 70)}...`}</p>
+                <h1 className='detalhes__titulo'>{nome}</h1>
+                <p className='detalhes__descricao'>{`${descricao.slice(0, 70)}...`}</p>
                 <p className='detalhes__descricao responsive'>{`Informações para identificação do objeto.`}</p>
 
                 <div className='detalhes__infos'>
@@ -71,7 +81,7 @@ function Detalhes(objeto){
 
                     <div>
                         <p className='detalhes__objeto__subtitle'>Descrição Completa</p>
-                        <p className='detalhes__descricao__completa'>{objetoEncontrado.descricao}</p>
+                        <p className='detalhes__descricao__completa'>{descricao}</p>
                     </div>
 
                     <hr />
@@ -94,7 +104,7 @@ function Detalhes(objeto){
 
                     <div>
                         <p className='detalhes__objeto__subtitle'>Complemento de localização</p>
-                        <p className='detalhes__descricao__complemento'>{objetoEncontrado.localizacao.complemento}</p>
+                        <p className='detalhes__descricao__complemento'>{complemento}</p>
                     </div>
                 </div>
         </div>

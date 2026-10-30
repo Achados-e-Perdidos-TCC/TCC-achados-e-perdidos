@@ -1,0 +1,67 @@
+.notobjectsRegistered__container {
+  display: flex;
+  justify-content: center;
+  border: 0.1rem solid var(--border-color);
+  border-radius: 1rem;
+  padding: 3rem;
+}
+
+.notobjectRegistered__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  height: 45rem;
+}
+
+/* img */
+
+.notobjectRegistered__img {
+  height: 16rem;
+}
+
+.notobjectRegistered__img__button {
+  height: 1.8rem;
+}
+
+/* texts */
+
+.notobjectRegistered__title {
+  font-weight: 500;
+  color: var(--primary-color-text);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  line-height: 2.7rem;
+  text-align: center;
+}
+
+.notobjectRegistered__subtitle {
+  text-align: center;
+  color: var(--secondary-color-gray);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+}
+
+/* button */
+
+.notobjectRegistered__form__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(1.4rem, 2vw, 1.6rem);
+  gap: 1rem;
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.notobjectRegistered__button__blue {
+  background-color: var(--primary-color-blue);
+  color: var(--secondary-color-white);
+}
+
+@media (max-width: 768px) {
+  .notobjectRegistered__img {
+    height: 13rem;
+  }
+}

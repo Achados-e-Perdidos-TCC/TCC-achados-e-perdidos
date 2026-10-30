@@ -1,91 +1,70 @@
-function objetosAprovados(objetos, primaryFilters){
+function filtros(objeto, primaryFilters, secondaryFilters) {
+  // Filtro por nome do objeto
+  const nomeObjeto = objeto.nome?.toUpperCase() || "";
+  const buscaObjeto = primaryFilters.OBJETO?.toUpperCase() || "";
 
-    const filtrosAprovados = {}
-    const categorias = ['OBJETO', 'LOCALIZAÇÃO', 'CATEGORIA', 'PERÍODO'];
+  const objetoAprovado =
+    !buscaObjeto ||
+    buscaObjeto.split(" ").every((termo) => nomeObjeto.includes(termo));
 
-    categorias.map((valorCategorias) => {
+  // Filtro por localização
+  const cidadeObjeto = objeto.localizacao?.cidade?.toUpperCase() || "";
+  const enderecoObjeto = objeto.localizacao?.endereco?.toUpperCase() || "";
+  const buscaLocalizacao = primaryFilters.LOCALIZAÇÃO?.toUpperCase() || "";
 
-        if (!primaryFilters[valorCategorias]) { return }
+  const localizacaoAprovada =
+    !buscaLocalizacao ||
+    buscaLocalizacao
+      .split(" ")
+      .every(
+        (termo) =>
+          cidadeObjeto.includes(termo) || enderecoObjeto.includes(termo),
+      );
 
-        if (valorCategorias === 'LOCALIZAÇÃO') {
+  // Filtro por categoria
+  const categoriaObjeto = objeto.categoria?.toUpperCase() || "";
+  const buscaCategoria = primaryFilters.CATEGORIA?.toUpperCase() || "";
 
-            const termosBusca = primaryFilters[valorCategorias].toUpperCase().split(' ');
-            const cidadeObjeto = objetos.localizacao.cidade.toUpperCase();
-            const enderecoObjeto = objetos.localizacao.endereco.toUpperCase();
+  const categoriaAprovada =
+    !buscaCategoria || categoriaObjeto.includes(buscaCategoria);
 
-            // every funciona igual o filter, a diferenca é que o filter retorna um novo array, o every retorna um boolean
-            const objetosEncontrados = termosBusca.every((valorEncontrados) => {
-                return cidadeObjeto.includes(valorEncontrados) || enderecoObjeto.includes(valorEncontrados);
-            });
+  // Filtro por período
+  const dataObjeto = objeto.data?.data?.trim() || "";
 
-            filtrosAprovados[valorCategorias] = objetosEncontrados
+  const dataInicial = primaryFilters.DATA_INICIAL || "";
+  const dataFinal = primaryFilters.DATA_FINAL || "";
 
-        } else if (valorCategorias === 'CATEGORIA') {
+  // Se apenas a data inicial estiver preenchida,
+  // considera somente aquele dia.
+  const dataLimite = dataFinal || dataInicial;
 
-            const termosBusca = primaryFilters[valorCategorias].toUpperCase();
-            const nomeDoObjeto = objetos.categoria.toUpperCase();
+  const periodoAprovado =
+    !dataInicial || (dataObjeto >= dataInicial && dataObjeto <= dataLimite);
 
-            if (nomeDoObjeto.includes(termosBusca)) { filtrosAprovados[valorCategorias] = false }
-            if (nomeDoObjeto.includes(termosBusca)) { filtrosAprovados[valorCategorias] = true }
+  // Todos os filtros principais precisam ser aprovados
+  const filtrosPrincipaisAprovados =
+    objetoAprovado &&
+    localizacaoAprovada &&
+    categoriaAprovada &&
+    periodoAprovado;
 
-        } else if (valorCategorias === 'OBJETO'){
+  if (!filtrosPrincipaisAprovados) {
+    return false;
+  }
 
-            const termosBusca = primaryFilters[valorCategorias].toUpperCase().split(' ');
-            const nomeDoObjeto = objetos.nome.toUpperCase();
+  // Filtro secundário (status)
+  if (!secondaryFilters || secondaryFilters === "TODOS") {
+    return true;
+  }
 
-            
-            const objetosEncontrados = termosBusca.every((valorEncontrados) => {
-                return nomeDoObjeto.includes(valorEncontrados);
-            })
-            
-            filtrosAprovados[valorCategorias] = objetosEncontrados
+  if (
+    objeto.status === secondaryFilters.slice(0, 7) ||
+    objeto.status === secondaryFilters.slice(0, 10)
+  ) {
+    return true;
+  }
 
-        } else {
-
-            // montar logica de periodo após req ao banco estiver funcionando
-            
-            // const termosBusca = primaryFilters[valorCategorias].toUpperCase();
-            // const nomeDoObjeto = objetos.dataOcorrencia.toUpperCase();
-
-            // const objetosEncontrados = termosBusca.every((valorEncontrados) => {
-            //     return nomeDoObjeto.includes(valorEncontrados);
-            // })
-
-            // Aprovados[valorCategorias] = objetosEncontrados
-        }
-
-    });
-
-    return filtrosAprovados
-}
-
-function filtros(objetos, primaryFilters, secondaryFilters) {
-        
-    const resultadoFiltros = objetosAprovados(objetos, primaryFilters); 
-    
-    const aprovados = []
-    const preenchidos = []
-    
-    for (let camposPreenchidos in primaryFilters) { 
-        if (primaryFilters[camposPreenchidos]) { preenchidos.push(camposPreenchidos) };
-    }
-    
-    for (let ResultadosAprovados in resultadoFiltros) { 
-        if (resultadoFiltros[ResultadosAprovados]) { aprovados.push(ResultadosAprovados) }; 
-    }
-    
-    // if a quantidade de objetos preenchidos for a mesma de objetos aprovados, então ele filtra
-    // se não tiver nenhum preenchido nem aprovado ele filtra pelos secondaryFilters direto
-    if (preenchidos.length === aprovados.length) {
-        
-        if (!secondaryFilters || secondaryFilters === 'TODOS') { return (objetos) }
-
-        if (objetos.status === secondaryFilters.slice(0, 7)) { return (objetos) }
-
-        if (objetos.status === secondaryFilters.slice(0, 10)) { return (objetos) }
-
-        // logica dos mais recentes e relevantes
-    }
+  return false;
 }
 
 export default filtros;

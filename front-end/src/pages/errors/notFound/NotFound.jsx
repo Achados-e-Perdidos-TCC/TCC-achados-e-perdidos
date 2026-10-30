@@ -18,7 +18,7 @@ function NotFound(){
 
                 <div className='notfound__texts'>
                     <h1 className='notfound__title'>Ops! Página não encontrada</h1>
-                    <p className='notfound__subtitle'>Não conseguimos encontra a página que você está procurando.</p>
+                    <p className='notfound__subtitle'>Não conseguimos encontrar a página que você está procurando.</p>
                 </div>
 
                 <div className='notfound__container__buttons'>
@@ -29,7 +29,7 @@ function NotFound(){
                     </NavLink>
 
                     <NavLink className='notfound__form__button notfound__button__white' to='/buscar-objetos' end >
-                        <img  classname='notfound__img__button' src={findBlue} />
+                        <img  className='notfound__img__button' src={findBlue} />
                         <p>Buscar objetos</p>
                     </NavLink>
                     

@@ -38,7 +38,7 @@ function Login(){
             // faz chamada API
             await login(inputEmailState.toLowerCase(), inputPasswordState, lembrarUsuario);
 
-            return window.location.href = "/";
+            return window.location.href = "/user-area";
 
         } catch(erro) { 
             if(erro.message === 'Credenciais inválidas'){ return setError(`Credenciais inválidas`)}

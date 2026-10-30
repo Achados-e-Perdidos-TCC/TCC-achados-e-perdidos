@@ -1,85 +1,116 @@
-import { useState } from 'react';
-import { useParams, NavLink, useOutletContext } from 'react-router'; 
+import { useEffect, useState } from "react";
+import { useParams, NavLink, useOutletContext } from "react-router";
 
-import './editDetalhesObjeto.css'; 
+import "./editDetalhesObjeto.css";
 
-import objetos from '../../../buscar-objetos/components/principalCards/objetos.json'; 
+import { findMyObject } from "../../private.service.js";
 
-import houseGray from '../../../../assets/icons/detalhesObjeto/house-gray.svg'; 
-import arrowGray from '../../../../assets/icons/detalhesObjeto/arrow-gray.svg'; 
-import arrowBlue from '../../../../assets/icons/detalhesObjeto/arrow-blue.svg'; 
-import pencil from '../../../../assets/icons/userArea/pencil-white.png';
-import xBlack from '../../../../assets/icons/detalhesObjeto/x-black.svg';  
-import xWhite from '../../../../assets/icons/detalhesObjeto/x-white.png';  
+import houseGray from "../../../../assets/icons/detalhesObjeto/house-gray.svg";
+import arrowGray from "../../../../assets/icons/detalhesObjeto/arrow-gray.svg";
+import arrowBlue from "../../../../assets/icons/detalhesObjeto/arrow-blue.svg";
+import pencil from "../../../../assets/icons/userArea/pencil-white.png";
+import xBlack from "../../../../assets/icons/detalhesObjeto/x-black.svg";
+import xWhite from "../../../../assets/icons/detalhesObjeto/x-white.png";
 
-import ImagesCard from '../components/editImagesCard/ImagesCard.jsx'; 
-import Detalhes from '../components/editDetalhes/Detalhes.jsx'; 
+import ImagesCard from "../components/editImagesCard/ImagesCard.jsx";
+import Detalhes from "../components/editDetalhes/Detalhes.jsx";
 
-function EditdetalhesObjeto(){
+function EditdetalhesObjeto() {
+  const [edit, setEdit] = useState(false);
+  const [objetoEncontrado, setObjetoEncontrado] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState(false);
 
-    const [edit, setEdit] = useState(false);
-    const params = useParams(); 
-    const {tema} = useOutletContext()
+  const params = useParams();
+  const { tema } = useOutletContext();
 
-    const objetoEncontrado = objetos.filter((objetos) => { if (objetos.id === Number(params.id)) { return objetos }} )
+  useEffect(() => {
+    async function carregarObjeto() {
+      try {
+        setCarregando(true);
+        setErro(false);
 
-    function editarInformacoes(){
-        setEdit(true)
+        const resposta = await findMyObject(params.id);
 
-
+        setObjetoEncontrado(resposta);
+      } catch (error) {
+        console.error("Erro ao buscar objeto:", error);
+        setErro(true);
+      } finally {
+        setCarregando(false);
+      }
     }
 
-    return (
-        <section className='detalhe__objetos'>
+    carregarObjeto();
+  }, [params.id]);
 
-                <div className='caminho__voltar'>
+  function editarInformacoes() {
+    setEdit(true);
+  }
 
-                        <div className='caminho'>
-                                <img className='house__gray' src={houseGray} />
-                                <img src={arrowGray} />
-                                <p className='caminho__text'>Buscar objetos / {objetoEncontrado[0].nome}</p>
-                        </div>
+  if (carregando) {
+    return <p>Carregando informações do objeto...</p>;
+  }
 
-                        <div className='voltar__buscar'>
+  if (erro || !objetoEncontrado) {
+    return <p>Não foi possível carregar os detalhes deste objeto.</p>;
+  }
 
-                            <NavLink className='voltar__navlink' to='/user-area' end>
-                                <img src={arrowBlue} />
-                                <p className='voltar__text'> voltar para área do usuario </p>
-                            </NavLink>
-                                
-                        </div>
-                </div>
+  return (
+    <section className="detalhe__objetos">
+      <div className="caminho__voltar">
+        <div className="caminho">
+          <img className="house__gray" src={houseGray} />
+          <img src={arrowGray} />
 
-                <div className='container__detalhes'>
+          <p className="caminho__text">
+            Buscar objetos / {objetoEncontrado.nome}
+          </p>
+        </div>
 
-                    <div className='esquerda'>
-                        <ImagesCard objeto={objetoEncontrado} edit={edit}/>
-                    </div>
+        <div className="voltar__buscar">
+          <NavLink className="voltar__navlink" to="/user-area" end>
+            <img src={arrowBlue} />
+            <p className="voltar__text">voltar para área do usuario</p>
+          </NavLink>
+        </div>
+      </div>
 
-                    <div className='direita'>
-                        <Detalhes objeto={objetoEncontrado} edit={edit}/>
-                    </div>
+      <div className="container__detalhes">
+        <div className="esquerda">
+          <ImagesCard objeto={objetoEncontrado} edit={edit} />
+        </div>
 
-                </div>
+        <div className="direita">
+          <Detalhes objeto={objetoEncontrado} edit={edit} />
+        </div>
+      </div>
 
-                <div className='container__botoes'>
-                    <div className='botao__azul' onClick={() => { editarInformacoes() }}> 
-                        <div className='botoes'>
-                            <img src={pencil}/>
-                            <p>editar informações do objeto</p>
-                        </div>
-                    </ div>
+      <div className="container__botoes">
+        <div className="botao__azul" onClick={editarInformacoes}>
+          <div className="botoes">
+            <img src={pencil} />
+            <p>editar informações do objeto</p>
+          </div>
+        </div>
 
-                    <div className='botao__default' onClick={() => { window.location.reload() }}>
-                        <div className='botoes'>
-                            {tema === 'light' ? <img src={xBlack}/> : <img className='x__white' src={xWhite}/>}
-                            <p>Cancelar alterações</p>
-                        </div>
-                    </div>
-                </div>
+        <div
+          className="botao__default"
+          onClick={() => window.location.reload()}
+        >
+          <div className="botoes">
+            {tema === "light" ? (
+              <img src={xBlack} />
+            ) : (
+              <img className="x__white" src={xWhite} />
+            )}
 
-        </section>
-    )
+            <p>Cancelar alterações</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default EditdetalhesObjeto;

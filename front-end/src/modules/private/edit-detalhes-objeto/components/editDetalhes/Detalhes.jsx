@@ -1,105 +1,193 @@
-import { hoje, ontem } from '../../../../../utils/date/date.js'; 
+import { hoje, ontem } from "../../../../../utils/date/date.js";
 
-import './detalhes.css'
+import "./detalhes.css";
 
-import Status from '../../../../../components/status/Status.jsx';
+import Status from "../../../../../components/status/Status.jsx";
 
-import pinGray from '../../../../../assets/icons/buscarObjetos/pin-gray.svg';
-import calendarGray from '../../../../../assets/icons/buscarObjetos/calendar-gray.svg';
-import gridGray from '../../../../../assets/icons/buscarObjetos/grid-gray.svg';
-import circuloBlue from '../../../../../assets/icons/detalhesObjeto/circulo-blue.png'
+import pinGray from "../../../../../assets/icons/buscarObjetos/pin-gray.svg";
+import calendarGray from "../../../../../assets/icons/buscarObjetos/calendar-gray.svg";
+import gridGray from "../../../../../assets/icons/buscarObjetos/grid-gray.svg";
+import circuloBlue from "../../../../../assets/icons/detalhesObjeto/circulo-blue.png";
 
-const icons = [ gridGray, pinGray,  calendarGray ]
-const infos = ['categorias', 'Localização', 'Data']
+const icons = [gridGray, pinGray, calendarGray];
+const infos = ["Categorias", "Localização", "Data"];
 
-function Detalhes({ objeto, edit }){
+function Detalhes({ objeto, edit }) {
+  // Recebe diretamente o objeto retornado pela API.
+  const objetoEncontrado = objeto;
 
-    let posicao = -1;
-    const objetoEncontrado = objeto[0];
-    const localizacaoFormatada = `${objetoEncontrado.localizacao.estado} - ${objetoEncontrado.localizacao.cidade}, ${objetoEncontrado.localizacao.endereco}`
+  const localizacao = objetoEncontrado.localizacao ?? {};
+  const dataObjeto = objetoEncontrado.data ?? {};
 
-    function dataFormatada(data, hora){
-        if (data === hoje()) { return `Hoje, ${hora}`}
-        if (data === ontem()) { return `Ontem, ${hora}`}
-        
-        return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}, ${hora}`; 
-    }
+  const cidadeEstado = [localizacao.estado, localizacao.cidade]
+    .filter(Boolean)
+    .join(" - ");
 
-    const descricaoInfo = [objetoEncontrado.categoria, localizacaoFormatada, dataFormatada(objetoEncontrado.data.data, objetoEncontrado.data.hora)]
+  const localizacaoFormatada =
+    [cidadeEstado, localizacao.endereco].filter(Boolean).join(", ") ||
+    "Localização não informada";
 
-    
-    const informacoesAdicionais = [ `Categoria: ${objetoEncontrado.categoria}`, `Localização: ${objetoEncontrado.localizacao.endereco}`,
-    `Cidade: ${objetoEncontrado.localizacao.cidade}`, `Estado: ${objetoEncontrado.localizacao.estado}`, `Data: ${dataFormatada(objetoEncontrado.data.data).slice(0, 10)}`,
-    `Horário: ${objetoEncontrado.data.hora}`
-    ]
+  function dataFormatada(data, hora) {
+    if (!data) return "Data não informada";
 
-    return(
-        <div className='detalhes'>
+    if (data === hoje()) return `Hoje, ${hora ?? ""}`;
+    if (data === ontem()) return `Ontem, ${hora ?? ""}`;
 
-            <div>
-                <div className={'status__detalhes'}>
-                    <Status objeto={objetoEncontrado}/>
-                </div>
+    return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}, ${hora ?? ""}`;
+  }
 
-                {edit ? <input type="text" defaultValue={objetoEncontrado.nome} className='detalhes__titulo__input' /> : <h1 className='detalhes__titulo'>{objetoEncontrado.nome}</h1>}
-                <p className='detalhes__descricao'>{`${objetoEncontrado.descricao.slice(0, 70)}...`}</p>
-                <p className='detalhes__descricao responsive'>{`Informações para identificação do objeto.`}</p>
+  const descricao = objetoEncontrado.descricao ?? "";
 
-                <div className='detalhes__infos'>
-                    {icons.map((valor) => {
-                        posicao++
+  const descricaoInfo = [
+    objetoEncontrado.categoria ?? "Não informada",
+    localizacaoFormatada,
+    dataFormatada(dataObjeto.data, dataObjeto.hora),
+  ];
 
-                        return(
-                            <div key={valor} className='infos__icons'>
+  const informacoesAdicionais = [
+    {
+      titulo: "Categoria",
+      valor: objetoEncontrado.categoria ?? "Não informada",
+    },
+    {
+      titulo: "Localização",
+      valor: localizacao.endereco ?? "Não informada",
+    },
+    {
+      titulo: "Cidade",
+      valor: localizacao.cidade ?? "Não informada",
+    },
+    {
+      titulo: "Estado",
+      valor: localizacao.estado ?? "Não informado",
+    },
+    {
+      titulo: "Data",
+      valor: dataObjeto.data ?? "Não informada",
+    },
+    {
+      titulo: "Horário",
+      valor: dataObjeto.hora ?? "Não informado",
+    },
+  ];
 
-                                <img className="icons" src={valor} />
-
-                                <div>
-                                    <span className='infos__categoria'> {infos[posicao]} </span>
-                                    <p className='infos__text'> {descricaoInfo[posicao]} </p>
-                                    <p className='responsive infos__text'> {`${descricaoInfo[posicao].slice(0, 17)}...`} </p>
-                                </div>
-                                
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-
-                <div className='card__infos'>
-                    <h2 className='detalhes__objeto__title'>Detalhes do objeto</h2>
-
-                    <div>
-                        <p className='detalhes__objeto__subtitle'>Descrição Completa</p>
-                        { edit ? <textarea defaultValue={objetoEncontrado.descricao} className="detalhes__descricao__input"/> : <p className='detalhes__descricao__completa'>{objetoEncontrado.descricao}</p> } 
-                    </div>
-
-                    <hr />
-
-                    <div>
-                        <p className='detalhes__objeto__subtitle'>Informações</p>
-                        {
-                            informacoesAdicionais.map((valor) => {
-                                return ( 
-                                    <div key={valor} className='informacoes__adicionais'>
-                                        <img className="circulo__blue" src={circuloBlue} />
-                                        <p className='detalhes__descricao__adicional'> {valor} </p>
-                                    </div>
-                               ) 
-                            })
-                        }
-                    </div>
-
-                    <hr />
-
-                    <div>
-                        <p className='detalhes__objeto__subtitle'>Complemento de localização</p>
-                        { edit ? <textarea defaultValue={objetoEncontrado.localizacao.complemento} className="detalhes__complemento__input"/> : <p className='detalhes__descricao__complemento'>{objetoEncontrado.localizacao.complemento}</p> }
-                    </div>
-                </div>
+  return (
+    <div className="detalhes">
+      <div>
+        <div className="status__detalhes">
+          <Status objeto={objetoEncontrado} />
         </div>
-    )
-}
 
+        {edit ? (
+          <input
+            type="text"
+            defaultValue={objetoEncontrado.nome ?? ""}
+            className="detalhes__titulo__input"
+          />
+        ) : (
+          <h1 className="detalhes__titulo">
+            {objetoEncontrado.nome ?? "Objeto sem nome"}
+          </h1>
+        )}
+
+        <p className="detalhes__descricao">
+          {descricao.slice(0, 70)}
+          {descricao.length > 70 ? "..." : ""}
+        </p>
+
+        <p className="detalhes__descricao responsive">
+          Informações para identificação do objeto.
+        </p>
+
+        <div className="detalhes__infos">
+          {icons.map((valor, index) => (
+            <div key={valor} className="infos__icons">
+              <img className="icons" src={valor} />
+
+              <div>
+                <span className="infos__categoria">{infos[index]}</span>
+
+                <p className="infos__text">{descricaoInfo[index]}</p>
+
+                <p className="responsive infos__text">
+                  {descricaoInfo[index].slice(0, 17)}
+                  {descricaoInfo[index].length > 17 ? "..." : ""}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="card__infos">
+        <h2 className="detalhes__objeto__title">Detalhes do objeto</h2>
+
+        <div>
+          <p className="detalhes__objeto__subtitle">Descrição Completa</p>
+
+          {edit ? (
+            <textarea
+              defaultValue={descricao}
+              className="detalhes__descricao__input"
+            />
+          ) : (
+            <p className="detalhes__descricao__completa">
+              {descricao || "Nenhuma descrição informada."}
+            </p>
+          )}
+        </div>
+
+        <hr />
+
+        <div>
+          <p className="detalhes__objeto__subtitle">Informações</p>
+
+          {informacoesAdicionais.map((valor) => (
+            <div key={valor.titulo} className="informacoes__adicionais">
+              <img className="circulo__blue" src={circuloBlue} />
+
+              <p className="detalhes__descricao__adicional">{valor.titulo}:</p>
+
+              {edit ? (
+                valor.titulo === "Data" || valor.titulo === "Horário" ? (
+                  <p className="detalhes__descricao__adicional">
+                    {valor.valor}
+                  </p>
+                ) : (
+                  <input
+                    type="text"
+                    defaultValue={valor.valor}
+                    className="detalhes__principal__input"
+                  />
+                )
+              ) : (
+                <p className="detalhes__descricao__adicional">{valor.valor}</p>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <hr />
+
+        <div>
+          <p className="detalhes__objeto__subtitle">
+            Complemento de localização
+          </p>
+
+          {edit ? (
+            <textarea
+              defaultValue={localizacao.complemento ?? ""}
+              className="detalhes__complemento__input"
+            />
+          ) : (
+            <p className="detalhes__descricao__complemento">
+              {localizacao.complemento || "Nenhum complemento informado."}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default Detalhes;

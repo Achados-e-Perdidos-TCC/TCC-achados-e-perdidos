@@ -8,6 +8,7 @@ import Sidebar from '../components/sidebar/Sidebar.jsx';
 import UserObjects from '../components/user-objects/UserObjects.jsx';
 import UserProfile from '../components/user-profile/UserProfile.jsx'; 
 import UserNotifications from '../components/user-notifications/UserNotifications.jsx'; 
+import Loading from '../../../../pages/errors/loading/Loading.jsx';
 
 function User(){
 
@@ -40,7 +41,7 @@ function User(){
         localStorage.setItem('lastUserPage', pageActive) 
     }, [pageActive]); 
 
-    if (!userInfos) { return ( <p> Carregando... </p> )}
+    if (!userInfos) { return ( <Loading /> )}
 
     return (
         <section className='user__area'>
