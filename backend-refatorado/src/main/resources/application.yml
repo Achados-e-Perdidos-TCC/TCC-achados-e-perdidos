@@ -1,5 +1,7 @@
 server:
-  port: 8080
+  # Plataformas como o Render injetam a porta certa via env var PORT, não
+  # necessariamente 8080 — a aplicação precisa escutar nela.
+  port: ${PORT:8080}
 
 spring:
   application:
