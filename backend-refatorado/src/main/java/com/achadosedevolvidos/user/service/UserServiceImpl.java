@@ -113,6 +113,9 @@ public class UserServiceImpl implements UserService {
         if (request.emailsEnabled() != null) {
             preferences.setEmailsEnabled(request.emailsEnabled());
         }
+        if (request.showEmailOnItems() != null) {
+            preferences.setShowEmailOnItems(request.showEmailOnItems());
+        }
 
         return userMapper.toPreferencesResponse(userPreferencesRepository.save(preferences));
     }

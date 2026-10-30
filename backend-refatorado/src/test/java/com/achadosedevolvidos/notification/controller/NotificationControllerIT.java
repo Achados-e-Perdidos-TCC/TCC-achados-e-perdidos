@@ -79,7 +79,7 @@ class NotificationControllerIT extends IntegrationTestSupport {
         mockMvc.perform(patch("/api/v1/users/me/preferences")
                         .header("Authorization", user.authorizationHeader())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new UpdatePreferencesRequest(false, null))))
+                        .content(objectMapper.writeValueAsString(new UpdatePreferencesRequest(false, null, null))))
                 .andExpect(status().isOk());
 
         mockMvc.perform(patch("/api/v1/users/me")

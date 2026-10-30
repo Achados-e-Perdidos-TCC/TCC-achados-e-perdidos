@@ -19,6 +19,13 @@ import java.util.UUID;
  * ({@code locationText}), mapeado para "endereco"; os outros três ficam
  * {@code null} até o modelo de dados (e o formulário de cadastro) mudar para
  * suportar endereço estruturado.</p>
+ *
+ * <p>"emailResponsavel" só vem preenchido no detalhe público de um item
+ * específico ({@code GET /items/{id}}, via {@code ItemMapper.toResponse}
+ * com o parâmetro de e-mail) — nunca em listagens (busca, "meus objetos"),
+ * pra não virar um vetor de coleta em massa de e-mail de usuário. Além
+ * disso, só aparece se o dono tiver {@code showEmailOnItems} habilitado nas
+ * próprias preferências (default ligado — ver UserPreferences).</p>
  */
 public record ItemResponse(
         UUID id,
@@ -30,7 +37,8 @@ public record ItemResponse(
         String descricao,
         List<String> imagensSecundarias,
         LocalizacaoResponse localizacao,
-        DataEventoResponse data
+        DataEventoResponse data,
+        String emailResponsavel
 ) {
 
     public record LocalizacaoResponse(

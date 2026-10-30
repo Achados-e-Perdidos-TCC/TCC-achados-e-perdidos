@@ -14,6 +14,8 @@ import com.achadosedevolvidos.item.repository.ItemRepository;
 import com.achadosedevolvidos.item.repository.ItemSpecifications;
 import com.achadosedevolvidos.shared.exception.AppException;
 import com.achadosedevolvidos.user.model.User;
+import com.achadosedevolvidos.user.model.UserPreferences;
+import com.achadosedevolvidos.user.repository.UserPreferencesRepository;
 import com.achadosedevolvidos.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -35,6 +37,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final UserPreferencesRepository userPreferencesRepository;
     private final ItemMapper itemMapper;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -87,7 +90,23 @@ public class ItemServiceImpl implements ItemService {
             throw new AppException("Item não encontrado", HttpStatus.NOT_FOUND);
         }
 
-        return itemMapper.toResponse(item);
+        return itemMapper.toResponse(item, resolveEmailResponsavel(item));
+    }
+
+    /**
+     * Só o detalhe público de um item específico mostra o e-mail do dono
+     * (nunca em listagem/busca — ver javadoc de ItemResponse), e só se o
+     * próprio dono não tiver desligado showEmailOnItems nas preferências.
+     * Sem linha em user_preferences ainda = default ligado, mesmo critério
+     * usado em GET /users/me.
+     */
+    private String resolveEmailResponsavel(Item item) {
+        UUID ownerId = item.getUser().getId();
+        boolean showEmail = userPreferencesRepository.findByUserId(ownerId)
+                .map(UserPreferences::isShowEmailOnItems)
+                .orElse(true);
+
+        return showEmail ? item.getUser().getEmail() : null;
     }
 
     /**

@@ -32,4 +32,15 @@ public class UserPreferences extends BaseEntity {
     @Column(name = "emails_enabled", nullable = false)
     @Builder.Default
     private boolean emailsEnabled = true;
+
+    /**
+     * Controla se o e-mail de cadastro aparece como "emailResponsavel" no
+     * detalhe público de cada item do usuário (GET /items/{id}, sem
+     * autenticação) — ver ItemServiceImpl.findById. Default true: quem
+     * publica um item perdido/achado normalmente quer ser contatado: quem
+     * se importa com privacidade desliga manualmente.
+     */
+    @Column(name = "show_email_on_items", nullable = false)
+    @Builder.Default
+    private boolean showEmailOnItems = true;
 }

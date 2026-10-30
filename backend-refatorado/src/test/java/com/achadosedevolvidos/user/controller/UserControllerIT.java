@@ -157,14 +157,15 @@ class UserControllerIT extends IntegrationTestSupport {
                         .header("Authorization", user.authorizationHeader()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.preferences.notificationsEnabled").value(true))
-                .andExpect(jsonPath("$.preferences.emailsEnabled").value(true));
+                .andExpect(jsonPath("$.preferences.emailsEnabled").value(true))
+                .andExpect(jsonPath("$.preferences.showEmailOnItems").value(true));
     }
 
     @Test
     void sunnyDay_deveAtualizarApenasAsPreferenciasEnviadas() throws Exception {
         AuthenticatedTestUser user = registerAndAuthenticate("Atualiza Preferencias");
 
-        UpdatePreferencesRequest primeiraAtualizacao = new UpdatePreferencesRequest(false, null);
+        UpdatePreferencesRequest primeiraAtualizacao = new UpdatePreferencesRequest(false, null, null);
 
         mockMvc.perform(patch("/api/v1/users/me/preferences")
                         .header("Authorization", user.authorizationHeader())
@@ -172,9 +173,10 @@ class UserControllerIT extends IntegrationTestSupport {
                         .content(objectMapper.writeValueAsString(primeiraAtualizacao)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.notificationsEnabled").value(false))
-                .andExpect(jsonPath("$.emailsEnabled").value(true));
+                .andExpect(jsonPath("$.emailsEnabled").value(true))
+                .andExpect(jsonPath("$.showEmailOnItems").value(true));
 
-        UpdatePreferencesRequest segundaAtualizacao = new UpdatePreferencesRequest(null, false);
+        UpdatePreferencesRequest segundaAtualizacao = new UpdatePreferencesRequest(null, false, false);
 
         mockMvc.perform(patch("/api/v1/users/me/preferences")
                         .header("Authorization", user.authorizationHeader())
@@ -183,12 +185,13 @@ class UserControllerIT extends IntegrationTestSupport {
                 .andExpect(status().isOk())
                 // Não enviado na segunda chamada: preservado da primeira.
                 .andExpect(jsonPath("$.notificationsEnabled").value(false))
-                .andExpect(jsonPath("$.emailsEnabled").value(false));
+                .andExpect(jsonPath("$.emailsEnabled").value(false))
+                .andExpect(jsonPath("$.showEmailOnItems").value(false));
     }
 
     @Test
     void rainyDay_deveRecusarAtualizacaoDePreferenciasSemAutenticacao() throws Exception {
-        UpdatePreferencesRequest request = new UpdatePreferencesRequest(true, true);
+        UpdatePreferencesRequest request = new UpdatePreferencesRequest(true, true, true);
 
         mockMvc.perform(patch("/api/v1/users/me/preferences")
                         .contentType(MediaType.APPLICATION_JSON)

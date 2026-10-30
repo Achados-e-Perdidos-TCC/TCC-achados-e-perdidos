@@ -17,6 +17,15 @@ public class ItemMapper {
     private static final DateTimeFormatter HORA_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public ItemResponse toResponse(Item item) {
+        return toResponse(item, null);
+    }
+
+    /**
+     * emailResponsavel já vem resolvido por quem chama (ItemServiceImpl) —
+     * o Mapper não decide se o e-mail deve ou não aparecer, só monta a
+     * resposta com o que foi passado.
+     */
+    public ItemResponse toResponse(Item item, String emailResponsavel) {
         List<String> imagens = item.getImages() == null
                 ? List.of()
                 : item.getImages().stream()
@@ -52,7 +61,8 @@ public class ItemMapper {
                 item.getShortDescription(),
                 imagens,
                 localizacao,
-                data
+                data,
+                emailResponsavel
         );
     }
 }
