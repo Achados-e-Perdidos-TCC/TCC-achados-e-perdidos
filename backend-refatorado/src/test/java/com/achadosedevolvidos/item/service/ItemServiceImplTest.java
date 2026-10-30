@@ -9,6 +9,8 @@ import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.item.repository.ItemRepository;
 import com.achadosedevolvidos.shared.exception.AppException;
 import com.achadosedevolvidos.user.model.User;
+import com.achadosedevolvidos.user.model.UserPreferences;
+import com.achadosedevolvidos.user.repository.UserPreferencesRepository;
 import com.achadosedevolvidos.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,6 +48,9 @@ class ItemServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
+    private UserPreferencesRepository userPreferencesRepository;
+
+    @Mock
     private ApplicationEventPublisher eventPublisher;
 
     private ItemServiceImpl itemService;
@@ -55,7 +60,10 @@ class ItemServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        itemService = new ItemServiceImpl(itemRepository, categoryRepository, userRepository, new ItemMapper(), eventPublisher);
+        itemService = new ItemServiceImpl(
+                itemRepository, categoryRepository, userRepository, userPreferencesRepository,
+                new ItemMapper(), eventPublisher
+        );
 
         user = User.builder().id(UUID.randomUUID()).name("Ana").email("ana@teste.com")
                 .role(User.Role.USER).build();
@@ -115,16 +123,33 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void sunnyDay_deveEncontrarItemPorId() {
+    void sunnyDay_deveEncontrarItemPorIdEIncluirEmailDoDonoPorDefault() {
         Item item = Item.builder().id(UUID.randomUUID()).user(user).category(category)
                 .type(Item.ItemType.ENCONTRADO).title("Chaveiro").eventDate(LocalDateTime.now())
                 .createdAt(LocalDateTime.now()).build();
         when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
+        when(userPreferencesRepository.findByUserId(user.getId())).thenReturn(Optional.empty());
 
         ItemResponse response = itemService.findById(item.getId());
 
         assertThat(response.id()).isEqualTo(item.getId());
         assertThat(response.nome()).isEqualTo("Chaveiro");
+        // Sem linha em user_preferences ainda = default ligado.
+        assertThat(response.emailResponsavel()).isEqualTo(user.getEmail());
+    }
+
+    @Test
+    void sunnyDay_naoDeveIncluirEmailQuandoDonoDesligouAPreferencia() {
+        Item item = Item.builder().id(UUID.randomUUID()).user(user).category(category)
+                .type(Item.ItemType.ENCONTRADO).title("Chaveiro").eventDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now()).build();
+        when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
+        when(userPreferencesRepository.findByUserId(user.getId()))
+                .thenReturn(Optional.of(UserPreferences.builder().showEmailOnItems(false).build()));
+
+        ItemResponse response = itemService.findById(item.getId());
+
+        assertThat(response.emailResponsavel()).isNull();
     }
 
     @Test

@@ -1,0 +1,6 @@
+target/
+uploads/
+.env
+*.md
+.idea/
+.git/
