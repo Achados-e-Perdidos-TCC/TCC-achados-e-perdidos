@@ -18,7 +18,7 @@ Documentação relacionada:
 - **`README-FRONTEND.md`** — guia único para o time de front-end: catálogo
   completo de endpoints (request/response de cada um) e todas as regras de
   segurança que o cliente precisa respeitar (armazenamento de token, CORS,
-  autenticação do WebSocket, etc.). Comece por aqui se você é do front-end.
+  etc.). Comece por aqui se você é do front-end.
 - **`ARQUITETURA.md`** — o que mudou no refactor e por quê (desacoplamento,
   Flyway, estrutura de pacotes).
 - **`README-AUTH.md`** — detalhes do mecanismo de autenticação (Bearer JWT):
@@ -29,8 +29,8 @@ Documentação relacionada:
 ## Stack
 
 Java 21 · Spring Boot 3.3 · Spring Security 6 (Bearer JWT) ·
-Spring Data JPA · Hibernate 6 · PostgreSQL 16 · Flyway · WebSocket/STOMP ·
-Maven · Lombok · JJWT 0.12 · JUnit 5
+Spring Data JPA · Hibernate 6 · PostgreSQL 16 · Flyway ·
+Maven · Lombok · JJWT 0.12 · Bucket4j · JUnit 5
 
 ---
 
@@ -211,18 +211,15 @@ mvn verify -Dskip.unit.tests=true
 ```
 
 **Unitários** (Mockito, sem Spring, sem banco): `JwtService`, `AuthService`,
-`ItemServiceImpl`, `ChatServiceImpl` e `MatchEngineService` — cobrindo o
-caminho feliz e os principais erros de cada um (e-mail duplicado, credenciais
-inválidas, usuário/categoria/match inexistente, remetente que não participa da
-conversa, etc.).
+`ItemServiceImpl` e `LoginRateLimiter` — cobrindo o caminho feliz e os
+principais erros de cada um (e-mail duplicado, credenciais inválidas,
+usuário/categoria inexistente, limite de tentativas de login, etc.).
 
 **Integração** (`@SpringBootTest` + Postgres real via Testcontainers):
-endpoints REST de auth/itens/categorias/chat/perfil/upload (CRUD completo de
-item incluído: edição, exclusão, troca de status e o filtro combinado de
-`/items/me`), o fluxo assíncrono completo
-`item criado → evento → motor de match → match persistido`
-(`MatchFlowIT`), e a conexão WebSocket/STOMP autenticada do chat
-(`ChatWebSocketIT`).
+endpoints REST de auth/itens/categorias/perfil/upload/notificações (CRUD
+completo de item incluído: edição, exclusão, troca de status e o filtro
+combinado de `/items/me`) e o fluxo assíncrono de notificação por evento
+(`item/perfil atualizado → evento → notificação criada`).
 
 ### 2.5. Rodando a aplicação
 
@@ -269,7 +266,7 @@ Resumo funcional — a justificativa técnica de cada item está em
 
 - **Reorganização por feature**: um único pacote raiz
   `com.achadosedevolvidos`, dividido em `auth`, `user`, `category`, `item`,
-  `match`, `chat`, `config` e `shared`, eliminando a duplicidade de
+  `upload`, `notification`, `config` e `shared`, eliminando a duplicidade de
   controllers/entidades do protótipo original.
 - **Schema de banco versionado via Flyway** (`V1` a `V14`, em
   `src/main/resources/db/migration`), com `ddl-auto: validate` — o Hibernate
@@ -283,35 +280,31 @@ Resumo funcional — a justificativa técnica de cada item está em
 - **`ItemController` corrigido**: antes lia `@RequestAttribute("userId")`
   (nunca populado por nenhum filtro); agora usa
   `@AuthenticationPrincipal AuthenticatedUser`.
-- **WebSocket do chat autenticado**: `StompAuthChannelInterceptor` passou a
-  exigir e validar um Bearer JWT no `CONNECT` do STOMP; o remetente da
-  mensagem vem do `Principal` da sessão autenticada, nunca de um campo
-  enviado pelo cliente. `ChatServiceImpl` valida que o remetente é de fato um
-  dos dois donos de item do match.
-- **Desacoplamento `item` ↔ `match` via evento**: `ItemServiceImpl` publica
-  um `ItemCreatedEvent` (não conhece o módulo `match`); um listener
-  `@TransactionalEventListener(phase = AFTER_COMMIT)` + `@Async` dispara o
-  motor de match numa thread separada, sem afetar a resposta HTTP de criação
-  do item e sem propagar erros do motor de match.
-- **Motor de match (`MatchEngineService`) puro e testável**: opera sobre um
-  `record` (`MatchCandidate`), sem dependência de JPA — testado com
-  `new MatchEngineService()`, sem subir contexto Spring (`MatchEngineServiceTest`).
+- **Motor de match automático e chat em tempo real, removidos por decisão
+  do time**: o projeto teve, por um tempo, um motor de correspondência
+  (`match/`) e um chat construído em cima dele (`chat/`, cada mensagem
+  pertencia a um match). Os dois foram removidos por completo (migration
+  `V19`) — chat saiu junto por depender 100% de match, sem nenhuma tela de
+  front-end construída sobre ele ainda. A arquitetura de desacoplamento por
+  evento que o motor de match motivou originalmente continua sendo o padrão
+  do projeto, hoje usada entre `item`/`user` e `notification` (ver abaixo).
+  Detalhes em `ARQUITETURA.md`, seção 3.
 - **Busca dinâmica de itens** (`GET /api/v1/items/search`) via Spring Data
   JPA Specifications, com cada filtro isolado e combinável em
   `ItemSpecifications`.
 - **`BaseEntity`** centraliza `id` (UUID) e `createdAt` (`@PrePersist`) — as
   entidades e services deixaram de redeclarar/preencher isso manualmente.
 - **Camadas com contrato explícito**: Controller → Service (interface) →
-  Repository em todo fluxo de escrita (`ItemService`, `MatchService`,
-  `ChatService`), permitindo trocar implementação ou mockar em teste sem
-  tocar no Controller.
+  Repository em todo fluxo de escrita (`ItemService`, `UserService`,
+  `NotificationService`), permitindo trocar implementação ou mockar em
+  teste sem tocar no Controller.
 - **Ambiente de desenvolvimento reprodutível**: `docker-compose.yml` (Postgres
   com volume nomeado, dados persistentes) + `.env.example` como template —
   ver seção 2 acima.
 - **Suíte de testes unitários e de integração** (ver seção 2.4) — os de
   integração usam Postgres real via Testcontainers, cobrindo autenticação
-  (JWT), itens, categorias, perfil de usuário, chat e o fluxo assíncrono
-  completo de match.
+  (JWT), itens, categorias, perfil de usuário e o fluxo assíncrono de
+  notificação por evento.
 - **Pipeline de CI no GitHub Actions** (ver seção 3) — compila e roda as duas
   suítes de teste a cada push/PR.
 - **Campo `shortDescription` em `Item`** (migrations `V10`/`V11`): itens
@@ -330,10 +323,11 @@ Resumo funcional — a justificativa técnica de cada item está em
   senha exigindo a senha atual, revogando todos os refresh tokens da conta
   ao final — mesma lógica de segurança do reset de senha.
 - **Preferências de notificação** (`PATCH /users/me/preferences`; migration
-  `V16` cria a tabela `user_preferences`): liga/desliga notificações, alertas
-  de match e e-mails, numa tabela própria (não colunas em `users`) criada sob
-  demanda na primeira atualização — até lá `GET /users/me` devolve os valores
-  padrão (tudo habilitado).
+  `V16` cria a tabela `user_preferences`): liga/desliga notificações e
+  e-mails, numa tabela própria (não colunas em `users`) criada sob demanda
+  na primeira atualização — até lá `GET /users/me` devolve os valores
+  padrão (tudo habilitado). Ganhou depois um terceiro toggle,
+  `showEmailOnItems` (migration `V20` — ver abaixo).
 - **Exclusão de conta é soft delete** (`DELETE /users/me`; migration `V15`
   adiciona `active` em `users`): marca `active = false` em vez de apagar a
   linha, revoga todos os refresh tokens e marca os itens do próprio usuário
@@ -346,16 +340,23 @@ Resumo funcional — a justificativa técnica de cada item está em
   quanto `status` real), `PATCH /items/{id}` (edição parcial) e
   `PATCH /items/{id}/status`, ambos restritos ao dono (`403` pra quem não
   é). `DELETE /items/{id}` é soft delete (`status = INATIVO`) em vez de
-  apagar a linha — evita quebrar `matches`/mensagens já vinculados ao item,
-  que não têm `ON DELETE CASCADE`; o item some da busca pública e do
-  detalhe, mas continua visível no histórico do próprio dono.
+  apagar a linha, pra preservar histórico; o item some da busca pública e
+  do detalhe, mas continua visível no histórico do próprio dono.
+- **`emailResponsavel` no detalhe público de item** (`GET /items/{id}`;
+  migration `V20` adiciona `showEmailOnItems` em `user_preferences`, default
+  ligado): o front-end usa pra montar um `mailto:` no formulário "Tenho
+  informações sobre este objeto" — sem endpoint de envio de mensagem. Só
+  aparece no detalhe de um item específico, nunca em listagem/busca (mesmo
+  `ItemResponse`, mas só `findById` resolve o e-mail), e só se o dono não
+  tiver desligado a preferência. Decisão de privacidade alinhada antes de
+  implementar, já que o endpoint é público e sem autenticação — detalhes em
+  `ARQUITETURA.md`, seção 16.
 - **Módulo `notification/` — notificações** (`GET/PATCH /api/v1/notifications`;
   migration `V17` cria a tabela): nascem sozinhas, disparadas por evento de
-  domínio de outros módulos (troca de status de item, match encontrado,
-  perfil atualizado) — nenhum deles conhece o módulo `notification`
-  diretamente, mesmo desacoplamento já usado entre `item` e `match`. Cada
-  criação respeita a preferência do usuário (`notificationsEnabled`/
-  `matchAlertsEnabled`). Detalhes em `ARQUITETURA.md`, seção 14.
+  domínio de outros módulos (troca de status de item, perfil atualizado) —
+  nenhum deles conhece o módulo `notification` diretamente. Cada criação
+  respeita a preferência `notificationsEnabled` do usuário. Detalhes em
+  `ARQUITETURA.md`, seção 14.
 - **Módulo `upload/` — envio de imagens**: `POST /api/v1/uploads/images`
   (multipart) grava em disco local (`app.upload.dir`, default `./uploads`,
   servido de volta em `/uploads/**`) e devolve a URL a ser usada em
@@ -375,14 +376,17 @@ Resumo funcional — a justificativa técnica de cada item está em
     em vez de `404`, pelo mesmo motivo — o handler genérico de `Exception`
     interceptava a `NoResourceFoundException` do Spring antes dela virar o
     404 que já carregava por padrão.
-  - `ItemServiceImpl.findById/search`, `MatchServiceImpl.findMatchesForItem`
-    e `ChatServiceImpl.history`: como `spring.jpa.open-in-view` está
-    desligado (decisão deliberada do projeto), esses quatro métodos de
-    leitura lançavam `LazyInitializationException` (→ 500) ao tentar
-    acessar relações `@ManyToOne` preguiçosas (`item.getUser()`,
-    `match.getLostItem()`, etc.) fora de uma transação. Faltava
-    `@Transactional(readOnly = true)` nos quatro.
+  - `ItemServiceImpl.findById/search` e dois métodos de leitura dos módulos
+    match/chat (já removidos): como `spring.jpa.open-in-view` está desligado
+    (decisão deliberada do projeto), esses métodos de leitura lançavam
+    `LazyInitializationException` (→ 500) ao tentar acessar relações
+    `@ManyToOne` preguiçosas (`item.getUser()`, etc.) fora de uma transação.
+    Faltava `@Transactional(readOnly = true)`.
 
+- **Bug corrigido: `icon_url` sempre nulo em categorias** (migration `V18`):
+  a coluna foi adicionada em `V12`, mas nunca populada — as 6 categorias
+  semeadas por `V7` ficavam com `icon_url = NULL`, então `ItemResponse`
+  nunca trazia um ícone de verdade em nenhuma busca/detalhe de item.
 - **Rate limiting em `POST /api/v1/auth/login`** (Bucket4j, em memória): duas
   defesas independentes — um limite largo por IP (volumétrico, `60`/min por
   padrão) via `LoginRateLimitFilter`, e o limite de verdade contra força
@@ -417,8 +421,7 @@ GET  /api/v1/categories
 
 POST   /api/v1/items
 GET    /api/v1/items/search?type=&categoryId=&query=&locationText=&dateFrom=&dateTo=&page=&size=&sort=
-GET    /api/v1/items/{id}
-GET    /api/v1/items/{id}/matches
+GET    /api/v1/items/{id}                      (inclui emailResponsavel, se o dono permitir)
 GET    /api/v1/items/me?status=                (filtro aceita type OU status, ver ItemServiceImpl)
 PATCH  /api/v1/items/{id}                      (dono)
 DELETE /api/v1/items/{id}                      (dono — soft delete, status=INATIVO)
@@ -426,10 +429,6 @@ PATCH  /api/v1/items/{id}/status               (dono)
 
 POST /api/v1/uploads/images                    (multipart, devolve { url })
 GET  /uploads/{arquivo}                        (serve a imagem enviada, público)
-
-GET  /api/v1/matches/{matchId}/messages        (histórico do chat)
-WS   /ws  →  SEND /app/chat.sendMessage/{matchId}
-             SUBSCRIBE /topic/conversation/{matchId}
 
 GET    /api/v1/notifications
 PATCH  /api/v1/notifications/{id}/read
@@ -445,10 +444,8 @@ com.achadosedevolvidos
 ├── category/      # Categoria (entidade simples, CRUD de leitura)
 ├── item/          # Item, ItemImage, busca, DTOs, evento de criação
 ├── upload/        # Upload de imagens (multipart) para disco local
-├── match/         # Match, motor de pontuação puro, orquestração
-├── chat/          # Mensagens por match, WebSocket autenticado
-├── notification/  # Notificações criadas por evento (item/match/user)
-├── config/        # Security, WebSocket, Async, beans de autenticação
+├── notification/  # Notificações criadas por evento (item/user)
+├── config/        # Security, Async, beans de autenticação
 └── shared/        # BaseEntity, exceções e resposta de erro padrão
 ```
 

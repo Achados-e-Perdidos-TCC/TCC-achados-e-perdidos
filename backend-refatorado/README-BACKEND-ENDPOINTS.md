@@ -46,8 +46,8 @@ service do projeto implementado direto, por ser pequeno) → `UserRepository` +
 | `GET /` | Devolve o perfil do usuário autenticado, com as preferências aninhadas. | — |
 | `PATCH /` | Atualização parcial (`name`, `phone`, `city`, `avatarUrl`) — campo omitido/`null` = mantém. | `name`, se enviado, não pode ser vazio/só espaço (`400`). |
 | `PATCH /password` | Troca a senha; revoga **todos** os refresh tokens da conta ao final. | Exige a senha atual correta (`401` se errada); nova senha ≥ 8 caracteres. |
-| `PATCH /preferences` | Liga/desliga `notificationsEnabled`/`matchAlertsEnabled`/`emailsEnabled`, atualização parcial. | Find-or-create: cria a linha em `user_preferences` na primeira chamada (não existe uma por padrão). |
-| `DELETE /` | **Soft delete de conta.** Marca `active=false`, revoga todos os refresh tokens, marca todos os itens do usuário como `INATIVO`. | Efeito imediato: bloqueia login novo (`DisabledException` → `401`) **e** qualquer token já emitido (`JwtAuthenticationFilter`/`StompAuthChannelInterceptor` checam `isEnabled()`). Não apaga nenhuma linha do banco. |
+| `PATCH /preferences` | Liga/desliga `notificationsEnabled`/`emailsEnabled`/`showEmailOnItems`, atualização parcial. | Find-or-create: cria a linha em `user_preferences` na primeira chamada (não existe uma por padrão). `showEmailOnItems` controla se `emailResponsavel` aparece no detalhe público dos itens do usuário (seção 4). |
+| `DELETE /` | **Soft delete de conta.** Marca `active=false`, revoga todos os refresh tokens, marca todos os itens do usuário como `INATIVO`. | Efeito imediato: bloqueia login novo (`DisabledException` → `401`) **e** qualquer token já emitido (`JwtAuthenticationFilter` checa `isEnabled()`). Não apaga nenhuma linha do banco. |
 
 Implementação: `UserController` → `UserService`/`UserServiceImpl` →
 `UserRepository` + `UserPreferencesRepository` + `RefreshTokenRepository` +
@@ -68,14 +68,13 @@ Implementação: `UserController` → `UserService`/`UserServiceImpl` →
 
 | Endpoint | Auth | O que faz | Exigências / regras |
 |---|---|---|---|
-| `POST /` | 🔒 | Cria o item e dispara o motor de match assincronamente (`ItemCreatedEvent` → listener `@Async` após commit). | `categoryId` precisa existir (`400` se não); `eventDate` não pode ser futuro; `shortDescription` até 100 caracteres. |
-| `GET /search` | público | Busca com filtros combináveis (`type`, `categoryId`, `query`, `locationText`, intervalo de datas), paginada. | Implementado via `ItemSpecifications` (Spring Data JPA Specification), cada filtro isolado. Busca por raio geográfico (lat/lng) ainda **não** filtra de fato — ver pendências no `ARQUITETURA.md`. |
-| `GET /{id}` | público | Detalhe do item. | `404` se não existir **ou** se estiver `INATIVO` (soft-deletado) — a menos que quem pergunta seja o próprio dono via `GET /me`. |
-| `GET /{id}/matches` | 🔒 | Lista os matches encontrados para o item. | Qualquer usuário autenticado pode consultar, não só o dono. |
+| `POST /` | 🔒 | Cria o item. | `categoryId` precisa existir (`400` se não); `eventDate` não pode ser futuro; `shortDescription` até 100 caracteres. |
+| `GET /search` | público | Busca com filtros combináveis (`type`, `categoryId`, `query`, `locationText`, intervalo de datas), paginada. | Implementado via `ItemSpecifications` (Spring Data JPA Specification), cada filtro isolado. Busca por raio geográfico (lat/lng) ainda **não** filtra de fato — ver pendências no `ARQUITETURA.md`. Nunca inclui `emailResponsavel` (ver `GET /{id}`). |
+| `GET /{id}` | público | Detalhe do item. Inclui `emailResponsavel` (e-mail do dono) se o dono não tiver desligado `showEmailOnItems`. | `404` se não existir **ou** se estiver `INATIVO` (soft-deletado) — a menos que quem pergunta seja o próprio dono via `GET /me`. `emailResponsavel` só é resolvido aqui, nunca em listagem/busca — ver `ARQUITETURA.md`, seção 16. |
 | `GET /me` | 🔒 | "Meus objetos", com filtro combinado `status`. | `status` aceita tanto um `ItemType` (PERDIDO/ENCONTRADO) quanto um `ItemStatus` real — `parseCombinedStatusFilter` tenta os dois, `400` se não bater com nenhum. |
 | `PATCH /{id}` | 🔒 (dono) | Atualização parcial dos campos editáveis. | `403` se quem chama não for `item.getUser().getId()`. `type` não é editável (fixo desde a criação); status tem endpoint próprio. |
-| `DELETE /{id}` | 🔒 (dono) | Soft delete — marca `status=INATIVO`, não apaga a linha. | `403` se não for o dono. Motivo de ser soft delete: `matches`/`messages` já vinculados não têm `ON DELETE CASCADE`. |
-| `PATCH /{id}/status` | 🔒 (dono) | Muda só o status de workflow (`ANALISANDO`/`PROCURANDO`/`POSSIVEL_MATCH`/`RESOLVIDO`/`INATIVO`). | `403` se não for o dono. |
+| `DELETE /{id}` | 🔒 (dono) | Soft delete — marca `status=INATIVO`, não apaga a linha. | `403` se não for o dono. |
+| `PATCH /{id}/status` | 🔒 (dono) | Muda só o status de workflow (`ANALISANDO`/`PROCURANDO`/`RESOLVIDO`/`INATIVO`). | `403` se não for o dono. |
 
 Implementação: `ItemController` → `ItemService`/`ItemServiceImpl` →
 `ItemRepository` (+ `ItemSpecifications` para a busca). Verificação de dono
@@ -98,20 +97,7 @@ mesma interface de `FileStorageService`.
 
 ---
 
-## 6. Chat (`match/{matchId}/messages` REST + WebSocket) — `chat/`
-
-| Endpoint | Auth | O que faz | Exigências / regras |
-|---|---|---|---|
-| `GET /api/v1/matches/{matchId}/messages` | 🔒 | Histórico de mensagens do match. | Quem chama precisa ser um dos dois donos de item do match (`ChatServiceImpl` valida). |
-| `WS /ws` (SockJS) + `SEND /app/chat.sendMessage/{matchId}` | 🔒 (no `CONNECT`) | Envia mensagem em tempo real, publicada em `/topic/conversation/{matchId}`. | `StompAuthChannelInterceptor` exige `Authorization: Bearer <jwt>` como header nativo do frame `CONNECT`, valida assinatura/expiração **e** `isEnabled()` (conta não pode estar desativada). Remetente vem do `Principal` da sessão autenticada, nunca de um campo enviado pelo cliente. |
-
-Match em si não tem endpoint de criação — é gerado automaticamente pelo motor
-de match (`match/service/MatchEngineService`) quando um item é criado, sem
-nenhuma ação manual do usuário.
-
----
-
-## 7. Notificações (`/api/v1/notifications`) — `notification/` — todos 🔒
+## 6. Notificações (`/api/v1/notifications`) — `notification/` — todos 🔒
 
 | Endpoint | O que faz | Exigências / regras |
 |---|---|---|
@@ -120,26 +106,23 @@ nenhuma ação manual do usuário.
 | `PATCH /read-all` | Marca todas as notificações do usuário como lidas de uma vez. | `UPDATE` em massa (`NotificationRepository.markAllAsReadByUserId`), não carrega uma a uma. |
 
 Não existem endpoints de criação — uma notificação nasce sozinha, disparada
-por evento de domínio de outros módulos (mesmo desacoplamento já usado entre
-`item` e `match`):
+por evento de domínio de outros módulos:
 
 - `ItemServiceImpl.updateStatus` → `ITEM_UPDATED`
-- `MatchServiceImpl.persistMatch` → `POSSIBLE_MATCH` (os dois donos de item)
 - `UserServiceImpl.updateProfile` → `PROFILE_UPDATED`
 
-Cada criação respeita a preferência do usuário (`notificationsEnabled`/
-`matchAlertsEnabled` em `user_preferences`) — ver `ARQUITETURA.md`, seção 14.
-Migration: `V17`.
+Cada criação respeita a preferência `notificationsEnabled` do usuário em
+`user_preferences` — ver `ARQUITETURA.md`, seção 14. Migration: `V17`.
 
 ---
 
-## 8. O que ainda falta fazer
+## 7. O que ainda falta fazer
 
 Fora de escopo por decisão do time (não confundir com "esquecido"):
 
-- Endpoints de **ação manual sobre Matching** (aceitar/rejeitar um match
-  manualmente) — hoje o match é só criado automaticamente e consultado via
-  `GET /items/{id}/matches`. Não implementar sem alinhar com o time antes.
+- Match automático e chat em tempo real foram implementados e depois
+  **removidos por completo** (migration `V19`) — decisão do time, não
+  reimplementar sem alinhar antes.
 - Busca geográfica por raio de verdade (PostGIS ou Haversine).
 - Troca do storage de upload de disco local por S3/Cloudflare R2.
 
