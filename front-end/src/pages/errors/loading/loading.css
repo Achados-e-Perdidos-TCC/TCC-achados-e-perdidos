@@ -1,0 +1,54 @@
+
+.spinner {
+  width: 7rem;
+  height: 7rem;
+  border: 0.4rem solid #e2e8f5;
+  border-top-color: #1261ff;
+  border-left-color: #1261ff;
+  border-radius: 50%;
+  animation: spin 1.25s ease infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg) }
+    to { transform: rotate(360deg) }
+}
+
+.loading__container{
+    display: flex;
+    justify-content: center;
+}
+
+.loading__content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+    border: 0.2rem solid var(--border-color);
+    background-color: var(--card-color);
+    box-shadow: var(--subtle-shadow);
+    border-radius: 1rem;
+    padding: 3.5rem;
+    gap: 2rem;
+}
+
+.loading__content__texts{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* texts */
+
+.loading__title{
+    font-size: clamp(1.5rem, 3vw, 2.65rem);
+    color: var(--primary-color-text);
+    font-weight: 600;
+}
+
+.loading__subtitle{
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--secondary-color-gray);
+    max-width: 45ch;
+    text-align: center;
+}
