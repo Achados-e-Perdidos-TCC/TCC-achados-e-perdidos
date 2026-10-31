@@ -61,7 +61,6 @@ Passo a passo de instalação de cada um (Windows/macOS/Linux) está em
 | Dependência | Versão | Para que serve |
 |---|---|---|
 | `spring-boot-starter-web` | (BOM) | REST/MVC. |
-| `spring-boot-starter-websocket` | (BOM) | WebSocket/STOMP do chat em tempo real. |
 | `spring-boot-starter-mail` | (BOM) | Envio de e-mail (fluxo de esqueci-minha-senha). |
 | `spring-boot-starter-data-jpa` | (BOM) | JPA/Hibernate. |
 | `postgresql` (driver) | (BOM) | Driver JDBC do Postgres. |
@@ -70,11 +69,12 @@ Passo a passo de instalação de cada um (Windows/macOS/Linux) está em
 | `springdoc-openapi-starter-webmvc-ui` | 2.6.0 | Gera a spec OpenAPI e o Swagger UI em runtime, sem YAML escrito à mão — ver `README-OPENAPI.md`. |
 | `spring-boot-starter-security` | (BOM) | Bearer JWT, único mecanismo de login. |
 | `jjwt-api` / `jjwt-impl` / `jjwt-jackson` | 0.12.6 | Geração/validação dos tokens JWT (`JwtService`). |
+| `bucket4j-core` | 8.10.1 | Rate limiting (token bucket) de `POST /api/v1/auth/login`, por IP e por conta — ver `ARQUITETURA.md`, seção 15. |
 | `lombok` | (BOM) | Reduz boilerplate (getters/setters/builders/construtores). |
 | `spring-boot-starter-test` | (BOM, escopo `test`) | JUnit 5, Mockito, AssertJ, MockMvc. |
 | `spring-security-test` | (BOM, escopo `test`) | Utilitários de teste do Spring Security. |
 | `spring-boot-testcontainers` + `testcontainers:junit-jupiter` + `testcontainers:postgresql` | `1.21.4` (override — ver comentário no `pom.xml`) | Postgres real em container Docker para os testes de integração (`*IT.java`), em vez de H2/banco em memória. |
-| `awaitility` | (BOM, escopo `test`) | Espera assíncrona sem `Thread.sleep` fixo (ex.: aguardar o listener `@Async` do motor de match). |
+| `awaitility` | (BOM, escopo `test`) | Espera assíncrona sem `Thread.sleep` fixo (ex.: aguardar um listener `@Async` de notificação rodar). |
 | `greenmail-junit5` | 2.0.1 (escopo `test`) | Servidor SMTP fake em memória — testes do fluxo de esqueci-minha-senha capturam o e-mail de verdade, sem depender do Mailtrap real. |
 
 Não é necessário instalar nenhuma dessas manualmente — `mvn compile`/`mvn test`

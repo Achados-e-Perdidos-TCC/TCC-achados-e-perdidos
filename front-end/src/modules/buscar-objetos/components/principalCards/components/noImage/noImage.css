@@ -1,0 +1,11 @@
+.principal__cards__noimage__card{
+    border-radius: 1rem;
+    height: clamp(12rem, 16vw, 20rem);
+    width: clamp(12rem, 16vw, 20rem);
+}
+
+.noImage{
+    display: flex;
+    align-self: center;
+    justify-self: center;
+}

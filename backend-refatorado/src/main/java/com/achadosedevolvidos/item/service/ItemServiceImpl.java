@@ -6,7 +6,7 @@ import com.achadosedevolvidos.item.dto.CreateItemRequest;
 import com.achadosedevolvidos.item.dto.ItemResponse;
 import com.achadosedevolvidos.item.dto.ItemSearchFilter;
 import com.achadosedevolvidos.item.dto.UpdateItemRequest;
-import com.achadosedevolvidos.item.event.ItemCreatedEvent;
+import com.achadosedevolvidos.item.event.ItemStatusChangedEvent;
 import com.achadosedevolvidos.item.mapper.ItemMapper;
 import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.item.model.ItemImage;
@@ -14,6 +14,8 @@ import com.achadosedevolvidos.item.repository.ItemRepository;
 import com.achadosedevolvidos.item.repository.ItemSpecifications;
 import com.achadosedevolvidos.shared.exception.AppException;
 import com.achadosedevolvidos.user.model.User;
+import com.achadosedevolvidos.user.model.UserPreferences;
+import com.achadosedevolvidos.user.repository.UserPreferencesRepository;
 import com.achadosedevolvidos.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -28,13 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Propositalmente NÃO depende de MatchService (nem de nada do módulo match):
- * ao criar um item, só publica {@link ItemCreatedEvent} e segue em frente. Quem
- * reage a esse evento (o motor de match) é decidido em outro módulo, de forma
- * assíncrona e após o commit da transação — ver
- * {@code match.listener.ItemCreatedEventListener}.
- */
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
@@ -42,12 +37,13 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final UserPreferencesRepository userPreferencesRepository;
     private final ItemMapper itemMapper;
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
-    public ItemResponse createAndAnalyze(UUID currentUserId, CreateItemRequest request) {
+    public ItemResponse create(UUID currentUserId, CreateItemRequest request) {
         User user = userRepository.findById(currentUserId)
                 .orElseThrow(() -> new AppException("Usuário não encontrado", HttpStatus.UNAUTHORIZED));
 
@@ -70,8 +66,6 @@ public class ItemServiceImpl implements ItemService {
         item.setImages(buildImages(item, request.imageUrls()));
 
         Item saved = itemRepository.save(item);
-
-        eventPublisher.publishEvent(new ItemCreatedEvent(saved.getId()));
 
         return itemMapper.toResponse(saved);
     }
@@ -96,13 +90,29 @@ public class ItemServiceImpl implements ItemService {
             throw new AppException("Item não encontrado", HttpStatus.NOT_FOUND);
         }
 
-        return itemMapper.toResponse(item);
+        return itemMapper.toResponse(item, resolveEmailResponsavel(item));
+    }
+
+    /**
+     * Só o detalhe público de um item específico mostra o e-mail do dono
+     * (nunca em listagem/busca — ver javadoc de ItemResponse), e só se o
+     * próprio dono não tiver desligado showEmailOnItems nas preferências.
+     * Sem linha em user_preferences ainda = default ligado, mesmo critério
+     * usado em GET /users/me.
+     */
+    private String resolveEmailResponsavel(Item item) {
+        UUID ownerId = item.getUser().getId();
+        boolean showEmail = userPreferencesRepository.findByUserId(ownerId)
+                .map(UserPreferences::isShowEmailOnItems)
+                .orElse(true);
+
+        return showEmail ? item.getUser().getEmail() : null;
     }
 
     /**
      * "status" aqui aceita tanto um valor de {@code Item.ItemType}
      * (PERDIDO/ENCONTRADO) quanto de {@code Item.ItemStatus}
-     * (ANALISANDO/PROCURANDO/POSSIVEL_MATCH/RESOLVIDO/INATIVO) — um único filtro
+     * (ANALISANDO/PROCURANDO/RESOLVIDO/INATIVO) — um único filtro
      * combinado, como pedido pelo front-end pra tela "Meus objetos". Ao
      * contrário da busca pública, itens INATIVO (excluídos pelo próprio dono)
      * continuam visíveis aqui, já que é o histórico do próprio usuário.
@@ -163,9 +173,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Soft delete: marca como INATIVO em vez de apagar a linha — o item pode já
-     * ter matches e mensagens de chat vinculados, e não há ON DELETE CASCADE
-     * pra essas tabelas.
+     * Soft delete: marca como INATIVO em vez de apagar a linha, pra o item
+     * continuar visível no histórico do próprio dono (GET /items/me) mesmo
+     * depois de "excluído" da busca pública e do detalhe.
      */
     @Override
     @Transactional
@@ -184,7 +194,11 @@ public class ItemServiceImpl implements ItemService {
         ensureOwner(item, currentUserId);
 
         item.setStatus(newStatus);
-        return itemMapper.toResponse(itemRepository.save(item));
+        Item saved = itemRepository.save(item);
+
+        eventPublisher.publishEvent(new ItemStatusChangedEvent(saved.getId(), currentUserId, saved.getTitle()));
+
+        return itemMapper.toResponse(saved);
     }
 
     private Specification<Item> parseCombinedStatusFilter(String rawStatus) {

@@ -157,8 +157,8 @@ class UserControllerIT extends IntegrationTestSupport {
                         .header("Authorization", user.authorizationHeader()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.preferences.notificationsEnabled").value(true))
-                .andExpect(jsonPath("$.preferences.matchAlertsEnabled").value(true))
-                .andExpect(jsonPath("$.preferences.emailsEnabled").value(true));
+                .andExpect(jsonPath("$.preferences.emailsEnabled").value(true))
+                .andExpect(jsonPath("$.preferences.showEmailOnItems").value(true));
     }
 
     @Test
@@ -173,8 +173,8 @@ class UserControllerIT extends IntegrationTestSupport {
                         .content(objectMapper.writeValueAsString(primeiraAtualizacao)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.notificationsEnabled").value(false))
-                .andExpect(jsonPath("$.matchAlertsEnabled").value(true))
-                .andExpect(jsonPath("$.emailsEnabled").value(true));
+                .andExpect(jsonPath("$.emailsEnabled").value(true))
+                .andExpect(jsonPath("$.showEmailOnItems").value(true));
 
         UpdatePreferencesRequest segundaAtualizacao = new UpdatePreferencesRequest(null, false, false);
 
@@ -185,8 +185,8 @@ class UserControllerIT extends IntegrationTestSupport {
                 .andExpect(status().isOk())
                 // Não enviado na segunda chamada: preservado da primeira.
                 .andExpect(jsonPath("$.notificationsEnabled").value(false))
-                .andExpect(jsonPath("$.matchAlertsEnabled").value(false))
-                .andExpect(jsonPath("$.emailsEnabled").value(false));
+                .andExpect(jsonPath("$.emailsEnabled").value(false))
+                .andExpect(jsonPath("$.showEmailOnItems").value(false));
     }
 
     @Test

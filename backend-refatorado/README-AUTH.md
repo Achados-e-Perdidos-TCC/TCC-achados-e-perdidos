@@ -67,6 +67,12 @@ Erros seguem o padrão já existente do resto da API: `ApiError { status, messag
 - **Logout é "fire and forget"**: `/auth/logout` sempre responde `200`, então não
   precisa tratar erro nele — só limpar os tokens salvos no cliente depois de
   chamar (ou mesmo antes, já que o servidor nunca recusa).
+- **`/auth/login` tem rate limiting**: `429` (com header `Retry-After` em
+  segundos, quando o limite é por IP) se exceder as tentativas permitidas —
+  seja por IP (volumétrico, bem mais alto) ou por conta (bloqueio de força
+  bruta, mais apertado e só contando tentativas falhas). Trate como um erro
+  temporário: mostre uma mensagem pedindo pra tentar de novo em alguns
+  minutos, não um erro de credenciais.
 - **Forgot-password nunca revela se o e-mail existe**: a UI deve mostrar a mesma
   mensagem de sucesso genérica sempre que o endpoint responder `200`, independente
   do e-mail digitado existir ou não. Não construa uma tela de "e-mail não
@@ -132,7 +138,6 @@ mvn verify -Dskip.unit.tests=true    # integração, precisa do Docker rodando
 
 ## Próximos passos sugeridos (fora do escopo deste módulo)
 
-- Rate limiting no `/api/v1/auth/login` (ex.: Bucket4j) para mitigar força bruta.
 - Job de limpeza para linhas expiradas/revogadas em `refresh_tokens` e
   `password_reset_tokens` — hoje elas só se acumulam, sem impacto perceptível
   na escala atual, mas crescimento sem limite eventualmente vai pedir isso.

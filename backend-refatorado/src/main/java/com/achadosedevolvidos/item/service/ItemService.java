@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface ItemService {
 
-    ItemResponse createAndAnalyze(UUID currentUserId, CreateItemRequest request);
+    ItemResponse create(UUID currentUserId, CreateItemRequest request);
 
     Page<ItemResponse> search(ItemSearchFilter filter, Pageable pageable);
 

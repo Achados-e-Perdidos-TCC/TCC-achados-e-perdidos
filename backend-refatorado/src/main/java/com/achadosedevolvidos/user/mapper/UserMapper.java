@@ -34,8 +34,8 @@ public class UserMapper {
         }
         return new PreferencesResponse(
                 preferences.isNotificationsEnabled(),
-                preferences.isMatchAlertsEnabled(),
-                preferences.isEmailsEnabled()
+                preferences.isEmailsEnabled(),
+                preferences.isShowEmailOnItems()
         );
     }
 }

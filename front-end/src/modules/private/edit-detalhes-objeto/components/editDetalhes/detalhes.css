@@ -73,6 +73,16 @@
     outline: none;
 }
 
+.detalhes__principal__input{
+    font-family: inherit;
+    color: var(--primary-color-text);
+    background-color: var(--card-color);
+    border: 0.2rem solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.4rem;
+    outline: none;
+}
+
 .detalhes__infos{
     display: flex;
     gap: 5.5rem;

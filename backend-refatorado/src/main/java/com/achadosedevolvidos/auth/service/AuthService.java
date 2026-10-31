@@ -9,6 +9,7 @@ import com.achadosedevolvidos.auth.dto.RefreshRequest;
 import com.achadosedevolvidos.auth.dto.RegisterRequest;
 import com.achadosedevolvidos.auth.dto.ResetPasswordRequest;
 import com.achadosedevolvidos.auth.model.PasswordResetToken;
+import com.achadosedevolvidos.auth.ratelimit.LoginRateLimiter;
 import com.achadosedevolvidos.auth.model.RefreshToken;
 import com.achadosedevolvidos.auth.repository.PasswordResetTokenRepository;
 import com.achadosedevolvidos.auth.repository.RefreshTokenRepository;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +51,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final EmailService emailService;
+    private final LoginRateLimiter loginRateLimiter;
 
     @Value("${app.jwt.access-expiration-ms}")
     private long accessExpirationMs;
@@ -79,15 +82,39 @@ public class AuthService {
         return buildAuthResponse(user);
     }
 
+    /**
+     * Rate limiting por e-mail (não por IP — isso é o LoginRateLimitFilter,
+     * antes mesmo de chegar aqui): a defesa real contra força bruta/credential
+     * stuffing numa conta específica, mesmo vindo de IPs diferentes. Checa o
+     * limite ANTES de tocar no banco/comparar senha (isEmailRateLimited só
+     * consulta); só consome 1 tentativa do bucket em caso de falha — um login
+     * certo de primeira nunca é penalizado, e reseta o contador da conta.
+     */
     public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new BadCredentialsException("Credenciais inválidas"));
+        if (loginRateLimiter.isEmailRateLimited(request.email())) {
+            throw new AppException(
+                    "Muitas tentativas de login para esta conta. Tente novamente mais tarde.",
+                    HttpStatus.TOO_MANY_REQUESTS
+            );
+        }
 
-        // Lança BadCredentialsException se e-mail/senha não conferirem.
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password())
-        );
+        User user = userRepository.findByEmail(request.email()).orElse(null);
 
+        try {
+            if (user == null) {
+                throw new BadCredentialsException("Credenciais inválidas");
+            }
+            // Lança BadCredentialsException ou DisabledException (conta
+            // desativada) se e-mail/senha não conferirem.
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.email(), request.password())
+            );
+        } catch (AuthenticationException e) {
+            loginRateLimiter.consumeEmailAttempt(request.email());
+            throw e;
+        }
+
+        loginRateLimiter.resetEmailAttempts(request.email());
         return buildAuthResponse(user);
     }
 

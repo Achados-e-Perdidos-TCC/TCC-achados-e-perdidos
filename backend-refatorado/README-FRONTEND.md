@@ -20,7 +20,6 @@ Para outros assuntos, veja:
 
 - REST: `http://localhost:8080/api/v1` em dev (produção/staging: peça a URL
   ao time de backend).
-- WebSocket (chat): `ws://localhost:8080/ws` (SockJS).
 - Todo endpoint autenticado é marcado com 🔒 abaixo e exige o header:
   ```
   Authorization: Bearer <accessToken>
@@ -82,10 +81,7 @@ sessão é o mesmo de um reset de senha:
 
 **Depois de uma chamada `DELETE /users/me` bem-sucedida, limpe os tokens
 salvos e redirecione para a tela de login/logout imediatamente** — não espere
-a próxima chamada autenticada falhar para perceber. Isso vale para REST e
-para o WebSocket do chat: se o cliente tentar abrir uma nova conexão STOMP
-com o token da conta desativada, o servidor recusa o `CONNECT` (mesmo
-tratamento de um token inválido/expirado — seção 2.8).
+a próxima chamada autenticada falhar para perceber.
 
 ### 2.5. Forgot-password nunca revela se o e-mail existe
 
@@ -108,24 +104,19 @@ salvos no cliente.
 dependa dela para nada no front (ex.: não assuma que a URL devolvida termina
 com a mesma extensão do arquivo escolhido pelo usuário).
 
-### 2.8. Autenticação do WebSocket (chat)
+### 2.8. `POST /auth/login` tem rate limiting
 
-O handshake HTTP do SockJS (`/ws`) é público — a autenticação de verdade
-acontece no frame STOMP `CONNECT`, que precisa carregar um **header nativo do
-STOMP** (não query param, não corpo):
+Trate `429` como um erro temporário, nunca como "credenciais inválidas":
+- Por IP (volumétrico, limite mais alto) — proteção básica contra flood do
+  endpoint, independente de qual conta está sendo tentada. Vem com header
+  `Retry-After` (segundos) — se presente, use pra informar quanto tempo
+  esperar antes de deixar tentar de novo.
+- Por conta (bloqueio de força bruta, limite mais apertado) — só conta
+  tentativa com senha errada; um login certo nunca é penalizado por esse
+  limite, mesmo que a conta tenha tido tentativas falhas antes.
 
-```javascript
-const client = new StompJs.Client({
-  webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
-  connectHeaders: {
-    Authorization: `Bearer ${accessToken}`,
-  },
-});
-```
-
-Sem esse header (ou com um token inválido/expirado), o servidor recusa o
-`CONNECT`. Um `accessToken` que já funciona nas chamadas REST funciona aqui
-também — é o mesmo token, mesma validação.
+Mostre uma mensagem de "muitas tentativas, aguarde alguns minutos", não
+redirecione pra uma tela de "senha incorreta".
 
 ---
 
@@ -167,7 +158,7 @@ também — é o mesmo token, mesma validação.
 | GET | `/` | — | `200` `UserProfileResponse` | Perfil do usuário logado, incluindo preferências atuais. |
 | PATCH | `/` | `UpdateProfileRequest` (parcial) | `200` `UserProfileResponse` | Atualiza só os campos enviados (`null`/omitido = mantém). |
 | PATCH | `/password` | `{ currentPassword, newPassword }` (nova ≥ 8 chars) | `200` `{ message }` | Exige a senha atual; revoga todos os refresh tokens ao final (desloga outros dispositivos). |
-| PATCH | `/preferences` | `UpdatePreferencesRequest` (parcial) | `200` `PreferencesResponse` | Liga/desliga notificações, alertas de match, e-mails. |
+| PATCH | `/preferences` | `UpdatePreferencesRequest` (parcial) | `200` `PreferencesResponse` | Liga/desliga notificações, e-mails, e se o e-mail aparece no detalhe público dos seus itens. |
 | DELETE | `/` | — | `200` `{ message }` | **Zona de perigo.** Soft delete — ver seção 2.4 antes de usar. |
 
 ```ts
@@ -189,10 +180,12 @@ também — é o mesmo token, mesma validação.
 // name, se enviado, não pode ser string vazia/só espaços (400)
 
 // PreferencesResponse
-{ notificationsEnabled: boolean; matchAlertsEnabled: boolean; emailsEnabled: boolean }
+{ notificationsEnabled: boolean; emailsEnabled: boolean; showEmailOnItems: boolean }
 
 // UpdatePreferencesRequest (todos os campos opcionais — omitido/null = mantém valor atual)
-{ notificationsEnabled?: boolean; matchAlertsEnabled?: boolean; emailsEnabled?: boolean }
+{ notificationsEnabled?: boolean; emailsEnabled?: boolean; showEmailOnItems?: boolean }
+// showEmailOnItems controla se emailResponsavel aparece no detalhe público
+// dos seus itens (seção 4.4) — default true.
 // Se o usuário nunca chamou PATCH /preferences, GET /users/me.preferences vem com tudo `true`.
 ```
 
@@ -211,11 +204,10 @@ também — é o mesmo token, mesma validação.
 
 | Método | Path | Auth | Body / Query | Resposta | Ação |
 |---|---|---|---|---|---|
-| POST | `/` | 🔒 | `CreateItemRequest` | `201` `ItemResponse` | Cria o item; dispara o motor de match assincronamente (não afeta a resposta). |
-| GET | `/search` | público | query: `type, categoryId, query, locationText, dateFrom, dateTo, lat, lng, page, size, sort` | `200` `Page<ItemResponse>` | Busca pública, todos os filtros opcionais e combináveis. |
-| GET | `/{id}` | público | — | `200` `ItemResponse` | `404` se não existir ou estiver `INATIVO` (e você não for o dono — ver `/me`). |
-| GET | `/{id}/matches` | 🔒 | — | `200` `MatchResponse[]` | Qualquer usuário logado pode ver, não só o dono. |
-| GET | `/me` | 🔒 | query: `status` (opcional), `page, size, sort` | `200` `Page<ItemResponse>` | "Meus objetos". `status` aceita **tanto** um `type` (`PERDIDO`/`ENCONTRADO`) **quanto** um status real (`ANALISANDO`/`PROCURANDO`/`POSSIVEL_MATCH`/`RESOLVIDO`/`INATIVO`) — é o mesmo query param pros dois casos; valor que não bate com nenhum dos dois devolve `400`. |
+| POST | `/` | 🔒 | `CreateItemRequest` | `201` `ItemResponse` | Cria o item. |
+| GET | `/search` | público | query: `type, categoryId, query, locationText, dateFrom, dateTo, lat, lng, page, size, sort` | `200` `Page<ItemResponse>` | Busca pública, todos os filtros opcionais e combináveis. `emailResponsavel` nunca vem preenchido aqui (ver `GET /{id}`). |
+| GET | `/{id}` | público | — | `200` `ItemResponse` | `404` se não existir ou estiver `INATIVO` (e você não for o dono — ver `/me`). Único endpoint que pode trazer `emailResponsavel` preenchido. |
+| GET | `/me` | 🔒 | query: `status` (opcional), `page, size, sort` | `200` `Page<ItemResponse>` | "Meus objetos". `status` aceita **tanto** um `type` (`PERDIDO`/`ENCONTRADO`) **quanto** um status real (`ANALISANDO`/`PROCURANDO`/`RESOLVIDO`/`INATIVO`) — é o mesmo query param pros dois casos; valor que não bate com nenhum dos dois devolve `400`. |
 | PATCH | `/{id}` | 🔒 (dono) | `UpdateItemRequest` (parcial) | `200` `ItemResponse` | `403` se não for o dono. `type` não é editável (fixo desde a criação); status tem endpoint próprio, abaixo. |
 | DELETE | `/{id}` | 🔒 (dono) | — | `204` | Soft delete (`status = INATIVO`) — some da busca pública e do detalhe pra quem não é o dono, mas continua em `GET /items/me`. |
 | PATCH | `/{id}/status` | 🔒 (dono) | `{ status }` | `200` `ItemResponse` | Muda só o status de workflow. |
@@ -243,7 +235,7 @@ também — é o mesmo token, mesma validação.
 }
 
 // { status } de PATCH /{id}/status
-{ status: "ANALISANDO" | "PROCURANDO" | "POSSIVEL_MATCH" | "RESOLVIDO" | "INATIVO" }
+{ status: "ANALISANDO" | "PROCURANDO" | "RESOLVIDO" | "INATIVO" }
 
 // ItemResponse — formato acordado com o front-end (mesmo shape em busca, detalhe e criação)
 {
@@ -264,16 +256,11 @@ também — é o mesmo token, mesma validação.
     complemento: string | null; // idem
   };
   data: { data: string | null; hora: string | null };
-}
-
-// MatchResponse
-{
-  id: string;
-  lostItemId: string; lostItemTitle: string;
-  foundItemId: string; foundItemTitle: string;
-  score: number;
-  status: "PENDENTE" | "ACEITO" | "REJEITADO";
-  createdAt: string;
+  // Só vem preenchido em GET /{id} — null em busca, "meus objetos",
+  // criação/edição. Mesmo quando vem de GET /{id}, pode ser null se o dono
+  // tiver desligado showEmailOnItems (seção 4.2). Use pra montar um
+  // mailto:, não tem endpoint de envio de mensagem.
+  emailResponsavel: string | null;
 }
 ```
 
@@ -292,42 +279,33 @@ perfil. O arquivo servido em `GET /uploads/{arquivo}` é público (não precisa
 de token pra exibir a imagem), só o upload em si exige login. Ver seção 2.7
 para as restrições de tipo/tamanho.
 
-### 4.6. Chat
+### 4.6. Notificações (`/api/v1/notifications`) — 🔒
 
-Histórico via REST, tempo real via WebSocket — os dois usam o `matchId` como
-identificador da conversa.
+Sem endpoint de criação — uma notificação nasce sozinha no backend (troca de
+status de um item seu, perfil atualizado). O shape já bate com o que a tela
+de notificações espera.
 
-| Método | Path | Auth | Resposta |
-|---|---|---|---|
-| GET | `/api/v1/matches/{matchId}/messages` | 🔒 | `200` `ChatMessageResponse[]` |
+| Método | Path | Body | Resposta | Ação |
+|---|---|---|---|---|
+| GET | `/` | — | `200` `NotificationResponse[]` | Lista as notificações do usuário logado, mais recentes primeiro. Sem paginação hoje. |
+| PATCH | `/{id}/read` | — | `200` `NotificationResponse` | Marca uma notificação específica como lida. `403` se não for sua. |
+| PATCH | `/read-all` | — | `200` `{ message }` | Marca todas como lidas de uma vez. |
 
 ```ts
-// ChatMessageResponse
+// NotificationResponse
 {
-  id: string; matchId: string;
-  senderId: string; senderName: string;
-  content: string; sentAt: string;
+  id: string;
+  type: "ITEM_UPDATED" | "PROFILE_UPDATED";
+  title: string;
+  message: string;
+  createdAt: string; // ISO datetime
+  read: boolean;
 }
 ```
 
-**WebSocket** (ver autenticação na seção 2.8):
-
-```javascript
-client.onConnect = () => {
-  client.subscribe(`/topic/conversation/${matchId}`, (frame) => {
-    const message = JSON.parse(frame.body); // ChatMessageResponse
-  });
-};
-
-client.publish({
-  destination: `/app/chat.sendMessage/${matchId}`,
-  body: JSON.stringify({ content: "texto da mensagem" }),
-});
-```
-
-Não existe `senderId` no payload de envio — o remetente vem da autenticação
-da conexão, nunca de um campo que o cliente manda (isso é proposital, evita
-alguém mandar mensagem se passando por outro usuário).
+Se o usuário desligou `notificationsEnabled` em `PATCH /users/me/preferences`,
+a notificação correspondente nem é criada — não é algo pra filtrar no front,
+ela simplesmente não aparece na lista.
 
 ---
 

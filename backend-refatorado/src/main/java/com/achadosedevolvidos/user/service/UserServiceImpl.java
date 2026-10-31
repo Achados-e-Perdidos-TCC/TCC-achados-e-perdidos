@@ -13,9 +13,11 @@ import com.achadosedevolvidos.user.dto.UserProfileResponse;
 import com.achadosedevolvidos.user.mapper.UserMapper;
 import com.achadosedevolvidos.user.model.User;
 import com.achadosedevolvidos.user.model.UserPreferences;
+import com.achadosedevolvidos.user.event.ProfileUpdatedEvent;
 import com.achadosedevolvidos.user.repository.UserPreferencesRepository;
 import com.achadosedevolvidos.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional(readOnly = true)
@@ -64,6 +67,8 @@ public class UserServiceImpl implements UserService {
         }
 
         User saved = userRepository.save(user);
+        eventPublisher.publishEvent(new ProfileUpdatedEvent(saved.getId()));
+
         UserPreferences preferences = userPreferencesRepository.findByUserId(currentUserId).orElse(null);
         return userMapper.toResponse(saved, preferences);
     }
@@ -105,11 +110,11 @@ public class UserServiceImpl implements UserService {
         if (request.notificationsEnabled() != null) {
             preferences.setNotificationsEnabled(request.notificationsEnabled());
         }
-        if (request.matchAlertsEnabled() != null) {
-            preferences.setMatchAlertsEnabled(request.matchAlertsEnabled());
-        }
         if (request.emailsEnabled() != null) {
             preferences.setEmailsEnabled(request.emailsEnabled());
+        }
+        if (request.showEmailOnItems() != null) {
+            preferences.setShowEmailOnItems(request.showEmailOnItems());
         }
 
         return userMapper.toPreferencesResponse(userPreferencesRepository.save(preferences));

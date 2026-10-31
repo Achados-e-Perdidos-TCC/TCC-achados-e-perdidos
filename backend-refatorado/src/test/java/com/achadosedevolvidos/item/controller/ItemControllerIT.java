@@ -6,6 +6,8 @@ import com.achadosedevolvidos.item.dto.UpdateItemRequest;
 import com.achadosedevolvidos.item.dto.UpdateItemStatusRequest;
 import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.support.IntegrationTestSupport;
+import com.achadosedevolvidos.user.dto.UpdatePreferencesRequest;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -50,26 +53,73 @@ class ItemControllerIT extends IntegrationTestSupport {
                 .andExpect(jsonPath("$.nome").value(marcador + " carteira preta"))
                 .andExpect(jsonPath("$.status").value("PERDIDO"))
                 .andExpect(jsonPath("$.descricao").value("Carteira preta perdida"))
+                .andExpect(jsonPath("$.icon_url").isNotEmpty())
                 .andReturn();
 
         ItemResponse created = objectMapper.readValue(createResult.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class);
+        // Resposta de criação não é o detalhe público — não carrega e-mail.
+        assertThat(created.emailResponsavel()).isNull();
 
-        mockMvc.perform(get("/api/v1/items/" + created.id()))
+        MvcResult detalheResult = mockMvc.perform(get("/api/v1/items/" + created.id()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(created.id().toString()));
+                .andExpect(jsonPath("$.id").value(created.id().toString()))
+                .andReturn();
+        ItemResponse detalhe = objectMapper.readValue(
+                detalheResult.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class
+        );
+        // Por padrão (preferência showEmailOnItems ligada), o detalhe
+        // público traz o e-mail do dono — usado pelo front-end pra montar
+        // um mailto:.
+        assertThat(detalhe.emailResponsavel()).isEqualTo(user.user().getEmail());
 
-        mockMvc.perform(get("/api/v1/items/search")
+        MvcResult searchResult = mockMvc.perform(get("/api/v1/items/search")
                         .param("type", "PERDIDO")
                         .param("query", marcador))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[?(@.id == '" + created.id() + "')]").exists());
+                .andReturn();
+        JsonNode searchContent = objectMapper
+                .readTree(searchResult.getResponse().getContentAsString(StandardCharsets.UTF_8))
+                .get("content");
+        // E-mail nunca aparece em listagem/busca, só no detalhe de um item
+        // específico — ver javadoc de ItemResponse.
+        for (JsonNode itemNode : searchContent) {
+            assertThat(itemNode.get("emailResponsavel").isNull()).isTrue();
+        }
+    }
 
-        // Endpoint autenticado (não é o dono de nada além do próprio item, mas
-        // qualquer usuário logado pode consultar matches de um item público).
-        mockMvc.perform(get("/api/v1/items/" + created.id() + "/matches")
-                        .header("Authorization", user.authorizationHeader()))
+    @Test
+    void sunnyDay_naoDeveIncluirEmailNoDetalheQuandoDonoDesligaAPreferencia() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Email Privado");
+
+        mockMvc.perform(patch("/api/v1/users/me/preferences")
+                        .header("Authorization", dono.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new UpdatePreferencesRequest(null, null, false))))
+                .andExpect(status().isOk());
+
+        CreateItemRequest request = new CreateItemRequest(
+                Item.ItemType.ENCONTRADO, CATEGORIA_ELETRONICOS, "Item com email privado " + UUID.randomUUID(),
+                "Descricao completa", "Descricao curta", null, -23.55, -46.63,
+                LocalDateTime.now().minusHours(1), null
+        );
+
+        MvcResult createResult = mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", dono.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn();
+        ItemResponse created = objectMapper.readValue(
+                createResult.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class
+        );
+
+        MvcResult detalheResult = mockMvc.perform(get("/api/v1/items/" + created.id()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+                .andReturn();
+        ItemResponse detalhe = objectMapper.readValue(
+                detalheResult.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class
+        );
+        assertThat(detalhe.emailResponsavel()).isNull();
     }
 
     @Test
@@ -85,12 +135,6 @@ class ItemControllerIT extends IntegrationTestSupport {
                 // Sem header Authorization nenhum: cai no anyRequest().authenticated()
                 // e é barrada pelo Http403ForbiddenEntryPoint padrão (nenhum mecanismo
                 // de login baseado em sessão/redirect está configurado — só Bearer JWT).
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void rainyDay_deveRecusarConsultaDeMatchesSemAutenticacao() throws Exception {
-        mockMvc.perform(get("/api/v1/items/" + UUID.randomUUID() + "/matches"))
                 .andExpect(status().isForbidden());
     }
 

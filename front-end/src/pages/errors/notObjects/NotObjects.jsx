@@ -11,7 +11,7 @@ function NotObjects(){
                 <img className="notobject__img" src={notFoundIllustration} />
 
                 <div>
-                    <h1 className='notobject__title'> Não foi possivel indentificar nenhum objeto</h1>
+                    <h1 className='notobject__title'> Ops! Não encontramos nenhum objeto</h1>
                     <p className='notobject__subtitle'> Se você aplicou algum filtro, tente removê-lo. </p>
                 </div>
 

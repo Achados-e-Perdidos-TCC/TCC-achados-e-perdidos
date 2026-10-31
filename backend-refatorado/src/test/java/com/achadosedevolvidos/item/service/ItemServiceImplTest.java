@@ -4,17 +4,17 @@ import com.achadosedevolvidos.category.model.Category;
 import com.achadosedevolvidos.category.repository.CategoryRepository;
 import com.achadosedevolvidos.item.dto.CreateItemRequest;
 import com.achadosedevolvidos.item.dto.ItemResponse;
-import com.achadosedevolvidos.item.event.ItemCreatedEvent;
 import com.achadosedevolvidos.item.mapper.ItemMapper;
 import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.item.repository.ItemRepository;
 import com.achadosedevolvidos.shared.exception.AppException;
 import com.achadosedevolvidos.user.model.User;
+import com.achadosedevolvidos.user.model.UserPreferences;
+import com.achadosedevolvidos.user.repository.UserPreferencesRepository;
 import com.achadosedevolvidos.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,9 +33,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Testes unitários (Mockito) do ItemServiceImpl. O ponto mais importante coberto
- * aqui é o desacoplamento com o módulo match: criar um item deve publicar um
- * {@link ItemCreatedEvent} e nada mais — o service não deve conhecer MatchService.
+ * Testes unitários (Mockito) do ItemServiceImpl.
  */
 @ExtendWith(MockitoExtension.class)
 class ItemServiceImplTest {
@@ -50,6 +48,9 @@ class ItemServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
+    private UserPreferencesRepository userPreferencesRepository;
+
+    @Mock
     private ApplicationEventPublisher eventPublisher;
 
     private ItemServiceImpl itemService;
@@ -59,7 +60,10 @@ class ItemServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        itemService = new ItemServiceImpl(itemRepository, categoryRepository, userRepository, new ItemMapper(), eventPublisher);
+        itemService = new ItemServiceImpl(
+                itemRepository, categoryRepository, userRepository, userPreferencesRepository,
+                new ItemMapper(), eventPublisher
+        );
 
         user = User.builder().id(UUID.randomUUID()).name("Ana").email("ana@teste.com")
                 .role(User.Role.USER).build();
@@ -67,7 +71,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void sunnyDay_deveCriarItemEPublicarEventoDeCriacao() {
+    void sunnyDay_deveCriarItem() {
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
         when(itemRepository.save(any(Item.class))).thenAnswer(invocation -> {
@@ -82,17 +86,13 @@ class ItemServiceImplTest {
                 "Carteira preta perdida", "Terminal Central", -23.55, -46.63, LocalDateTime.now(), List.of("http://img/1.png")
         );
 
-        ItemResponse response = itemService.createAndAnalyze(user.getId(), request);
+        ItemResponse response = itemService.create(user.getId(), request);
 
         assertThat(response.nome()).isEqualTo("Carteira preta");
         assertThat(response.status()).isEqualTo("PERDIDO");
         assertThat(response.categoria()).isEqualTo("Eletrônicos");
         assertThat(response.descricao()).isEqualTo("Carteira preta perdida");
         assertThat(response.imagensSecundarias()).hasSize(1);
-
-        ArgumentCaptor<ItemCreatedEvent> eventCaptor = ArgumentCaptor.forClass(ItemCreatedEvent.class);
-        verify(eventPublisher).publishEvent(eventCaptor.capture());
-        assertThat(eventCaptor.getValue().itemId()).isEqualTo(response.id());
     }
 
     @Test
@@ -101,12 +101,11 @@ class ItemServiceImplTest {
 
         CreateItemRequest request = validRequest();
 
-        assertThatThrownBy(() -> itemService.createAndAnalyze(user.getId(), request))
+        assertThatThrownBy(() -> itemService.create(user.getId(), request))
                 .isInstanceOf(AppException.class)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.UNAUTHORIZED);
 
         verify(itemRepository, never()).save(any());
-        verify(eventPublisher, never()).publishEvent(any());
     }
 
     @Test
@@ -116,25 +115,41 @@ class ItemServiceImplTest {
 
         CreateItemRequest request = validRequest();
 
-        assertThatThrownBy(() -> itemService.createAndAnalyze(user.getId(), request))
+        assertThatThrownBy(() -> itemService.create(user.getId(), request))
                 .isInstanceOf(AppException.class)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.BAD_REQUEST);
 
         verify(itemRepository, never()).save(any());
-        verify(eventPublisher, never()).publishEvent(any());
     }
 
     @Test
-    void sunnyDay_deveEncontrarItemPorId() {
+    void sunnyDay_deveEncontrarItemPorIdEIncluirEmailDoDonoPorDefault() {
         Item item = Item.builder().id(UUID.randomUUID()).user(user).category(category)
                 .type(Item.ItemType.ENCONTRADO).title("Chaveiro").eventDate(LocalDateTime.now())
                 .createdAt(LocalDateTime.now()).build();
         when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
+        when(userPreferencesRepository.findByUserId(user.getId())).thenReturn(Optional.empty());
 
         ItemResponse response = itemService.findById(item.getId());
 
         assertThat(response.id()).isEqualTo(item.getId());
         assertThat(response.nome()).isEqualTo("Chaveiro");
+        // Sem linha em user_preferences ainda = default ligado.
+        assertThat(response.emailResponsavel()).isEqualTo(user.getEmail());
+    }
+
+    @Test
+    void sunnyDay_naoDeveIncluirEmailQuandoDonoDesligouAPreferencia() {
+        Item item = Item.builder().id(UUID.randomUUID()).user(user).category(category)
+                .type(Item.ItemType.ENCONTRADO).title("Chaveiro").eventDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now()).build();
+        when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
+        when(userPreferencesRepository.findByUserId(user.getId()))
+                .thenReturn(Optional.of(UserPreferences.builder().showEmailOnItems(false).build()));
+
+        ItemResponse response = itemService.findById(item.getId());
+
+        assertThat(response.emailResponsavel()).isNull();
     }
 
     @Test
