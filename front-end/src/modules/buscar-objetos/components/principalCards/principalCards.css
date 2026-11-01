@@ -1,201 +1,296 @@
-.card__principal{
+/* ==========================================================
+   CARD PRINCIPAL (Buscar objetos)
+   Escala: 1rem = 10px (html { font-size: 62.5% }).
+
+   Atenção: estas classes também são usadas pela home
+   (hero.jsx / hero.css, que sobrescreve com ".objetos-lista ...")
+   e o JSX tem duas versões do título e do endereço (normal e
+   "responsive"); por isso os breakpoints só trocam qual aparece.
+   ========================================================== */
+
+.card__principal {
     display: flex;
     gap: clamp(1rem, 2vw, 3rem);
-    border: 0.1rem solid var(--border-color);
-    background-color: var(--card-color);
-    border-radius: 1rem;
-    margin-bottom: clamp(1.5rem, 2vw, 2.5rem);
-    padding: clamp(0.5rem, 2vw, 1rem);
-    height: 22rem;
     width: 100%;
+    min-height: 22rem; /* era height fixa: o conteúdo nunca deve ser cortado */
+    padding: clamp(0.5rem, 2vw, 1rem);
+    margin-bottom: clamp(1.5rem, 2vw, 2.5rem);
+    border: 0.1rem solid var(--border-color);
+    border-radius: 1rem;
+    background-color: var(--card-color);
 }
 
-/* img */
+/* ---------- Imagem ---------- */
 
-.principal__cards__image__card{
-    border-radius: 1rem;
-    height: 20rem;
+.principal__cards__image__card {
+    flex-shrink: 0;
+    align-self: stretch; /* acompanha a altura do card (antes: height fixa de 20rem) */
     width: clamp(12rem, 16vw, 30rem);
+    border-radius: 1rem;
     object-fit: cover;
     object-position: center center;
 }
 
-/* meio */
+/* ---------- Meio ---------- */
 
-.principal__meio{
+.principal__meio {
     display: flex;
+    flex: 1 1 0;
     flex-direction: column;
-    gap: 8rem;
-    min-width: 0; /* faz com que não fuja do maximo do bloco, por padrao vem como auto quando display flex, por isso que quebra*/
+    gap: 2rem;
+    min-width: 0;
 }
 
-/* meio encima */
+/* meio, em cima */
 
-.titulo__principal{
+.titulo__principal {
     color: var(--primary-color-text);
+    font-size: clamp(2.2rem, 2.4vw, 3.2rem);
     font-weight: 600;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
 }
 
-.categoria__status{
+.categoria__status {
     display: flex;
-    gap: clamp(0.2rem, 2vw, 2rem);
+    flex-wrap: wrap; /* em telas estreitas as tags descem em vez de estourar */
+    gap: 0.6rem clamp(0.2rem, 2vw, 2rem);
 }
 
-.icon__categoria{ height: clamp(1.5rem, 2vw, 2rem) }
+.icon__categoria {
+    flex-shrink: 0;
+    width: auto;
+    height: clamp(1.5rem, 2vw, 2rem);
+}
 
-.categoria__principal{
+.categoria__principal {
     display: flex;
     align-items: center;
+    gap: 0.7rem;
     font-size: 1.5rem;
     font-weight: 400;
-    gap: 0.7rem;
+    min-width: 0;
 }
 
-/* meio embaixo */
+/* meio, embaixo */
 
-.endereco__principal, .divisoria{ color: var(--primary-color-text) }
+.endereco__principal,
+.divisoria {
+    color: var(--primary-color-text);
+}
 
-.data__hora{
+.endereco__principal,
+.endereco__responsive {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* local | data: lado a lado e, se faltar espaço, quebram sozinhos (flex-wrap) */
+.data__hora {
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+    align-self: flex-start;
+    gap: 0.6rem 1rem;
+    width: 100%;
     font-size: clamp(1rem, 2vw, 1.3rem);
+    text-align: left;
 }
 
-.data__principal, .hora__principal{
+.data__principal,
+.hora__principal {
     display: flex;
     align-items: center;
-    gap: clamp(0.1rem, 1vw, 0.8rem);
+    justify-content: flex-start;
+    gap: clamp(0.4rem, 1vw, 0.8rem);
+    min-width: 0;
+    text-align: left;
 }
 
-.descricao__principal{
+.data__principal img,
+.hora__principal img {
+    flex-shrink: 0;
+}
+
+.descricao__principal {
+    margin-left: 0.5rem;
+    color: var(--secondary-color-gray);
     font-size: 1.3rem;
-    margin-left: 0.5rem; 
-    color: var(--secondary-color-gray)
+    overflow-wrap: anywhere;
 }
 
-/* direita */
+/* ---------- Direita ---------- */
 
-.principal__direita{
+.principal__direita {
     display: flex;
-    align-items: end;
-    justify-content: end;
-    flex: 1
+    flex: 0 0 auto;
+    align-items: flex-end;
+    justify-content: flex-end;
 }
 
-.button__principal{
+.button__principal {
     display: flex;
     align-items: center;
-    gap: 1.5rem; 
+    gap: 1.5rem;
     padding: 0.6rem 2.5rem;
-    font-weight: 500;
     border: 0.2rem solid var(--primary-color-blue);
     border-radius: 1rem;
     font-family: var(--font-principal);
+    font-weight: 500;
+    white-space: nowrap;
     cursor: pointer;
 }
 
-.detalhes__principal{ color: var(--primary-color-blue) }
+.detalhes__principal {
+    color: var(--primary-color-blue);
+}
 
-.arrow__button__principal{
-    margin-top: 0.25rem;
+.arrow__button__principal {
+    flex-shrink: 0;
     height: 1.5rem;
+    margin-top: 0.25rem;
 }
 
-/* responsividade */
+/* ---------- Versões "responsive" (escondidas no desktop) ---------- */
 
-.button__responsive, .endereco__responsive, .titulo__responsive{ display: none }
+.button__responsive,
+.endereco__responsive,
+.titulo__responsive {
+    display: none;
+}
 
-@media ( max-width: 1032px ){
+/* ==========================================================
+   RESPONSIVIDADE
+   ========================================================== */
 
-    .descricao__principal, .titulo__principal, .endereco__principal{ display: none}
-    .endereco__responsive{ display: flex }
+/* ---------- Até 1024px: versão compacta do texto ---------- */
+@media (max-width: 1024px) {
+    .descricao__principal,
+    .titulo__principal,
+    .endereco__principal {
+        display: none;
+    }
 
-    .titulo__responsive{
+    .endereco__responsive {
         display: flex;
-        color: var(--primary-color-text);
-        font-weight: 600;
+    }
+
+    .titulo__responsive {
+        display: flex;
         margin-bottom: 1rem;
-        font-size: 3rem;
-        line-height: 3rem;
+        color: var(--primary-color-text);
+        font-size: clamp(1.5rem, 3.2vw, 3rem); /* desce de forma contínua, sem salto entre 1024 e 768 */
+        font-weight: 600;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
     }
 
-    .data__principal, .hora__principal{
-        font-size: 1.1rem; 
-        line-height: 1.1rem;
+    .data__principal,
+    .hora__principal {
+        font-size: 1.1rem;
+        line-height: 1.4;
     }
 
-    .principal__embaixo{
+    .principal__embaixo {
         display: flex;
-        justify-content: end;
-        flex-direction: column;
         flex: 1;
+        flex-direction: column;
+        justify-content: flex-start;
     }
 }
 
-@media ( max-width: 768px ){
+/* ---------- Até 768px: layout vertical ---------- */
+@media (max-width: 768px) {
+    .card__principal {
+        min-height: 16rem;
+    }
 
-    .descricao__principal, .principal__direita, .divisoria, .titulo__principal, .endereco__principal{ display: none}
-    .endereco__responsive{ display: flex }
+    .descricao__principal,
+    .principal__direita,
+    .divisoria,
+    .titulo__principal,
+    .endereco__principal {
+        display: none;
+    }
 
-    .categoria__status{
+    .endereco__responsive {
+        display: flex;
+    }
+
+    .categoria__status {
         flex-direction: column;
         margin-top: 1rem;
     }
 
-    .titulo__responsive{
-        display: flex;
-        color: var(--primary-color-text);
-        font-weight: 600;
-        font-size: 1.5rem;
-        line-height: 1.7rem;
+    .titulo__responsive {
+        margin-bottom: 0;
     }
 
-    .principal__meio{
+    .principal__meio {
+        flex: 1;
+        gap: 0;
         min-width: 0;
         min-height: 0;
-        gap: 0%;
-        flex: 1;
     }
 
-    .categoria__principal span{ font-size: 12px }
-    .image__principal{ margin-bottom: 0% }
+    .categoria__principal span {
+        font-size: 1.2rem;
+    }
 
-    .status__red, .status__orange, .status__green{
+    .image__principal {
+        margin-bottom: 0;
+    }
+
+    .status__red,
+    .status__orange,
+    .status__green {
         gap: 0.7rem;
-        font-size: 1.1rem; 
         padding: 0.2rem 0.7rem;
+        font-size: 1.1rem;
     }
 
-    .data__principal, .hora__principal{
-        font-size: 0.8rem; 
-        line-height: 1.1rem;
-    }
-
-    .principal__embaixo{
+    .principal__embaixo {
         display: flex;
-        justify-content: end;
-        gap: 0.5rem;
-        flex-direction: column;
         flex: 1;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 0.5rem;
     }
 
-    .arrow__button__principal{
-        margin-top: 0.25rem;
+    .arrow__button__principal {
         height: 1rem;
+        margin-top: 0.25rem;
     }
 
-    .button__responsive{
+    .button__responsive {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 1rem; 
+        gap: 1rem;
         padding: 0.2rem 0.7rem;
-        font-weight: 500;
-        font-size: 1.2rem;
         border: 0.2rem solid var(--primary-color-blue);
         border-radius: 1rem;
         font-family: var(--font-principal);
+        font-size: 1.2rem;
+        font-weight: 500;
     }
 
-    .data__hora{ gap: 1rem }
+    /* local e data empilhados (a divisória "|" já está escondida acima) */
+    .data__hora {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+    }
+
+    .data__principal,
+    .hora__principal {
+        width: 100%;
+    }
+}
+
+/* ---------- Até 480px: só ajustes finos ---------- */
+@media (max-width: 480px) {
+    .principal__cards__image__card {
+        width: 10rem;
+    }
 }

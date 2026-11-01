@@ -1,105 +1,167 @@
-.detalhes{
+/* ==========================================================
+   DETALHES DO OBJETO (coluna da direita)
+   Escala: 1rem = 10px (html { font-size: 62.5% }).
+
+   O JSX tem duas versões de alguns textos (normal e ".responsive");
+   por isso os breakpoints só trocam qual delas aparece.
+   ========================================================== */
+
+.detalhes {
     display: flex;
     flex-direction: column;
-    height: 100%;
     gap: 2rem;
+    min-width: 0;
+    /* Mantido de propósito: a coluna acompanha a altura da imagem (o pai
+       .container__detalhes limita a altura) e o card rola por dentro.
+       No celular o pai fica com altura automática e isto se ajusta sozinho. */
+    height: 100%;
 }
 
-/* img */
+/* ---------- Imagens ---------- */
 
-.icons{ height: 2.7rem }
+.icons {
+    flex-shrink: 0;
+    width: auto;
+    height: 2.7rem;
+}
 
-.circulo__blue{ height: 1.5rem }
+.circulo__blue {
+    flex-shrink: 0;
+    width: auto;
+    height: 1.5rem;
+}
 
-/* titulo/descricao */
+/* ---------- Título e descrição ---------- */
 
-.detalhes__titulo{
-    font-size: 3.5rem;
+.detalhes__titulo {
     color: var(--primary-color-text);
+    font-size: clamp(2.4rem, 4vw, 3.5rem);
     font-weight: 500;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
 }
 
-.detalhes__descricao, .detalhes__descricao__completa, .detalhes__descricao__complemento{
-    font-size: 1.5rem;
+.detalhes__descricao,
+.detalhes__descricao__completa,
+.detalhes__descricao__complemento {
+    max-width: 65ch;
     color: var(--secondary-color-gray);
-    max-width: 65ch;
-}
-
-.detalhes__descricao__adicional{
     font-size: 1.5rem;
-    color: var(--primary-color-text);
-    max-width: 65ch;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
-.detalhes__infos{
+.detalhes__descricao__adicional {
+    min-width: 0;
+    max-width: 65ch;
+    color: var(--primary-color-text);
+    font-size: 1.5rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Categoria / localização / data ---------- */
+
+.detalhes__infos {
     display: flex;
-    gap: 5.5rem;
+    flex-wrap: wrap; /* se faltar espaço, o item desce em vez de estourar */
+    gap: 1.6rem clamp(2rem, 5vw, 5.5rem);
     margin-top: 1.8rem;
 }
 
-.infos__icons{
+.infos__icons {
     display: flex;
     gap: 0.8rem;
+    min-width: 0;
 }
 
-.infos__categoria, .infos__text{
+.infos__categoria,
+.infos__text {
+    color: var(--secondary-color-gray);
     font-size: 1.4rem;
-    color: var(--secondary-color-gray); 
 }
 
-.infos__text{ 
-    font-size: 1.5rem;
+.infos__text {
     max-width: 28ch;
-    color: var(--primary-color-text)
+    color: var(--primary-color-text);
+    font-size: 1.5rem;
+    overflow-wrap: anywhere;
 }
 
-/* card */
+/* ---------- Card "Detalhes do objeto" ---------- */
 
-.card__infos{
+.card__infos {
     display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-    border: 0.2rem solid var(--border-color);
-    background-color: var(--card-color);
-    border-radius: 1rem;
-    padding: 2.5rem;
     flex: 1;
+    flex-direction: column;
+    gap: clamp(1.6rem, 2.5vw, 2.5rem);
+    padding: clamp(1.6rem, 3vw, 2.5rem);
+    border: 0.2rem solid var(--border-color);
+    border-radius: 1rem;
+    background-color: var(--card-color);
     overflow: auto;
 }
 
-.detalhes__objeto__title{
+/* as linhas separadoras usam a cor do tema (a padrão do navegador some no escuro) */
+.card__infos hr {
+    width: 100%;
+    border: none;
+    border-top: 0.1rem solid var(--border-color);
+}
+
+.detalhes__objeto__title {
     color: var(--primary-color-text);
-    font-size: 2rem;
+    font-size: clamp(1.7rem, 2.6vw, 2rem);
     font-weight: 600;
 }
 
-.detalhes__objeto__subtitle{ 
+.detalhes__objeto__subtitle {
+    margin-bottom: 1rem;
     color: var(--primary-color-text);
     font-weight: 500;
-    margin-bottom: 1rem;
 }
 
-.informacoes__adicionais{
+.informacoes__adicionais {
     display: flex;
     align-items: center;
-    gap: 0.5rem; 
+    gap: 0.5rem;
 }
 
-/* responsividade */
+/* ---------- Versões "responsive" (escondidas no desktop) ---------- */
 
-.responsive {display: none}
-
-@media( max-width: 1032px){
-    .detalhes__descricao, .infos__text{display: none}
-    .responsive { display: flex }
+.responsive {
+    display: none;
 }
 
-@media( max-width: 768px ){
-    .detalhes__descricao, .infos__text, .detalhes__infos{display: none}
-    .responsive { display: flex }
+/* ==========================================================
+   RESPONSIVIDADE
+   ========================================================== */
 
-    .detalhes__titulo{
+/* ---------- Até 1024px: versão resumida dos textos ---------- */
+@media (max-width: 1024px) {
+    .detalhes__descricao,
+    .infos__text {
+        display: none;
+    }
+
+    .responsive {
+        display: flex;
+    }
+}
+
+/* ---------- Até 768px: a linha de infos some (o card já traz tudo) ---------- */
+@media (max-width: 768px) {
+    .detalhes__descricao,
+    .infos__text,
+    .detalhes__infos {
+        display: none;
+    }
+
+    .responsive {
+        display: flex;
+    }
+
+    .detalhes__titulo {
         margin: 0.8rem 0;
-        line-height: 3.5rem;
     }
 }

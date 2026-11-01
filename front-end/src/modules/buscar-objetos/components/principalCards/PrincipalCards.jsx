@@ -14,6 +14,8 @@ import NotObjects from '../../../../pages/errors/notObjects/NotObjects.jsx';
 import pinGray from '../../../../assets/icons/buscarObjetos/pin-gray.svg';
 import calendarGray from '../../../../assets/icons/buscarObjetos/calendar-gray.svg';
 import arrowBlue from '../../../../assets/icons/buscarObjetos/arrow-blue.svg';
+import { formatarLocalizacao } from '../../../../utils/location/localizacao.js';
+import { resolverUrlImagem } from '../../../../utils/images/urlImagem.js';
 
 // falta adicionar logica de filtrar por periodo
 
@@ -62,16 +64,14 @@ function PrincipalCards({ objetos, inicio, fim, resultadosExibidos, resultadoTot
                 const nome = valor.nome || 'Objeto sem nome'; //obrigatorio
                 const descricao = valor.descricao || 'Sem descrição disponível'; //obrigatorio
 
-                const cidade = valor.localizacao.cidade || ''; //obrigatorio
-                const endereco = valor.localizacao.endereco || ''; //obrigatorio
-                const estado = valor.localizacao.estado || ''; //obrigatorio
+                const textoLocalizacao = formatarLocalizacao(valor.localizacao);
 
                 const data = valor.data.data.trim() ; 
                 const hora = valor.data.hora.trim();
 
                 return (
                     <div className='card__principal' key={valor.id}>
-                        { valor.imagemPrincipal === null ? <NoImage /> : <img className='principal__cards__image__card ' src={valor.imagemPrincipal} />}
+                        { !valor.imagemPrincipal ? <NoImage /> : <img className='principal__cards__image__card ' src={resolverUrlImagem(valor.imagemPrincipal)} alt={nome} />}
 
                         <div className='principal__meio'>
 
@@ -97,15 +97,28 @@ function PrincipalCards({ objetos, inicio, fim, resultadosExibidos, resultadoTot
 
                                     <div className='data__principal'>
                                         <img src={pinGray} />         
-                                        {!cidade || !endereco || !estado ? <p className='endereco__principal'>Endereço não informado</p> : 
-                                        <p className='endereco__principal'>{estado.length + cidade.length + endereco.length < 50 ? `${estado} - ${cidade}, ${endereco}` : `${estado} - ${cidade}, ${endereco}`.slice(0, 50) + `...`}</p>}
+                                        {!textoLocalizacao ? (
+                                            <p className='endereco__principal'>Localização não informada</p>
+                                        ) : (
+                                            <p className='endereco__principal'>
+                                                {textoLocalizacao.length < 50
+                                                    ? textoLocalizacao
+                                                    : `${textoLocalizacao.slice(0, 50)}...`}
+                                            </p>
+                                        )}
 
-                                        {!cidade || !endereco || !estado ? <p className='endereco__responsive'>Endereço não informado</p> : 
-                                        <span className='endereco__responsive'>{estado.length + cidade.length + endereco.length < 27 ? `${estado} - ${cidade}, ${endereco}` : `${estado} - ${cidade}, ${endereco}`.slice(0, 27) + `...`}</span>}
+                                        {!textoLocalizacao ? (
+                                            <p className='endereco__responsive'>Localização não informada</p>
+                                        ) : (
+                                            <span className='endereco__responsive'>
+                                                {textoLocalizacao.length < 27
+                                                    ? textoLocalizacao
+                                                    : `${textoLocalizacao.slice(0, 27)}...`}
+                                            </span>
+                                        )}
                                         
                                     </div>
 
-                                    <p className='divisoria'>|</p>
 
                                     <div className='hora__principal'>
                                         <img src={calendarGray} />

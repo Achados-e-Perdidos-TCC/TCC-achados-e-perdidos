@@ -24,16 +24,12 @@ public record CreateItemRequest(
         @NotBlank(message = "Descrição é obrigatória")
         String description,
 
-        @NotBlank(message = "Descrição curta é obrigatória")
-        @Size(max = 100, message = "Descrição curta deve ter no máximo 100 caracteres")
+       @Size(max = 50, message = "Características específicas devem ter no máximo 50 caracteres")
         String shortDescription,
 
         String locationText,
 
-        @NotNull(message = "Latitude é obrigatória")
         Double latitude,
-
-        @NotNull(message = "Longitude é obrigatória")
         Double longitude,
 
         @NotNull(message = "Data do evento é obrigatória")

@@ -1,115 +1,110 @@
-import { hoje, ontem } from '../../../../utils/date/date.js'; 
+import { hoje, ontem } from '../../../../utils/date/date.js';
+import { formatarLocalizacao, obterNomeCompletoEstado } from '../../../../utils/location/localizacao.js';
 
-import './detalhes.css'
+import './detalhes.css';
 
 import Status from '../../../../components/status/Status.jsx';
 
 import pinGray from '../../../../assets/icons/buscarObjetos/pin-gray.svg';
 import calendarGray from '../../../../assets/icons/buscarObjetos/calendar-gray.svg';
 import gridGray from '../../../../assets/icons/buscarObjetos/grid-gray.svg';
-import circuloBlue from '../../../../assets/icons/detalhesObjeto/circulo-blue.png'
+import circuloBlue from '../../../../assets/icons/detalhesObjeto/circulo-blue.png';
 
-const icons = [ gridGray, pinGray,  calendarGray ]
-const infos = ['categorias', 'Localização', 'Data']
+const icons = [gridGray, pinGray, calendarGray];
+const infos = ['Categorias', 'Localização', 'Data'];
 
-function Detalhes(objeto){
+function Detalhes({ objeto }) {
+    const objetoEncontrado = objeto;
+    const localizacao = objetoEncontrado.localizacao ?? {};
+    const dataObjeto = objetoEncontrado.data ?? {};
 
-    let posicao = -1;
-    const objetoEncontrado = objeto.objeto;
+    const nome = objetoEncontrado.nome || 'Objeto sem nome';
+    const descricao = objetoEncontrado.descricao || 'Descrição indisponível';
 
-    const nome = objetoEncontrado.nome || 'Objeto sem nome'; //obrigatorio
-    const descricao = objetoEncontrado.descricao || 'Descrição indisponível'; //obrigatorio
+    const cidade = localizacao.cidade || 'Não informado';
+    const endereco = localizacao.endereco || '';
+    const estado = obterNomeCompletoEstado(localizacao.estado) || 'Não informado';
 
-    const cidade = objetoEncontrado.localizacao.cidade || `Não informado`; //obrigatorio
-    const endereco = objetoEncontrado.localizacao.endereco || `Não informado`; //obrigatorio
-    const estado = objetoEncontrado.localizacao.estado || `Não informado`; //obrigatorio
-    const complemento = objetoEncontrado.localizacao.complemento || `Sem complemento`
+    // Endereço/bairro é opcional: cidade e estado já identificam a localização.
+    const localizacaoFormatada = formatarLocalizacao(localizacao) || 'Localização não informada';
 
-    const localizacaoFormatada = !objetoEncontrado.localizacao.cidade || !objetoEncontrado.localizacao.endereco || 
-    !objetoEncontrado.localizacao.estado ? 'Endereço não informado' : `${estado} - ${cidade}, ${endereco}`
+    function dataFormatada(data) {
+        if (!data) return 'Data não informada';
+        if (data === hoje()) return 'Hoje';
+        if (data === ontem()) return 'Ontem';
 
-    function dataFormatada(data){
-
-        if (data === hoje()) { return `Hoje`}
-        if (data === ontem()) { return `Ontem`}
-        
-        return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`; 
+        return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`;
     }
 
-    const descricaoInfo = [objetoEncontrado.categoria, localizacaoFormatada, dataFormatada(objetoEncontrado.data.data, objetoEncontrado.data.hora)]
+    const descricaoInfo = [
+        objetoEncontrado.categoria || 'Não informada',
+        localizacaoFormatada,
+        dataFormatada(dataObjeto.data),
+    ];
 
-    
-    const informacoesAdicionais = [ `Categoria: ${objetoEncontrado.categoria}`, `Localização: ${endereco}`,
-    `Cidade: ${cidade}`, `Estado: ${estado}`, `Data: ${dataFormatada(objetoEncontrado.data.data).slice(0, 10)}`,
-    `Horário: ${objetoEncontrado.data.hora}`]; 
+    const informacoesAdicionais = [
+        `Categoria: ${objetoEncontrado.categoria || 'Não informada'}`,
+        ...(endereco ? [`Bairro: ${endereco}`] : []),
+        `Cidade: ${cidade}`,
+        `Estado: ${estado}`,
+        `Data: ${dataFormatada(dataObjeto.data)}`,
+        `Horário: ${dataObjeto.hora || 'Não informado'}`,
+    ];
 
-    return(
+    return (
         <div className='detalhes'>
-
             <div>
-                <div className={'status__detalhes'}>
-                    <Status objeto={objetoEncontrado}/>
+                <div className='status__detalhes'>
+                    <Status objeto={objetoEncontrado} />
                 </div>
 
                 <h1 className='detalhes__titulo'>{nome}</h1>
-                <p className='detalhes__descricao'>{`${descricao.slice(0, 70)}...`}</p>
-                <p className='detalhes__descricao responsive'>{`Informações para identificação do objeto.`}</p>
+                <p className='detalhes__descricao'>{`${descricao.slice(0, 70)}${descricao.length > 70 ? '...' : ''}`}</p>
+                <p className='detalhes__descricao responsive'>Informações para identificação do objeto.</p>
 
                 <div className='detalhes__infos'>
-                    {icons.map((valor) => {
-                        posicao++
+                    {icons.map((valor, index) => (
+                        <div key={valor} className='infos__icons'>
+                            <img className="icons" src={valor} alt="" />
 
-                        return(
-                            <div key={valor} className='infos__icons'>
-
-                                <img className="icons" src={valor} />
-
-                                <div>
-                                    <span className='infos__categoria'> {infos[posicao]} </span>
-                                    <p className='infos__text'> {descricaoInfo[posicao]} </p>
-                                    <p className='responsive infos__text'> {`${descricaoInfo[posicao].slice(0, 17)}...`} </p>
-                                </div>
-                                
+                            <div>
+                                <span className='infos__categoria'>{infos[index]}</span>
+                                <p className='infos__text'>{descricaoInfo[index]}</p>
+                                <p className='responsive infos__text'>
+                                    {descricaoInfo[index].length > 17
+                                        ? `${descricaoInfo[index].slice(0, 17)}...`
+                                        : descricaoInfo[index]}
+                                </p>
                             </div>
-                        )
-                    })}
+                        </div>
+                    ))}
                 </div>
             </div>
 
-                <div className='card__infos'>
-                    <h2 className='detalhes__objeto__title'>Detalhes do objeto</h2>
+            <div className='card__infos'>
+                <h2 className='detalhes__objeto__title'>Detalhes do objeto</h2>
 
-                    <div>
-                        <p className='detalhes__objeto__subtitle'>Descrição Completa</p>
-                        <p className='detalhes__descricao__completa'>{descricao}</p>
-                    </div>
-
-                    <hr />
-
-                    <div>
-                        <p className='detalhes__objeto__subtitle'>Informações</p>
-                        {
-                            informacoesAdicionais.map((valor) => {
-                                return ( 
-                                    <div key={valor} className='informacoes__adicionais'>
-                                        <img className="circulo__blue" src={circuloBlue} />
-                                        <p className='detalhes__descricao__adicional'> {valor} </p>
-                                    </div>
-                               ) 
-                            })
-                        }
-                    </div>
-
-                    <hr />
-
-                    <div>
-                        <p className='detalhes__objeto__subtitle'>Complemento de localização</p>
-                        <p className='detalhes__descricao__complemento'>{complemento}</p>
-                    </div>
+                <div>
+                    <p className='detalhes__objeto__subtitle'>Descrição Completa</p>
+                    <p className='detalhes__descricao__completa'>{descricao}</p>
                 </div>
-        </div>
-    )
-}
 
+                <hr />
+
+                <div>
+                    <p className='detalhes__objeto__subtitle'>Informações</p>
+                    {informacoesAdicionais.map((valor) => (
+                        <div key={valor} className='informacoes__adicionais'>
+                            <img className='circulo__blue' src={circuloBlue} alt="" />
+                            <p className='detalhes__descricao__adicional'>{valor}</p>
+                        </div>
+                    ))}
+                </div>
+
+                <hr />
+            </div>
+        </div>
+    );
+}
 
 export default Detalhes;

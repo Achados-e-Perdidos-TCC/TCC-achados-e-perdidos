@@ -13,6 +13,8 @@ import arrowBlue from "../../../../../assets/icons/buscarObjetos/arrow-blue.svg"
 import arrowGray from "../../../../../assets/icons/buscarObjetos/arrow-gray.png";
 
 import { myObjects } from "../../../private.service.js";
+import { resolverUrlImagem } from "../../../../../utils/images/urlImagem.js";
+import { obterNomeCompletoEstado } from "../../../../../utils/location/localizacao.js";
 
 function UserObjects({ open }) {
   const [carregando, setCarregando] = useState(true);
@@ -55,6 +57,16 @@ function UserObjects({ open }) {
     }
 
     return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}, ${hora}`;
+  }
+
+  function formatarLocalizacao(localizacao) {
+    const cidade = localizacao?.cidade?.trim();
+    const estado = obterNomeCompletoEstado(localizacao?.estado);
+    const endereco = localizacao?.endereco?.trim();
+
+    const cidadeEstado = [cidade, estado].filter(Boolean).join(" - ");
+
+    return [cidadeEstado, endereco].filter(Boolean).join(", ") || "Localização não informada";
   }
 
   const [paginaAtual, setPaginaAtual] = useState(1);
@@ -100,14 +112,6 @@ function UserObjects({ open }) {
     setPaginaAtual(pagina);
   }
 
-  function formatarLocalizacao(localizacao) {
-    const estado = localizacao?.estado;
-    const cidade = localizacao?.cidade;
-
-    const cidadeEstado = [estado, cidade].filter(Boolean).join(" - ");
-
-    return cidadeEstado || localizacao?.endereco || "Localização não informada";
-  }
 
   if (carregando) {
     return <div className="user__objects">Carregando objetos...</div>;
@@ -144,6 +148,7 @@ function UserObjects({ open }) {
           objetos.slice(inicio, fim).map((valor) => {
             const nome = valor.nome || "Objeto sem nome";
             const localizacao = formatarLocalizacao(valor.localizacao);
+            const imagemPrincipal = resolverUrlImagem(valor.imagemPrincipal);
             const data = valor.data?.data;
             const hora = valor.data?.hora;
 
@@ -151,7 +156,7 @@ function UserObjects({ open }) {
               <div className="user__card__principal" key={valor.id}>
                 <img
                   className="user__principal__cards__image__card"
-                  src={valor.imagemPrincipal || ""}
+                  src={imagemPrincipal}
                   alt={nome}
                 />
 
@@ -164,7 +169,7 @@ function UserObjects({ open }) {
                         </h1>
                       ) : (
                         <h1 className="user__titulo__principal">
-                          {nome.length < 50 ? nome : `${nome.slice(0, 15)}...`}
+                          {nome.length < 50 ? nome : `${nome.slice(0, 50)}...`}
                         </h1>
                       )}
 
@@ -200,13 +205,13 @@ function UserObjects({ open }) {
                       <div className="user__data__principal">
                         <img src={pinGray} alt="" />
 
-                        <p className="user__endereco__principal">
+                        <p className="user__endereco__principal" title={localizacao}>
                           {localizacao.length < 20
                             ? localizacao
                             : `${localizacao.slice(0, 20)}...`}
                         </p>
 
-                        <span className="user__endereco__responsive">
+                        <span className="user__endereco__responsive" title={localizacao}>
                           {localizacao.length < 27
                             ? localizacao
                             : `${localizacao.slice(0, 27)}...`}

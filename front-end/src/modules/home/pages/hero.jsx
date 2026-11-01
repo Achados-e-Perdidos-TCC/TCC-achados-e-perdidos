@@ -1,4 +1,5 @@
 import "./hero.css";
+import { useEffect, useState } from "react";
 import { NavLink, useOutletContext } from "react-router";
 import direitawhite from "../../../assets/icons/home/direita-white.png";
 import direitablack from "../../../assets/icons/home/direita-black.png";
@@ -8,13 +9,51 @@ import warningRed from "../../../assets/icons/buscarObjetos/warning-red.svg";
 import checkGreen from "../../../assets/icons/buscarObjetos/check-green.svg";
 import hourglassOrange from "../../../assets/icons/buscarObjetos/hourglass-orange.svg";
 import { hoje, ontem } from "../../../utils/date/date.js";
-import objetos from "../../buscar-objetos/components/principalCards/objetos.json";
+import { objects as buscarObjetos } from "../../buscar-objetos/buscarObjetos.service.js";
+import { formatarLocalizacao } from "../../../utils/location/localizacao.js";
+import { resolverUrlImagem } from "../../../utils/images/urlImagem.js";
 import cadastrodevolucao from "../../../assets/icons/home/cadastroadevolucao.png";
 import comoencontramos from "../../../assets/icons/home/comoencontramos.png";
 import lupa from "../../../assets/icons/home/lupa.png"
+import lupablack from "../../../assets/icons/home/lupablack.png"
+import comoencontramosblack from "../../../assets/icons/home/comoencontramosblack.png"
+import cadastrodevolucaoblack from "../../../assets/icons/home/cadastroadevolucaoblack.png"
 
 function Hero() {
     const { tema } = useOutletContext();
+    const [objetos, setObjetos] = useState([]);
+    const [carregandoObjetos, setCarregandoObjetos] = useState(true);
+    const [erroObjetos, setErroObjetos] = useState(false);
+
+    useEffect(() => {
+        let componenteAtivo = true;
+
+        async function carregarObjetosRecentes() {
+            try {
+                const resultado = await buscarObjetos();
+
+                if (componenteAtivo) {
+                    setObjetos(Array.isArray(resultado) ? resultado.slice(0, 4) : []);
+                }
+            } catch (error) {
+                console.error("Erro ao carregar objetos recentes:", error);
+
+                if (componenteAtivo) {
+                    setErroObjetos(true);
+                }
+            } finally {
+                if (componenteAtivo) {
+                    setCarregandoObjetos(false);
+                }
+            }
+        }
+
+        carregarObjetosRecentes();
+
+        return () => {
+            componenteAtivo = false;
+        };
+    }, []);
 
     return (
 
@@ -65,7 +104,7 @@ function Hero() {
             <h2>O que você está procurando?</h2>
 
             <div>
-                {tema === 'light' ? <img src={lupa} alt="lupawhite" /> : <img src={lupa} alt="lupablack" />}
+                {tema === 'light' ? <img src={lupa} alt="lupa" /> : <img src={lupablack} alt="lupablack" />}
             </div>
 
            <p>Encontre objetos cadastrados e veja possíveis
@@ -83,14 +122,14 @@ function Hero() {
 
             {/* Seção de Cadastro e Como Encontramos */}
 
-        <div className="cadastro-ComoEncontramos">
+        <div className="cadastro-ComoEncontramos cadastro-comoencontramos">
 
             <div id="cadastrodevolucao">
-                {tema === 'light' ? <img src={cadastrodevolucao} alt="cadastroadevolucaowhite" /> : <img src={cadastrodevolucao} alt="cadastroadevolucaoblack" />}
+                {tema === 'light' ? <img src={cadastrodevolucao} alt="cadastroadevolucao" /> : <img src={cadastrodevolucaoblack} alt="cadastroadevolucaoblack" />}
             </div>
 
             <div id="comoencontramos">
-               {tema === 'light' ? <img src={comoencontramos} alt="estatisticasWhite" /> : <img src={comoencontramos} alt="estatisticasBlack" />}
+               {tema === 'light' ? <img src={comoencontramos} alt="estatisticas" /> : <img src={comoencontramosblack} alt="estatisticasBlack" />}
             </div>
         </div>
 
@@ -106,17 +145,32 @@ function Hero() {
         </div>
 
         <div className="objetos-lista">
-            {objetos.slice(0, 4).map((objeto) => {
-                const status = objeto.status.trim().toUpperCase();
+            {carregandoObjetos ? (
+                <p>Carregando objetos recentes...</p>
+            ) : erroObjetos ? (
+                <p>Não foi possível carregar os objetos recentes.</p>
+            ) : objetos.length === 0 ? (
+                <p>Nenhum objeto cadastrado recentemente.</p>
+            ) : objetos.map((objeto) => {
+                const status = (objeto.status || "").trim().toUpperCase();
+                const nome = objeto.nome || "Objeto sem nome";
+                const descricao = objeto.descricao || "Sem descrição disponível";
+                const data = objeto.data?.data?.trim() || "";
+                const hora = objeto.data?.hora?.trim() || "";
+                const localizacaoFormatada = formatarLocalizacao(objeto.localizacao);
 
                 return (
                 <div className="objeto-card card__principal" key={objeto.id}>
-                    <img className="image__card" src={objeto.imagemPrincipal} alt={objeto.nome} />
+                    {objeto.imagemPrincipal ? (
+                        <img className="image__card" src={resolverUrlImagem(objeto.imagemPrincipal)} alt={nome} />
+                    ) : (
+                        <div className="image__card" aria-label="Imagem não disponível" />
+                    )}
 
                     <div className="principal__meio">
                         <div className="principal__encima">
                             <h3 className="titulo__principal">
-                                {objeto.nome.length < 35 ? objeto.nome : `${objeto.nome.slice(0, 35)}...`}
+                                {nome.length < 35 ? nome : `${nome.slice(0, 35)}...`}
                             </h3>
 
                             <div className="categoria__status">
@@ -129,7 +183,7 @@ function Hero() {
 
                                 <div className="categoria__principal">
                                     <img className="icon__categoria" src={objeto.icon_url} alt="" />
-                                    <span>{objeto.categoria}</span>
+                                    <span>{objeto.categoria || "Outros"}</span>
                                 </div>
                             </div>
                         </div>
@@ -138,19 +192,17 @@ function Hero() {
                             <div className="data__hora">
                                 <div className="data__principal">
                                     <img src={localizacao} alt="Localização" />
-                                    <span>{`${objeto.localizacao.estado} - ${objeto.localizacao.cidade}`}</span>
+                                    <span>{localizacaoFormatada || "Localização não informada"}</span>
                                 </div>
-
-                                <p className="divisoria">|</p>
 
                                 <div className="hora__principal">
                                     <img src={calendar} alt="Data" />
-                                    <span>{dataFormatada(objeto.data.data.trim(), objeto.data.hora.trim())}</span>
+                                    <span>{dataFormatada(data, hora)}</span>
                                 </div>
                             </div>
 
                             <p className="descricao__principal">
-                                {objeto.descricao.length < 102 ? objeto.descricao : `${objeto.descricao.slice(0, 102)}...`}
+                                {descricao.length < 102 ? descricao : `${descricao.slice(0, 102)}...`}
                             </p>
                         </div>
                     </div>
@@ -169,20 +221,24 @@ function Hero() {
 function verificaIconStatus(status) {
     if (status === "PERDIDO") return warningRed;
     if (status === "ENCONTRADO") return checkGreen;
-    if (status === "ANALISE") return hourglassOrange;
+    if (status === "ANALISE" || status === "EM_ANALISE") return hourglassOrange;
+    return hourglassOrange;
 }
 
 function adicionaClassNameStatus(status) {
     if (status === "PERDIDO") return "status__red";
     if (status === "ENCONTRADO") return "status__green";
-    if (status === "ANALISE") return "status__orange";
+    if (status === "ANALISE" || status === "EM_ANALISE") return "status__orange";
+    return "status__orange";
 }
 
 function dataFormatada(data, hora) {
-    if (data === hoje()) return `Hoje, ${hora}`;
-    if (data === ontem()) return `Ontem, ${hora}`;
+    if (!data) return "Data não informada";
+    if (data === hoje()) return `Hoje${hora ? `, ${hora}` : ""}`;
+    if (data === ontem()) return `Ontem${hora ? `, ${hora}` : ""}`;
 
-    return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}, ${hora}`;
+    const dataLegivel = `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`;
+    return hora ? `${dataLegivel}, ${hora}` : dataLegivel;
 }
 
 export default Hero;

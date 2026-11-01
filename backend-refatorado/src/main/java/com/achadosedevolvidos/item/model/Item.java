@@ -54,7 +54,7 @@ public class Item extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @Column(name = "short_description", length = 100, nullable = false)
+    @Column(name = "short_description", length = 100, nullable = true)
     private String shortDescription;
 
     private String locationText;
