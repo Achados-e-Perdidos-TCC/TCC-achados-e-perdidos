@@ -22,9 +22,10 @@ public record CreateItemRequest(
         String title,
 
         @NotBlank(message = "Descrição é obrigatória")
+        @Size(max = 500, message = "Descrição deve ter no máximo 500 caracteres")
         String description,
 
-       @Size(max = 50, message = "Características específicas devem ter no máximo 50 caracteres")
+        @Size(max = 200, message = "Características específicas devem ter no máximo 200 caracteres")
         String shortDescription,
 
         String locationText,

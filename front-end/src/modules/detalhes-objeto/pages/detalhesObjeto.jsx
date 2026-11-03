@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, NavLink, useOutletContext } from "react-router";
 
@@ -13,234 +14,296 @@ import xBlack from "../../../assets/icons/detalhesObjeto/x-black.svg";
 import xWhite from "../../../assets/icons/detalhesObjeto/x-white.png";
 
 import ImagesCard from "../components/imagesCard/ImagesCard.jsx";
-import Detalhes from "../components/detalhes/Detalhes.jsx";
 
-function detalhesObjeto() {
-  const params = useParams();
-  const { tema } = useOutletContext();
+import Detalhes, {
+    DetalhesCabecalho,
+} from "../components/detalhes/Detalhes.jsx";
 
-  const [objetos, setObjetos] = useState([]);
+function DetalhesObjeto() {
+    const params = useParams();
+    const { tema } = useOutletContext();
 
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState(null);
+    const [objetos, setObjetos] = useState(null);
 
-  const [modalAberto, setModalAberto] = useState(false);
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [informacoes, setInformacoes] = useState("");
-  const [erroEnvio, setErroEnvio] = useState("");
+    const [carregando, setCarregando] = useState(true);
+    const [erro, setErro] = useState(null);
 
-  useEffect(() => {
-    async function Object() {
-      try {
-        const data = await objects(params.id);
+    const [modalAberto, setModalAberto] = useState(false);
 
-        setObjetos(data);
-      } catch (error) {
-        setErro(error);
-      } finally {
-        setCarregando(false);
-      }
+    const [nome, setNome] = useState("");
+    const [email, setEmail] = useState("");
+    const [informacoes, setInformacoes] = useState("");
+    const [erroEnvio, setErroEnvio] = useState("");
+
+    useEffect(() => {
+        async function carregarObjeto() {
+            try {
+                const data = await objects(params.id);
+                setObjetos(data);
+            } catch (error) {
+                setErro(error);
+            } finally {
+                setCarregando(false);
+            }
+        }
+
+        carregarObjeto();
+    }, [params.id]);
+
+    function validarFormulario() {
+        if (!nome.trim()) {
+            setErroEnvio("Informe seu nome.");
+            return false;
+        }
+
+        if (!email.trim()) {
+            setErroEnvio("Informe seu e-mail.");
+            return false;
+        }
+
+        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailValido.test(email)) {
+            setErroEnvio("Informe um endereço de e-mail válido.");
+            return false;
+        }
+
+        if (!informacoes.trim()) {
+            setErroEnvio(
+                "Descreva as informações que você possui sobre o objeto."
+            );
+            return false;
+        }
+
+        return true;
     }
 
-    Object();
-  }, []);
+    function enviarEmail(event) {
+        event.preventDefault();
 
-  function validarFormulario() {
-    if (!nome.trim()) {
-      setErroEnvio("Informe seu nome.");
-      return false;
+        setErroEnvio("");
+
+        if (!validarFormulario()) return;
+
+        const emailResponsavel = objetos?.emailResponsavel;
+
+        if (!emailResponsavel) {
+            setErroEnvio(
+                "Não foi possível identificar o e-mail do responsável por este objeto."
+            );
+            return;
+        }
+
+        const assunto = `Informações sobre o objeto: ${objetos.nome}`;
+
+        const mensagem = `
+Olá!
+
+Tenho informações sobre o objeto "${objetos.nome}".
+
+Nome: ${nome}
+E-mail: ${email}
+
+Informações:
+${informacoes}
+
+Link do objeto: ${window.location.href}
+        `;
+
+        const link = `mailto:${emailResponsavel}?subject=${encodeURIComponent(
+            assunto
+        )}&body=${encodeURIComponent(mensagem)}`;
+
+        window.location.href = link;
+        setModalAberto(false);
     }
 
-    if (!email.trim()) {
-      setErroEnvio("Informe seu e-mail.");
-      return false;
+    if (carregando) {
+        return <p>Carregando objeto...</p>;
     }
 
-    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailValido.test(email)) {
-      setErroEnvio("Informe um endereço de e-mail válido.");
-      return false;
+    if (erro || !objetos) {
+        return <p>Não foi possível carregar o objeto.</p>;
     }
 
-    if (!informacoes.trim()) {
-      setErroEnvio("Descreva as informações que você possui sobre o objeto.");
-      return false;
-    }
+    return (
+        <section className="detalhe__objetos">
 
-    return true;
-  }
+            {/* Caminho de navegação */}
+            <div className="caminho__voltar">
+                <div className="caminho">
+                    <img
+                        className="house__gray"
+                        src={houseGray}
+                        alt="Início"
+                    />
 
-  function enviarEmail(event) {
-    event.preventDefault();
+                    <img src={arrowGray} alt="" />
 
-    setErroEnvio("");
+                    <p className="caminho__text">
+                        Buscar objetos / {objetos.nome || "Objeto encontrado"}
+                    </p>
+                </div>
 
-    if (!validarFormulario()) return;
+                <div className="voltar__buscar">
+                    <NavLink
+                        className="voltar__navlink"
+                        to="/buscar-objetos"
+                        end
+                    >
+                        <img src={arrowBlue} alt="" />
 
-    const emailResponsavel = objetos?.emailResponsavel;
-
-    if (!emailResponsavel) {
-      setErroEnvio(
-        "Não foi possível identificar o e-mail do responsável por este objeto.",
-      );
-      return;
-    }
-
-    const assunto = `Informações sobre o objeto: ${objetos.nome}`;
-
-    const mensagem = `
-        Olá!
-
-        Tenho informações sobre o objeto "${objetos.nome}".
-
-        Nome: ${nome}
-        E-mail: ${email}
-
-        Informações:
-        ${informacoes}
-
-        Link do objeto: ${window.location.href}
-    `;
-
-    const link = `mailto:${emailResponsavel}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(mensagem)}`;
-
-    window.location.href = link;
-    setModalAberto(false);
-  }
-
-  if (carregando) {
-    return <p>Carregando objetos...</p>;
-  }
-  if (erro) {
-    return <p>Não foi possível carregar os objetos.</p>;
-  }
-
-  return (
-    <section className="detalhe__objetos">
-      <div className="caminho__voltar">
-        <div className="caminho">
-          <img className="house__gray" src={houseGray} />
-          <img src={arrowGray} />
-          <p className="caminho__text">
-            Buscar objetos / {`objetoEncontrado[0].name`}
-          </p>
-        </div>
-
-        <div className="voltar__buscar">
-          <NavLink className="voltar__navlink" to="/buscar-objetos" end>
-            <img src={arrowBlue} />
-            <p className="voltar__text"> voltar para Buscar Objetos </p>
-          </NavLink>
-        </div>
-      </div>
-
-      <div className="container__detalhes">
-        <div className="esquerda">
-          <ImagesCard objeto={objetos} />
-        </div>
-
-        <div className="direita">
-          <Detalhes objeto={objetos} />
-        </div>
-      </div>
-
-      <div className="container__botoes">
-        <button
-          className="botao__azul"
-          type="button"
-          onClick={() => {
-            setErroEnvio("");
-            setModalAberto(true);
-          }}
-        >
-          <div className="botoes">
-            <img src={chatWhite} />
-            <p>Tenho informações sobre este objeto</p>
-          </div>
-        </button>
-      </div>
-
-      {/* modal */}
-
-      {modalAberto && (
-        <div
-          className="modal__informacoes__overlay"
-          onClick={() => setModalAberto(false)}
-        >
-          <div
-            className="modal__informacoes"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="modal__informacoes__header">
-              <h2>Tenho informações sobre este objeto</h2>
-
-              <button
-                className="modal__informacoes__fechar"
-                type="button"
-                onClick={() => setModalAberto(false)}
-              >
-                <img src={tema === "light" ? xBlack : xWhite} />
-              </button>
+                        <p className="voltar__text">
+                            Voltar para Buscar Objetos
+                        </p>
+                    </NavLink>
+                </div>
             </div>
 
-            <form className="formulario__informacoes" onSubmit={enviarEmail}>
-              <div className="campo__informacoes">
-                <label htmlFor="nome">Seu nome</label>
-                <input
-                  id="nome"
-                  type="text"
-                  placeholder="Digite seu nome"
-                  value={nome}
-                  onChange={(event) => setNome(event.target.value)}
-                />
-              </div>
+            {/* Conteúdo principal */}
+            <div className="container__detalhes">
 
-              <div className="campo__informacoes">
-                <label htmlFor="email">Seu e-mail</label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="Digite seu e-mail"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-              </div>
+                {/* Galeria de imagens */}
+                <div className="esquerda">
+                    <ImagesCard objeto={objetos} />
+                </div>
 
-              <div className="campo__informacoes">
-                <label htmlFor="informacoes">Suas informações</label>
-                <textarea
-                  id="informacoes"
-                  placeholder="Descreva as informações que você tem sobre este objeto..."
-                  value={informacoes}
-                  onChange={(event) => setInformacoes(event.target.value)}
-                />
-              </div>
+                {/* Coluna direita */}
+                <div className="coluna__detalhes">
 
-              {erroEnvio && (
-                <p className="modal__informacoes__erro">{erroEnvio}</p>
-              )}
+                    {/* Nome e status */}
+                    <div className="topo__detalhes">
+                        <DetalhesCabecalho objeto={objetos} />
+                    </div>
 
-              <div className="modal__informacoes__botoes">
+                    {/* Categoria, localização, data e descrição */}
+                    <div className="direita">
+                        <Detalhes objeto={objetos} />
+                    </div>
+
+                </div>
+
+            </div>
+
+            {/* Botão de contato */}
+            <div className="container__botoes">
                 <button
-                  className="botao__cancelar__informacoes"
-                  type="button"
-                  onClick={() => setModalAberto(false)}
+                    className="botao__azul"
+                    type="button"
+                    onClick={() => {
+                        setErroEnvio("");
+                        setModalAberto(true);
+                    }}
                 >
-                  Cancelar
-                </button>
+                    <div className="botoes">
+                        <img src={chatWhite} alt="" />
 
-                <button className="botao__enviar__informacoes" type="submit">
-                  Enviar informações
+                        <p>Tenho informações sobre este objeto</p>
+                    </div>
                 </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-    </section>
-  );
+            </div>
+
+            {/* Modal de informações */}
+            {modalAberto && (
+                <div
+                    className="modal__informacoes__overlay"
+                    onClick={() => setModalAberto(false)}
+                >
+                    <div
+                        className="modal__informacoes"
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                        <div className="modal__informacoes__header">
+                            <h2>Tenho informações sobre este objeto</h2>
+
+                            <button
+                                className="modal__informacoes__fechar"
+                                type="button"
+                                onClick={() => setModalAberto(false)}
+                            >
+                                <img
+                                    src={tema === "light" ? xBlack : xWhite}
+                                    alt="Fechar"
+                                />
+                            </button>
+                        </div>
+
+                        <form
+                            className="formulario__informacoes"
+                            onSubmit={enviarEmail}
+                        >
+                            <div className="campo__informacoes">
+                                <label htmlFor="nome">Seu nome</label>
+
+                                <input
+                                    id="nome"
+                                    type="text"
+                                    placeholder="Digite seu nome"
+                                    value={nome}
+                                    onChange={(event) =>
+                                        setNome(event.target.value)
+                                    }
+                                />
+                            </div>
+
+                            <div className="campo__informacoes">
+                                <label htmlFor="email">Seu e-mail</label>
+
+                                <input
+                                    id="email"
+                                    type="email"
+                                    placeholder="Digite seu e-mail"
+                                    value={email}
+                                    onChange={(event) =>
+                                        setEmail(event.target.value)
+                                    }
+                                />
+                            </div>
+
+                            <div className="campo__informacoes">
+                                <label htmlFor="informacoes">
+                                    Suas informações
+                                </label>
+
+                                <textarea
+                                    id="informacoes"
+                                    placeholder="Descreva as informações que você tem sobre este objeto..."
+                                    value={informacoes}
+                                    onChange={(event) =>
+                                        setInformacoes(event.target.value)
+                                    }
+                                />
+                            </div>
+
+                            {erroEnvio && (
+                                <p className="modal__informacoes__erro">
+                                    {erroEnvio}
+                                </p>
+                            )}
+
+                            <div className="modal__informacoes__botoes">
+                                <button
+                                    className="botao__cancelar__informacoes"
+                                    type="button"
+                                    onClick={() => setModalAberto(false)}
+                                >
+                                    Cancelar
+                                </button>
+
+                                <button
+                                    className="botao__enviar__informacoes"
+                                    type="submit"
+                                >
+                                    Enviar informações
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+        </section>
+    );
 }
 
-export default detalhesObjeto;
+export default DetalhesObjeto;

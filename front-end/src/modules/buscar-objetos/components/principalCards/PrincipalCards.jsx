@@ -75,65 +75,101 @@ function PrincipalCards({ objetos, inicio, fim, resultadosExibidos, resultadoTot
 
                         <div className='principal__meio'>
 
-                            <div className='principal__encima'>
+                           <div className='principal__meio'>
 
-                                <h1 className='titulo__principal'>{ nome.length < 35 ? nome : `${nome.slice(0, 35)}...` }</h1>
-                                <h1 className='titulo__responsive'>{ nome.length < 25 ? nome : `${nome.slice(0, 25)}...`}</h1>
+    {/* Parte superior: título, status e categoria */}
+    <div className='principal__encima'>
 
-                                <div className='categoria__status'>
-                                    <Status objeto={valor}/>
+        <h1 className='titulo__principal'>
+            {nome.length < 35 ? nome : `${nome.slice(0, 35)}...`}
+        </h1>
 
-                                    <div className='categoria__principal'>
-                                        <img className='icon__categoria' src={valor.icon_url} />
-                                        <span>{valor.categoria}</span>
-                                    </div>
-                                </div>
+        <h1 className='titulo__responsive'>
+            {nome.length < 25 ? nome : `${nome.slice(0, 25)}...`}
+        </h1>
 
-                            </div>
+        <div className='categoria__status'>
+            <Status objeto={valor}/>
 
-                            <div className='principal__embaixo'>
+            <div className='categoria__principal'>
+                <img
+                    className='icon__categoria'
+                    src={valor.icon_url}
+                    alt=""
+                />
+                <span>{valor.categoria}</span>
+            </div>
+        </div>
 
-                                <div className='data__hora'>
+        {/* Localização e data abaixo do status */}
+        <div className='data__hora'>
 
-                                    <div className='data__principal'>
-                                        <img src={pinGray} />         
-                                        {!textoLocalizacao ? (
-                                            <p className='endereco__principal'>Localização não informada</p>
-                                        ) : (
-                                            <p className='endereco__principal'>
-                                                {textoLocalizacao.length < 50
-                                                    ? textoLocalizacao
-                                                    : `${textoLocalizacao.slice(0, 50)}...`}
-                                            </p>
-                                        )}
+            <div className='data__principal'>
+                <img src={pinGray} alt="" />
 
-                                        {!textoLocalizacao ? (
-                                            <p className='endereco__responsive'>Localização não informada</p>
-                                        ) : (
-                                            <span className='endereco__responsive'>
-                                                {textoLocalizacao.length < 27
-                                                    ? textoLocalizacao
-                                                    : `${textoLocalizacao.slice(0, 27)}...`}
-                                            </span>
-                                        )}
-                                        
-                                    </div>
+                {!textoLocalizacao ? (
+                    <p className='endereco__principal'>
+                        Localização não informada
+                    </p>
+                ) : (
+                    <p className='endereco__principal'>
+                        {textoLocalizacao.length < 50
+                            ? textoLocalizacao
+                            : `${textoLocalizacao.slice(0, 50)}...`}
+                    </p>
+                )}
 
+                <span className='endereco__responsive'>
+                    {!textoLocalizacao
+                        ? 'Localização não informada'
+                        : textoLocalizacao.length < 27
+                            ? textoLocalizacao
+                            : `${textoLocalizacao.slice(0, 27)}...`}
+                </span>
+            </div>
 
-                                    <div className='hora__principal'>
-                                        <img src={calendarGray} />
-                                        <span>{dataFormatada(data.trim(), hora.trim())}</span>
-                                    </div>
-                                    
-                                </div>
+            <div className='hora__principal'>
+                <img src={calendarGray} alt="" />
+                <span>{dataFormatada(data, hora)}</span>
+            </div>
 
-                                <p className='descricao__principal'>{descricao.length < 102 ? descricao : `${descricao.slice(0, 102)}...`}</p>
+        </div>
+    </div>
 
-                                <div className='button__responsive'>
-                                    <NavLink className='detalhes__principal' to={`/buscar-objetos/${valor.id}`}>Ver detalhes</NavLink>
-                                    <img className='arrow__button__principal' src={arrowBlue} alt="" />
-                                </div>
-                            </div>
+    {/* Parte central: descrição */}
+    <div className='principal__embaixo'>
+
+        <div className='busca__descricao'>
+            <span className='busca__descricao__titulo'>
+                Descrição
+            </span>
+
+            <p className='descricao__principal'>
+                {descricao.length < 102
+                    ? descricao
+                    : `${descricao.slice(0, 102)}...`}
+            </p>
+        </div>
+
+        {/* Botão responsivo */}
+        <div className='button__responsive'>
+            <NavLink
+                className='detalhes__principal'
+                to={`/buscar-objetos/${valor.id}`}
+            >
+                Ver detalhes
+            </NavLink>
+
+            <img
+                className='arrow__button__principal'
+                src={arrowBlue}
+                alt=""
+            />
+        </div>
+
+    </div>
+
+</div>
 
                         </div>
 

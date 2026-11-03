@@ -81,19 +81,21 @@ public class ItemMapper {
                 );
 
         return new ItemResponse(
-                item.getId(),
-                imagemPrincipal,
-                item.getTitle(),
-                item.getType().name(),
-                item.getCategory().getName(),
-                item.getCategory().getIconUrl(),
-                item.getShortDescription() != null && !item.getShortDescription().isBlank()
-                        ? item.getShortDescription()
-                        : item.getDescription(),
-                imagens,
-                localizacao,
-                data,
-                emailResponsavel
-        );
+        item.getId(),
+        imagemPrincipal,
+        item.getTitle(),
+        item.getType().name(),
+        item.getCategory().getName(),
+        item.getCategory().getIconUrl(),
+        item.getDescription(),
+        item.getShortDescription() != null
+                && !item.getShortDescription().isBlank()
+                ? item.getShortDescription()
+                : null,
+        imagens,
+        localizacao,
+        data,
+        emailResponsavel
+);
     }
 }

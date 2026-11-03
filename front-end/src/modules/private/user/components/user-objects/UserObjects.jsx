@@ -151,7 +151,6 @@ function UserObjects({ open }) {
             const imagemPrincipal = resolverUrlImagem(valor.imagemPrincipal);
             const data = valor.data?.data;
             const hora = valor.data?.hora;
-
             return (
               <div className="user__card__principal" key={valor.id}>
                 <img
