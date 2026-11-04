@@ -1,177 +1,273 @@
-import { useState, useEffect } from 'react'; 
-import { updateProfile, updatePreferences, imageUpload } from '../../../../auth/auth.service.js';
-import { verificaEmailSenha, validaCidade, verificaTelefone } from '../../../../../utils/inputs/inputs.js';
+import { useState, useEffect } from "react";
 
-import FormInfos from './components/formInfos/FormInfos.jsx'; 
-import SecurityLinks from './components/securityLinks/SecurityLinks.jsx'; 
-import UserPreferences from './components/userPreferences/UserPreferences.jsx'; 
-import DangerZone from './components/dangerZone/DangerZone.jsx'; 
-import PhotoCard from './components/photoCard/PhotoCard.jsx'; 
+import {
+  updateProfile,
+  updatePreferences,
+  imageUpload,
+} from "../../../../auth/auth.service.js";
 
-import cidadesBrasil from '../../../../../utils/json/cidade-estados.json';
+import {
+  validaCidade,
+  verificaTelefone,
+} from "../../../../../utils/inputs/inputs.js";
 
-import './UserProfile.css'; 
+import FormInfos from "./components/formInfos/FormInfos.jsx";
+import SecurityLinks from "./components/securityLinks/SecurityLinks.jsx";
+import UserPreferences from "./components/userPreferences/UserPreferences.jsx";
+import DangerZone from "./components/dangerZone/DangerZone.jsx";
+import PhotoCard from "./components/photoCard/PhotoCard.jsx";
 
-import userBlue from '../../../../../assets/icons/register/user-blue.png'; 
-import configBlue from '../../../../../assets/icons/userArea/config-blue.png'; 
-import shieldBlue from '../../../../../assets/icons/userArea/protect-blue.png';
-import dangerRed from '../../../../../assets/icons/userArea/danger-red.png';
-import saveWhite from '../../../../../assets/icons/userArea/save-white.png';
+import cidadesBrasil from "../../../../../utils/json/cidade-estados.json";
 
-function UserProfile({ userInfos }){
+import "./UserProfile.css";
 
-    const [inputNameState, setInputNameState] = useState(userInfos.name);
-    const [inputEmailState, setInputEmailState] = useState(userInfos.email);
-    const [inputTelephoneState, setInputTelephoneState] = useState(userInfos.phone);
+import userBlue from "../../../../../assets/icons/register/user-blue.png";
+import configBlue from "../../../../../assets/icons/userArea/config-blue.png";
+import shieldBlue from "../../../../../assets/icons/userArea/protect-blue.png";
+import dangerRed from "../../../../../assets/icons/userArea/danger-red.png";
+import saveWhite from "../../../../../assets/icons/userArea/save-white.png";
 
-    const [inputCityState, setInputCityState] = useState(userInfos.city);
-    const [inputState, setInputState] = useState('');
+function UserProfile({ userInfos }) {
+  const [inputNameState, setInputNameState] = useState(userInfos.name);
+  const [inputEmailState, setInputEmailState] = useState(userInfos.email);
+  const [inputTelephoneState, setInputTelephoneState] = useState(
+    userInfos.phone,
+  );
 
-    const [ativo1, setAtivo1] = useState(userInfos.preferences.notificationsEnabled);
-    const [ativo2, setAtivo2] = useState(userInfos.preferences.emailsEnabled);
+  const [inputCityState, setInputCityState] = useState(userInfos.city);
+  const [inputState, setInputState] = useState("");
 
-    const [avatar, setAvatar] = useState(null); // -> db
-    const [photo, setPhoto] = useState() // -> new 
+  const [ativo1, setAtivo1] = useState(
+    userInfos.preferences.notificationsEnabled,
+  );
 
-    const [error, setError] = useState();
+  const [showEmailOnItems, setShowEmailOnItems] = useState(
+    userInfos.preferences?.showEmailOnItems ?? true,
+  );
 
-    const todasAsCidades = [];
-    cidadesBrasil.estados.forEach((estado) => { estado.cidades.forEach((cidade) => { todasAsCidades.push({
+  const [avatar, setAvatar] = useState(null);
+  const [photo, setPhoto] = useState();
+
+  const [error, setError] = useState();
+
+  const todasAsCidades = [];
+
+  cidadesBrasil.estados.forEach((estado) => {
+    estado.cidades.forEach((cidade) => {
+      todasAsCidades.push({
         cidade: cidade,
-        estado: estado.sigla
-    })})});
+        estado: estado.sigla,
+      });
+    });
+  });
 
-        useEffect(() => {
-            if (userInfos.city) {
-                const estadoEncontrado = cidadesBrasil.estados.find((estado) => estado.cidades.includes(userInfos.city));
+  useEffect(() => {
+    if (userInfos.city) {
+      const estadoEncontrado = cidadesBrasil.estados.find((estado) =>
+        estado.cidades.includes(userInfos.city),
+      );
 
-                if (estadoEncontrado) { setInputState(estadoEncontrado.sigla) }
-            }
-    }, [userInfos.city]);
-
-    async function changeDataAccount(){
-        try{
-            if(inputNameState !== userInfos.name || inputTelephoneState !== userInfos.phone || inputCityState !== userInfos.city || photo){ 
-
-                let avatar = userInfos.avatarUrl
-
-                if(photo){
-                    const image = await imageUpload(photo);
-                    avatar = image.url; 
-                }
-
-                if (inputNameState.trim().length < 3 || inputNameState.trim().length > 100) { return setError('Nome inválido') }
-
-                verificaTelefone(inputTelephoneState);
-                validaCidade(inputCityState, inputState, todasAsCidades); 
-
-                await updateProfile( inputNameState, inputTelephoneState, inputCityState, avatar); 
-                return window.location.reload()
-             }
-
-            if(ativo1 !== userInfos.preferences.notificationsEnabled || ativo2 !== userInfos.preferences.emailsEnabled){
-
-                await updatePreferences({
-                    notificationsEnabled: ativo1,
-                    matchAlertsEnabled: false,
-                    emailsEnabled: ativo2
-                }); 
-                return window.location.reload()
-            }
-
-            setError('Não foi possivel atualizar os seus dados, verifique se você realmente realizou alguma alteração');
-
-        } catch(erro){
-            if(erro.message === 'Telefone inválido') { return setError('Telefone inválido')}
-            if (erro.message === 'Estado não selecionado') { return setError('Selecione o estado da cidade') }
-            if (erro.message === 'Cidade inválida') { return setError('Selecione uma cidade disponível na lista') } 
-        }
+      if (estadoEncontrado) {
+        setInputState(estadoEncontrado.sigla);
+      }
     }
+  }, [userInfos.city]);
 
-    return(
-        <section className="user__profile">
-           <div>
-                <h1 className='user__profile__text'>Meu perfil</h1>
-                <p className='user__profile__subtitle'>Gerencie suas informações pessoais, preferências e segurança da sua conta. </p>
-            </div>
+  async function changeDataAccount() {
+    try {
+      setError(undefined);
 
-            <div>
-                <PhotoCard userInfos={userInfos} photo={photo} setPhoto={setPhoto} avatar={avatar} setAvatar={setAvatar} setError={setError} />
-            </div>
+      let alterou = false;
 
+      const dadosPessoaisAlterados =
+        inputNameState !== userInfos.name ||
+        inputTelephoneState !== userInfos.phone ||
+        inputCityState !== userInfos.city ||
+        photo;
 
-            <div className='user__profile__container__contents'>
+      const preferenciasAlteradas =
+        ativo1 !== userInfos.preferences.notificationsEnabled ||
+        showEmailOnItems !== (userInfos.preferences?.showEmailOnItems ?? true);
 
-                <div className='user__profile__container__default'>
+      // Atualização dos dados pessoais
+      if (dadosPessoaisAlterados) {
+        if (
+          inputNameState.trim().length < 3 ||
+          inputNameState.trim().length > 100
+        ) {
+          return setError("Nome inválido");
+        }
 
-                    <div className='user__profile__header'>
-                        <img className='user__profile__user' src={userBlue} />
-                        <h3 className='user__profile__header__subtitle'>Informações pessoais</h3>
-                    </div>
+        verificaTelefone(inputTelephoneState);
+        validaCidade(inputCityState, inputState, todasAsCidades);
 
-                    <div>
-                        <FormInfos inputState={inputState} inputCityState={inputCityState} inputEmailState={inputEmailState} setInputNameState={setInputNameState} 
-                        inputNameState={inputNameState} inputTelephoneState={inputTelephoneState} setInputCityState={setInputCityState} 
-                        setInputEmailState={setInputEmailState} setInputTelephoneState={setInputTelephoneState} setInputState={setInputState} todasAsCidades={todasAsCidades} /> 
-                    </div>
+        let avatarAtualizado = userInfos.avatarUrl;
 
-                </div>
+        if (photo) {
+          const image = await imageUpload(photo);
+          avatarAtualizado = image.url;
+        }
 
-                <div className='user__profile__container__default'>
+        await updateProfile(
+          inputNameState,
+          inputTelephoneState,
+          inputCityState,
+          avatarAtualizado,
+        );
 
-                    <div className='user__profile__header'>
-                        <img className='user__profile__shield' src={shieldBlue} />
-                        <h3 className='user__profile__header__subtitle'>Segurança</h3>
-                    </div>
+        alterou = true;
+      }
 
-                    <div>
-                        <SecurityLinks />
-                    </div>
+      // Atualização das preferências
+      if (preferenciasAlteradas) {
+        await updatePreferences({
+          notificationsEnabled: ativo1,
+          showEmailOnItems: showEmailOnItems,
+        });
 
-                </div>
+        alterou = true;
+      }
 
-                <div className='user__profile__container__default'>
+      // Recarrega após concluir as atualizações
+      if (alterou) {
+        return window.location.reload();
+      }
 
-                    <div className='user__profile__header'>
-                        <img className='user__profile__bell' src={configBlue} />
-                        <h3 className='user__profile__header__subtitle'>Preferências</h3>
-                    </div>
+      setError(
+        "Não foi possível atualizar os dados. Verifique se realizou alguma alteração.",
+      );
+    } catch (erro) {
+      if (erro.message === "Telefone inválido") {
+        return setError("Telefone inválido");
+      }
 
-                    <div>
-                        <UserPreferences ativo1={ativo1} ativo2={ativo2} setAtivo1={setAtivo1} setAtivo2={setAtivo2} />
-                    </div>
+      if (erro.message === "Estado não selecionado") {
+        return setError("Selecione o estado da cidade");
+      }
 
-                </div>
+      if (erro.message === "Cidade inválida") {
+        return setError("Selecione uma cidade disponível na lista");
+      }
 
-                <div className='user__profile__container__default__danger'>
+      console.error("Erro ao atualizar perfil:", erro);
 
-                    <div className='user__profile__header'>
-                        <img className='user__profile__danger' src={dangerRed} />
-                        <h3 className='user__profile__header__subtitle__danger'>Zona de perigo</h3>
-                    </div>
+      setError("Não foi possível salvar as alterações.");
+    }
+  }
 
-                    <div>
-                        <DangerZone />
-                    </div>
+  return (
+    <section className="user__profile">
+      <div>
+        <h1 className="user__profile__text">Meu perfil</h1>
 
-                </div>
-            </div>
+        <p className="user__profile__subtitle">
+          Gerencie suas informações pessoais, preferências e segurança da sua
+          conta.
+        </p>
+      </div>
 
-            {error ? <p className='user__error__message'>{error}</p> : ''}
+      <div>
+        <PhotoCard
+          userInfos={userInfos}
+          photo={photo}
+          setPhoto={setPhoto}
+          avatar={avatar}
+          setAvatar={setAvatar}
+          setError={setError}
+        />
+      </div>
 
-            <div className='user__profile__buttons'>
+      <div className="user__profile__container__contents">
+        <div className="user__profile__container__default">
+          <div className="user__profile__header">
+            <img className="user__profile__user" src={userBlue} />
 
-                    <button className='user__profile__save__button' onClick={() => { changeDataAccount() }}>
-                        <img className='user__profile__save' src={saveWhite} />
-                        <span> Salvar alterações </span>
-                    </button>
+            <h3 className="user__profile__header__subtitle">
+              Informações pessoais
+            </h3>
+          </div>
 
-                    <button className='user__profile__cancel__button' onClick={() => { window.location.reload() }}>
-                        <span> Cancelar </span>
-                    </button>
-            </div>
-        </section>
-    )
+          <div>
+            <FormInfos
+              inputState={inputState}
+              inputCityState={inputCityState}
+              inputEmailState={inputEmailState}
+              setInputNameState={setInputNameState}
+              inputNameState={inputNameState}
+              inputTelephoneState={inputTelephoneState}
+              setInputCityState={setInputCityState}
+              setInputEmailState={setInputEmailState}
+              setInputTelephoneState={setInputTelephoneState}
+              setInputState={setInputState}
+              todasAsCidades={todasAsCidades}
+            />
+          </div>
+        </div>
+
+        <div className="user__profile__container__default">
+          <div className="user__profile__header">
+            <img className="user__profile__shield" src={shieldBlue} />
+
+            <h3 className="user__profile__header__subtitle">Segurança</h3>
+          </div>
+
+          <div>
+            <SecurityLinks />
+          </div>
+        </div>
+
+        <div className="user__profile__container__default">
+          <div className="user__profile__header">
+            <img className="user__profile__bell" src={configBlue} />
+
+            <h3 className="user__profile__header__subtitle">Preferências</h3>
+          </div>
+
+          <div>
+            <UserPreferences
+              ativo1={ativo1}
+              showEmailOnItems={showEmailOnItems}
+              setAtivo1={setAtivo1}
+              setShowEmailOnItems={setShowEmailOnItems}
+            />
+          </div>
+        </div>
+
+        <div className="user__profile__container__default__danger">
+          <div className="user__profile__header">
+            <img className="user__profile__danger" src={dangerRed} />
+
+            <h3 className="user__profile__header__subtitle__danger">
+              Zona de perigo
+            </h3>
+          </div>
+
+          <div>
+            <DangerZone />
+          </div>
+        </div>
+      </div>
+
+      {error && <p className="user__error__message">{error}</p>}
+
+      <div className="user__profile__buttons">
+        <button
+          className="user__profile__save__button"
+          onClick={changeDataAccount}
+        >
+          <img className="user__profile__save" src={saveWhite} />
+          <span>Salvar alterações</span>
+        </button>
+
+        <button
+          className="user__profile__cancel__button"
+          onClick={() => window.location.reload()}
+        >
+          <span>Cancelar</span>
+        </button>
+      </div>
+    </section>
+  );
 }
 
-export default UserProfile; 
+export default UserProfile;
