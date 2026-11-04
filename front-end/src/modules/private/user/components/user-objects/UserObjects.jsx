@@ -187,7 +187,7 @@ function UserObjects({ open }) {
                         </button>
 
                         <div className="user__menu__editar__opcoes">
-                          <NavLink to={`/buscar-objetos/${valor.id}?edit=true`}>
+                          <NavLink to={`/user-area/editar-objeto/${valor.id}`}>
                             <span>Editar objeto</span>
                           </NavLink>
                         </div>

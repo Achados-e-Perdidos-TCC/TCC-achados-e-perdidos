@@ -146,12 +146,19 @@ public class ItemServiceImpl implements ItemService {
             item.setDescription(request.description());
         }
         if (request.shortDescription() != null) {
-            requireNotBlank(request.shortDescription(), "Descrição curta não pode ser vazia");
-            if (request.shortDescription().length() > 100) {
-                throw new AppException("Descrição curta deve ter no máximo 100 caracteres", HttpStatus.BAD_REQUEST);
-            }
-            item.setShortDescription(request.shortDescription());
-        }
+    String shortDescription = request.shortDescription().trim();
+
+    if (shortDescription.length() > 100) {
+        throw new AppException(
+            "Descrição curta deve ter no máximo 100 caracteres",
+            HttpStatus.BAD_REQUEST
+        );
+    }
+
+    item.setShortDescription(
+        shortDescription.isBlank() ? null : shortDescription
+    );
+}
         if (request.locationText() != null) {
             item.setLocationText(request.locationText());
         }

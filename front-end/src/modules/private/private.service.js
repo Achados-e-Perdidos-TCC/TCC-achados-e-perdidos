@@ -11,6 +11,40 @@ export async function userInformation() {
   return data;
 }
 
+export async function findOwnedObject(id) {
+  let pagina = 0;
+  let totalPaginas = 1;
+  const tamanhoPagina = 20;
+
+  while (pagina < totalPaginas) {
+    const data = await request(
+      `${ENDPOINTS.item.me}?page=${pagina}&size=${tamanhoPagina}`,
+      {
+        method: "GET",
+      }
+    );
+
+    const objetos = Array.isArray(data)
+      ? data
+      : Array.isArray(data?.content)
+        ? data.content
+        : [];
+
+    const objetoEncontrado = objetos.find(
+      (objeto) => String(objeto.id) === String(id)
+    );
+
+    if (objetoEncontrado) {
+      return objetoEncontrado;
+    }
+
+    totalPaginas = Number(data?.totalPages ?? 1);
+    pagina++;
+  }
+
+  return null;
+}
+
 export async function loadAvatar(avatarUrl) {
   // .slice() para cortar /api/v1
   const response = await fetch(`${API_URL.slice(0, 21)}${avatarUrl}`);
