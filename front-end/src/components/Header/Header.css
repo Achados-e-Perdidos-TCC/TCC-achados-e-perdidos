@@ -209,3 +209,8 @@ li {
     transform: translateX(100%);
   }
 }
+@media (min-width: 769px) {
+    .nav-item-cadastrar {
+        display: none;
+    }
+}

@@ -56,7 +56,7 @@ function Header({ tema, aoAlternarTema }) {
                             </NavLink>
                         </li>
 
-                        <li>
+                        <li className="nav-item-cadastrar">
                             <NavLink
                                 className="nav__link"
                                 to="/cadastrar-objetos"
