@@ -51,7 +51,9 @@
 }
 
 .direita {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 /* buttons */
@@ -81,6 +83,7 @@
   border: none;
   color: #ffff;
   transition: 0.3s;
+  width: 100%;
 }
 
 .botao__azul:hover {
@@ -119,22 +122,44 @@
 
 .modal__informacoes__header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1.5rem;
+}
+
+.modal__informacoes__header > button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal__informacoes__header h2,
+.modal__informacoes__header p {
+  display: block;
+  width: 100%;
 }
 
 .modal__informacoes__header h2 {
   font-size: 2rem;
 }
 
+.modal__informacoes__header > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.modal__informacoes__header p {
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--secondary-color-gray);
+}
+
 .modal__informacoes__fechar {
-  width: 3.5rem;
-  height: 3.5rem;
-  border: none;
-  border-radius: 0.8rem;
-  background: transparent;
-  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .formulario__informacoes {
@@ -213,12 +238,28 @@
   color: #fff;
 }
 
+.aviso__email {
+  font-size: 1.05rem;
+  color: var(--secondary-color-gray);
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
+}
+
 /* responsividade */
 
 @media (max-width: 768px) {
   .esquerda,
   .botao__azul {
     width: 100%;
+  }
+
+  .direita {
+    width: 100%;
+  }
+
+  .modal__informacoes__header {
+    align-items: flex-start;
   }
 
   .detalhe__objetos {
@@ -234,8 +275,11 @@
   }
 
   .container__botoes {
-    flex-direction: column;
-    gap: 1rem;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    gap: 4rem;
+    align-items: center;
   }
 
   .botoes p {

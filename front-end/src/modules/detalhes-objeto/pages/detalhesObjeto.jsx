@@ -19,7 +19,7 @@ function detalhesObjeto() {
   const params = useParams();
   const { tema } = useOutletContext();
 
-  const [objetos, setObjetos] = useState([]);
+  const [objetos, setObjetos] = useState(null);
 
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
@@ -29,6 +29,8 @@ function detalhesObjeto() {
   const [email, setEmail] = useState("");
   const [informacoes, setInformacoes] = useState("");
   const [erroEnvio, setErroEnvio] = useState("");
+
+  const objetoEncontrado = objetos?.status?.toUpperCase() === "ENCONTRADO";
 
   useEffect(() => {
     async function Object() {
@@ -44,7 +46,7 @@ function detalhesObjeto() {
     }
 
     Object();
-  }, []);
+  }, [params.id]);
 
   function validarFormulario() {
     if (!nome.trim()) {
@@ -59,7 +61,7 @@ function detalhesObjeto() {
 
     const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailValido.test(email)) {
+    if (!emailValido.test(email.trim())) {
       setErroEnvio("Informe um endereço de e-mail válido.");
       return false;
     }
@@ -83,37 +85,64 @@ function detalhesObjeto() {
 
     if (!emailResponsavel) {
       setErroEnvio(
-        "Não foi possível identificar o e-mail do responsável por este objeto.",
+        "O responsável por este objeto não disponibilizou um e-mail para contato.",
       );
       return;
     }
 
-    const assunto = `Informações sobre o objeto: ${objetos.nome}`;
+    const nomeObjeto = objetos.nome;
 
-    const mensagem = `
-        Olá!
+    const assunto = objetoEncontrado
+      ? `Tenho interesse no objeto: ${nomeObjeto}`
+      : `Informações sobre o objeto: ${nomeObjeto}`;
 
-        Tenho informações sobre o objeto "${objetos.nome}".
+    const mensagem = `Olá!
 
-        Nome: ${nome}
-        E-mail: ${email}
+    ${
+      objetoEncontrado
+        ? `Tenho interesse no objeto "${nomeObjeto}" e gostaria de saber mais sobre ele.`
+        : `Tenho informações sobre o objeto "${nomeObjeto}" e gostaria de ajudar na sua identificação e recuperação.`
+    }
 
-        Informações:
-        ${informacoes}
+    Nome: ${nome.trim()}
+    E-mail: ${email.trim()}
 
-        Link do objeto: ${window.location.href}
-    `;
+    Mensagem:
+    ${informacoes.trim()}
 
-    const link = `mailto:${emailResponsavel}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(mensagem)}`;
+    Link do objeto: ${window.location.href}`;
 
-    window.location.href = link;
+    const parametros = new URLSearchParams({
+      view: "cm",
+      to: emailResponsavel,
+      su: assunto,
+      body: mensagem,
+    });
+
+    const link = `https://mail.google.com/mail/u/0/?${parametros.toString()}`;
+
+    const largura = 850;
+    const altura = 650;
+
+    const esquerda = window.screenX + (window.outerWidth - largura) / 2;
+    const topo = window.screenY + (window.outerHeight - altura) / 2;
+
+    window.open(
+      link,
+      "janelaEmail",
+      `width=${largura},height=${altura},left=${esquerda},top=${topo},resizable=yes,scrollbars=yes`,
+    );
+
+    window.open(link, "_blank");
+
     setModalAberto(false);
   }
 
   if (carregando) {
     return <p>Carregando objetos...</p>;
   }
-  if (erro) {
+
+  if (erro || !objetos) {
     return <p>Não foi possível carregar os objetos.</p>;
   }
 
@@ -121,17 +150,16 @@ function detalhesObjeto() {
     <section className="detalhe__objetos">
       <div className="caminho__voltar">
         <div className="caminho">
-          <img className="house__gray" src={houseGray} />
-          <img src={arrowGray} />
-          <p className="caminho__text">
-            Buscar objetos / {`objetoEncontrado[0].name`}
-          </p>
+          <img className="house__gray" src={houseGray} alt="" />
+          <img src={arrowGray} alt="" />
+
+          <p className="caminho__text">Buscar objetos / {objetos.nome}</p>
         </div>
 
         <div className="voltar__buscar">
           <NavLink className="voltar__navlink" to="/buscar-objetos" end>
-            <img src={arrowBlue} />
-            <p className="voltar__text"> voltar para Buscar Objetos </p>
+            <img src={arrowBlue} alt="" />
+            <p className="voltar__text">voltar para Buscar Objetos</p>
           </NavLink>
         </div>
       </div>
@@ -143,26 +171,30 @@ function detalhesObjeto() {
 
         <div className="direita">
           <Detalhes objeto={objetos} />
+
+          <div className="container__botoes">
+            <button
+              className="botao__azul"
+              type="button"
+              onClick={() => {
+                setErroEnvio("");
+                setModalAberto(true);
+              }}
+            >
+              <div className="botoes">
+                <img src={chatWhite} alt="" />
+                <p>
+                  {objetoEncontrado
+                    ? "Tenho interesse neste objeto"
+                    : "Tenho informações sobre este objeto"}
+                </p>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="container__botoes">
-        <button
-          className="botao__azul"
-          type="button"
-          onClick={() => {
-            setErroEnvio("");
-            setModalAberto(true);
-          }}
-        >
-          <div className="botoes">
-            <img src={chatWhite} />
-            <p>Tenho informações sobre este objeto</p>
-          </div>
-        </button>
-      </div>
-
-      {/* modal */}
+      {/* Modal de informações */}
 
       {modalAberto && (
         <div
@@ -174,20 +206,37 @@ function detalhesObjeto() {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="modal__informacoes__header">
-              <h2>Tenho informações sobre este objeto</h2>
+              <div>
+                <h2>
+                  {objetoEncontrado
+                    ? "Tenho interesse neste objeto"
+                    : "Tenho informações sobre este objeto"}
+                </h2>
+
+                <p>
+                  {objetoEncontrado
+                    ? "Gostaria de saber mais sobre este objeto? Envie uma mensagem ao responsável para obter mais informações."
+                    : "Possui informações sobre este objeto? Envie uma mensagem ao responsável para ajudar na sua identificação e recuperação."}
+                </p>
+              </div>
 
               <button
                 className="modal__informacoes__fechar"
                 type="button"
                 onClick={() => setModalAberto(false)}
               >
-                <img src={tema === "light" ? xBlack : xWhite} />
+                <img src={tema === "light" ? xBlack : xWhite} alt="Fechar" />
               </button>
             </div>
+
+            {erroEnvio && (
+              <p className="modal__informacoes__erro">{erroEnvio}</p>
+            )}
 
             <form className="formulario__informacoes" onSubmit={enviarEmail}>
               <div className="campo__informacoes">
                 <label htmlFor="nome">Seu nome</label>
+
                 <input
                   id="nome"
                   type="text"
@@ -199,6 +248,7 @@ function detalhesObjeto() {
 
               <div className="campo__informacoes">
                 <label htmlFor="email">Seu e-mail</label>
+
                 <input
                   id="email"
                   type="email"
@@ -209,18 +259,21 @@ function detalhesObjeto() {
               </div>
 
               <div className="campo__informacoes">
-                <label htmlFor="informacoes">Suas informações</label>
+                <label htmlFor="informacoes">
+                  {objetoEncontrado ? "Sua mensagem" : "Suas informações"}
+                </label>
+
                 <textarea
                   id="informacoes"
-                  placeholder="Descreva as informações que você tem sobre este objeto..."
+                  placeholder={
+                    objetoEncontrado
+                      ? "Escreva sua mensagem ou dúvida sobre este objeto..."
+                      : "Descreva as informações que você tem sobre este objeto..."
+                  }
                   value={informacoes}
                   onChange={(event) => setInformacoes(event.target.value)}
                 />
               </div>
-
-              {erroEnvio && (
-                <p className="modal__informacoes__erro">{erroEnvio}</p>
-              )}
 
               <div className="modal__informacoes__botoes">
                 <button
@@ -232,9 +285,14 @@ function detalhesObjeto() {
                 </button>
 
                 <button className="botao__enviar__informacoes" type="submit">
-                  Enviar informações
+                  {objetoEncontrado ? "Enviar mensagem" : "Enviar informações"}
                 </button>
               </div>
+
+              <p className="aviso__email">
+                A mensagem será aberta no seu próprio Gmail. O e-mail informado
+                será usado apenas para identificação.
+              </p>
             </form>
           </div>
         </div>

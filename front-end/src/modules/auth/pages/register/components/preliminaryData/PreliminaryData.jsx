@@ -391,8 +391,8 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
           />
 
           <span>
-            Li e aceito os <NavLink to="/termos-de-uso">Termos de Uso</NavLink>e
-            a{" "}
+            Li e aceito os <NavLink to="/termos-de-uso">Termos de Uso</NavLink>{" "}
+            e a{" "}
             <NavLink to="/politica-de-privacidade">
               Política de Privacidade
             </NavLink>
@@ -412,23 +412,13 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
             alguém encontrar um objeto que publiquei na plataforma.
           </span>
         </label>
-
-        <div className="register__aviso__email">
-          <img src={infoBlue} alt="" />
-
-          <p>
-            Seu e-mail poderá ser exibido na página pública do objeto para
-            permitir que outras pessoas entrem em contato com você. Essa
-            autorização é opcional.
-          </p>
-        </div>
       </div>
 
       <div className="register__container__info">
         <img className="info__image" src={infoBlue} />
         <p className="info__subtitle">
-          Você poderá adicionar sua foto e personalizar suas preferências nas
-          próximas etapas.
+          Seu e-mail poderá ser exibido na página pública de objetos para
+          permitir contato. Essa autorização é opcional.
         </p>
       </div>
 

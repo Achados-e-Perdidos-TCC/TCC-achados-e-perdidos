@@ -1,27 +1,38 @@
-import './contaCriada.css'; 
+import "./contaCriada.css";
 
-import success from '../../../../../../assets/icons/register/success.png'; 
+import success from "../../../../../../assets/icons/register/success.png";
 
-function ContaCriada(){
+function ContaCriada() {
+  return (
+    <div className="conta__criada">
+      <img className="success__image" src={success} />
 
-    return (
-        <div className='conta__criada'>
-            <img className='success__image' src={success} />
+      <div>
+        <h1 className="success__title">Conta criada com sucesso!</h1>
+        <p className="success__subtitle">
+          Sua conta no Achados e Devolvidos foi criada. Agora você já pode
+          explorar e usar o sistema.
+        </p>
+      </div>
 
-            <div>
-                <h1 className='success__title'>Conta criada com sucesso!</h1>
-                <p className='success__subtitle'>Sua conta no Achados e Devolvidos foi criada. Agora você já pode explorar e usar o sistema.</p>
-            </div>
+      <div
+        className="success__button"
+        onClick={() => {
+          window.location.href = "/user-area";
+        }}
+      >
+        <p className="success__link"> Ir para meu perfil </p>
+      </div>
 
-            <div className='success__button' onClick={() => {window.location.href = "/"}}>
-                <p className='success__link'> Ir para meu perfil </p>
-            </div>
-
-            <div onClick={() => {window.location.href = "/"}}>
-                <p className='success__return__link '> Voltar para início</p>
-            </div>
-        </div>
-    )
+      <div
+        onClick={() => {
+          window.location.href = "/";
+        }}
+      >
+        <p className="success__return__link "> Voltar para início</p>
+      </div>
+    </div>
+  );
 }
 
 export default ContaCriada;
