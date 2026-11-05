@@ -816,7 +816,7 @@ function EditarObjeto() {
                     <div className="textarea">
                         <textarea
                             id="descricao"
-                            maxLength={100}
+                            maxLength={500}
                             value={formulario.descricao}
                             onChange={(e) =>
                                 atualizarCampo("descricao", e.target.value)
@@ -825,7 +825,7 @@ function EditarObjeto() {
                         />
 
                         <span className="textarea__counter">
-                            {formulario.descricao.length}/100
+                            {formulario.descricao.length}/500
                         </span>
                     </div>
                 </div>
@@ -840,7 +840,7 @@ function EditarObjeto() {
                     <div className="textarea">
                         <textarea
                             id="caracteristicas"
-                            maxLength={50}
+                            maxLength={100}
                             value={formulario.caracteristicas}
                             onChange={(e) =>
                                 atualizarCampo("caracteristicas", e.target.value)
@@ -848,7 +848,7 @@ function EditarObjeto() {
                         />
 
                         <span className="textarea__counter">
-                            {formulario.caracteristicas.length}/50
+                            {formulario.caracteristicas.length}/100
                         </span>
                     </div>
                 </div>

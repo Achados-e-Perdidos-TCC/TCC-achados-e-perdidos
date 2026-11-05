@@ -49,6 +49,10 @@ public class Item extends BaseEntity {
     private ItemStatus status = ItemStatus.ANALISANDO;
 
     @Column(nullable = false)
+    @Builder.Default
+    private boolean deleted = false;
+
+    @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)

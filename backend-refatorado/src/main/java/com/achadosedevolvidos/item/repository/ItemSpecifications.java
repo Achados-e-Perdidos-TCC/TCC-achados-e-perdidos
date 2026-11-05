@@ -20,20 +20,23 @@ public final class ItemSpecifications {
     private ItemSpecifications() {}
 
     public static Specification<Item> withFilters(ItemSearchFilter filter) {
-        return Specification
-                .where(hasType(filter.type()))
-                .and(hasCategory(filter.categoryId()))
-                .and(matchesQuery(filter.query()))
-                .and(hasLocationText(filter.locationText()))
-                .and(eventDateBetween(filter.dateFrom(), filter.dateTo()))
-                // Item "excluído" (DELETE /items/{id}) é soft-delete via
-                // status=INATIVO — nunca deve aparecer na busca pública.
-                .and(statusNot(Item.ItemStatus.INATIVO));
-    }
+    return Specification
+            .where(hasType(filter.type()))
+            .and(hasCategory(filter.categoryId()))
+            .and(matchesQuery(filter.query()))
+            .and(hasLocationText(filter.locationText()))
+            .and(eventDateBetween(filter.dateFrom(), filter.dateTo()))
+            .and(notDeleted());
+}
 
     public static Specification<Item> hasUserId(UUID userId) {
         return (root, query, cb) -> userId == null ? null : cb.equal(root.get("user").get("id"), userId);
     }
+
+    public static Specification<Item> notDeleted() {
+    return (root, query, cb) ->
+            cb.isFalse(root.get("deleted"));
+}
 
     public static Specification<Item> hasStatus(Item.ItemStatus status) {
         return (root, query, cb) -> status == null ? null : cb.equal(root.get("status"), status);

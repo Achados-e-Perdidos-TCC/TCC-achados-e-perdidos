@@ -761,7 +761,7 @@ export default function CadastrarObjeto() {
           <div className="textarea">
             <textarea
               id="descricao"
-              maxLength={100}
+              maxLength={500}
               placeholder="Descreva o objeto com o máximo de detalhes possível..."
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
@@ -769,7 +769,7 @@ export default function CadastrarObjeto() {
             />
 
             <span className="textarea__counter">
-              {descricao.length}/100
+              {descricao.length}/500
             </span>
           </div>
         </div>
@@ -784,14 +784,14 @@ export default function CadastrarObjeto() {
           <div className="textarea">
             <textarea
               id="caracteristicas"
-              maxLength={50}
+              maxLength={100}
               placeholder="Ex.: cor, marcas, logo, avarias, número de série, etc."
               value={caracteristicas}
               onChange={(e) => setCaracteristicas(e.target.value)}
             />
 
             <span className="textarea__counter">
-              {caracteristicas.length}/50
+              {caracteristicas.length}/100
             </span>
           </div>
         </div>

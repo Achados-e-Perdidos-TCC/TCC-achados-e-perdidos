@@ -29,7 +29,11 @@ function UserObjects({ open }) {
 
         const resposta = await myObjects();
 
-        setObjetos(Array.isArray(resposta) ? resposta : []);
+        const objetosAtivos = Array.isArray(resposta)
+          ? resposta.filter((objeto) => objeto.status !== "INATIVO")
+          : [];
+
+        setObjetos(objetosAtivos);
       } catch (error) {
         console.error("Erro ao buscar objetos:", error);
         setErro(true);

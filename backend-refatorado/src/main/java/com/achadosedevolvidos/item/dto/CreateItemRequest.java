@@ -1,3 +1,4 @@
+
 package com.achadosedevolvidos.item.dto;
 
 import com.achadosedevolvidos.item.model.Item;
@@ -25,7 +26,7 @@ public record CreateItemRequest(
         @Size(max = 500, message = "Descrição deve ter no máximo 500 caracteres")
         String description,
 
-        @Size(max = 200, message = "Características específicas devem ter no máximo 200 caracteres")
+        @Size(max = 100, message = "Descrição curta deve ter no máximo 100 caracteres")
         String shortDescription,
 
         String locationText,

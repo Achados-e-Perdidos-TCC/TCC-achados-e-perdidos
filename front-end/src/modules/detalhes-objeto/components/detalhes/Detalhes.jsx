@@ -52,8 +52,6 @@ function Detalhes({ objeto }) {
     const estado =
         obterNomeCompletoEstado(localizacao.estado) || 'Não informado';
 
-    const complemento = localizacao.complemento || 'Sem complemento';
-
     const localizacaoFormatada =
         formatarLocalizacao(localizacao) || 'Localização não informada';
 
@@ -156,18 +154,6 @@ function Detalhes({ objeto }) {
                             </p>
                         </div>
                     ))}
-                </div>
-
-                <hr />
-
-                <div>
-                    <p className="detalhes__objeto__subtitle">
-                        Complemento de localização
-                    </p>
-
-                    <p className="detalhes__descricao__complemento">
-                        {complemento}
-                    </p>
                 </div>
             </div>
         </div>
