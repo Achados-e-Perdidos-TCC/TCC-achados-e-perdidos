@@ -25,6 +25,10 @@ export function DetalhesCabecalho({ objeto }) {
         <div className="cabecalho__detalhes">
             <h1 className="detalhes__titulo">{nome}</h1>
 
+            <p className="detalhes__descricao responsive">
+                Informações para identificação do objeto.
+            </p>
+
             <div className="status__detalhes">
                 <Status objeto={objeto} />
             </div>
@@ -33,7 +37,8 @@ export function DetalhesCabecalho({ objeto }) {
 }
 
 function Detalhes({ objeto }) {
-    const objetoEncontrado = objeto;
+    const objetoEncontrado = objeto ?? {};
+
     const localizacao = objetoEncontrado.localizacao ?? {};
     const dataObjeto = objetoEncontrado.data ?? {};
 
@@ -44,7 +49,10 @@ function Detalhes({ objeto }) {
 
     const cidade = localizacao.cidade || 'Não informado';
     const endereco = localizacao.endereco || '';
-    const estado = obterNomeCompletoEstado(localizacao.estado) || 'Não informado';
+    const estado =
+        obterNomeCompletoEstado(localizacao.estado) || 'Não informado';
+
+    const complemento = localizacao.complemento || 'Sem complemento';
 
     const localizacaoFormatada =
         formatarLocalizacao(localizacao) || 'Localização não informada';
@@ -65,7 +73,7 @@ function Detalhes({ objeto }) {
 
     const informacoesAdicionais = [
         `Categoria: ${objetoEncontrado.categoria || 'Não informada'}`,
-        ...(endereco ? [`Bairro: ${endereco}`] : []),
+        ...(endereco ? [`Endereço: ${endereco}`] : []),
         `Cidade: ${cidade}`,
         `Estado: ${estado}`,
         `Data: ${dataFormatada(dataObjeto.data)}`,
@@ -133,7 +141,10 @@ function Detalhes({ objeto }) {
                     </p>
 
                     {informacoesAdicionais.map((valor) => (
-                        <div key={valor} className="informacoes__adicionais">
+                        <div
+                            key={valor}
+                            className="informacoes__adicionais"
+                        >
                             <img
                                 className="circulo__blue"
                                 src={circuloBlue}
@@ -148,6 +159,16 @@ function Detalhes({ objeto }) {
                 </div>
 
                 <hr />
+
+                <div>
+                    <p className="detalhes__objeto__subtitle">
+                        Complemento de localização
+                    </p>
+
+                    <p className="detalhes__descricao__complemento">
+                        {complemento}
+                    </p>
+                </div>
             </div>
         </div>
     );

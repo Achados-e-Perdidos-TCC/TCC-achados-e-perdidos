@@ -77,7 +77,7 @@
     padding: 1.5rem;
     border: 0.2rem solid var(--border-color);
     border-radius: 1rem;
-    background-color: var(-card-color);
+    background-color: var(--card-color);
     color: var(--primary-color-text);
 }
 

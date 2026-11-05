@@ -8,6 +8,8 @@ export async function userInformation() {
     method: "GET",
   });
 
+  console.log("DADOS DO USUARIO", data);
+
   return data;
 }
 

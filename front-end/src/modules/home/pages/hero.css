@@ -509,10 +509,6 @@
     text-align: left;
 }
 
-.objetos-lista .divisoria {
-    color: var(none);
-}
-
 .objetos-lista .descricao__principal {
     display: block;
     margin: 0;
