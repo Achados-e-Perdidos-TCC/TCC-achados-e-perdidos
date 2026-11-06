@@ -53,6 +53,7 @@ class ItemControllerIT extends IntegrationTestSupport {
                 .andExpect(jsonPath("$.nome").value(marcador + " carteira preta"))
                 .andExpect(jsonPath("$.status").value("PERDIDO"))
                 .andExpect(jsonPath("$.descricao").value("Carteira preta perdida"))
+                .andExpect(jsonPath("$.descricaoCompleta").value("Perdida perto da entrada principal"))
                 .andExpect(jsonPath("$.icon_url").isNotEmpty())
                 .andReturn();
 
@@ -251,6 +252,59 @@ class ItemControllerIT extends IntegrationTestSupport {
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com espaços em branco na descrição curta",
                 "Descrição completa do item perdido", descricaoCurtaComEspacos, null, null, null, -23.55, -46.63, LocalDateTime.now(), null
+        );
+
+        mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void rainyDay_deveRecusarCriacaoComEstadoComFormatoInvalido() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Estado Invalido");
+
+        CreateItemRequest request = new CreateItemRequest(
+                Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com estado inválido",
+                "Descrição completa do item", null, "RSS", "Porto Alegre", null, -23.55, -46.63,
+                LocalDateTime.now(), null
+        );
+
+        mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void rainyDay_deveRecusarCriacaoComCidadeMaiorQue100Caracteres() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Cidade Longa Demais");
+        String cidadeInvalida = "x".repeat(101);
+
+        CreateItemRequest request = new CreateItemRequest(
+                Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com cidade longa demais",
+                "Descrição completa do item", null, "RS", cidadeInvalida, null, -23.55, -46.63,
+                LocalDateTime.now(), null
+        );
+
+        mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void rainyDay_deveRecusarCriacaoComBairroMaiorQue100Caracteres() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Bairro Longo Demais");
+        String bairroInvalido = "x".repeat(101);
+
+        CreateItemRequest request = new CreateItemRequest(
+                Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com bairro longo demais",
+                "Descrição completa do item", null, "RS", "Porto Alegre", bairroInvalido, -23.55, -46.63,
+                LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
