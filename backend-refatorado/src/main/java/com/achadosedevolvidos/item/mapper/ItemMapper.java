@@ -37,37 +37,10 @@ public class ItemMapper {
 
         String imagemPrincipal = imagens.isEmpty() ? null : imagens.get(0);
 
-        // Recupera a localização armazenada no objeto.
-        String locationText = item.getLocationText();
-
-        String endereco = null;
-        String cidade = null;
-        String estado = null;
-
-        if (locationText != null && !locationText.isBlank()) {
-
-            String[] partes = locationText.split("\\s+-\\s+", 2);
-
-            if (partes.length == 2) {
-                estado = partes[1].trim();
-
-                String bairroECidade = partes[0].trim();
-
-                int ultimaVirgula = bairroECidade.lastIndexOf(',');
-
-                if (ultimaVirgula >= 0) {
-                    endereco = bairroECidade.substring(0, ultimaVirgula).trim();
-                    cidade = bairroECidade.substring(ultimaVirgula + 1).trim();
-                } else {
-                    cidade = bairroECidade;
-                }
-            }
-        }
-
         LocalizacaoResponse localizacao = new LocalizacaoResponse(
-                endereco,
-                cidade,
-                estado,
+                item.getLocationText(),
+                null,
+                null,
                 item.getLatitude(),
                 item.getLongitude(),
                 null
@@ -81,21 +54,17 @@ public class ItemMapper {
                 );
 
         return new ItemResponse(
-        item.getId(),
-        imagemPrincipal,
-        item.getTitle(),
-        item.getType().name(),
-        item.getCategory().getName(),
-        item.getCategory().getIconUrl(),
-        item.getDescription(),
-        item.getShortDescription() != null
-                && !item.getShortDescription().isBlank()
-                ? item.getShortDescription()
-                : null,
-        imagens,
-        localizacao,
-        data,
-        emailResponsavel
-);
+                item.getId(),
+                imagemPrincipal,
+                item.getTitle(),
+                item.getType().name(),
+                item.getCategory().getName(),
+                item.getCategory().getIconUrl(),
+                item.getShortDescription(),
+                imagens,
+                localizacao,
+                data,
+                emailResponsavel
+        );
     }
 }

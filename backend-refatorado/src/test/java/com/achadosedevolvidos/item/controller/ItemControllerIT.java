@@ -5,12 +5,10 @@ import com.achadosedevolvidos.item.dto.ItemResponse;
 import com.achadosedevolvidos.item.dto.UpdateItemRequest;
 import com.achadosedevolvidos.item.dto.UpdateItemStatusRequest;
 import com.achadosedevolvidos.item.model.Item;
-import com.achadosedevolvidos.item.repository.ItemRepository;
 import com.achadosedevolvidos.support.IntegrationTestSupport;
 import com.achadosedevolvidos.user.dto.UpdatePreferencesRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -36,9 +34,6 @@ class ItemControllerIT extends IntegrationTestSupport {
 
     private static final UUID CATEGORIA_ELETRONICOS = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
-    @Autowired
-    private ItemRepository itemRepository;
-
     @Test
     void sunnyDay_deveCriarBuscarEConsultarItemAutenticado() throws Exception {
         AuthenticatedTestUser user = registerAndAuthenticate("Dono do Item");
@@ -57,8 +52,7 @@ class ItemControllerIT extends IntegrationTestSupport {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.nome").value(marcador + " carteira preta"))
                 .andExpect(jsonPath("$.status").value("PERDIDO"))
-                .andExpect(jsonPath("$.descricao").value("Perdida perto da entrada principal"))
-                .andExpect(jsonPath("$.caracteristicasEspecificas").value("Carteira preta perdida"))
+                .andExpect(jsonPath("$.descricao").value("Carteira preta perdida"))
                 .andExpect(jsonPath("$.icon_url").isNotEmpty())
                 .andReturn();
 
@@ -175,7 +169,7 @@ class ItemControllerIT extends IntegrationTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.caracteristicasEspecificas").value(descricaoCurtaNoLimite));
+                .andExpect(jsonPath("$.descricao").value(descricaoCurtaNoLimite));
     }
 
     @Test
@@ -213,7 +207,7 @@ class ItemControllerIT extends IntegrationTestSupport {
     }
 
     @Test
-    void rainyDay_deveRecusarCriacaoSemDescricaoCurta() throws Exception {
+    void sunnyDay_deveAceitarCriacaoSemDescricaoCurta() throws Exception {
         AuthenticatedTestUser user = registerAndAuthenticate("Sem Descricao Curta");
 
         CreateItemRequest request = new CreateItemRequest(
@@ -225,8 +219,8 @@ class ItemControllerIT extends IntegrationTestSupport {
                         .header("Authorization", user.authorizationHeader())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                        .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.caracteristicasEspecificas").value((Object) null));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.descricao").value((Object) null));
     }
 
     @Test
@@ -467,24 +461,12 @@ class ItemControllerIT extends IntegrationTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[?(@.id == '" + item.id() + "')]").doesNotExist());
 
-        // Não permanece na listagem normal dos objetos do próprio dono.
-        mockMvc.perform(get("/api/v1/items/me")
-                        .header("Authorization", dono.authorizationHeader())
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[?(@.id == '" + item.id() + "')]").doesNotExist());
-
-        // Tampouco é exibido quando o status INATIVO é solicitado explicitamente.
+        // ...mas continua no histórico do próprio dono, agora como INATIVO.
         mockMvc.perform(get("/api/v1/items/me")
                         .header("Authorization", dono.authorizationHeader())
                         .param("status", "INATIVO"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[?(@.id == '" + item.id() + "')]").doesNotExist());
-
-        Item persistedItem = itemRepository.findById(item.id()).orElseThrow();
-        assertThat(persistedItem.isDeleted()).isTrue();
-        assertThat(persistedItem.getStatus())
-                .isIn(Item.ItemStatus.INATIVO, Item.ItemStatus.ANALISANDO);
+                .andExpect(jsonPath("$.content[?(@.id == '" + item.id() + "')]").exists());
     }
 
     @Test

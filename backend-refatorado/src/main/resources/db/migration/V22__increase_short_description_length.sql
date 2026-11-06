@@ -1,2 +1,0 @@
-ALTER TABLE items
-ALTER COLUMN short_description TYPE VARCHAR(200);

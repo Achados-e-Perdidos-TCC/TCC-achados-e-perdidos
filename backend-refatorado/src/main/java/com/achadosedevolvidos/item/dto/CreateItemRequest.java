@@ -1,4 +1,3 @@
-
 package com.achadosedevolvidos.item.dto;
 
 import com.achadosedevolvidos.item.model.Item;
