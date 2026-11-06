@@ -205,7 +205,7 @@ class UserControllerIT extends IntegrationTestSupport {
 
         CreateItemRequest itemRequest = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item do usuario que vai excluir a conta",
-                "Descrição completa do item", "Descrição curta do item", null, -23.55, -46.63,
+                "Descrição completa do item", "Descrição curta do item", null, null, null, -23.55, -46.63,
                 LocalDateTime.now(), null
         );
         MvcResult createResult = mockMvc.perform(post("/api/v1/items")

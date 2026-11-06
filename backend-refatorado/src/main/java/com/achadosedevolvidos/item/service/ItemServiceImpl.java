@@ -57,7 +57,9 @@ public class ItemServiceImpl implements ItemService {
                 .title(request.title())
                 .description(request.description())
                 .shortDescription(request.shortDescription())
-                .locationText(request.locationText())
+                .estado(request.estado() == null ? null : request.estado().toUpperCase())
+                .cidade(request.cidade())
+                .bairro(request.bairro())
                 .latitude(request.latitude())
                 .longitude(request.longitude())
                 .eventDate(request.eventDate())
@@ -152,8 +154,14 @@ public class ItemServiceImpl implements ItemService {
             }
             item.setShortDescription(shortDescription.isBlank() ? null : shortDescription);
         }
-        if (request.locationText() != null) {
-            item.setLocationText(request.locationText());
+        if (request.estado() != null) {
+            item.setEstado(request.estado().toUpperCase());
+        }
+        if (request.cidade() != null) {
+            item.setCidade(request.cidade());
+        }
+        if (request.bairro() != null) {
+            item.setBairro(request.bairro());
         }
         if (request.latitude() != null) {
             item.setLatitude(request.latitude());

@@ -24,7 +24,9 @@ public final class ItemSpecifications {
                 .where(hasType(filter.type()))
                 .and(hasCategory(filter.categoryId()))
                 .and(matchesQuery(filter.query()))
-                .and(hasLocationText(filter.locationText()))
+                .and(hasEstado(filter.estado()))
+                .and(hasCidade(filter.cidade()))
+                .and(hasBairro(filter.bairro()))
                 .and(eventDateBetween(filter.dateFrom(), filter.dateTo()))
                 // Item "excluído" (DELETE /items/{id}) é soft-delete via
                 // status=INATIVO — nunca deve aparecer na busca pública.
@@ -66,13 +68,22 @@ public final class ItemSpecifications {
         };
     }
 
-    public static Specification<Item> hasLocationText(String locationText) {
-        return (root, query, cb) -> {
-            if (locationText == null || locationText.isBlank()) {
-                return null;
-            }
-            return cb.like(cb.lower(root.get("locationText")), "%" + locationText.toLowerCase() + "%");
-        };
+    public static Specification<Item> hasEstado(String estado) {
+        return (root, query, cb) -> estado == null || estado.isBlank()
+                ? null
+                : cb.equal(cb.lower(root.get("estado")), estado.toLowerCase());
+    }
+
+    public static Specification<Item> hasCidade(String cidade) {
+        return (root, query, cb) -> cidade == null || cidade.isBlank()
+                ? null
+                : cb.equal(cb.lower(root.get("cidade")), cidade.toLowerCase());
+    }
+
+    public static Specification<Item> hasBairro(String bairro) {
+        return (root, query, cb) -> bairro == null || bairro.isBlank()
+                ? null
+                : cb.equal(cb.lower(root.get("bairro")), bairro.toLowerCase());
     }
 
     /**

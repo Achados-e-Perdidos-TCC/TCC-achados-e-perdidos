@@ -38,9 +38,9 @@ public class ItemMapper {
         String imagemPrincipal = imagens.isEmpty() ? null : imagens.get(0);
 
         LocalizacaoResponse localizacao = new LocalizacaoResponse(
-                item.getLocationText(),
-                null,
-                null,
+                item.getBairro(),
+                item.getCidade(),
+                item.getEstado(),
                 item.getLatitude(),
                 item.getLongitude(),
                 null

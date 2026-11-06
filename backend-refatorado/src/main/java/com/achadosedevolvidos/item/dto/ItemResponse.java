@@ -14,11 +14,11 @@ import java.util.UUID;
  * ANALISANDO/PROCURANDO/RESOLVIDO/INATIVO), então ele não aparece
  * nesta estrutura.</p>
  *
- * <p>"cidade"/"estado"/"complemento" de {@link LocalizacaoResponse} ainda não
- * existem como colunas separadas no banco — hoje só há um campo de texto livre
- * ({@code locationText}), mapeado para "endereco"; os outros três ficam
- * {@code null} até o modelo de dados (e o formulário de cadastro) mudar para
- * suportar endereço estruturado.</p>
+ * <p>Em {@link LocalizacaoResponse}, "endereco" é o bairro ({@code Item.bairro}
+ * — o nível mais fino que o formulário de cadastro coleta), "cidade" e
+ * "estado" (sigla da UF) vêm de colunas estruturadas próprias. "complemento"
+ * ainda não é coletado por nenhum formulário — reservado pra uma eventual
+ * linha de endereço livre, por enquanto sempre {@code null}.</p>
  *
  * <p>"emailResponsavel" só vem preenchido no detalhe público de um item
  * específico ({@code GET /items/{id}}, via {@code ItemMapper.toResponse}

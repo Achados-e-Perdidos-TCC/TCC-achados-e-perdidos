@@ -41,8 +41,8 @@ class ItemControllerIT extends IntegrationTestSupport {
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, marcador + " carteira preta",
-                "Perdida perto da entrada principal", "Carteira preta perdida", "Bloco A", -23.5505, -46.6333,
-                LocalDateTime.now().minusHours(2), List.of("http://exemplo.com/foto1.png")
+                "Perdida perto da entrada principal", "Carteira preta perdida", "RS", "Porto Alegre", "Bloco A",
+                -23.5505, -46.6333, LocalDateTime.now().minusHours(2), List.of("http://exemplo.com/foto1.png")
         );
 
         MvcResult createResult = mockMvc.perform(post("/api/v1/items")
@@ -99,7 +99,7 @@ class ItemControllerIT extends IntegrationTestSupport {
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.ENCONTRADO, CATEGORIA_ELETRONICOS, "Item com email privado " + UUID.randomUUID(),
-                "Descricao completa", "Descricao curta", null, -23.55, -46.63,
+                "Descricao completa", "Descricao curta", null, null, null, -23.55, -46.63,
                 LocalDateTime.now().minusHours(1), null
         );
 
@@ -126,7 +126,7 @@ class ItemControllerIT extends IntegrationTestSupport {
     void rainyDay_deveRecusarCriacaoSemAutenticacao() throws Exception {
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item sem dono",
-                null, null, null, -23.55, -46.63, LocalDateTime.now(), null
+                null, null, null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
@@ -144,7 +144,7 @@ class ItemControllerIT extends IntegrationTestSupport {
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, UUID.randomUUID(), "Item com categoria fantasma",
-                null, null, null, -23.55, -46.63, LocalDateTime.now(), null
+                null, null, null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
@@ -161,7 +161,7 @@ class ItemControllerIT extends IntegrationTestSupport {
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com descrição curta no limite",
-                "Descrição completa do item", descricaoCurtaNoLimite, null, -23.55, -46.63, LocalDateTime.now(), null
+                "Descrição completa do item", descricaoCurtaNoLimite, null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
@@ -178,7 +178,7 @@ class ItemControllerIT extends IntegrationTestSupport {
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item sem descrição",
-                null, "Descrição curta válida", null, -23.55, -46.63, LocalDateTime.now(), null
+                null, "Descrição curta válida", null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
@@ -196,7 +196,7 @@ class ItemControllerIT extends IntegrationTestSupport {
         // como se fosse uma descrição preenchida, já que não é null nem "".
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com descrição só de espaços",
-                "     ", "Descrição curta válida", null, -23.55, -46.63, LocalDateTime.now(), null
+                "     ", "Descrição curta válida", null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
@@ -212,7 +212,7 @@ class ItemControllerIT extends IntegrationTestSupport {
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item sem descrição curta",
-                "Descrição completa do item", null, null, -23.55, -46.63, LocalDateTime.now(), null
+                "Descrição completa do item", null, null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
@@ -230,7 +230,7 @@ class ItemControllerIT extends IntegrationTestSupport {
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com descrição curta longa demais",
-                "Descrição completa do item", descricaoCurtaInvalida, null, -23.55, -46.63, LocalDateTime.now(), null
+                "Descrição completa do item", descricaoCurtaInvalida, null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
@@ -250,7 +250,7 @@ class ItemControllerIT extends IntegrationTestSupport {
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com espaços em branco na descrição curta",
-                "Descrição completa do item perdido", descricaoCurtaComEspacos, null, -23.55, -46.63, LocalDateTime.now(), null
+                "Descrição completa do item perdido", descricaoCurtaComEspacos, null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
@@ -291,7 +291,7 @@ class ItemControllerIT extends IntegrationTestSupport {
     void rainyDay_deveIgnorarTokenInvalidoERecusarComoAnonimo() throws Exception {
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com token quebrado",
-                null, null, null, -23.55, -46.63, LocalDateTime.now(), null
+                null, null, null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
 
         mockMvc.perform(post("/api/v1/items")
@@ -309,15 +309,15 @@ class ItemControllerIT extends IntegrationTestSupport {
     }
 
     @Test
-    void sunnyDay_buscaComLocationTextEIntervaloDeDatasFiltraCorretamente() throws Exception {
+    void sunnyDay_buscaComLocalizacaoEIntervaloDeDatasFiltraCorretamente() throws Exception {
         AuthenticatedTestUser user = registerAndAuthenticate("Filtro Data e Local");
         String marcador = "Marcador-" + UUID.randomUUID();
         LocalDateTime ontem = LocalDateTime.now().minusDays(1);
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, marcador + " chaveiro",
-                "Perdido no centro", "Chaveiro perdido", "Praca Central, Bloco A", -23.5505, -46.6333,
-                ontem, null
+                "Perdido no centro", "Chaveiro perdido", "RS", "Porto Alegre", "Praca Central",
+                -23.5505, -46.6333, ontem, null
         );
 
         MvcResult createResult = mockMvc.perform(post("/api/v1/items")
@@ -330,14 +330,15 @@ class ItemControllerIT extends IntegrationTestSupport {
         ItemResponse created = objectMapper.readValue(createResult.getResponse().getContentAsString(StandardCharsets.UTF_8), ItemResponse.class);
 
         mockMvc.perform(get("/api/v1/items/search")
-                        .param("locationText", "Praca Central")
+                        .param("cidade", "Porto Alegre")
+                        .param("estado", "RS")
                         .param("dateFrom", ontem.toLocalDate().minusDays(1).toString())
                         .param("dateTo", ontem.toLocalDate().plusDays(1).toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[?(@.id == '" + created.id() + "')]").exists());
 
         mockMvc.perform(get("/api/v1/items/search")
-                        .param("locationText", "Praca Central")
+                        .param("cidade", "Porto Alegre")
                         .param("dateFrom", ontem.toLocalDate().plusDays(5).toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[?(@.id == '" + created.id() + "')]").doesNotExist());
@@ -403,7 +404,7 @@ class ItemControllerIT extends IntegrationTestSupport {
         AuthenticatedTestUser dono = registerAndAuthenticate("Dono Edicao");
         ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, "Titulo original");
 
-        UpdateItemRequest request = new UpdateItemRequest(null, "Titulo atualizado", null, null, null, null, null, null, null);
+        UpdateItemRequest request = new UpdateItemRequest(null, "Titulo atualizado", null, null, null, null, null, null, null, null, null);
 
         mockMvc.perform(patch("/api/v1/items/" + item.id())
                         .header("Authorization", dono.authorizationHeader())
@@ -421,7 +422,7 @@ class ItemControllerIT extends IntegrationTestSupport {
         AuthenticatedTestUser outraPessoa = registerAndAuthenticate("Intruso Edicao");
         ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, "Item de outro dono");
 
-        UpdateItemRequest request = new UpdateItemRequest(null, "Tentativa de sequestro", null, null, null, null, null, null, null);
+        UpdateItemRequest request = new UpdateItemRequest(null, "Tentativa de sequestro", null, null, null, null, null, null, null, null, null);
 
         mockMvc.perform(patch("/api/v1/items/" + item.id())
                         .header("Authorization", outraPessoa.authorizationHeader())
@@ -432,7 +433,7 @@ class ItemControllerIT extends IntegrationTestSupport {
 
     @Test
     void rainyDay_deveRecusarEdicaoSemAutenticacao() throws Exception {
-        UpdateItemRequest request = new UpdateItemRequest(null, "Qualquer coisa", null, null, null, null, null, null, null);
+        UpdateItemRequest request = new UpdateItemRequest(null, "Qualquer coisa", null, null, null, null, null, null, null, null, null);
 
         mockMvc.perform(patch("/api/v1/items/" + UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -540,8 +541,8 @@ class ItemControllerIT extends IntegrationTestSupport {
     private ItemResponse criarItem(AuthenticatedTestUser user, Item.ItemType type, String title) throws Exception {
         CreateItemRequest request = new CreateItemRequest(
                 type, CATEGORIA_ELETRONICOS, title,
-                "Descrição completa", "Descrição curta", "Bloco A", -23.55, -46.63,
-                LocalDateTime.now().minusHours(1), null
+                "Descrição completa", "Descrição curta", "RS", "Porto Alegre", "Bloco A",
+                -23.55, -46.63, LocalDateTime.now().minusHours(1), null
         );
 
         MvcResult result = mockMvc.perform(post("/api/v1/items")

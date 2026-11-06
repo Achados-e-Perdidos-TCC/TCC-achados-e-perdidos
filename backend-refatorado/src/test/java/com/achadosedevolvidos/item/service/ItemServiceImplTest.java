@@ -83,7 +83,8 @@ class ItemServiceImplTest {
 
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, category.getId(), "Carteira preta", "Perdida no ônibus",
-                "Carteira preta perdida", "Terminal Central", -23.55, -46.63, LocalDateTime.now(), List.of("http://img/1.png")
+                "Carteira preta perdida", "RS", "Porto Alegre", "Terminal Central", -23.55, -46.63,
+                LocalDateTime.now(), List.of("http://img/1.png")
         );
 
         ItemResponse response = itemService.create(user.getId(), request);
@@ -165,7 +166,7 @@ class ItemServiceImplTest {
     private CreateItemRequest validRequest() {
         return new CreateItemRequest(
                 Item.ItemType.PERDIDO, category.getId(), "Carteira preta", "Perdida no ônibus",
-                "Carteira preta perdida", null, -23.55, -46.63, LocalDateTime.now(), null
+                "Carteira preta perdida", null, null, null, -23.55, -46.63, LocalDateTime.now(), null
         );
     }
 }
