@@ -61,7 +61,6 @@ public class ItemMapper {
                 item.getCategory().getName(),
                 item.getCategory().getIconUrl(),
                 item.getShortDescription(),
-                item.getDescription(),
                 imagens,
                 localizacao,
                 data,

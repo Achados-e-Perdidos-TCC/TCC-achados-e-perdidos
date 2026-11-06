@@ -26,13 +26,6 @@ import java.util.UUID;
  * pra não virar um vetor de coleta em massa de e-mail de usuário. Além
  * disso, só aparece se o dono tiver {@code showEmailOnItems} habilitado nas
  * próprias preferências (default ligado — ver UserPreferences).</p>
- *
- * <p>"descricao" é o resumo curto ({@code Item.shortDescription}, até 100
- * caracteres) — o que sempre foi, usado nos cards de busca e como destaque
- * de características específicas no detalhe. "descricaoCompleta" é o texto
- * completo ({@code Item.description}), campo adicional pra tela de detalhe
- * mostrar o relato inteiro sem reaproveitar (e quebrar) o significado de
- * "descricao".</p>
  */
 public record ItemResponse(
         UUID id,
@@ -42,7 +35,6 @@ public record ItemResponse(
         String categoria,
         @JsonProperty("icon_url") String iconUrl,
         String descricao,
-        String descricaoCompleta,
         List<String> imagensSecundarias,
         LocalizacaoResponse localizacao,
         DataEventoResponse data,
