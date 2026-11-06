@@ -54,10 +54,18 @@ public class Item extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @Column(name = "short_description", length = 100, nullable = false)
+    @Column(name = "short_description", length = 100)
     private String shortDescription;
 
-    private String locationText;
+    @Column(length = 2)
+    private String estado;
+
+    @Column(length = 100)
+    private String cidade;
+
+    @Column(length = 100)
+    private String bairro;
+
     private Double latitude;
     private Double longitude;
 

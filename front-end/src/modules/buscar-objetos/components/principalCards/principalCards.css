@@ -1,201 +1,458 @@
-.card__principal{
+/* ==========================================================
+   CARD PRINCIPAL — BUSCAR OBJETOS
+   Escala: 1rem = 10px.
+   Os estilos da busca não interferem nos cards da Home.
+   ========================================================== */
+
+/* ---------- Estrutura principal ---------- */
+
+.card__principal:not(.objeto-card) {
     display: flex;
     gap: clamp(1rem, 2vw, 3rem);
-    border: 0.1rem solid var(--border-color);
-    background-color: var(--card-color);
-    border-radius: 1rem;
-    margin-bottom: clamp(1.5rem, 2vw, 2.5rem);
-    padding: clamp(0.5rem, 2vw, 1rem);
-    height: 22rem;
     width: 100%;
+    min-height: 24rem;
+    padding: clamp(0.8rem, 2vw, 1.2rem);
+    margin-bottom: clamp(1.5rem, 2vw, 2.5rem);
+
+    border: 0.1rem solid var(--border-color);
+    border-radius: 1rem;
+    background-color: var(--card-color);
 }
 
-/* img */
+/* ---------- Imagem ---------- */
 
-.principal__cards__image__card{
-    border-radius: 1rem;
-    height: 20rem;
+.card__principal:not(.objeto-card) .principal__cards__image__card {
+    flex-shrink: 0;
+    align-self: stretch;
     width: clamp(12rem, 16vw, 30rem);
+
+    border-radius: 1rem;
     object-fit: cover;
     object-position: center center;
 }
 
-/* meio */
+/* ---------- Conteúdo central ---------- */
 
-.principal__meio{
+.card__principal:not(.objeto-card) .principal__meio {
     display: flex;
+    flex: 1 1 0;
     flex-direction: column;
-    gap: 8rem;
-    min-width: 0; /* faz com que não fuja do maximo do bloco, por padrao vem como auto quando display flex, por isso que quebra*/
+    gap: 0;
+    min-width: 0;
+    min-height: 0;
 }
 
-/* meio encima */
+/* ==========================================================
+   PARTE SUPERIOR
+   Nome, status, categoria, localização e data.
+   ========================================================== */
 
-.titulo__principal{
+.card__principal:not(.objeto-card) .principal__encima {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+    min-width: 0;
+}
+
+/* ---------- Título ---------- */
+
+.card__principal:not(.objeto-card) .titulo__principal {
+    margin: 0;
     color: var(--primary-color-text);
+    font-size: clamp(2.2rem, 2.4vw, 3.2rem);
+    font-weight: 600;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.card__principal:not(.objeto-card) .titulo__responsive {
+    display: none;
+}
+
+/* ---------- Status e categoria ---------- */
+
+.card__principal:not(.objeto-card) .categoria__status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem clamp(0.2rem, 2vw, 2rem);
+}
+
+.card__principal:not(.objeto-card) .icon__categoria {
+    flex-shrink: 0;
+    width: auto;
+    height: clamp(1.5rem, 2vw, 2rem);
+}
+
+.card__principal:not(.objeto-card) .categoria__principal {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+/* ==========================================================
+   LOCALIZAÇÃO E DATA
+   Uma informação abaixo da outra.
+   ========================================================== */
+
+.card__principal:not(.objeto-card) .data__hora {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.6rem;
+
+    width: 100%;
+    margin-top: 0.4rem;
+
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    text-align: left;
+}
+
+.card__principal:not(.objeto-card) .data__principal,
+.card__principal:not(.objeto-card) .hora__principal {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: clamp(0.4rem, 1vw, 0.8rem);
+
+    width: 100%;
+    min-width: 0;
+
+    text-align: left;
+}
+
+.card__principal:not(.objeto-card) .endereco__principal {
+    margin: 0;
+    color: var(--primary-color-text);
+    overflow-wrap: anywhere;
+}
+
+.card__principal:not(.objeto-card) .endereco__responsive {
+    display: none;
+}
+
+.card__principal:not(.objeto-card) .data__principal img,
+.card__principal:not(.objeto-card) .hora__principal img {
+    flex-shrink: 0;
+}
+
+/* ==========================================================
+   PARTE CENTRAL
+   Descrição principal.
+   ========================================================== */
+
+.card__principal:not(.objeto-card) .principal__embaixo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
+
+    width: 100%;
+    min-width: 0;
+
+    /* Sobe ligeiramente a posição visual da descrição. */
+    padding-bottom: 1.6rem;
+}
+
+/* Container da descrição */
+
+.card__principal:not(.objeto-card) .busca__descricao {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 100%;
+    min-width: 0;
+
+    text-align: left;
+}
+
+/* Título Descrição */
+
+.card__principal:not(.objeto-card) .busca__descricao__titulo {
+    margin: 0 0 0.6rem;
+
+    color: var(--primary-color-text);
+    font-size: 1.5rem;
     font-weight: 600;
 }
 
-.categoria__status{
-    display: flex;
-    gap: clamp(0.2rem, 2vw, 2rem);
-}
+/* Texto da descrição */
 
-.icon__categoria{ height: clamp(1.5rem, 2vw, 2rem) }
+.card__principal:not(.objeto-card) .descricao__principal {
+    display: -webkit-box;
 
-.categoria__principal{
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: 400;
-    gap: 0.7rem;
-}
+    width: 100%;
+    margin: 0;
 
-/* meio embaixo */
-
-.endereco__principal, .divisoria{ color: var(--primary-color-text) }
-
-.data__hora{
-    display: flex;
-    gap: 1rem;
-    font-size: clamp(1rem, 2vw, 1.3rem);
-}
-
-.data__principal, .hora__principal{
-    display: flex;
-    align-items: center;
-    gap: clamp(0.1rem, 1vw, 0.8rem);
-}
-
-.descricao__principal{
+    color: var(--secondary-color-gray);
     font-size: 1.3rem;
-    margin-left: 0.5rem; 
-    color: var(--secondary-color-gray)
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-align: left;
 }
 
-/* direita */
+/* ==========================================================
+   BOTÃO VER DETALHES — DESKTOP
+   ========================================================== */
 
-.principal__direita{
+.card__principal:not(.objeto-card) .principal__direita {
     display: flex;
-    align-items: end;
-    justify-content: end;
-    flex: 1
+    flex: 0 0 auto;
+    align-self: stretch;
+    align-items: flex-end;
+    justify-content: flex-end;
 }
 
-.button__principal{
+.card__principal:not(.objeto-card) .button__principal {
     display: flex;
     align-items: center;
-    gap: 1.5rem; 
+    justify-content: center;
+    gap: 1.5rem;
+
     padding: 0.6rem 2.5rem;
-    font-weight: 500;
+
     border: 0.2rem solid var(--primary-color-blue);
     border-radius: 1rem;
+
     font-family: var(--font-principal);
+    font-weight: 500;
+    white-space: nowrap;
     cursor: pointer;
 }
 
-.detalhes__principal{ color: var(--primary-color-blue) }
+.card__principal:not(.objeto-card) .detalhes__principal {
+    color: var(--primary-color-blue);
+    text-decoration: none;
+}
 
-.arrow__button__principal{
-    margin-top: 0.25rem;
+.card__principal:not(.objeto-card) .arrow__button__principal {
+    flex-shrink: 0;
     height: 1.5rem;
+    margin-top: 0.25rem;
 }
 
-/* responsividade */
+/* ---------- Elementos responsivos ---------- */
 
-.button__responsive, .endereco__responsive, .titulo__responsive{ display: none }
-
-@media ( max-width: 1032px ){
-
-    .descricao__principal, .titulo__principal, .endereco__principal{ display: none}
-    .endereco__responsive{ display: flex }
-
-    .titulo__responsive{
-        display: flex;
-        color: var(--primary-color-text);
-        font-weight: 600;
-        margin-bottom: 1rem;
-        font-size: 3rem;
-        line-height: 3rem;
-    }
-
-    .data__principal, .hora__principal{
-        font-size: 1.1rem; 
-        line-height: 1.1rem;
-    }
-
-    .principal__embaixo{
-        display: flex;
-        justify-content: end;
-        flex-direction: column;
-        flex: 1;
-    }
+.card__principal:not(.objeto-card) .button__responsive,
+.card__principal:not(.objeto-card) .divisoria {
+    display: none;
 }
 
-@media ( max-width: 768px ){
+/* ==========================================================
+   RESPONSIVIDADE
+   ========================================================== */
 
-    .descricao__principal, .principal__direita, .divisoria, .titulo__principal, .endereco__principal{ display: none}
-    .endereco__responsive{ display: flex }
+/* ---------- Até 1024px ---------- */
 
-    .categoria__status{
-        flex-direction: column;
-        margin-top: 1rem;
+@media (max-width: 1024px) {
+
+    .card__principal:not(.objeto-card) {
+        min-height: 22rem;
     }
 
-    .titulo__responsive{
+    /* Título compacto */
+
+    .card__principal:not(.objeto-card) .titulo__principal {
+        display: none;
+    }
+
+    .card__principal:not(.objeto-card) .titulo__responsive {
         display: flex;
+        margin: 0;
+
         color: var(--primary-color-text);
+        font-size: clamp(1.8rem, 3.2vw, 3rem);
         font-weight: 600;
-        font-size: 1.5rem;
-        line-height: 1.7rem;
+        line-height: 1.2;
+
+        overflow-wrap: anywhere;
     }
 
-    .principal__meio{
+    /* Endereço compacto */
+
+    .card__principal:not(.objeto-card) .endereco__principal {
+        display: none;
+    }
+
+    .card__principal:not(.objeto-card) .endereco__responsive {
+        display: inline-flex;
         min-width: 0;
-        min-height: 0;
-        gap: 0%;
+        color: var(--primary-color-text);
+        overflow-wrap: anywhere;
+    }
+
+    /* Texto e ícones */
+
+    .card__principal:not(.objeto-card) .data__principal,
+    .card__principal:not(.objeto-card) .hora__principal {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    }
+
+    .card__principal:not(.objeto-card) .principal__meio {
+        justify-content: flex-start;
+    }
+
+    .card__principal:not(.objeto-card) .principal__embaixo {
         flex: 1;
+        justify-content: center;
     }
 
-    .categoria__principal span{ font-size: 12px }
-    .image__principal{ margin-bottom: 0% }
+    .card__principal:not(.objeto-card) .descricao__principal {
+        display: -webkit-box;
+    }
+}
 
-    .status__red, .status__orange, .status__green{
-        gap: 0.7rem;
-        font-size: 1.1rem; 
-        padding: 0.2rem 0.7rem;
+/* ---------- Até 768px ---------- */
+
+@media (max-width: 768px) {
+
+    .card__principal:not(.objeto-card) {
+        min-height: 20rem;
+        gap: 1rem;
+        padding: 1rem;
     }
 
-    .data__principal, .hora__principal{
-        font-size: 0.8rem; 
-        line-height: 1.1rem;
+    /* Imagem */
+
+    .card__principal:not(.objeto-card) .principal__cards__image__card {
+        width: 10rem;
+        min-height: 18rem;
     }
 
-    .principal__embaixo{
-        display: flex;
-        justify-content: end;
-        gap: 0.5rem;
+    /* Conteúdo central */
+
+    .card__principal:not(.objeto-card) .principal__meio {
+        flex: 1;
+        gap: 0.8rem;
+        min-width: 0;
+    }
+
+    .card__principal:not(.objeto-card) .principal__encima {
+        gap: 0.6rem;
+    }
+
+    /* Título */
+
+    .card__principal:not(.objeto-card) .titulo__responsive {
+        margin: 0;
+        font-size: 1.6rem;
+        line-height: 1.4;
+    }
+
+    /* Categoria e status */
+
+    .card__principal:not(.objeto-card) .categoria__status {
         flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+        margin-top: 0.2rem;
+    }
+
+    .card__principal:not(.objeto-card) .categoria__principal span {
+        font-size: 1.2rem;
+    }
+
+    .card__principal:not(.objeto-card) .status__red,
+    .card__principal:not(.objeto-card) .status__orange,
+    .card__principal:not(.objeto-card) .status__green {
+        gap: 0.7rem;
+        padding: 0.2rem 0.7rem;
+        font-size: 1.1rem;
+    }
+
+    /* Localização e data */
+
+    .card__principal:not(.objeto-card) .data__hora {
+        gap: 0.6rem;
+        margin-top: 0.2rem;
+    }
+
+    .card__principal:not(.objeto-card) .data__principal,
+    .card__principal:not(.objeto-card) .hora__principal {
+        font-size: 1rem;
+        line-height: 1.3;
+    }
+
+    /* Descrição */
+
+    .card__principal:not(.objeto-card) .principal__embaixo {
         flex: 1;
+        justify-content: space-between;
+        gap: 0.8rem;
+        padding-bottom: 0;
     }
 
-    .arrow__button__principal{
-        margin-top: 0.25rem;
-        height: 1rem;
+    .card__principal:not(.objeto-card) .busca__descricao__titulo {
+        font-size: 1.3rem;
     }
 
-    .button__responsive{
+    .card__principal:not(.objeto-card) .descricao__principal {
+        font-size: 1.2rem;
+        line-height: 1.4;
+        -webkit-line-clamp: 3;
+    }
+
+    /* Botão responsivo */
+
+    .card__principal:not(.objeto-card) .principal__direita {
+        display: none;
+    }
+
+    .card__principal:not(.objeto-card) .button__responsive {
         display: flex;
+        align-self: flex-start;
         align-items: center;
         justify-content: center;
-        gap: 1rem; 
-        padding: 0.2rem 0.7rem;
-        font-weight: 500;
-        font-size: 1.2rem;
+        gap: 0.8rem;
+
+        padding: 0.5rem 0.8rem;
+
         border: 0.2rem solid var(--primary-color-blue);
-        border-radius: 1rem;
+        border-radius: 0.8rem;
+
         font-family: var(--font-principal);
+        font-size: 1.2rem;
+        font-weight: 500;
     }
 
-    .data__hora{ gap: 1rem }
+    .card__principal:not(.objeto-card) .arrow__button__principal {
+        height: 1rem;
+    }
+}
+
+/* ---------- Até 480px ---------- */
+
+@media (max-width: 480px) {
+
+    .card__principal:not(.objeto-card) {
+        min-height: 19rem;
+        gap: 0.8rem;
+        padding: 0.8rem;
+    }
+
+    .card__principal:not(.objeto-card) .principal__cards__image__card {
+        width: 9rem;
+    }
+
+    .card__principal:not(.objeto-card) .titulo__responsive {
+        font-size: 1.5rem;
+    }
+
+    .card__principal:not(.objeto-card) .descricao__principal {
+        font-size: 1.1rem;
+    }
 }

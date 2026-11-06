@@ -9,6 +9,7 @@ import routesDetalhesObjeto from '../modules/detalhes-objeto/detalhesObjeto.rout
 import routesHome from '../modules/home/home.routes.jsx';
 import routesComoFunciona from '../modules/como-funciona/ComoFunciona.routes.jsx'
 import routesAuth from '../modules/auth/auth.routes.jsx';
+import routesCadastrarObjetos from '../modules/cadastrar-objetos/cadastrarObjetos.routes.jsx';
 
 import routesPrivate from '../modules/private/private.routes.jsx';
 
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
             routesDetalhesObjeto,
             routesComoFunciona,
             routesAuth,
+            routesCadastrarObjetos,
             routesPrivate
         ]                
     }

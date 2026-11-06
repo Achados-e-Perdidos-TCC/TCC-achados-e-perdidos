@@ -1,0 +1,116 @@
+.editar-fotos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: 1.2rem;
+}
+
+.editar-foto-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    min-width: 0;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.8rem;
+    background: var(--card-color);
+}
+
+.editar-foto-item img {
+    width: 100%;
+    height: 12rem;
+    object-fit: contain;
+    border-radius: 0.5rem;
+}
+
+.editar-foto-item span {
+    color: var(--secondary-color-gray);
+    font-size: 1.2rem;
+}
+.editar-fotos-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.editar-foto-item button {
+    width: 100%;
+}
+
+.editar-foto-item button:hover {
+    cursor: pointer;
+}
+
+.editar-fotos-footer button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.editar-feedback--sucesso {
+    color: #15803d;
+    font-weight: 600;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+/* Botão excluir - cor de perdido */
+.cadastrar-page .btn--danger {
+    background: var(--error-text-color);
+    color: var(--secondary-color-white);
+    border-color: var(--error-text-color);
+}
+
+.cadastrar-page .btn--danger:hover {
+    background: color-mix(in srgb, var(--error-text-color) 85%, black);
+    border-color: color-mix(in srgb, var(--error-text-color) 85%, black);
+}
+
+.cadastrar-page .btn--danger:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.cadastrar-page .btn--danger:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Ícone do modal de exclusão */
+.cadastrar-page .confirmation-modal--danger
+.confirmation-modal__icon {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Botão salvar - cor de encontrado */
+.cadastrar-page .actions .btn--primary {
+    background: var(--primary-color-green);
+    border-color: var(--primary-color-green);
+    color: var(--secondary-color-white);
+}
+
+.cadastrar-page .actions .btn--primary:hover {
+    background: color-mix(in srgb, var(--primary-color-green) 85%, black);
+    border-color: color-mix(in srgb, var(--primary-color-green) 85%, black);
+}
+/* Botão de confirmação do salvamento */
+.cadastrar-page .btn--save-confirm {
+    background: var(--primary-color-green);
+    border-color: var(--primary-color-green);
+    color: var(--secondary-color-white);
+}
+
+.cadastrar-page .btn--save-confirm:hover {
+    background: color-mix(
+        in srgb,
+        var(--primary-color-green) 85%,
+        black
+    );
+
+    border-color: color-mix(
+        in srgb,
+        var(--primary-color-green) 85%,
+        black
+    );
+}

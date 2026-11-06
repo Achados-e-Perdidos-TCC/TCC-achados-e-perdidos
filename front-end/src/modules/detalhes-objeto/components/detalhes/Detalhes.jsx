@@ -1,128 +1,163 @@
-import { hoje, ontem } from "../../../../utils/date/date.js";
 
-import "./detalhes.css";
+import { hoje, ontem } from '../../../../utils/date/date.js';
+import {
+    formatarLocalizacao,
+    obterNomeCompletoEstado
+} from '../../../../utils/location/localizacao.js';
 
-import Status from "../../../../components/status/Status.jsx";
+import './detalhes.css';
 
-import pinGray from "../../../../assets/icons/buscarObjetos/pin-gray.svg";
-import calendarGray from "../../../../assets/icons/buscarObjetos/calendar-gray.svg";
-import gridGray from "../../../../assets/icons/buscarObjetos/grid-gray.svg";
-import circuloBlue from "../../../../assets/icons/detalhesObjeto/circulo-blue.png";
+import Status from '../../../../components/status/Status.jsx';
+
+import pinGray from '../../../../assets/icons/buscarObjetos/pin-gray.svg';
+import calendarGray from '../../../../assets/icons/buscarObjetos/calendar-gray.svg';
+import gridGray from '../../../../assets/icons/buscarObjetos/grid-gray.svg';
+import circuloBlue from '../../../../assets/icons/detalhesObjeto/circulo-blue.png';
 
 const icons = [gridGray, pinGray, calendarGray];
-const infos = ["categorias", "Localização", "Data"];
+const infos = ['Categorias', 'Localização', 'Data'];
 
-function Detalhes(objeto) {
-  let posicao = -1;
-  const objetoEncontrado = objeto.objeto;
+// Cabeçalho separado para permitir reposicionamento responsivo.
+export function DetalhesCabecalho({ objeto }) {
+    const nome = objeto?.nome || 'Objeto sem nome';
 
-  const nome = objetoEncontrado.nome || "Objeto sem nome"; //obrigatorio
-  const descricao = objetoEncontrado.descricao || "Descrição indisponível"; //obrigatorio
+    return (
+        <div className="cabecalho__detalhes">
+            <h1 className="detalhes__titulo">{nome}</h1>
 
-  const cidade = objetoEncontrado.localizacao.cidade || `Não informado`; //obrigatorio
-  const endereco = objetoEncontrado.localizacao.endereco || `Não informado`; //obrigatorio
-  const estado = objetoEncontrado.localizacao.estado || `Não informado`; //obrigatorio
-  const complemento =
-    objetoEncontrado.localizacao.complemento || `Sem complemento`;
+            <p className="detalhes__descricao responsive">
+                Informações para identificação do objeto.
+            </p>
 
-  const localizacaoFormatada =
-    !objetoEncontrado.localizacao.cidade ||
-    !objetoEncontrado.localizacao.endereco ||
-    !objetoEncontrado.localizacao.estado
-      ? "Endereço não informado"
-      : `${estado} - ${cidade}, ${endereco}`;
-
-  function dataFormatada(data) {
-    if (data === hoje()) {
-      return `Hoje`;
-    }
-    if (data === ontem()) {
-      return `Ontem`;
-    }
-
-    return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`;
-  }
-
-  const descricaoInfo = [
-    objetoEncontrado.categoria,
-    localizacaoFormatada,
-    dataFormatada(objetoEncontrado.data.data, objetoEncontrado.data.hora),
-  ];
-
-  const informacoesAdicionais = [
-    `Categoria: ${objetoEncontrado.categoria}`,
-    `Localização: ${endereco}`,
-    `Cidade: ${cidade}`,
-    `Estado: ${estado}`,
-    `Data: ${dataFormatada(objetoEncontrado.data.data).slice(0, 10)}`,
-    `Horário: ${objetoEncontrado.data.hora}`,
-  ];
-
-  return (
-    <div className="detalhes">
-      <div>
-        <div className={"status__detalhes"}>
-          <Status objeto={objetoEncontrado} />
+            <div className="status__detalhes">
+                <Status objeto={objeto} />
+            </div>
         </div>
+    );
+}
 
-        <h1 className="detalhes__titulo">{nome}</h1>
-        <p className="detalhes__descricao responsive">{`Informações para identificação do objeto.`}</p>
+function Detalhes({ objeto }) {
+    const objetoEncontrado = objeto ?? {};
 
-        <div className="detalhes__infos">
-          {icons.map((valor) => {
-            posicao++;
+    const localizacao = objetoEncontrado.localizacao ?? {};
+    const dataObjeto = objetoEncontrado.data ?? {};
 
-            return (
-              <div key={valor} className="infos__icons">
-                <img className="icons" src={valor} />
+    const descricao = objetoEncontrado.descricao || 'Descrição indisponível';
+
+    const caracteristicasEspecificas =
+        objetoEncontrado.caracteristicasEspecificas?.trim() || '';
+
+    const cidade = localizacao.cidade || 'Não informado';
+    const endereco = localizacao.endereco || '';
+    const estado =
+        obterNomeCompletoEstado(localizacao.estado) || 'Não informado';
+
+    const localizacaoFormatada =
+        formatarLocalizacao(localizacao) || 'Localização não informada';
+
+    function dataFormatada(data) {
+        if (!data) return 'Data não informada';
+        if (data === hoje()) return 'Hoje';
+        if (data === ontem()) return 'Ontem';
+
+        return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`;
+    }
+
+    const descricaoInfo = [
+        objetoEncontrado.categoria || 'Não informada',
+        localizacaoFormatada,
+        dataFormatada(dataObjeto.data),
+    ];
+
+    const informacoesAdicionais = [
+        `Categoria: ${objetoEncontrado.categoria || 'Não informada'}`,
+        ...(endereco ? [`Endereço: ${endereco}`] : []),
+        `Cidade: ${cidade}`,
+        `Estado: ${estado}`,
+        `Data: ${dataFormatada(dataObjeto.data)}`,
+        `Horário: ${dataObjeto.hora || 'Não informado'}`,
+    ];
+
+    return (
+        <div className="detalhes">
+            <div className="detalhes__infos">
+                {icons.map((valor, index) => (
+                    <div key={valor} className="infos__icons">
+                        <img className="icons" src={valor} alt="" />
+
+                        <div>
+                            <span className="infos__categoria">
+                                {infos[index]}
+                            </span>
+
+                            <p className="infos__text">
+                                {descricaoInfo[index]}
+                            </p>
+
+                            <p className="responsive infos__text">
+                                {descricaoInfo[index].length > 17
+                                    ? `${descricaoInfo[index].slice(0, 17)}...`
+                                    : descricaoInfo[index]}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="card__infos">
+                <h2 className="detalhes__objeto__title">
+                    Detalhes do objeto
+                </h2>
 
                 <div>
-                  <span className="infos__categoria"> {infos[posicao]} </span>
-                  <p className="infos__text"> {descricaoInfo[posicao]} </p>
-                  <p className="responsive infos__text">
-                    {" "}
-                    {`${descricaoInfo[posicao].slice(0, 17)}...`}{" "}
-                  </p>
+                    <p className="detalhes__objeto__subtitle">
+                        Descrição Completa
+                    </p>
+
+                    <p className="detalhes__descricao__completa">
+                        {descricao}
+                    </p>
+
+                    {caracteristicasEspecificas && (
+                        <>
+                            <p className="detalhes__objeto__subtitle">
+                                Características específicas
+                            </p>
+
+                            <p className="detalhes__descricao__completa">
+                                {caracteristicasEspecificas}
+                            </p>
+                        </>
+                    )}
                 </div>
-              </div>
-            );
-          })}
+
+                <hr />
+
+                <div>
+                    <p className="detalhes__objeto__subtitle">
+                        Informações
+                    </p>
+
+                    {informacoesAdicionais.map((valor) => (
+                        <div
+                            key={valor}
+                            className="informacoes__adicionais"
+                        >
+                            <img
+                                className="circulo__blue"
+                                src={circuloBlue}
+                                alt=""
+                            />
+
+                            <p className="detalhes__descricao__adicional">
+                                {valor}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div className="card__infos">
-        <h2 className="detalhes__objeto__title">Detalhes do objeto</h2>
-
-        <div>
-          <p className="detalhes__objeto__subtitle">Descrição Completa</p>
-          <p className="detalhes__descricao__completa">{descricao}</p>
-        </div>
-
-        <hr />
-
-        <div>
-          <p className="detalhes__objeto__subtitle">Informações</p>
-          {informacoesAdicionais.map((valor) => {
-            return (
-              <div key={valor} className="informacoes__adicionais">
-                <img className="circulo__blue" src={circuloBlue} />
-                <p className="detalhes__descricao__adicional"> {valor} </p>
-              </div>
-            );
-          })}
-        </div>
-
-        <hr />
-
-        <div>
-          <p className="detalhes__objeto__subtitle">
-            Complemento de localização
-          </p>
-          <p className="detalhes__descricao__complemento">{complemento}</p>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default Detalhes;

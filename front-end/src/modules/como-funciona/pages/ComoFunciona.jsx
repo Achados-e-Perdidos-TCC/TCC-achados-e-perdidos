@@ -119,7 +119,7 @@ function ComoFunciona() {
 
 
             <div className="como__funciona__cta">
-                <NavLink id="btn_cadastrar_objeto" to="/cadastrar-objeto">
+                <NavLink id="btn_cadastrar_objeto" to="/cadastrar-objetos">
                     <IconAdicionar className="cta__icone" />
                     Cadastrar meu objeto
                 </NavLink>

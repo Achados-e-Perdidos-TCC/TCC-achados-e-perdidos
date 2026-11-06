@@ -1,40 +1,78 @@
-.como__funciona {
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-    padding: 4rem 0;
+.como__funciona,
+.como__funciona *,
+.como__funciona *::before,
+.como__funciona *::after {
+    box-sizing: border-box;
 }
 
+/* ---------- Variáveis locais (apelidos das globais) ---------- */
+.como__funciona {
+    --cf-accent: var(--primary-color-blue);
+    --cf-title: var(--primary-color-text);
+    --cf-muted: var(--secondary-color-gray);
+
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.8rem, 5vw, 4rem);
+    padding: clamp(2.4rem, 5vw, 4rem) 0;
+    font-family: var(--font-principal);
+}
+
+/* no escuro o azul puro perde contraste: clareamos só aqui */
+[data-theme="dark"] .como__funciona {
+    --cf-accent: color-mix(in srgb, var(--primary-color-blue) 55%, white);
+}
+
+/* ---------- Cabeçalho ---------- */
 .como__funciona__cabecalho {
-    text-align: center;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    text-align: center;
 }
 
 .title__como__funciona {
-    font-size: 3.2rem;
-    color: var(--primary-color-text);
+    margin: 0;
+    color: var(--cf-title);
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    line-height: 1.2;
 }
 
+.como__funciona__cabecalho p {
+    max-width: 60rem;
+    margin: 0 auto;
+    color: var(--cf-muted);
+    font-size: clamp(1.4rem, 2vw, 1.6rem);
+    line-height: 1.5;
+}
+
+/* ---------- Passos ---------- */
 .como__funciona__passos {
     display: flex;
     align-items: stretch;
     justify-content: center;
     gap: 1rem;
-    flex-wrap: wrap;
+}
+
+.passo__wrapper {
+    display: flex;
+    flex: 1 1 0;
+    align-items: stretch;
+    gap: 1rem;
+    min-width: 0;
 }
 
 .passo__card {
+    position: relative;
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+    padding: 2.4rem;
     background-color: var(--card-color);
     border: 0.1rem solid var(--border-color);
     border-radius: 1rem;
-    padding: 2.4rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 22rem;
-    position: relative;
     transition: box-shadow 0.3s ease-in-out;
 }
 
@@ -43,9 +81,9 @@
 }
 
 .passo__numero {
+    color: var(--cf-accent);
     font-size: 1.4rem;
     font-weight: 700;
-    color: var(--primary-color-blue);
 }
 
 .passo__icone {
@@ -55,69 +93,88 @@
 }
 
 .passo__titulo {
-    font-size: 1.8rem;
-    color: var(--primary-color-text);
-}
-
-.como__funciona__cta {
-    display: flex;
-    justify-content: center;
-}
-
-#btn_buscar {
-    background-color: var(--primary-color-blue);
-    color: var(--secondary-color-white);
-    padding: 1.2rem 3.2rem;
-    border-radius: 0.5rem;
-    font-size: 1.6rem;
-}
-
-@media (max-width: 1024px) {
-    .como__funciona__passos {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 600px) {
-    .como__funciona__passos {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-.passo__wrapper {
-    display: flex;
-    align-items: stretch;
-    gap: 1rem;
+    margin: 0;
+    color: var(--cf-title);
+    font-size: clamp(1.6rem, 2vw, 1.8rem);
+    line-height: 1.3;
 }
 
 .passo__seta {
-    width: 2rem;
-    height: 2rem;
     flex-shrink: 0;
     align-self: center;
+    width: 2rem;
+    height: 2rem;
 }
 
+/* ---------- CTA ---------- */
+.como__funciona__cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.6rem;
+}
 
-.como__funciona__demo {
+/* escopado: o hero.css também define #btn_buscar, então aqui
+   resetamos width/max-width/min-height que vazariam de lá */
+.como__funciona #btn_buscar,
+.como__funciona #btn_cadastrar_objeto {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    width: auto;
+    max-width: 100%;
+    min-height: 0;
+    padding: 1.2rem 3.2rem;
+    background-color: var(--primary-color-blue);
+    color: var(--secondary-color-white);
+    border: 0.1rem solid var(--primary-color-blue);
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.como__funciona #btn_buscar:hover,
+.como__funciona #btn_cadastrar_objeto:hover {
+    opacity: 0.85;
+}
+
+.cta__icone {
+    flex-shrink: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+/* ---------- Demonstração ---------- */
+.como__funciona__demo,
+.como__funciona__motivos {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2.4rem;
 }
 
-.demo__titulo {
-    font-size: 2.2rem;
-    color: var(--primary-color-text);
+.demo__titulo,
+.motivos__titulo {
+    margin: 0;
+    color: var(--cf-title);
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    line-height: 1.25;
     text-align: center;
 }
 
 .demo__conteudo {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 1.6rem;
-    flex-wrap: wrap;
+    max-width: 100%;
 }
 
 .demo__conexao {
@@ -129,19 +186,19 @@
 .demo__linha {
     width: 3rem;
     height: 0;
-    border-top: 0.2rem dashed var(--primary-color-blue);
+    border-top: 0.2rem dashed var(--cf-accent);
 }
 
 .demo__conexao__icone {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    background-color: var(--card-color);
-    border: 0.15rem solid var(--primary-color-blue);
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    width: 4rem;
+    height: 4rem;
+    background-color: var(--card-color);
+    border: 0.15rem solid var(--cf-accent);
+    border-radius: 50%;
 }
 
 .demo__conexao__icone img {
@@ -150,43 +207,31 @@
 }
 
 .demo__badge__match {
+    padding: 0.6rem 1.8rem;
     background-color: var(--success-tag-color);
     color: var(--success-text-color);
-    font-weight: 600;
-    font-size: 1.4rem;
-    padding: 0.6rem 1.8rem;
     border-radius: 1.4rem;
+    font-size: 1.4rem;
+    font-weight: 600;
 }
 
-
-.como__funciona__motivos {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2.4rem;
-}
-
-.motivos__titulo {
-    font-size: 2.2rem;
-    color: var(--primary-color-text);
-    text-align: center;
-}
-
+/* ---------- Motivos ---------- */
 .motivos__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 2rem;
     width: 100%;
 }
 
 .motivo__card {
-    background-color: var(--card-color);
-    border: 0.1rem solid var(--border-color);
-    border-radius: 1rem;
-    padding: 2.4rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    min-width: 0;
+    padding: 2.4rem;
+    background-color: var(--card-color);
+    border: 0.1rem solid var(--border-color);
+    border-radius: 1rem;
     transition: box-shadow 0.3s ease-in-out;
 }
 
@@ -201,74 +246,90 @@
 }
 
 .motivo__icone--svg {
-    color: var(--primary-color-blue);
+    color: var(--cf-accent);
 }
 
 .motivo__card__titulo {
-    font-size: 1.7rem;
-    color: var(--primary-color-text);
+    margin: 0;
+    color: var(--cf-title);
+    font-size: clamp(1.5rem, 2vw, 1.7rem);
+    line-height: 1.3;
 }
 
+/* ==========================================================
+   RESPONSIVIDADE
+   ========================================================== */
 
-#btn_cadastrar_objeto {
-    background-color: var(--primary-color-blue);
-    color: var(--secondary-color-white);
-    padding: 1.2rem 3.2rem;
-    border-radius: 0.5rem;
-    font-size: 1.6rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    transition: opacity 0.2s ease-in-out;
-}
-
-#btn_cadastrar_objeto:hover {
-    opacity: 0.85;
-}
-
-.cta__icone {
-    width: 1.8rem;
-    height: 1.8rem;
-}
-
-
+/* ---------- Até 1024px: reduzir espaços, manter horizontal ---------- */
 @media (max-width: 1024px) {
+    .passo__card,
+    .motivo__card {
+        padding: 1.6rem;
+    }
+
+    .como__funciona__passos,
+    .passo__wrapper {
+        gap: 0.6rem;
+    }
+
     .motivos__grid {
-        grid-template-columns: repeat(2, 1fr);
+        gap: 1.6rem;
+    }
+}
+
+/* ---------- Até 768px: layout vertical ---------- */
+@media (max-width: 768px) {
+    .como__funciona__passos {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+    }
+
+    /* o wrapper vira coluna: card em cima, seta apontando para baixo */
+    .passo__wrapper {
+        flex: 0 0 auto;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .passo__card {
+        flex: 0 0 auto;
     }
 
     .passo__seta {
         transform: rotate(90deg);
     }
 
-    .como__funciona__passos {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .passo__wrapper {
-        flex-direction: column;
-    }
-}
-
-@media (max-width: 600px) {
     .motivos__grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .demo__conteudo {
         flex-direction: column;
     }
 
+    /* conexão na vertical: linha tracejada em pé, sem altura fixa */
     .demo__conexao {
         flex-direction: column;
-        height: 4rem;
     }
 
     .demo__linha {
         width: 0;
         height: 1.5rem;
         border-top: none;
-        border-left: 0.2rem dashed var(--primary-color-blue);
+        border-left: 0.2rem dashed var(--cf-accent);
+    }
+}
+
+/* ---------- Até 480px: ajustes finos ---------- */
+@media (max-width: 480px) {
+    .motivos__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .como__funciona #btn_buscar,
+    .como__funciona #btn_cadastrar_objeto {
+        width: 100%;
+        padding-inline: 1.6rem;
     }
 }

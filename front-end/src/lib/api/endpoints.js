@@ -19,7 +19,8 @@ export const ENDPOINTS = {
     search: `${API_BASE_URL}/items/search`, // GET
     find: (id) => `${API_BASE_URL}/items/${id}`, //GET
     me: `${API_BASE_URL}/items/me`, //GET
-    // fazer o resto
+    update: (id) => `${API_BASE_URL}/items/${id}`, // PATCH
+    remove: (id) => `${API_BASE_URL}/items/${id}`, // DELETE
   },
   notification: {
     get: `${API_BASE_URL}/notifications`,

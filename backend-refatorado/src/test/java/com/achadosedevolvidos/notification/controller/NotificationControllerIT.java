@@ -100,7 +100,7 @@ class NotificationControllerIT extends IntegrationTestSupport {
 
         ItemResponse item = criarItem(dono, new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ANIMAIS, "Item perdido notif " + UUID.randomUUID(),
-                "Descricao completa", "Descricao curta", null, -23.55, -46.63,
+                "Descricao completa", "Descricao curta", null, null, null, -23.55, -46.63,
                 LocalDateTime.now().minusHours(1), null
         ));
 

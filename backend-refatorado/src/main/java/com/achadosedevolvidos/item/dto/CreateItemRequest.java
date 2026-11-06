@@ -4,6 +4,7 @@ import com.achadosedevolvidos.item.model.Item;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -22,18 +23,20 @@ public record CreateItemRequest(
         String title,
 
         @NotBlank(message = "Descrição é obrigatória")
+        @Size(max = 500, message = "Descrição deve ter no máximo 500 caracteres")
         String description,
 
-        @NotBlank(message = "Descrição curta é obrigatória")
         @Size(max = 100, message = "Descrição curta deve ter no máximo 100 caracteres")
         String shortDescription,
 
-        String locationText,
+        @Pattern(regexp = "[A-Za-z]{2}", message = "Estado deve ser a sigla com 2 letras (ex.: RS)")
+        String estado,
 
-        @NotNull(message = "Latitude é obrigatória")
+        String cidade,
+
+        String bairro,
+
         Double latitude,
-
-        @NotNull(message = "Longitude é obrigatória")
         Double longitude,
 
         @NotNull(message = "Data do evento é obrigatória")
