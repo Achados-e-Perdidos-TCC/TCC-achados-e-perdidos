@@ -53,6 +53,7 @@ class ItemControllerIT extends IntegrationTestSupport {
                 .andExpect(jsonPath("$.nome").value(marcador + " carteira preta"))
                 .andExpect(jsonPath("$.status").value("PERDIDO"))
                 .andExpect(jsonPath("$.descricao").value("Carteira preta perdida"))
+                .andExpect(jsonPath("$.descricaoCompleta").value("Perdida perto da entrada principal"))
                 .andExpect(jsonPath("$.icon_url").isNotEmpty())
                 .andReturn();
 
