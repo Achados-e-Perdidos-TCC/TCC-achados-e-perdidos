@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -62,6 +64,28 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleFileTooLarge(MaxUploadSizeExceededException ex) {
         return ResponseEntity.badRequest()
                 .body(new ApiError(HttpStatus.BAD_REQUEST.value(), "Arquivo excede o tamanho máximo permitido"));
+    }
+
+    /**
+     * Cobre, por exemplo, {@code GET /items/abc} quando o path variable é
+     * {@code UUID id} — sem isso, o Spring lança essa exceção ao tentar converter
+     * "abc" para UUID e ela cai no catch-all genérico, virando 500 em vez do 400
+     * de path variable malformado que realmente é.
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiError> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return ResponseEntity.badRequest()
+                .body(new ApiError(HttpStatus.BAD_REQUEST.value(), "Parâmetro '" + ex.getName() + "' inválido"));
+    }
+
+    /**
+     * Cobre, por exemplo, {@code GET /auth/register} (rota só aceita POST) —
+     * sem isso, cai no catch-all genérico e vira 500 em vez do 405 que realmente é.
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiError> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(new ApiError(HttpStatus.METHOD_NOT_ALLOWED.value(), "Método não suportado nesta rota"));
     }
 
     /**

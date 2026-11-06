@@ -287,6 +287,12 @@ class ItemControllerIT extends IntegrationTestSupport {
     }
 
     @Test
+    void rainyDay_deveRetornar400ParaIdComFormatoInvalido() throws Exception {
+        mockMvc.perform(get("/api/v1/items/isto-nao-eh-um-uuid"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void rainyDay_deveIgnorarTokenInvalidoERecusarComoAnonimo() throws Exception {
         CreateItemRequest request = new CreateItemRequest(
                 Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com token quebrado",
