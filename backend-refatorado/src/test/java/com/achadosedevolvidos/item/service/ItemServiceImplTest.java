@@ -93,6 +93,7 @@ class ItemServiceImplTest {
         assertThat(response.status()).isEqualTo("PERDIDO");
         assertThat(response.categoria()).isEqualTo("Eletrônicos");
         assertThat(response.descricao()).isEqualTo("Carteira preta perdida");
+        assertThat(response.descricaoCompleta()).isEqualTo("Perdida no ônibus");
         assertThat(response.imagensSecundarias()).hasSize(1);
     }
 
