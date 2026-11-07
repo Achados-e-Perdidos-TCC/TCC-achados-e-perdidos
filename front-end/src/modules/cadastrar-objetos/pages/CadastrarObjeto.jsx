@@ -196,13 +196,6 @@ export default function CadastrarObjeto() {
   const bairrosDisponiveis =
     estadoSelecionado?.bairrosPorCidade?.[cidade] ?? [];
 
-  // O backend recebe a localização em um único texto (locationText).
-  // O bairro é opcional para municípios sem bairros disponíveis na base.
-  const localizacao =
-    cidade && estadoSelecionado
-      ? `${bairro ? `${bairro}, ` : ""}${cidade} - ${estadoSelecionado.sigla}`
-      : "";
-
   function handleSelecionarFotos(e) {
     const arquivosSelecionados = Array.from(e.target.files ?? []);
 
@@ -308,7 +301,9 @@ export default function CadastrarObjeto() {
         title: nomeObjeto.trim(),
         type: status === "lost" ? "PERDIDO" : "ENCONTRADO",
         categoryId: categoria,
-        localizacao,
+        estado: estadoSelecionado.sigla,
+        cidade,
+        bairro: bairro || null,
         data,
         horario,
         descricao,

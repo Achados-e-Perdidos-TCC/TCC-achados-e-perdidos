@@ -44,8 +44,8 @@ function Detalhes({ objeto }) {
 
     const descricao = objetoEncontrado.descricao || 'Descrição indisponível';
 
-    const caracteristicasEspecificas =
-        objetoEncontrado.caracteristicasEspecificas?.trim() || '';
+    const descricaoCompleta =
+        objetoEncontrado.descricaoCompleta?.trim() || '';
 
     const cidade = localizacao.cidade || 'Não informado';
     const endereco = localizacao.endereco || '';
@@ -118,14 +118,14 @@ function Detalhes({ objeto }) {
                         {descricao}
                     </p>
 
-                    {caracteristicasEspecificas && (
+                    {descricaoCompleta && (
                         <>
                             <p className="detalhes__objeto__subtitle">
                                 Características específicas
                             </p>
 
                             <p className="detalhes__descricao__completa">
-                                {caracteristicasEspecificas}
+                                {descricaoCompleta}
                             </p>
                         </>
                     )}
