@@ -22,7 +22,9 @@ public record UpdateItemRequest(
         String shortDescription,
         @Pattern(regexp = "[A-Za-z]{2}", message = "Estado deve ser a sigla com 2 letras (ex.: RS)")
         String estado,
+        @Size(max = 100, message = "Cidade deve ter no máximo 100 caracteres")
         String cidade,
+        @Size(max = 100, message = "Bairro deve ter no máximo 100 caracteres")
         String bairro,
         Double latitude,
         Double longitude,

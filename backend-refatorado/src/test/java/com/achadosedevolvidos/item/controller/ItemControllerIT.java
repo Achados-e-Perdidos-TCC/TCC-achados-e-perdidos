@@ -261,6 +261,59 @@ class ItemControllerIT extends IntegrationTestSupport {
     }
 
     @Test
+    void rainyDay_deveRecusarCriacaoComEstadoComFormatoInvalido() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Estado Invalido");
+
+        CreateItemRequest request = new CreateItemRequest(
+                Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com estado inválido",
+                "Descrição completa do item", null, "RSS", "Porto Alegre", null, -23.55, -46.63,
+                LocalDateTime.now(), null
+        );
+
+        mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void rainyDay_deveRecusarCriacaoComCidadeMaiorQue100Caracteres() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Cidade Longa Demais");
+        String cidadeInvalida = "x".repeat(101);
+
+        CreateItemRequest request = new CreateItemRequest(
+                Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com cidade longa demais",
+                "Descrição completa do item", null, "RS", cidadeInvalida, null, -23.55, -46.63,
+                LocalDateTime.now(), null
+        );
+
+        mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void rainyDay_deveRecusarCriacaoComBairroMaiorQue100Caracteres() throws Exception {
+        AuthenticatedTestUser user = registerAndAuthenticate("Bairro Longo Demais");
+        String bairroInvalido = "x".repeat(101);
+
+        CreateItemRequest request = new CreateItemRequest(
+                Item.ItemType.PERDIDO, CATEGORIA_ELETRONICOS, "Item com bairro longo demais",
+                "Descrição completa do item", null, "RS", "Porto Alegre", bairroInvalido, -23.55, -46.63,
+                LocalDateTime.now(), null
+        );
+
+        mockMvc.perform(post("/api/v1/items")
+                        .header("Authorization", user.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void rainyDay_deveRecusarCriacaoComPayloadInvalido() throws Exception {
         AuthenticatedTestUser user = registerAndAuthenticate("Payload Invalido");
 
@@ -285,6 +338,12 @@ class ItemControllerIT extends IntegrationTestSupport {
     void rainyDay_deveRetornar404ParaItemInexistente() throws Exception {
         mockMvc.perform(get("/api/v1/items/" + UUID.randomUUID()))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void rainyDay_deveRetornar400ParaIdComFormatoInvalido() throws Exception {
+        mockMvc.perform(get("/api/v1/items/isto-nao-eh-um-uuid"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
