@@ -5,7 +5,9 @@ import { imageUpload } from "../../auth/auth.service.js";
 export async function atualizarObjeto(id, {
   title,
   categoryId,
-  localizacao,
+  estado,
+  cidade,
+  bairro,
   data,
   horario,
   descricao,
@@ -32,7 +34,9 @@ export async function atualizarObjeto(id, {
     categoryId,
     description: descricao.trim(),
     shortDescription: caracteristicas.trim(),
-    locationText: localizacao,
+    estado,
+    cidade,
+    bairro,
     eventDate: `${data}T${horario}:00`,
     imageUrls,
   };

@@ -6,7 +6,9 @@ export async function cadastrarObjeto({
     title,
     type,
     categoryId,
-    localizacao,
+    estado,
+    cidade,
+    bairro,
     data,
     horario,
     descricao,
@@ -29,7 +31,9 @@ export async function cadastrarObjeto({
         description: descricao,
         shortDescription: caracteristicas?.trim() || null,
         eventDate: `${data}T${horario}:00`,
-        locationText: localizacao,
+        estado,
+        cidade,
+        bairro,
         imageUrls,
     };
 
