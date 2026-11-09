@@ -1,335 +1,316 @@
-.como__funciona,
-.como__funciona *,
-.como__funciona *::before,
-.como__funciona *::after {
-    box-sizing: border-box;
-}
-
-/* ---------- Variáveis locais (apelidos das globais) ---------- */
 .como__funciona {
-    --cf-accent: var(--primary-color-blue);
-    --cf-title: var(--primary-color-text);
-    --cf-muted: var(--secondary-color-gray);
-
-    display: flex;
-    flex-direction: column;
-    gap: clamp(2.8rem, 5vw, 4rem);
-    padding: clamp(2.4rem, 5vw, 4rem) 0;
-    font-family: var(--font-principal);
+  background-color: var(--background-color);
+  color: var(--primary-color-text);
 }
 
-/* no escuro o azul puro perde contraste: clareamos só aqui */
-[data-theme="dark"] .como__funciona {
-    --cf-accent: color-mix(in srgb, var(--primary-color-blue) 55%, white);
+.como__funciona__container {
+  width: 100%;
+  max-width: 120rem;
+  margin: 0 auto;
 }
 
-/* ---------- Cabeçalho ---------- */
-.como__funciona__cabecalho {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
+/* HEADER */
+
+.como__funciona__header {
+  max-width: 70rem;
+  margin: 0 auto 6.4rem;
+  text-align: center;
 }
 
-.title__como__funciona {
-    margin: 0;
-    color: var(--cf-title);
-    font-size: clamp(2.4rem, 4vw, 3.2rem);
-    line-height: 1.2;
+.como__funciona__eyebrow {
+  display: inline-block;
+  margin-bottom: 1.8rem;
+  padding: 0.8rem 1.4rem;
+
+  border-radius: 3rem;
+  background-color: var(--primary-color-blue-light);
+  color: var(--primary-color-blue);
+
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.12rem;
 }
 
-.como__funciona__cabecalho p {
-    max-width: 60rem;
-    margin: 0 auto;
-    color: var(--cf-muted);
-    font-size: clamp(1.4rem, 2vw, 1.6rem);
-    line-height: 1.5;
+.como__funciona__header h2 {
+  margin: 0;
+
+  font-size: clamp(2.8rem, 4vw, 4.2rem);
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.12rem;
 }
 
-/* ---------- Passos ---------- */
-.como__funciona__passos {
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    gap: 1rem;
+.title__h2 {
+  color: var(--primary-color-blue);
 }
 
-.passo__wrapper {
-    display: flex;
-    flex: 1 1 0;
-    align-items: stretch;
-    gap: 1rem;
-    min-width: 0;
+.title__h2__e {
+  color: var(--primary-color-green);
 }
 
-.passo__card {
-    position: relative;
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
-    gap: 1rem;
-    min-width: 0;
-    padding: 2.4rem;
-    background-color: var(--card-color);
-    border: 0.1rem solid var(--border-color);
-    border-radius: 1rem;
-    transition: box-shadow 0.3s ease-in-out;
+.como__funciona__header p {
+  max-width: 52rem;
+  margin: 2rem auto 0;
+
+  color: var(--secondary-color-gray);
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.7;
 }
 
-.passo__card:hover {
-    box-shadow: var(--shadow-hover);
+/* ETAPAS */
+
+.como__funciona__etapas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.4rem;
 }
 
-.passo__numero {
-    color: var(--cf-accent);
+/* CARDS */
+
+.como__funciona__card {
+  --card-accent: var(--primary-color-blue);
+  --card-accent-light: var(--primary-color-blue-light);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  min-height: 28rem;
+  padding: 2.8rem;
+
+  background-color: var(--card-color);
+  border: 0.1rem solid var(--border-color);
+  border-radius: 1.8rem;
+
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+}
+
+/* ALTERNÂNCIA DE CORES */
+
+.como__funciona__card.card--verde {
+  --card-accent: var(--primary-color-green);
+  --card-accent-light: rgba(9, 172, 169, 0.12);
+}
+
+/* HOVER */
+
+.como__funciona__card:hover {
+  transform: translateY(-0.3rem);
+  border-color: var(--card-accent);
+  box-shadow: 0 0.8rem 2.2rem rgba(0, 0, 0, 0.07);
+}
+
+/* TOPO DOS CARDS */
+
+.como__funciona__card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+
+.como__funciona__numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 4.8rem;
+  height: 4.8rem;
+
+  border-radius: 1.2rem;
+  background-color: var(--card-accent-light);
+  color: var(--card-accent);
+
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.como__funciona__tipo {
+  padding: 0.7rem 1.2rem;
+  border-radius: 2rem;
+
+  background-color: var(--card-accent-light);
+  color: var(--card-accent);
+
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* CONTEÚDO */
+
+.como__funciona__card__content {
+  margin-top: 3rem;
+}
+
+.como__funciona__card__content h3 {
+  margin: 0 0 1.4rem;
+
+  font-size: 2.1rem;
+  line-height: 1.35;
+  font-weight: 500;
+  letter-spacing: -0.04rem;
+}
+
+.como__funciona__card__content p {
+  margin: 0;
+
+  color: var(--secondary-color-gray);
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.8;
+}
+
+/* RODAPÉ DOS CARDS */
+
+.como__funciona__card__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  margin-top: auto;
+  padding-top: 2.8rem;
+
+  color: var(--secondary-color-gray);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.como__funciona__indicador {
+  width: 0.7rem;
+  height: 0.7rem;
+
+  border-radius: 50%;
+  background-color: var(--card-accent);
+}
+
+/* RODAPÉ DA SEÇÃO */
+
+.como__funciona__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+
+  margin-top: 4rem;
+  padding: 2rem;
+
+  border: 0.1rem solid var(--border-color);
+  border-radius: 1.4rem;
+
+  background-color: var(--card-color);
+}
+
+.como__funciona__footer__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+  width: 2.8rem;
+  height: 2.8rem;
+
+  border-radius: 50%;
+  background-color: rgba(9, 172, 169, 0.12);
+  color: var(--primary-color-green);
+
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.como__funciona__footer p {
+  margin: 0;
+
+  color: var(--secondary-color-gray);
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.como__funciona__footer strong {
+  color: var(--primary-color-text);
+  font-weight: 500;
+}
+
+/* TEMA ESCURO */
+
+[data-theme="dark"] .como__funciona__card.card--verde {
+  --card-accent-light: rgba(9, 172, 169, 0.18);
+}
+
+[data-theme="dark"] .como__funciona__card:hover {
+  box-shadow: 0 0.8rem 2.2rem rgba(0, 0, 0, 0.2);
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 90rem) {
+  .como__funciona {
+    padding: 8rem 2.4rem;
+  }
+
+  .como__funciona__etapas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .como__funciona__card:last-child {
+    grid-column: 1 / -1;
+    min-height: 24rem;
+  }
+}
+
+@media (max-width: 60rem) {
+  .como__funciona {
+    padding: 6.4rem 2rem;
+  }
+
+  .como__funciona__header {
+    margin-bottom: 4rem;
+  }
+
+  .como__funciona__header h2 {
+    letter-spacing: -0.07rem;
+  }
+
+  .como__funciona__header p {
     font-size: 1.4rem;
-    font-weight: 700;
-}
+  }
 
-.passo__icone {
-    width: 4rem;
-    height: 4rem;
-    object-fit: contain;
-}
-
-.passo__titulo {
-    margin: 0;
-    color: var(--cf-title);
-    font-size: clamp(1.6rem, 2vw, 1.8rem);
-    line-height: 1.3;
-}
-
-.passo__seta {
-    flex-shrink: 0;
-    align-self: center;
-    width: 2rem;
-    height: 2rem;
-}
-
-/* ---------- CTA ---------- */
-.como__funciona__cta {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  .como__funciona__etapas {
+    grid-template-columns: 1fr;
     gap: 1.6rem;
-}
+  }
 
-/* escopado: o hero.css também define #btn_buscar, então aqui
-   resetamos width/max-width/min-height que vazariam de lá */
-.como__funciona #btn_buscar,
-.como__funciona #btn_cadastrar_objeto {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    width: auto;
-    max-width: 100%;
-    min-height: 0;
-    padding: 1.2rem 3.2rem;
-    background-color: var(--primary-color-blue);
-    color: var(--secondary-color-white);
-    border: 0.1rem solid var(--primary-color-blue);
-    border-radius: 0.5rem;
-    font-family: inherit;
-    font-size: 1.6rem;
-    font-weight: 600;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: opacity 0.2s ease-in-out;
-}
-
-.como__funciona #btn_buscar:hover,
-.como__funciona #btn_cadastrar_objeto:hover {
-    opacity: 0.85;
-}
-
-.cta__icone {
-    flex-shrink: 0;
-    width: 1.8rem;
-    height: 1.8rem;
-}
-
-/* ---------- Demonstração ---------- */
-.como__funciona__demo,
-.como__funciona__motivos {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2.4rem;
-}
-
-.demo__titulo,
-.motivos__titulo {
-    margin: 0;
-    color: var(--cf-title);
-    font-size: clamp(1.8rem, 3vw, 2.2rem);
-    line-height: 1.25;
-    text-align: center;
-}
-
-.demo__conteudo {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 1.6rem;
-    max-width: 100%;
-}
-
-.demo__conexao {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-.demo__linha {
-    width: 3rem;
-    height: 0;
-    border-top: 0.2rem dashed var(--cf-accent);
-}
-
-.demo__conexao__icone {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: 4rem;
-    height: 4rem;
-    background-color: var(--card-color);
-    border: 0.15rem solid var(--cf-accent);
-    border-radius: 50%;
-}
-
-.demo__conexao__icone img {
-    width: 2.2rem;
-    height: 2.2rem;
-}
-
-.demo__badge__match {
-    padding: 0.6rem 1.8rem;
-    background-color: var(--success-tag-color);
-    color: var(--success-text-color);
-    border-radius: 1.4rem;
-    font-size: 1.4rem;
-    font-weight: 600;
-}
-
-/* ---------- Motivos ---------- */
-.motivos__grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 2rem;
-    width: 100%;
-}
-
-.motivo__card {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    min-width: 0;
+  .como__funciona__card,
+  .como__funciona__card:last-child {
+    grid-column: auto;
+    min-height: 25rem;
     padding: 2.4rem;
-    background-color: var(--card-color);
-    border: 0.1rem solid var(--border-color);
-    border-radius: 1rem;
-    transition: box-shadow 0.3s ease-in-out;
+  }
+
+  .como__funciona__card__content {
+    margin-top: 2.4rem;
+  }
+
+  .como__funciona__footer {
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-top: 2.4rem;
+    padding: 1.6rem;
+  }
 }
 
-.motivo__card:hover {
-    box-shadow: var(--shadow-hover);
-}
+/* ACESSIBILIDADE */
 
-.motivo__icone {
-    width: 3.2rem;
-    height: 3.2rem;
-    object-fit: contain;
-}
+@media (prefers-reduced-motion: reduce) {
+  .como__funciona__card {
+    transition: none;
+  }
 
-.motivo__icone--svg {
-    color: var(--cf-accent);
-}
-
-.motivo__card__titulo {
-    margin: 0;
-    color: var(--cf-title);
-    font-size: clamp(1.5rem, 2vw, 1.7rem);
-    line-height: 1.3;
-}
-
-/* ==========================================================
-   RESPONSIVIDADE
-   ========================================================== */
-
-/* ---------- Até 1024px: reduzir espaços, manter horizontal ---------- */
-@media (max-width: 1024px) {
-    .passo__card,
-    .motivo__card {
-        padding: 1.6rem;
-    }
-
-    .como__funciona__passos,
-    .passo__wrapper {
-        gap: 0.6rem;
-    }
-
-    .motivos__grid {
-        gap: 1.6rem;
-    }
-}
-
-/* ---------- Até 768px: layout vertical ---------- */
-@media (max-width: 768px) {
-    .como__funciona__passos {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.6rem;
-    }
-
-    /* o wrapper vira coluna: card em cima, seta apontando para baixo */
-    .passo__wrapper {
-        flex: 0 0 auto;
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .passo__card {
-        flex: 0 0 auto;
-    }
-
-    .passo__seta {
-        transform: rotate(90deg);
-    }
-
-    .motivos__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .demo__conteudo {
-        flex-direction: column;
-    }
-
-    /* conexão na vertical: linha tracejada em pé, sem altura fixa */
-    .demo__conexao {
-        flex-direction: column;
-    }
-
-    .demo__linha {
-        width: 0;
-        height: 1.5rem;
-        border-top: none;
-        border-left: 0.2rem dashed var(--cf-accent);
-    }
-}
-
-/* ---------- Até 480px: ajustes finos ---------- */
-@media (max-width: 480px) {
-    .motivos__grid {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .como__funciona #btn_buscar,
-    .como__funciona #btn_cadastrar_objeto {
-        width: 100%;
-        padding-inline: 1.6rem;
-    }
+  .como__funciona__card:hover {
+    transform: none;
+  }
 }
