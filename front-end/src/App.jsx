@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Header from "./components/header/header.jsx";
+import Header from "./components/Header/Header.jsx";
 import AuthProvider from "./contexts/authContexts/AuthContext.jsx";
 
 // Reaproveitamento de estrutura
