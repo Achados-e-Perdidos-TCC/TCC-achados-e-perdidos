@@ -1,147 +1,108 @@
-
 /* ==========================================================
    DETALHES DO OBJETO
    Escala: 1rem = 10px.
    ========================================================== */
 
-
 /* ---------- Estrutura principal ---------- */
 
 .detalhe__objetos {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 
-    min-height: 100dvh;
-    min-width: 0;
+  min-height: 100dvh;
+  min-width: 0;
 }
-
 
 /* ---------- Ícones ---------- */
 
 .house__gray,
 .x__white {
-    height: 1.8rem;
-    width: auto;
+  height: 1.8rem;
+  width: auto;
 }
-
 
 /* ==========================================================
    CAMINHO DE NAVEGAÇÃO / VOLTAR
    ========================================================== */
 
 .caminho__voltar {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .caminho,
 .voltar__navlink {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .caminho__text {
-    font-size: 1.2rem;
-    color: var(--secondary-color-gray);
+  font-size: 1.2rem;
+  color: var(--secondary-color-gray);
 }
 
 .voltar__text {
-    font-size: 1.3rem;
-    color: var(--primary-color-blue);
+  font-size: 1.3rem;
+  color: var(--primary-color-blue);
 }
-
 
 /* ==========================================================
    CONTEÚDO PRINCIPAL
    ========================================================== */
 
 .container__detalhes {
-    display: grid;
-
-    grid-template-columns:
-        minmax(0, 46%)
-        minmax(0, 1fr);
-
-    align-items: start;
-    column-gap: clamp(2rem, 4vw, 7rem);
-
-    width: 100%;
-    min-width: 0;
-    max-height: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
-
-
-/* ---------- Galeria de imagens ---------- */
-
-.esquerda {
-    grid-column: 1;
-
-    width: 100%;
-    min-width: 0;
-}
-
-
-/* ---------- Coluna direita ---------- */
-
-.coluna__detalhes {
-    grid-column: 2;
-
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-
-    width: 100%;
-    min-width: 0;
-}
-
 
 /* ---------- Cabeçalho ---------- */
 
 .topo__detalhes {
-    width: 100%;
-    min-width: 0;
+  width: 100%;
+  min-width: 0;
 }
-
 
 /* ---------- Descrição e informações ---------- */
 
 .direita {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-
-    width: 100%;
-    min-width: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 2rem;
 }
-
 
 /* ---------- Cabeçalho do objeto ---------- */
 
 .cabecalho__detalhes {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 
-    width: 100%;
-    min-width: 0;
+  width: 100%;
+  min-width: 0;
 }
 
 .cabecalho__detalhes .detalhes__titulo {
-    margin: 0;
+  margin: 0;
 
-    color: var(--primary-color-text);
-    font-size: clamp(2.4rem, 4vw, 3.5rem);
-    font-weight: 500;
-    line-height: 1.2;
+  color: var(--primary-color-text);
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1.2;
 
-    overflow-wrap: anywhere;
+  overflow-wrap: anywhere;
 }
 
+.coluna__detalhes {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
 
 /* ==========================================================
    AJUSTES DO CONTEÚDO INTERNO
@@ -149,297 +110,291 @@
    ========================================================== */
 
 @media (min-width: 769px) {
+  /* Aproxima os campos do cabeçalho */
 
-    /* Aproxima os campos do cabeçalho */
+  .coluna__detalhes {
+    gap: 0.8rem;
+  }
 
-    .coluna__detalhes {
-        gap: 0.8rem;
-    }
+  .coluna__detalhes .direita .detalhes {
+    height: auto;
+    min-height: 0;
 
-    .coluna__detalhes .direita .detalhes {
-        height: auto;
-        min-height: 0;
+    gap: 1rem;
+  }
 
-        gap: 1rem;
-    }
+  .coluna__detalhes .direita .detalhes__infos {
+    margin-top: 0;
+  }
 
-    .coluna__detalhes .direita .detalhes__infos {
-        margin-top: 0;
-    }
-
-    .coluna__detalhes .direita .card__infos {
-        flex: none;
-    }
+  .coluna__detalhes .direita .card__infos {
+    flex: none;
+  }
 }
 
+.card__infos {
+  min-height: 50.5rem;
+  max-height: 50.5rem;
+}
 
 /* ==========================================================
    BOTÕES
    ========================================================== */
 
 .container__botoes {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    gap: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 4rem;
 }
 
 .botoes {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
 
-    cursor: pointer;
-    font-weight: 600;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .botao__azul {
-    flex: 1;
-    width: 100%;
-    padding: 1.5rem;
+  flex: 1;
+  width: 100%;
+  padding: 1.5rem;
 
-    border: none;
-    border-radius: 1rem;
+  border: none;
+  border-radius: 1rem;
 
-    font-size: 1.7rem;
+  font-size: 1.7rem;
 
-    background-color: var(--primary-color-blue);
-    color: #fff;
+  background-color: var(--primary-color-blue);
+  color: #fff;
 
-    transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .botao__azul:hover {
-    background-color: #003cbe;
+  background-color: #003cbe;
 }
-
 
 /* ==========================================================
    MODAL DE INFORMAÇÕES
    ========================================================== */
 
 .modal__informacoes__overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    padding: 2rem;
+  padding: 2rem;
 
-    background-color: rgba(15, 25, 40, 0.55);
-    backdrop-filter: blur(3px);
+  background-color: rgba(15, 25, 40, 0.55);
+  backdrop-filter: blur(3px);
 }
 
 .modal__informacoes {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 
-    width: 100%;
-    max-width: 52rem;
-    max-height: 90dvh;
-    overflow-y: auto;
+  width: 100%;
+  max-width: 52rem;
+  max-height: 90dvh;
+  overflow-y: auto;
 
-    padding: 3rem;
+  padding: 3rem;
 
-    border: 0.1rem solid var(--border-color);
-    border-radius: 1.5rem;
+  border: 0.1rem solid var(--border-color);
+  border-radius: 1.5rem;
 
-    background-color: var(--card-color);
-    color: var(--primary-color-text);
+  background-color: var(--card-color);
+  color: var(--primary-color-text);
 
-    box-shadow: 0 1rem 4rem rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1rem 4rem rgba(0, 0, 0, 0.18);
 }
 
 .modal__informacoes__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
 }
 
 .modal__informacoes__header > button {
-    outline: none;
-    border: none;
-    cursor: pointer;
+  outline: none;
+  border: none;
+  cursor: pointer;
 }
 
 .modal__informacoes__header h2,
 .modal__informacoes__header p {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
 }
 
 .modal__informacoes__header h2 {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
 .modal__informacoes__header > div {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 .modal__informacoes__header p {
-    font-size: 1.3rem;
-    line-height: 1.5;
-    color: var(--secondary-color-gray);
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--secondary-color-gray);
 }
 
 .modal__informacoes__fechar {
-    flex-shrink: 0;
+  flex-shrink: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    width: 3.5rem;
-    height: 3.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
 
-    border: none;
-    border-radius: 0.8rem;
+  border: none;
+  border-radius: 0.8rem;
 
-    background: transparent;
-    cursor: pointer;
+  background: transparent;
+  cursor: pointer;
 }
 
 .modal__informacoes__fechar img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
-
 
 /* ---------- Formulário do modal ---------- */
 
 .formulario__informacoes {
-    display: flex;
-    flex-direction: column;
-    gap: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
 }
 
 .campo__informacoes {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 .campo__informacoes label {
-    font-size: 1.3rem;
-    font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
 .campo__informacoes input,
 .campo__informacoes textarea {
-    width: 100%;
-    padding: 1.2rem 1.4rem;
+  width: 100%;
+  padding: 1.2rem 1.4rem;
 
-    border: 0.1rem solid var(--border-color);
-    border-radius: 0.8rem;
+  border: 0.1rem solid var(--border-color);
+  border-radius: 0.8rem;
 
-    background-color: var(--background-color);
-    color: var(--primary-color-text);
+  background-color: var(--background-color);
+  color: var(--primary-color-text);
 
-    font-family: inherit;
-    font-size: 1.3rem;
+  font-family: inherit;
+  font-size: 1.3rem;
 
-    outline: none;
+  outline: none;
 }
 
 .campo__informacoes input:focus,
 .campo__informacoes textarea:focus {
-    border-color: var(--primary-color-blue);
+  border-color: var(--primary-color-blue);
 }
 
 .campo__informacoes textarea {
-    min-height: 12rem;
-    resize: vertical;
+  min-height: 12rem;
+  resize: vertical;
 }
-
 
 /* ---------- Erros do formulário ---------- */
 
 .modal__informacoes__erro {
-    padding: 1.2rem;
+  padding: 1.2rem;
 
-    border: 0.1rem solid #e7b7b7;
-    border-radius: 0.8rem;
+  border: 0.1rem solid #e7b7b7;
+  border-radius: 0.8rem;
 
-    background-color: rgba(220, 70, 70, 0.08);
-    color: #d64545;
+  background-color: rgba(220, 70, 70, 0.08);
+  color: #d64545;
 
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
-
 
 /* ---------- Ações do modal ---------- */
 
 .modal__informacoes__botoes {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 
 .botao__cancelar__informacoes,
 .botao__enviar__informacoes {
-    padding: 1.2rem 2rem;
+  padding: 1.2rem 2rem;
 
-    border-radius: 0.8rem;
+  border-radius: 0.8rem;
 
-    font-size: 1.3rem;
-    font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 600;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .botao__cancelar__informacoes {
-    border: 0.1rem solid var(--border-color);
+  border: 0.1rem solid var(--border-color);
 
-    background-color: var(--card-color);
-    color: var(--primary-color-text);
+  background-color: var(--card-color);
+  color: var(--primary-color-text);
 }
 
 .botao__enviar__informacoes {
-    border: none;
+  border: none;
 
-    background-color: var(--primary-color-blue);
-    color: #fff;
+  background-color: var(--primary-color-blue);
+  color: #fff;
 }
-
 
 /* ---------- Aviso de e-mail ---------- */
 
 .aviso__email {
-    font-size: 1.05rem;
-    color: var(--secondary-color-gray);
-    text-align: center;
-    line-height: 1.4;
-    margin: 0;
+  font-size: 1.05rem;
+  color: var(--secondary-color-gray);
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
 }
-
 
 /* ==========================================================
    RESPONSIVIDADE
    ========================================================== */
 
-
 /* ---------- Tablets ---------- */
 
 @media (max-width: 1024px) and (min-width: 769px) {
+  .container__detalhes {
+    grid-template-columns:
+      minmax(0, 45%)
+      minmax(0, 1fr);
 
-    .container__detalhes {
-        grid-template-columns:
-            minmax(0, 45%)
-            minmax(0, 1fr);
-
-        column-gap: 2.5rem;
-    }
+    column-gap: 2.5rem;
+  }
 }
-
 
 /* ==========================================================
    CELULARES
@@ -447,137 +402,134 @@
    ========================================================== */
 
 @media (max-width: 768px) {
+  .direita {
+    width: 100%;
+  }
 
-    .direita {
-        width: 100%;
-    }
+  .modal__informacoes__header {
+    align-items: flex-start;
+  }
 
-    .modal__informacoes__header {
-        align-items: flex-start;
-    }
+  .detalhe__objetos {
+    gap: 1.5rem;
+    min-height: 0;
+  }
 
-    .detalhe__objetos {
-        gap: 1.5rem;
-        min-height: 0;
-    }
+  .container__detalhes {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch;
 
-    .container__detalhes {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch;
+    width: 100%;
+    max-height: none;
+    gap: 2.5rem;
+  }
 
-        width: 100%;
-        max-height: none;
-        gap: 2.5rem;
-    }
-
-    /* Retira o wrapper da estrutura visual,
+  /* Retira o wrapper da estrutura visual,
        permitindo reorganizar seus elementos internos. */
 
-    .coluna__detalhes {
-        display: contents;
-    }
+  .coluna__detalhes {
+    display: contents;
+  }
 
-    /* Primeiro: nome e status */
+  /* Primeiro: nome e status */
 
-    .topo__detalhes {
-        order: 0;
-        width: 100%;
-        min-width: 0;
-    }
+  .topo__detalhes {
+    order: 0;
+    width: 100%;
+    min-width: 0;
+  }
 
-    /* Segundo: galeria de imagens */
+  /* Segundo: galeria de imagens */
 
-    .esquerda {
-        order: 1;
+  .esquerda {
+    order: 1;
 
-        flex: none;
-        width: 100%;
-        min-width: 0;
-    }
+    flex: none;
+    width: 100%;
+    min-width: 0;
+  }
 
-    /* Terceiro: descrição e demais informações */
+  /* Terceiro: descrição e demais informações */
 
-    .direita {
-        order: 2;
+  .direita {
+    order: 2;
 
-        flex: none;
-        width: 100%;
-        min-width: 0;
-    }
+    flex: none;
+    width: 100%;
+    min-width: 0;
+  }
 
-    /* Cabeçalho */
+  /* Cabeçalho */
 
-    .cabecalho__detalhes .detalhes__titulo {
-        margin: 0.8rem 0;
-        font-size: clamp(2.2rem, 6vw, 2.8rem);
-    }
+  .cabecalho__detalhes .detalhes__titulo {
+    margin: 0.8rem 0;
+    font-size: clamp(2.2rem, 6vw, 2.8rem);
+  }
 
-    /* Botões */
+  /* Botões */
 
-    .container__botoes {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
-        width: 100%;
-    }
+  .container__botoes {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    width: 100%;
+  }
 
-    .botao__azul {
-        width: 100%;
-    }
+  .botao__azul {
+    width: 100%;
+  }
 
-    .botoes p {
-        font-size: 1.3rem;
-    }
+  .botoes p {
+    font-size: 1.3rem;
+  }
 
-    /* Modal */
+  /* Modal */
 
-    .modal__informacoes {
-        padding: 2rem;
-    }
+  .modal__informacoes {
+    padding: 2rem;
+  }
 
-    .modal__informacoes__header h2 {
-        font-size: 1.7rem;
-    }
+  .modal__informacoes__header h2 {
+    font-size: 1.7rem;
+  }
 
-    .modal__informacoes__botoes {
-        flex-direction: column-reverse;
-    }
+  .modal__informacoes__botoes {
+    flex-direction: column-reverse;
+  }
 
-    .botao__cancelar__informacoes,
-    .botao__enviar__informacoes {
-        width: 100%;
-    }
+  .botao__cancelar__informacoes,
+  .botao__enviar__informacoes {
+    width: 100%;
+  }
 }
-
 
 /* ---------- Celulares menores ---------- */
 
 @media (max-width: 480px) {
+  .detalhe__objetos {
+    gap: 1.5rem;
+  }
 
-    .detalhe__objetos {
-        gap: 1.5rem;
-    }
+  .container__detalhes {
+    gap: 2rem;
+  }
 
-    .container__detalhes {
-        gap: 2rem;
-    }
+  .modal__informacoes__overlay {
+    padding: 1.2rem;
+  }
 
-    .modal__informacoes__overlay {
-        padding: 1.2rem;
-    }
+  .modal__informacoes {
+    padding: 1.8rem;
+    gap: 1.6rem;
+    border-radius: 1rem;
+  }
 
-    .modal__informacoes {
-        padding: 1.8rem;
-        gap: 1.6rem;
-        border-radius: 1rem;
-    }
+  .modal__informacoes__header h2 {
+    font-size: 1.6rem;
+  }
 
-    .modal__informacoes__header h2 {
-        font-size: 1.6rem;
-    }
-
-    .caminho__text {
-        font-size: 1.1rem;
-    }
+  .caminho__text {
+    font-size: 1.1rem;
+  }
 }
