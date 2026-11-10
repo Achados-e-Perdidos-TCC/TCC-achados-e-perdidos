@@ -284,11 +284,6 @@ function EditarObjeto() {
             return;
         }
 
-        // O mesmo padrão de localização utilizado no cadastro.
-        const localizacao =
-            `${formulario.bairro ? `${formulario.bairro}, ` : ""}` +
-            `${formulario.cidade} - ${estadoAtual.sigla}`;
-
         try {
             setSalvando(true);
 
@@ -296,7 +291,9 @@ function EditarObjeto() {
             const objetoAtualizado = await atualizarObjeto(id, {
                 title: formulario.nomeObjeto,
                 categoryId: formulario.categoriaId,
-                localizacao,
+                estado: estadoAtual.sigla,
+                cidade: formulario.cidade,
+                bairro: formulario.bairro || null,
                 data: formulario.data,
                 horario: formulario.horario,
                 descricao: formulario.descricao,
@@ -319,7 +316,7 @@ function EditarObjeto() {
                 ...atual,
                 fotosExistentes: imagensAtualizadas,
                 caracteristicas:
-                    objetoAtualizado.caracteristicasEspecificas ?? "",
+                    objetoAtualizado.descricaoCompleta ?? "",
             }));
 
             // Libera as prévias das imagens que já foram enviadas.
@@ -468,7 +465,7 @@ function EditarObjeto() {
 
                     descricao: objetoEncontrado.descricao ?? "",
                     caracteristicas:
-                        objetoEncontrado.caracteristicasEspecificas ?? "",
+                        objetoEncontrado.descricaoCompleta ?? "",
 
                     fotosExistentes: imagensExistentes,
                 });

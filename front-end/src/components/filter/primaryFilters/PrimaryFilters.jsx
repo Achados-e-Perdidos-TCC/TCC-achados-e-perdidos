@@ -13,7 +13,7 @@ import pinGray from "../../../assets/icons/buscarObjetos/pin-gray.svg";
 import gridGray from "../../../assets/icons/buscarObjetos/grid-gray.svg";
 import calendarGray from "../../../assets/icons/buscarObjetos/calendar-gray.svg";
 import arrowGray from "../../../assets/icons/buscarObjetos/arrow-gray.png";
-import closeGray from "../../../assets/icons/buscarObjetos/x-gray.png";
+import closeGray from "../../../assets/icons/buscarObjetos/X-gray.png";
 
 import filtros from "./primaryFilters.json";
 

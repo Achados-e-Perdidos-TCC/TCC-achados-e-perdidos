@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, NavLink, useOutletContext } from "react-router";
 
-import "./editDetalhesObjeto.css";
+import "./editdetalhesObjeto.css";
 
 import { findMyObject } from "../../private.service.js";
 

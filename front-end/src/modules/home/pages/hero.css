@@ -1,618 +1,774 @@
+/* ==========================================================
+   HERO — BASE
+   ========================================================== */
+
 .hero,
 .hero *,
 .hero *::before,
 .hero *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .hero {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(1.6rem, 2vw, 2.4rem);
-    background-color: var(--background-color);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.6rem, 2vw, 2.4rem);
+  background-color: var(--background-color);
 }
 
-/* reset leve: parágrafos da hero não herdam margem do navegador */
+/* Reset leve */
+
 .hero p {
-    margin: 0;
-    font-family: var(--font-principal);
+  margin: 0;
+  font-family: var(--font-principal);
 }
 
-/* ---------- Lado esquerdo (texto) ---------- */
+/* ==========================================================
+   HERO — CONTEÚDO
+   ========================================================== */
+
 .hero-content,
 .hero-imagem {
-    min-width: 0;
+  min-width: 0;
 }
 
 .hero-content {
-    grid-column: 1;
-    grid-row: 1;
+  grid-column: 1;
+  grid-row: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .hero-content h1 {
-    margin: 0;
-    padding: 0;
-    color: var(--primary-color-text);
-    font-family: var(--font-principal);
-    font-size: clamp(2.8rem, 4vw, 4.4rem);
-    font-weight: 630;
-    line-height: 1.15;
+  margin: 0;
+  padding: 0;
+
+  color: var(--primary-color-text);
+  font-family: var(--font-principal);
+  font-size: clamp(2.8rem, 4vw, 4.4rem);
+  font-weight: 500;
+  line-height: 1.15;
 }
 
 .hero span#perto {
-    color: var(--primary-color-blue);
-    font-family: var(--font-principal);
-    padding: 0 6px;
+  padding: 0 6px;
+
+  color: var(--primary-color-blue);
+  font-family: var(--font-principal);
 }
 
 .hero span#imagina {
-    color: var(--primary-color-green);
-    font-family: var(--font-principal);
-    padding: 0 6px;
+  padding: 0 6px;
+
+  color: var(--primary-color-green);
+  font-family: var(--font-principal);
 }
 
 .hero-content p {
-    color: var(--secondary-color-gray);
-    font-size: 14px;
-    line-height: 1.5;
-    padding: 12px 0;
+  padding: 1.2rem 0;
+
+  color: var(--secondary-color-gray);
+  font-size: 1.5rem;
+  line-height: 1.5;
 }
 
+/* ==========================================================
+   HERO — BOTÕES DE CADASTRO
+   ========================================================== */
+
 .hero-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+#btn_perdiObjeto,
+#btn_encontreiObjeto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+
+  padding: 1.2rem 1.8rem;
+
+  border-radius: 0.5rem;
+  font-family: var(--font-principal);
+  font-size: 1.5rem;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 #btn_perdiObjeto {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 18px;
-    background-color: var(--primary-color-blue);
-    color: var(--secondary-color-white);
-    border: 1px solid var(--primary-color-blue);
-    border-radius: 5px;
-    font-family: var(--font-principal);
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  background-color: var(--primary-color-blue);
+  color: var(--secondary-color-white);
+  border: 1px solid var(--primary-color-blue);
 }
 
 #btn_encontreiObjeto {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 18px;
-    background-color: transparent;
-    color: var(--primary-color-green);
-    border: 1px solid var(--primary-color-green);
-    border-radius: 5px;
-    font-family: var(--font-principal);
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  background-color: transparent;
+  color: var(--primary-color-green);
+  border: 1px solid var(--primary-color-green);
 }
 
-/* ---------- Lado direito (imagem) ---------- */
+/* ==========================================================
+   HERO — IMAGEM
+   ========================================================== */
+
 .hero-imagem {
-    grid-column: 2;
-    grid-row: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  grid-column: 2;
+  grid-row: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero-imagem img {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+
+  object-fit: contain;
 }
 
-/* ---------- Card de busca ---------- */
+/* ==========================================================
+   HERO — CARD DE BUSCA
+   ========================================================== */
+
 .hero-busca {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    width: 100%;
-    min-height: 14rem;
-    margin-top: 25px;
-    padding: clamp(1.6rem, 2.5vw, 2.5rem) clamp(1.6rem, 2.8vw, 2.8rem);
+  grid-column: 1 / -1;
+  grid-row: 2;
 
-    display: grid;
-    grid-template-columns: clamp(7rem, 10vw, 11rem) minmax(0, 1fr) minmax(14rem, 22rem);
-    grid-template-rows: auto auto;
-    grid-template-areas:
-        "lupa titulo botao"
-        "lupa texto botao";
-    align-items: center;
-    column-gap: clamp(1rem, 2vw, 2rem);
+  display: grid;
+  grid-template-columns:
+    clamp(7rem, 10vw, 11rem)
+    minmax(0, 1fr)
+    minmax(14rem, 22rem);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "lupa titulo botao"
+    "lupa texto botao";
 
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+  align-items: center;
+  column-gap: clamp(1rem, 2vw, 2rem);
+
+  width: 100%;
+  min-height: 14rem;
+  margin-top: 25px;
+  padding: clamp(1.6rem, 2.5vw, 2.5rem) clamp(1.6rem, 2.8vw, 2.8rem);
+
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
 }
+
+/* Título */
 
 .hero-busca h2 {
-    grid-area: titulo;
-    justify-self: start;
-    width: 100%;
-    margin: 0 0 6px 0;
-    color: var(--primary-color-text);
-    font-size: clamp(2rem, 2.6vw, 2.8rem);
-    font-weight: 700;
-    line-height: 1.2;
+  grid-area: titulo;
+
+  justify-self: start;
+  width: 100%;
+  margin: 0 0 6px;
+
+  color: var(--primary-color-text);
+  font-size: clamp(2rem, 2.6vw, 2.8rem);
+  font-weight: 500;
+  line-height: 1.2;
 }
 
+/* Ícone de busca */
+
 .hero-busca > div:nth-of-type(1) {
-    grid-area: lupa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  grid-area: lupa;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero-busca > div:nth-of-type(1) img {
-    display: block;
-    width: 100%;
-    max-width: 8.6rem;
-    height: auto;
-    object-fit: contain;
+  display: block;
+
+  width: 100%;
+  max-width: 8.6rem;
+  height: auto;
+
+  object-fit: contain;
 }
+
+/* Texto */
 
 .hero-busca p {
-    grid-area: texto;
-    justify-self: start;
-    width: 100%;
-    text-align: left;
-    color: var(--secondary-color-gray);
-    font-size: clamp(1.4rem, 1.6vw, 1.8rem);
-    font-weight: 400;
-    line-height: 1.45;
+  grid-area: texto;
+
+  justify-self: start;
+  width: 100%;
+  text-align: left;
+
+  color: var(--secondary-color-gray);
+  font-size: clamp(1.4rem, 1.6vw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.45;
 }
 
+/* Botão */
+
 .hero-busca > div:nth-of-type(2) {
-    grid-area: botao;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    min-width: 0;
+  grid-area: botao;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  min-width: 0;
 }
 
 #btn_buscar,
 .btn_buscar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 22rem;
-    min-height: 56px;
-    padding: 0 1.6rem;
-    background-color: var(--primary-color-blue);
-    color: var(--secondary-color-white);
-    border: 1px solid var(--primary-color-blue);
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    transition: 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 22rem;
+  min-height: 56px;
+  padding: 0 1.6rem;
+
+  background-color: var(--primary-color-blue);
+  color: var(--secondary-color-white);
+  border: 1px solid var(--primary-color-blue);
+  border-radius: 6px;
+
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-/* ---------- Como encontramos (imagens) ---------- */
+/* ==========================================================
+   HERO — CADASTRO / COMO ENCONTRAMOS
+   ========================================================== */
+
 .cadastro-ComoEncontramos {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: clamp(1rem, 2vw, 1.5rem);
+  grid-column: 1 / -1;
+  grid-row: 3;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 .cadastro-ComoEncontramos > div {
-    flex: 1 1 0;
-    min-width: 0;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .cadastro-ComoEncontramos img {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
 }
 
-/* ---------- Objetos recentes (título + link) ---------- */
+/* ==========================================================
+   OBJETOS RECENTES — TÍTULO E LINK
+   ========================================================== */
+
 .objetos-recentes {
-    grid-column: 1 / -1;
-    grid-row: 4;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.8rem;
-    margin-top: 28px;
-    padding: 0 4px;
+  grid-column: 1 / -1;
+  grid-row: 4;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  width: 100%;
+  margin-top: 28px;
+  padding: 0 4px;
 }
 
 .objetos-recentes h2 {
-    margin: 0;
-    color: var(--primary-color-text);
-    font-family: var(--font-principal);
-    font-size: clamp(1.8rem, 2vw, 2.2rem);
-    font-weight: 700;
+  margin: 0;
+
+  color: var(--primary-color-text);
+  font-family: var(--font-principal);
+  font-size: clamp(1.8rem, 2vw, 2.2rem);
+  font-weight: 500;
 }
 
 .objetos-recentes a {
-    color: var(--primary-color-blue);
-    font-family: var(--font-principal);
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
+  color: var(--primary-color-blue);
+  font-family: var(--font-principal);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
 }
 
-/* ---------- Lista de cards ---------- */
+/* ==========================================================
+   OBJETOS RECENTES — LISTA DE CARDS
+   ========================================================== */
+
 .objetos-lista {
-    grid-column: 1 / -1;
-    grid-row: 5;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+  grid-column: 1 / -1;
+  grid-row: 5;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+
+  width: 100%;
 }
 
-/* card simples (versão antiga) */
+/* Card antigo */
+
 .objeto-card {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    min-width: 0;
-    padding: 12px;
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+
+  min-width: 0;
+  padding: 12px;
+
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
 }
+
+/* Topo */
 
 .objeto-topo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
+/* Imagem */
+
 .objeto-imagem {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100px;
-    aspect-ratio: 100 / 76;
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+  flex-shrink: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100px;
+  aspect-ratio: 100 / 76;
+
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
 }
 
 .imagem-placeholder {
-    color: var(--secondary-color-gray);
-    font-family: var(--font-principal);
-    font-size: 14px;
-    font-weight: 700;
+  color: var(--secondary-color-gray);
+  font-family: var(--font-principal);
+  font-size: 14px;
+  font-weight: 500;
 }
 
+/* Título do objeto */
+
 .objeto-titulo-wrap {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-    gap: 6px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 6px;
+
+  min-width: 0;
 }
 
 .objeto-titulo-wrap h3 {
-    margin: 0;
-    color: var(--primary-color-text);
-    font-family: var(--font-principal);
-    font-size: 16px;
-    font-weight: 700;
+  margin: 0;
+
+  color: var(--primary-color-text);
+  font-family: var(--font-principal);
+  font-size: 16px;
+  font-weight: 500;
 }
 
+/* Informações */
+
 .objetos-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .objetos-info p {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .info-icone {
-    flex-shrink: 0;
-    width: 12px;
-    height: 12px;
-    object-fit: contain;
+  flex-shrink: 0;
+
+  width: 12px;
+  height: 12px;
+
+  object-fit: contain;
 }
 
+/* Status antigo */
+
 .status {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0;
-    border: none;
-    border-radius: 0;
-    background: transparent;
-    font-family: var(--font-principal);
-    font-size: 13px;
-    font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 0;
+  background: transparent;
+
+  font-family: var(--font-principal);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .status.perdido {
-    color: var(--error-text-color);
+  color: var(--error-text-color);
 }
 
 .status.encontrado {
-    color: var(--primary-color-green);
+  color: var(--primary-color-green);
 }
+
+/* Dados */
 
 .objetos-dados p {
-    color: var(--secondary-color-gray);
-    font-size: 13px;
+  color: var(--secondary-color-gray);
+  font-size: 13px;
 }
 
+/* Botão de correspondência */
+
 .btn_correspondencia {
-    align-self: stretch;
-    margin-top: auto;
-    padding: 10px 14px;
-    background-color: var(--primary-color-blue);
-    color: var(--secondary-color-white);
-    border: 1px solid var(--primary-color-blue);
-    border-radius: 6px;
-    font-family: var(--font-principal);
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  align-self: stretch;
+  margin-top: auto;
+  padding: 10px 14px;
+
+  background-color: var(--primary-color-blue);
+  color: var(--secondary-color-white);
+  border: 1px solid var(--primary-color-blue);
+  border-radius: 6px;
+
+  font-family: var(--font-principal);
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn_correspondencia.correspondencia-encontrado {
-    background-color: var(--primary-color-green);
-    border-color: var(--primary-color-green);
-    color: var(--secondary-color-white);
+  background-color: var(--primary-color-green);
+  border-color: var(--primary-color-green);
+  color: var(--secondary-color-white);
 }
 
 .btn_correspondencia.correspondencia-perdido {
-    background-color: var(--error-text-color);
-    border-color: var(--error-text-color);
-    color: var(--secondary-color-white);
+  background-color: var(--error-text-color);
+  border-color: var(--error-text-color);
+  color: var(--secondary-color-white);
 }
 
-/* card principal (versão com tags) */
+/* ==========================================================
+   OBJETOS RECENTES — CARD PRINCIPAL
+   ========================================================== */
+
 .objetos-lista .card__principal {
-    height: auto;
-    min-height: 360px;
-    flex-direction: column;
-    overflow: visible;
+  height: auto;
+  min-height: 360px;
+
+  flex-direction: column;
+  overflow: visible;
 }
+
+/* Imagem do card */
 
 .objetos-lista .image__card {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 2 / 1;
-    border-radius: 8px;
-    object-fit: cover;
+  display: block;
+
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+
+  border-radius: 8px;
+  object-fit: cover;
 }
+
+/* Conteúdo central */
 
 .objetos-lista .principal__meio {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 12px;
-    min-width: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+
+  min-width: 0;
 }
+
+/* Título */
 
 .objetos-lista .titulo__principal {
-    display: block;
-    margin: 0;
-    color: var(--primary-color-text);
-    font-family: var(--font-principal);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.3;
+  display: block;
+  margin: 0;
+
+  color: var(--primary-color-text);
+  font-family: var(--font-principal);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
+/* Tags */
+
 .objetos-lista .categoria__status {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-top: 8px;
 }
 
 .objetos-lista .status__red,
 .objetos-lista .status__orange,
 .objetos-lista .status__green {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  padding: 4px 8px;
+
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
 }
 
+/* Status vermelho */
+
 .objetos-lista .status__red {
-    background-color: var(--error-tag-color);
+  background-color: var(--error-tag-color);
 }
 
 .objetos-lista .status__red span {
-    color: var(--error-text-color);
+  color: var(--error-text-color);
 }
 
+/* Status laranja */
+
 .objetos-lista .status__orange {
-    background-color: var(--analysis-tag-color);
+  background-color: var(--analysis-tag-color);
 }
 
 .objetos-lista .status__orange span {
-    color: var(--analysis-text-color);
+  color: var(--analysis-text-color);
 }
 
+/* Status verde */
+
 .objetos-lista .status__green {
-    background-color: var(--success-tag-color);
+  background-color: var(--success-tag-color);
 }
 
 .objetos-lista .status__green span {
-    color: var(--success-text-color);
+  color: var(--success-text-color);
 }
+
+/* Ícones */
 
 .objetos-lista .image__principal,
 .objetos-lista .icon__categoria,
 .objetos-lista .data__principal img,
 .objetos-lista .hora__principal img {
-    flex-shrink: 0;
-    width: 14px;
-    height: 14px;
-    object-fit: contain;
+  flex-shrink: 0;
+
+  width: 14px;
+  height: 14px;
+
+  object-fit: contain;
 }
+
+/* Categoria, data e hora */
 
 .objetos-lista .categoria__principal,
 .objetos-lista .data__principal,
 .objetos-lista .hora__principal {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: var(--secondary-color-gray);
-    font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  color: var(--secondary-color-gray);
+  font-size: 12px;
 }
 
+/* Informações de data e hora */
+
 .objetos-lista .data__hora {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 8px;
-    width: 100%;
-    text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+
+  width: 100%;
+  text-align: left;
 }
 
 .objetos-lista .data__principal,
 .objetos-lista .hora__principal {
-    justify-content: flex-start;
-    width: 100%;
-    text-align: left;
+  justify-content: flex-start;
+
+  width: 100%;
+  text-align: left;
 }
+
+/* Descrição */
 
 .objetos-lista .descricao__principal {
-    display: block;
-    margin: 0;
-    color: var(--secondary-color-gray);
-    font-family: var(--font-principal);
-    font-size: 12px;
-    line-height: 1.4;
-    overflow: visible;
+  display: block;
+  margin: 0;
+
+  color: var(--secondary-color-gray);
+  font-family: var(--font-principal);
+  font-size: 12px;
+  line-height: 1.4;
+
+  overflow: visible;
 }
 
+/* Área do botão */
+
 .objetos-lista .principal__direita {
-    display: flex;
-    justify-content: flex-start;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .objetos-lista .button__principal {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid var(--primary-color-blue);
-    border-radius: 6px;
-    font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  width: 100%;
+  padding: 8px 12px;
+
+  border: 1px solid var(--primary-color-blue);
+  border-radius: 6px;
+
+  font-size: 12px;
 }
 
 .objetos-lista .detalhes__principal {
-    color: var(--primary-color-blue);
+  color: var(--primary-color-blue);
 }
 
 .objetos-lista .arrow__button__principal {
-    width: 12px;
-    height: 12px;
+  width: 12px;
+  height: 12px;
 }
 
 /* ==========================================================
-   RESPONSIVIDADE
+   RESPONSIVIDADE — TABLET
    ========================================================== */
 
-/* ---------- Até 1024px ---------- */
 @media (max-width: 1024px) {
-    .hero {
-        gap: 1.6rem;
-    }
+  .hero {
+    gap: 1.6rem;
+  }
 
-    .objetos-lista {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .objetos-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-/* ---------- Até 768px: layout vertical ---------- */
+/* ==========================================================
+   RESPONSIVIDADE — MOBILE
+   ========================================================== */
+
 @media (max-width: 768px) {
-    .hero {
-        grid-template-columns: minmax(0, 1fr);
-    }
+  /* Layout principal */
 
-    .hero-content,
-    .hero-imagem,
-    .hero-busca,
-    .cadastro-ComoEncontramos,
-    .objetos-recentes,
-    .objetos-lista {
-        grid-column: 1;
-        grid-row: auto;
-    }
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-    .hero-content {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .hero-content,
+  .hero-imagem,
+  .hero-busca,
+  .cadastro-ComoEncontramos,
+  .objetos-recentes,
+  .objetos-lista {
+    grid-column: 1;
+    grid-row: auto;
+  }
 
-    .hero-content h1 {
-        font-size: clamp(2.6rem, 8vw, 3.8rem);
-    }
+  /* Conteúdo */
 
-    .hero-buttons {
-        width: 100%;
-        flex-direction: column;
-        align-items: stretch;
-    }
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    #btn_perdiObjeto,
-    #btn_encontreiObjeto {
-        width: 100%;
-    }
+  .hero-content h1 {
+    font-size: clamp(2.6rem, 8vw, 3.8rem);
+  }
 
-    .hero-busca {
-        grid-template-columns: 7rem minmax(0, 1fr);
-        grid-template-rows: auto auto auto;
-        grid-template-areas:
-            "lupa titulo"
-            "lupa texto"
-            "lupa botao";
-        min-height: 0;
-    }
+  /* Botões */
 
-    .hero-busca > div:nth-of-type(2) {
-        justify-content: flex-start;
-        padding-top: 1rem;
-    }
+  .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
 
-    .cadastro-ComoEncontramos {
-        flex-direction: column;
-        align-items: stretch;
-    }
+    width: 100%;
+  }
+
+  #btn_perdiObjeto,
+  #btn_encontreiObjeto {
+    width: 100%;
+  }
+
+  /* Card de busca */
+
+  .hero-busca {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "lupa titulo"
+      "lupa texto"
+      "lupa botao";
+
+    min-height: 0;
+  }
+
+  .hero-busca > div:nth-of-type(2) {
+    justify-content: flex-start;
+    padding-top: 1rem;
+  }
+
+  /* Cadastro e como encontramos */
+
+  .cadastro-ComoEncontramos {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
