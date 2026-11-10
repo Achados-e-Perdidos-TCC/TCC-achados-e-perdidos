@@ -1,263 +1,244 @@
-/* ==========================================================
-   DETALHES DO OBJETO
-   Escala: 1rem = 10px.
-   Layout da coluna de informações do objeto.
-   ========================================================== */
+/* DETALHES DO OBJETO */
 
-/* ---------- Estrutura principal ---------- */
+/* Estrutura principal */
 
 .detalhes {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    min-width: 0;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 0;
+  height: 100%;
 }
 
-/* ---------- Ícones ---------- */
+/* Ícones */
 
 .detalhes .icons {
-    flex-shrink: 0;
-    width: auto;
-    height: 2.7rem;
+  flex-shrink: 0;
+  width: auto;
+  height: 2.7rem;
 }
 
 .detalhes .circulo__blue {
-    flex-shrink: 0;
-    width: auto;
-    height: 1.5rem;
+  flex-shrink: 0;
+  width: auto;
+  height: 1.5rem;
 }
 
-/* ==========================================================
-   TÍTULO E TEXTOS
-   ========================================================== */
+/* TÍTULO E TEXTOS */
 
 .detalhes .detalhes__titulo {
-    color: var(--primary-color-text);
-    font-size: clamp(2.4rem, 4vw, 3.5rem);
-    font-weight: 500;
-    line-height: 1.2;
-    overflow-wrap: anywhere;
+  color: var(--primary-color-text);
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .detalhes .detalhes__descricao,
 .detalhes .detalhes__descricao__completa {
-    max-width: 65ch;
-    color: var(--secondary-color-gray);
-    font-size: 1.5rem;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
+  max-width: 65ch;
+  color: var(--secondary-color-gray);
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
 }
 
 .detalhes .detalhes__descricao__adicional {
-    min-width: 0;
-    max-width: 65ch;
-    color: var(--primary-color-text);
-    font-size: 1.5rem;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
+  min-width: 0;
+  max-width: 65ch;
+  color: var(--primary-color-text);
+  font-size: 1.5rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
-/* ==========================================================
-   CATEGORIA, LOCALIZAÇÃO E DATA
-   ========================================================== */
+/*CATEGORIA, LOCALIZAÇÃO E DATA*/
 
 .detalhes .detalhes__infos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.6rem clamp(2rem, 5vw, 5.5rem);
-    margin-top: 1.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem clamp(2rem, 5vw, 5.5rem);
+  margin-top: 1.8rem;
 }
 
 .detalhes .infos__icons {
-    display: flex;
-    gap: 0.8rem;
-    min-width: 0;
+  display: flex;
+  gap: 0.8rem;
+  min-width: 0;
 }
 
 .detalhes .infos__categoria,
 .detalhes .infos__text {
-    color: var(--secondary-color-gray);
-    font-size: 1.4rem;
+  color: var(--secondary-color-gray);
+  font-size: 1.4rem;
 }
 
 .detalhes .infos__text {
-    max-width: 28ch;
-    color: var(--primary-color-text);
-    font-size: 1.5rem;
-    overflow-wrap: anywhere;
+  max-width: 28ch;
+  color: var(--primary-color-text);
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
 }
 
-/* ==========================================================
-   CARD — DETALHES DO OBJETO
-   ========================================================== */
+/* CARD — DETALHES DO OBJETO */
 
 .detalhes .card__infos {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: clamp(1.6rem, 2.5vw, 2.5rem);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: clamp(1.6rem, 2.5vw, 2.5rem);
 
-    min-width: 0;
-    padding: clamp(1.6rem, 3vw, 2.5rem);
+  min-width: 0;
+  padding: clamp(1.6rem, 3vw, 2.5rem);
 
-    border: 0.2rem solid var(--border-color);
-    border-radius: 1rem;
-    background-color: var(--card-color);
+  border: 0.2rem solid var(--border-color);
+  border-radius: 1rem;
+  background-color: var(--card-color);
 
-    overflow: auto;
+  overflow: auto;
 }
 
-/* ---------- Separadores ---------- */
+/* Separadores */
 
 .detalhes .card__infos hr {
-    width: 100%;
-    margin: 0;
-    border: none;
-    border-top: 0.1rem solid var(--border-color);
+  width: 100%;
+  margin: 0;
+  border: none;
+  border-top: 0.1rem solid var(--border-color);
 }
 
-/* ---------- Títulos internos ---------- */
+/* Títulos internos */
 
 .detalhes .detalhes__objeto__title {
-    color: var(--primary-color-text);
-    font-size: clamp(1.7rem, 2.6vw, 2rem);
-    font-weight: 600;
+  color: var(--primary-color-text);
+  font-size: clamp(1.7rem, 2.6vw, 2rem);
+  font-weight: 600;
 }
 
 .detalhes .detalhes__objeto__subtitle {
-    margin-bottom: 1rem;
-    color: var(--primary-color-text);
-    font-weight: 500;
+  color: var(--primary-color-text);
+  font-weight: 500;
 }
 
-/* ---------- Informações adicionais ---------- */
+/* Informações adicionais */
 
 .detalhes .informacoes__adicionais {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
 }
 
-/* ==========================================================
-   ELEMENTOS RESPONSIVOS
-   ========================================================== */
+/* ELEMENTOS RESPONSIVOS */
 
 .detalhes .responsive {
-    display: none;
+  display: none;
 }
 
-/* ==========================================================
-   RESPONSIVIDADE
-   ========================================================== */
+/* RESPONSIVIDADE */
 
-/* ---------- Até 1024px ---------- */
+/* Até 1024px */
 
 @media (max-width: 1024px) {
+  .detalhes .detalhes__descricao,
+  .detalhes .infos__text {
+    display: none;
+  }
 
-    .detalhes .detalhes__descricao,
-    .detalhes .infos__text {
-        display: none;
-    }
+  .detalhes .responsive {
+    display: flex;
+  }
 
-    .detalhes .responsive {
-        display: flex;
-    }
-
-    .detalhes .card__infos {
-        gap: 1.8rem;
-    }
+  .detalhes .card__infos {
+    gap: 1.8rem;
+  }
 }
 
-/* ---------- Até 768px ---------- */
+/* Até 768px */
 
 @media (max-width: 768px) {
+  /* A coluna de detalhes passa a acompanhar o conteúdo. */
+  .detalhes {
+    height: auto;
+    min-height: 0;
+    gap: 1.6rem;
+    overflow: visible;
+  }
 
-    /* A coluna de detalhes passa a acompanhar o conteúdo. */
-    .detalhes {
-        height: auto;
-        min-height: 0;
-        gap: 1.6rem;
-        overflow: visible;
-    }
+  /* Mantém o título confortável em telas menores. */
+  .detalhes .detalhes__titulo {
+    margin: 0.8rem 0;
+    font-size: clamp(2.2rem, 6vw, 2.8rem);
+  }
 
-    /* Mantém o título confortável em telas menores. */
-    .detalhes .detalhes__titulo {
-        margin: 0.8rem 0;
-        font-size: clamp(2.2rem, 6vw, 2.8rem);
-    }
+  /* O card não terá rolagem interna no celular. */
+  .detalhes .card__infos {
+    flex: none;
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    padding: 1.6rem;
 
-    /* O card não terá rolagem interna no celular. */
-    .detalhes .card__infos {
-        flex: none;
-        width: 100%;
-        height: auto;
-        min-width: 0;
-        padding: 1.6rem;
+    gap: 1.6rem;
+    overflow: visible;
+  }
 
-        gap: 1.6rem;
-        overflow: visible;
-    }
+  .detalhes .detalhes__objeto__title {
+    font-size: 1.8rem;
+  }
 
-    .detalhes .detalhes__objeto__title {
-        font-size: 1.8rem;
-    }
+  .detalhes .detalhes__objeto__subtitle {
+    margin-bottom: 0.8rem;
+    font-size: 1.5rem;
+  }
 
-    .detalhes .detalhes__objeto__subtitle {
-        margin-bottom: 0.8rem;
-        font-size: 1.5rem;
-    }
+  .detalhes .detalhes__descricao__completa,
+  .detalhes .detalhes__descricao__adicional {
+    font-size: 1.4rem;
+    line-height: 1.5;
+  }
 
-    .detalhes .detalhes__descricao__completa,
-    .detalhes .detalhes__descricao__adicional {
-        font-size: 1.4rem;
-        line-height: 1.5;
-    }
+  /* As informações resumidas continuam dentro do card. */
+  .detalhes .detalhes__infos {
+    display: none;
+  }
 
-    /* As informações resumidas continuam dentro do card. */
-    .detalhes .detalhes__infos {
-        display: none;
-    }
+  .detalhes .responsive {
+    display: flex;
+  }
 
-    .detalhes .responsive {
-        display: flex;
-    }
+  .detalhes .informacoes__adicionais {
+    align-items: flex-start;
+  }
 
-    .detalhes .informacoes__adicionais {
-        align-items: flex-start;
-    }
-
-    .detalhes .circulo__blue {
-        margin-top: 0.3rem;
-    }
+  .detalhes .circulo__blue {
+    margin-top: 0.3rem;
+  }
 }
 
-/* ---------- Até 480px ---------- */
+/* Até 480px */
 
 @media (max-width: 480px) {
+  .detalhes {
+    gap: 1.2rem;
+  }
 
-    .detalhes {
-        gap: 1.2rem;
-    }
+  .detalhes .card__infos {
+    padding: 1.4rem;
+    border-radius: 0.8rem;
+  }
 
-    .detalhes .card__infos {
-        padding: 1.4rem;
-        border-radius: 0.8rem;
-    }
+  .detalhes .detalhes__titulo {
+    font-size: 2.2rem;
+  }
 
-    .detalhes .detalhes__titulo {
-        font-size: 2.2rem;
-    }
-
-    .detalhes .detalhes__descricao__completa,
-    .detalhes .detalhes__descricao__adicional {
-        font-size: 1.35rem;
-    }
+  .detalhes .detalhes__descricao__completa,
+  .detalhes .detalhes__descricao__adicional {
+    font-size: 1.35rem;
+  }
 }
 /* Aproxima categoria, localização e data do cabeçalho no desktop */
 @media (min-width: 769px) {
-    .detalhes .detalhes__infos {
-        margin-top: 0.5rem;
-    }
+  .detalhes .detalhes__infos {
+    margin-top: 0.5rem;
+  }
 }

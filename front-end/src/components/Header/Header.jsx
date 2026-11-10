@@ -1,107 +1,202 @@
-import { useState, useContext } from 'react';
-import { AuthContext } from '../../contexts/authContexts/AuthContext.jsx';
-import './Header.css';
+import { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../../contexts/authContexts/AuthContext.jsx";
+import "./Header.css";
 
-import { NavLink } from 'react-router';
+import { NavLink } from "react-router";
 
-import logo from '../../assets/logo_completa.png';
-import iconCadastrarObjeto from '../../assets/icons/header/cabecalho_cadastrar_objeto.svg';
+import logo from "../../assets/logo_completa.png";
+import iconCadastrarObjeto from "../../assets/icons/header/cabecalho_cadastrar_objeto.svg";
 // import temaDark from '../../assets/icons/header/cabecalho_tema_dark.svg';
 // import temaLight from '../../assets/icons/header/cabecalho_tema_light.svg';
-import burguerWhite from '../../assets/icons/header/cabecalho_burguer_white.svg';
-import burguerDark from '../../assets/icons/header/cabecalho_burguer_black.svg';
-import closeWhite from '../../assets/icons/header/cabecalho_close_white.svg';
-import closeBlack from '../../assets/icons/header/cabecalho_close_black.svg';
-import personWhite from '../../assets/icons/header/cabecalho_person_white.png';
-import personDark from '../../assets/icons/header/cabecalho_person_dark.png';
+import burguerWhite from "../../assets/icons/header/cabecalho_burguer_white.svg";
+import burguerDark from "../../assets/icons/header/cabecalho_burguer_black.svg";
+import closeWhite from "../../assets/icons/header/cabecalho_close_white.svg";
+import closeBlack from "../../assets/icons/header/cabecalho_close_black.svg";
+import personWhite from "../../assets/icons/header/cabecalho_person_white.png";
+import personDark from "../../assets/icons/header/cabecalho_person_dark.png";
 
-function Header({ tema, aoAlternarTema }) {
+function Header({ tema }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { isAuthenticated } = useContext(AuthContext);
 
-    const [menuOpen, setMenuOpen] = useState(false);
-    const { isAuthenticated } = useContext(AuthContext);
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
 
-    function toogleMenu() { !menuOpen ? setMenuOpen(true) : setMenuOpen(false) }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
-    function person() {
-        if (tema === 'light' && !isAuthenticated) {
-            return (<NavLink to='/auth/login' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink>);
-        } else if (tema === 'light' && isAuthenticated) {
-            return (<NavLink to='/user-area' end> <img className="person" src={personDark} alt="Acessar perfil" /> </NavLink>);
-        }
+  function toogleMenu() {
+    !menuOpen ? setMenuOpen(true) : setMenuOpen(false);
+  }
 
-        if (tema === 'dark' && !isAuthenticated) {
-            return (<NavLink to='/auth/login' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
-        } else if (tema === 'dark' && isAuthenticated) {
-            return (<NavLink to='/user-area' end> <img className="person" src={personWhite} alt="Acessar perfil" /> </NavLink>);
-        }
+  function person() {
+    if (tema === "light" && !isAuthenticated) {
+      return (
+        <NavLink to="/auth/login" end>
+          {" "}
+          <img className="person" src={personDark} alt="Acessar perfil" />{" "}
+        </NavLink>
+      );
+    } else if (tema === "light" && isAuthenticated) {
+      return (
+        <NavLink to="/user-area" end>
+          {" "}
+          <img className="person" src={personDark} alt="Acessar perfil" />{" "}
+        </NavLink>
+      );
     }
 
-    return (
-        <header className='header cabecalho_content'>
-            <a href="/"><img className='cabecalho__logo' src={logo} alt="Página inicial" /></a>
+    if (tema === "dark" && !isAuthenticated) {
+      return (
+        <NavLink to="/auth/login" end>
+          {" "}
+          <img className="person" src={personWhite} alt="Acessar perfil" />{" "}
+        </NavLink>
+      );
+    } else if (tema === "dark" && isAuthenticated) {
+      return (
+        <NavLink to="/user-area" end>
+          {" "}
+          <img className="person" src={personWhite} alt="Acessar perfil" />{" "}
+        </NavLink>
+      );
+    }
+  }
 
-            <div className={!menuOpen ? 'menu__desativo' : 'menu__ativo'}>
-                {tema === 'light' ? <img className='burguer close__menu' onClick={toogleMenu} src={closeWhite} alt="Fechar menu" /> : <img className='burguer close__menu' onClick={toogleMenu} src={closeBlack} alt="Fechar menu" />}
-                <nav>
-                    <ul>
-                        <li>
-                            <NavLink className="nav__link" to="/" end onClick={() => setMenuOpen(false)}>
-                                <p>Início</p>
-                            </NavLink>
-                        </li>
+  return (
+    <header className="header cabecalho_content">
+      <a href="/">
+        <img className="cabecalho__logo" src={logo} alt="Página inicial" />
+      </a>
 
-                        <li>
-                            <NavLink className="nav__link" to="/buscar-objetos" end onClick={() => setMenuOpen(false)}>
-                                <p>Buscar objetos</p>
-                            </NavLink>
-                        </li>
+      {menuOpen && <div className="overlay" />}
 
-                        <li className="nav-item-cadastrar">
-                            <NavLink
-                                className="nav__link"
-                                to="/cadastrar-objetos"
-                                end
-                                onClick={() => setMenuOpen(false)}
-                            >
-                                <p>Cadastrar objeto</p>
-                            </NavLink>
-                        </li>
+      <div
+        className={`menu__fundo ${!menuOpen ? "menu__desativo" : "menu__ativo"}`}
+      >
+        {tema === "light" ? (
+          <img
+            className="burguer close__menu"
+            onClick={toogleMenu}
+            src={closeWhite}
+            alt="Fechar menu"
+          />
+        ) : (
+          <img
+            className="burguer close__menu"
+            onClick={toogleMenu}
+            src={closeBlack}
+            alt="Fechar menu"
+          />
+        )}
+        <nav>
+          <ul>
+            <li>
+              <NavLink
+                className="nav__link"
+                to="/"
+                end
+                onClick={() => setMenuOpen(false)}
+              >
+                <p>Início</p>
+              </NavLink>
+            </li>
 
-                        <li>
-                            <NavLink className="nav__link" to="/como-funciona" end onClick={() => setMenuOpen(false)}>
-                                <p>Como funciona</p>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <li>
+              <NavLink
+                className="nav__link"
+                to="/buscar-objetos"
+                end
+                onClick={() => setMenuOpen(false)}
+              >
+                <p>Buscar objetos</p>
+              </NavLink>
+            </li>
 
-            <div className='cabecalho__buttons'>
+            <li className="nav-item-cadastrar">
+              <NavLink
+                className="nav__link"
+                to="/cadastrar-objetos"
+                end
+                onClick={() => setMenuOpen(false)}
+              >
+                <p>Cadastrar objeto</p>
+              </NavLink>
+            </li>
 
-                <div className='button button__cadastrar'>
-                    <img className='cabecalho__icon' src={iconCadastrarObjeto} alt="Cadastrar objeto" />
-                    <NavLink to='/cadastrar-objetos' end className='cadastrar link' href="#" onClick={() => setMenuOpen(false)}>Cadastrar objeto</NavLink>
-                </div>
+            <li>
+              <NavLink
+                className="nav__link"
+                to="/como-funciona"
+                end
+                onClick={() => setMenuOpen(false)}
+              >
+                <p>Como funciona</p>
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
 
-                <div className='button button__entrar'>
-                    {isAuthenticated ? <NavLink to='/user-area' end className='entrar link' onClick={() => setMenuOpen(false)}>Meu Perfil</NavLink> : <NavLink to='/auth/login' end className='entrar link' href="#" onClick={() => setMenuOpen(false)}>Entrar</NavLink>}
-                </div>
+      <div className="cabecalho__buttons">
+        <div className="button button__cadastrar">
+          <img
+            className="cabecalho__icon"
+            src={iconCadastrarObjeto}
+            alt="Cadastrar objeto"
+          />
+          <NavLink
+            to="/cadastrar-objetos"
+            end
+            className="cadastrar link"
+            href="#"
+            onClick={() => setMenuOpen(false)}
+          >
+            Cadastrar objeto
+          </NavLink>
+        </div>
 
+        <div className="button button__entrar">
+          {isAuthenticated ? (
+            <NavLink
+              to="/user-area"
+              end
+              className="entrar link"
+              onClick={() => setMenuOpen(false)}
+            >
+              Meu Perfil
+            </NavLink>
+          ) : (
+            <NavLink
+              to="/auth/login"
+              end
+              className="entrar link"
+              href="#"
+              onClick={() => setMenuOpen(false)}
+            >
+              Entrar
+            </NavLink>
+          )}
+        </div>
 
-                {/* <div className='button button__tema' onClick={aoAlternarTema}>
+        {/* <div className='button button__tema' onClick={aoAlternarTema}>
                     {tema === 'light' ? <img className="tema" src={temaDark} alt="Ativar tema escuro" /> : <img className="tema" src={temaLight} alt="Ativar tema claro" />}
                 </div> */}
 
-                <div className='button__person'>
-                    {person()}
-                </div>
+        <div className="button__person">{person()}</div>
 
-                <div className='burguer__menu' onClick={toogleMenu}>
-                    {tema === 'light' ? <img className='burguer' src={burguerDark} alt="Abrir menu" /> : <img className='burguer' src={burguerWhite} alt="Abrir menu" />}
-                </div>
-            </div>
-        </header>
-    )
+        <div className="burguer__menu" onClick={toogleMenu}>
+          {tema === "light" ? (
+            <img className="burguer" src={burguerDark} alt="Abrir menu" />
+          ) : (
+            <img className="burguer" src={burguerWhite} alt="Abrir menu" />
+          )}
+        </div>
+      </div>
+    </header>
+  );
 }
 
 export default Header;

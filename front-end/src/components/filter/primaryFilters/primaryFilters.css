@@ -1,68 +1,97 @@
-.input__container { position: relative }
-
-.text__filter{
-    cursor: pointer;
-    color: var(--primary-color-text);
-    font-size: 1.4rem;
-    font-weight: 500;
+.input__container {
+  position: relative;
 }
 
-.icon__filter{
-    position: absolute;
-    left: 5%;
-    top: 25%;
-    height: 2.5rem;
-    z-index: 2;
+.text__filter {
+  cursor: pointer;
+  color: var(--primary-color-text);
+  font-size: 1.4rem;
+  font-weight: 500;
 }
 
-.input__filter{
-    position: relative;
-    font-size: 1.5rem;
-    border: 0.1rem solid var(--border-color);
-    color: var(--primary-color-text); 
-    background-color: var(--card-color);
-    border-radius: 1rem;
-    padding: 1.7rem 1.5rem 1.7rem 5rem;
-    width: 30rem;
-    text-align: start;
-    z-index: 2;
+.icon__filter {
+  position: absolute;
+  left: 5%;
+  top: 25%;
+  height: 2.5rem;
+  z-index: 2;
 }
 
-.input__filter:focus{
-    transition: 0.4s ease;
-    box-shadow: var(--shadow-hover) 
+.input__filter {
+  position: relative;
+  font-size: 1.5rem;
+  border: 0.1rem solid var(--border-color);
+  color: var(--primary-color-text);
+  background-color: var(--card-color);
+  border-radius: 1rem;
+  padding: 1.7rem 1.5rem 1.7rem 5rem;
+  width: 30rem;
+  text-align: start;
+  z-index: 2;
+}
+
+.input__filter:focus {
+  transition: 0.4s ease;
+  box-shadow: var(--shadow-hover);
+}
+
+.button__buscar__container {
+  display: flex;
+  align-items: center;
+  margin-top: 2.5rem;
+}
+
+.button__buscar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-width: 0.1rem;
+  border-radius: 0.5rem;
+  border-color: var(--primary-color-blue);
+  font-family: var(--font-principal);
+  background-color: var(--primary-color-blue);
+  color: white;
+  gap: 1rem;
+  font-size: 1.8rem;
+  padding: 1rem 2.5rem;
+  cursor: pointer;
 }
 
 /* responsividade */
 
-@media( max-width: 1024px){
-    
-     .button__buscar{
-        display: flex;
-        justify-content: center;
-    }
+@media (max-width: 1024px) {
+  .button__buscar__container {
+    margin-top: 1rem;
+  }
 
-    .input__filter{
-        display: flex;
-        font-size: 1.5rem;
-        padding: 1.7rem 1.5rem 1.7rem 5rem;
-        width: 100%;
-    }
+  .button__buscar {
+    padding: 0.3rem;
+  }
 
-    .icon__filter{ left: 2% }
-} 
+  .input__filter {
+    display: flex;
+    font-size: 1.5rem;
+    padding: 1.7rem 1.5rem 1.7rem 5rem;
+    width: 100%;
+  }
 
-@media( max-width: 768px){
+  .icon__filter {
+    left: 2%;
+  }
+}
 
-    .button__buscar{
-        display: flex;
-        justify-content: center;
-    }
+@media (max-width: 768px) {
+  .button__buscar {
+    display: flex;
+    width: 100%;
+    min-width: 100%;
+  }
 
-    .input__filter{
-        display: flex;
-        font-size: 1.2rem;
-        padding: 1.7rem 1.5rem 1.7rem 5rem;
-        width: 100%;
-    }
+  .input__filter {
+    display: flex;
+    font-size: 1.2rem;
+    padding: 1.7rem 1.5rem 1.7rem 5rem;
+    width: 100%;
+  }
 }

@@ -1,0 +1,54 @@
+.estado-objetos-vazio {
+  --estado-cor: var(--primary-color-blue);
+  --estado-fundo: var(--primary-color-blue-light);
+  --estado-borda: var(--border-color);
+}
+
+.estado-objetos-vazio-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 5.2rem;
+  height: 5.2rem;
+
+  background-color: var(--estado-fundo);
+  border: 0.1rem solid var(--estado-borda);
+  border-radius: 50%;
+  color: var(--estado-cor);
+}
+
+.estado-objetos-vazio-icone svg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+@media (max-width: 76.8rem) {
+  .estado-objetos {
+    min-height: 18rem;
+    padding: 2.4rem 1.6rem;
+    gap: 1rem;
+  }
+
+  .estado-objetos-icone,
+  .estado-objetos-vazio-icone {
+    width: 4.6rem;
+    height: 4.6rem;
+  }
+
+  .estado-objetos-icone svg,
+  .estado-objetos-vazio-icone svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .estado-objetos h3 {
+    font-size: 1.5rem;
+  }
+
+  .estado-objetos p {
+    max-width: 30rem;
+    font-size: 1.3rem;
+    line-height: 1.5;
+  }
+}

@@ -1,6 +1,4 @@
-/* ==========================================================
-   HERO — BASE
-   ========================================================== */
+/* HERO — BASE */
 
 .hero,
 .hero *,
@@ -23,9 +21,7 @@
   font-family: var(--font-principal);
 }
 
-/* ==========================================================
-   HERO — CONTEÚDO
-   ========================================================== */
+/* HERO — CONTEÚDO */
 
 .hero-content,
 .hero-imagem {
@@ -39,6 +35,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .hero-content h1 {
@@ -47,7 +44,7 @@
 
   color: var(--primary-color-text);
   font-family: var(--font-principal);
-  font-size: clamp(2.8rem, 4vw, 4.4rem);
+  font-size: clamp(2.8rem, 4vw, 4.6rem);
   font-weight: 500;
   line-height: 1.15;
 }
@@ -70,13 +67,11 @@
   padding: 1.2rem 0;
 
   color: var(--secondary-color-gray);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   line-height: 1.5;
 }
 
-/* ==========================================================
-   HERO — BOTÕES DE CADASTRO
-   ========================================================== */
+/* HERO — BOTÕES DE CADASTRO */
 
 .hero-buttons {
   display: flex;
@@ -92,11 +87,11 @@
   justify-content: center;
   gap: 0.8rem;
 
-  padding: 1.2rem 1.8rem;
+  padding: 1.3rem 4.5rem;
 
   border-radius: 0.5rem;
   font-family: var(--font-principal);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 500;
 
   cursor: pointer;
@@ -115,9 +110,15 @@
   border: 1px solid var(--primary-color-green);
 }
 
-/* ==========================================================
-   HERO — IMAGEM
-   ========================================================== */
+#btn_perdiObjeto:hover {
+  background-color: #0341c7;
+}
+
+#btn_encontreiObjeto:hover {
+  background-color: #d6d6d638;
+}
+
+/* HERO — IMAGEM */
 
 .hero-imagem {
   grid-column: 2;
@@ -132,40 +133,32 @@
   display: block;
 
   width: 100%;
-  max-width: 100%;
-  height: auto;
+  height: 35rem;
 
   object-fit: contain;
 }
 
-/* ==========================================================
-   HERO — CARD DE BUSCA
-   ========================================================== */
+/* HERO — CARD DE BUSCA */
 
 .hero-busca {
   grid-column: 1 / -1;
   grid-row: 2;
 
   display: grid;
-  grid-template-columns:
-    clamp(7rem, 10vw, 11rem)
-    minmax(0, 1fr)
-    minmax(14rem, 22rem);
-  grid-template-rows: auto auto;
+  grid-template-columns: 8rem minmax(0, 1fr) 18rem;
   grid-template-areas:
     "lupa titulo botao"
     "lupa texto botao";
 
   align-items: center;
-  column-gap: clamp(1rem, 2vw, 2rem);
+  column-gap: 1.8rem;
 
   width: 100%;
-  min-height: 14rem;
-  margin-top: 25px;
-  padding: clamp(1.6rem, 2.5vw, 2.5rem) clamp(1.6rem, 2.8vw, 2.8rem);
+  margin-top: 1.8rem;
+  padding: 1.8rem 2.4rem;
 
-  background-color: var(--card-color);
-  border: 1px solid var(--border-color);
+  background-color: #eaf1ff;
+  border: 1px solid #d5e2fa;
   border-radius: 12px;
 }
 
@@ -174,17 +167,13 @@
 .hero-busca h2 {
   grid-area: titulo;
 
-  justify-self: start;
-  width: 100%;
-  margin: 0 0 6px;
-
-  color: var(--primary-color-text);
-  font-size: clamp(2rem, 2.6vw, 2.8rem);
+  color: #142d5e;
+  font-family: var(--font-principal);
+  font-size: clamp(1.4rem, 2.2vw, 2.3rem);
   font-weight: 500;
-  line-height: 1.2;
 }
 
-/* Ícone de busca */
+/* Ícone */
 
 .hero-busca > div:nth-of-type(1) {
   grid-area: lupa;
@@ -198,7 +187,7 @@
   display: block;
 
   width: 100%;
-  max-width: 8.6rem;
+  max-width: 7rem;
   height: auto;
 
   object-fit: contain;
@@ -208,15 +197,10 @@
 
 .hero-busca p {
   grid-area: texto;
-
-  justify-self: start;
-  width: 100%;
-  text-align: left;
-
-  color: var(--secondary-color-gray);
-  font-size: clamp(1.4rem, 1.6vw, 1.8rem);
+  color: #64748b;
+  font-family: var(--font-principal);
+  font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: 400;
-  line-height: 1.45;
 }
 
 /* Botão */
@@ -227,8 +211,6 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-
-  min-width: 0;
 }
 
 #btn_buscar,
@@ -238,16 +220,17 @@
   justify-content: center;
 
   width: 100%;
-  max-width: 22rem;
-  min-height: 56px;
-  padding: 0 1.6rem;
+  max-width: 18rem;
+  min-height: 5rem;
+  padding: 0 1.5rem;
 
   background-color: var(--primary-color-blue);
   color: var(--secondary-color-white);
   border: 1px solid var(--primary-color-blue);
   border-radius: 6px;
 
-  font-size: 16px;
+  font-family: var(--font-principal);
+  font-size: 15px;
   font-weight: 500;
   text-decoration: none;
 
@@ -255,9 +238,27 @@
   transition: 0.2s ease;
 }
 
-/* ==========================================================
-   HERO — CADASTRO / COMO ENCONTRAMOS
-   ========================================================== */
+#btn_buscar:hover,
+.btn_buscar:hover {
+  background-color: #0341c7;
+}
+
+/* Tema escuro */
+
+[data-theme="dark"] .hero-busca {
+  background-color: #202b40;
+  border-color: #34435c;
+}
+
+[data-theme="dark"] .hero-busca h2 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .hero-busca p {
+  color: #b8c3d6;
+}
+
+/* HERO — CADASTRO / COMO ENCONTRAMOS */
 
 .cadastro-ComoEncontramos {
   grid-column: 1 / -1;
@@ -265,8 +266,18 @@
 
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.cadastro-ComoEncontramos > :first-child {
+  flex: 1.9 1 0;
+  min-width: 0;
+}
+
+.cadastro-ComoEncontramos > :last-child {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .cadastro-ComoEncontramos > div {
@@ -285,9 +296,7 @@
   border-radius: 20px;
 }
 
-/* ==========================================================
-   OBJETOS RECENTES — TÍTULO E LINK
-   ========================================================== */
+/* OBJETOS RECENTES — TÍTULO E LINK */
 
 .objetos-recentes {
   grid-column: 1 / -1;
@@ -320,9 +329,7 @@
   text-decoration: none;
 }
 
-/* ==========================================================
-   OBJETOS RECENTES — LISTA DE CARDS
-   ========================================================== */
+/* OBJETOS RECENTES — LISTA DE CARDS */
 
 .objetos-lista {
   grid-column: 1 / -1;
@@ -491,9 +498,7 @@
   color: var(--secondary-color-white);
 }
 
-/* ==========================================================
-   OBJETOS RECENTES — CARD PRINCIPAL
-   ========================================================== */
+/* OBJETOS RECENTES — CARD PRINCIPAL */
 
 .objetos-lista .card__principal {
   height: auto;
@@ -652,6 +657,7 @@
   font-family: var(--font-principal);
   font-size: 12px;
   line-height: 1.4;
+  margin-top: 1.2rem;
 
   overflow: visible;
 }
@@ -686,9 +692,11 @@
   height: 12px;
 }
 
-/* ==========================================================
-   RESPONSIVIDADE — TABLET
-   ========================================================== */
+.responsive__hero {
+  display: none;
+}
+
+/* RESPONSIVIDADE — TABLET */
 
 @media (max-width: 1024px) {
   .hero {
@@ -700,12 +708,14 @@
   }
 }
 
-/* ==========================================================
-   RESPONSIVIDADE — MOBILE
-   ========================================================== */
+/* RESPONSIVIDADE — MOBILE*/
 
 @media (max-width: 768px) {
   /* Layout principal */
+
+  .responsive__hero {
+    display: block;
+  }
 
   .hero {
     grid-template-columns: minmax(0, 1fr);
@@ -770,5 +780,18 @@
   .cadastro-ComoEncontramos {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .cadastro-ComoEncontramos > :first-child,
+  .cadastro-ComoEncontramos > :last-child {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  #btn_buscar,
+  .btn_buscar {
+    min-height: 2.5rem;
+    font-size: 12px;
+    min-width: 100%;
   }
 }

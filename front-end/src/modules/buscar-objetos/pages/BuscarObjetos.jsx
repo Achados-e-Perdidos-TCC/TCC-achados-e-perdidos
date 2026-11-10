@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Loading from "../../../components/loading/Loading.jsx";
 import "./buscarObjetos.css";
 
 import FilterProvider from "../../../contexts/filterContexts/filterContext.jsx";
@@ -103,7 +104,7 @@ function BuscarObjetos() {
 
             <div className="principal__cards">
               {carregando ? (
-                <p>Carregando objetos...</p>
+                <Loading />
               ) : erro ? (
                 <p>Não foi possível carregar os objetos.</p>
               ) : (
