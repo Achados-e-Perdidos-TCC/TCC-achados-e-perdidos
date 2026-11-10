@@ -142,10 +142,17 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * {@code setAllowedOriginPatterns} (não {@code setAllowedOrigins}) de propósito:
+     * precisa casar com padrão de wildcard (ex.: deploys de preview do Vercel, que
+     * geram uma URL com hash aleatório por deploy — {@code https://achados-e-devolvidos-*.vercel.app}),
+     * não só origem exata. Compatível com {@code allowCredentials(true)} porque o
+     * Spring reflete de volta a origem específica que casou, nunca manda "*" literal.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(allowedOrigins.split(",")));
+        configuration.setAllowedOriginPatterns(List.of(allowedOrigins.split(",")));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
