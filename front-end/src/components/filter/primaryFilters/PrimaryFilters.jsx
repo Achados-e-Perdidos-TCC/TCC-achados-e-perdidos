@@ -126,9 +126,9 @@ function BasicFilters() {
         );
       })}
 
-      <div className="button__buscar">
+      <div className="button__buscar__container">
         <button
-          className="button buscar"
+          className="button__buscar"
           onClick={() => {
             filtrar();
           }}

@@ -1,9 +1,4 @@
-/* ==========================================================
-   DETALHES DO OBJETO
-   Escala: 1rem = 10px.
-   ========================================================== */
-
-/* ---------- Estrutura principal ---------- */
+/* Estrutura principal */
 
 .detalhe__objetos {
   display: flex;
@@ -14,7 +9,7 @@
   min-width: 0;
 }
 
-/* ---------- Ícones ---------- */
+/* Ícones */
 
 .house__gray,
 .x__white {
@@ -22,9 +17,7 @@
   width: auto;
 }
 
-/* ==========================================================
-   CAMINHO DE NAVEGAÇÃO / VOLTAR
-   ========================================================== */
+/* CAMINHO DE NAVEGAÇÃO / VOLTAR  */
 
 .caminho__voltar {
   display: flex;
@@ -51,23 +44,21 @@
   color: var(--primary-color-blue);
 }
 
-/* ==========================================================
-   CONTEÚDO PRINCIPAL
-   ========================================================== */
+/* CONTEÚDO PRINCIPAL */
 
 .container__detalhes {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
-/* ---------- Cabeçalho ---------- */
+/* Cabeçalho */
 
 .topo__detalhes {
   width: 100%;
   min-width: 0;
 }
 
-/* ---------- Descrição e informações ---------- */
+/* Descrição e informações */
 
 .direita {
   display: flex;
@@ -76,7 +67,7 @@
   gap: 2rem;
 }
 
-/* ---------- Cabeçalho do objeto ---------- */
+/* Cabeçalho do objeto */
 
 .cabecalho__detalhes {
   display: flex;
@@ -104,10 +95,7 @@
   min-height: 100%;
 }
 
-/* ==========================================================
-   AJUSTES DO CONTEÚDO INTERNO
-   Somente desktop.
-   ========================================================== */
+/* AJUSTES DO CONTEÚDO INTERNO Somente desktop. */
 
 @media (min-width: 769px) {
   /* Aproxima os campos do cabeçalho */
@@ -137,9 +125,7 @@
   max-height: 50.5rem;
 }
 
-/* ==========================================================
-   BOTÕES
-   ========================================================== */
+/* BOTÕES */
 
 .container__botoes {
   display: flex;
@@ -178,9 +164,7 @@
   background-color: #003cbe;
 }
 
-/* ==========================================================
-   MODAL DE INFORMAÇÕES
-   ========================================================== */
+/* MODAL DE INFORMAÇÕES */
 
 .modal__informacoes__overlay {
   position: fixed;
@@ -260,8 +244,7 @@
   align-items: center;
   justify-content: center;
 
-  width: 3.5rem;
-  height: 3.5rem;
+  height: 1.2rem;
 
   border: none;
   border-radius: 0.8rem;
@@ -276,7 +259,7 @@
   object-fit: contain;
 }
 
-/* ---------- Formulário do modal ---------- */
+/* Formulário do modal */
 
 .formulario__informacoes {
   display: flex;
@@ -322,7 +305,7 @@
   resize: vertical;
 }
 
-/* ---------- Erros do formulário ---------- */
+/* Erros do formulário  */
 
 .modal__informacoes__erro {
   padding: 1.2rem;
@@ -336,7 +319,7 @@
   font-size: 1.2rem;
 }
 
-/* ---------- Ações do modal ---------- */
+/* Ações do modal */
 
 .modal__informacoes__botoes {
   display: flex;
@@ -370,7 +353,7 @@
   color: #fff;
 }
 
-/* ---------- Aviso de e-mail ---------- */
+/* Aviso de e-mail */
 
 .aviso__email {
   font-size: 1.05rem;
@@ -380,11 +363,9 @@
   margin: 0;
 }
 
-/* ==========================================================
-   RESPONSIVIDADE
-   ========================================================== */
+/* RESPONSIVIDADE */
 
-/* ---------- Tablets ---------- */
+/* Tablets */
 
 @media (max-width: 1024px) and (min-width: 769px) {
   .container__detalhes {
@@ -396,10 +377,7 @@
   }
 }
 
-/* ==========================================================
-   CELULARES
-   Ordem: nome/status → imagens → informações.
-   ========================================================== */
+/* CELULARES Ordem: nome/status → imagens → informações. */
 
 @media (max-width: 768px) {
   .direita {
@@ -425,8 +403,7 @@
     gap: 2.5rem;
   }
 
-  /* Retira o wrapper da estrutura visual,
-       permitindo reorganizar seus elementos internos. */
+  /* Retira o wrapper da estrutura visual, permitindo reorganizar seus elementos internos. */
 
   .coluna__detalhes {
     display: contents;
@@ -504,7 +481,7 @@
   }
 }
 
-/* ---------- Celulares menores ---------- */
+/* Celulares menores  */
 
 @media (max-width: 480px) {
   .detalhe__objetos {

@@ -1,0 +1,92 @@
+.estado-objetos-erro {
+  --estado-cor: var(--error-text-color);
+  --estado-fundo: var(--error-background-color);
+  --estado-borda: var(--error-border-color);
+}
+
+.estado-objetos {
+  grid-column: 1 / -1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+
+  width: 100%;
+  min-height: 22rem;
+  padding: 3rem 2rem;
+
+  background-color: var(--card-color);
+  border: 0.1rem solid var(--border-color);
+  border-radius: 1.2rem;
+
+  text-align: center;
+  font-family: var(--font-principal);
+}
+
+.estado-objetos-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 5.2rem;
+  height: 5.2rem;
+
+  background-color: var(--estado-fundo);
+  border: 0.1rem solid var(--estado-borda);
+  border-radius: 50%;
+  color: var(--estado-cor);
+}
+
+.estado-objetos-icone svg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.estado-objetos h3 {
+  margin: 0;
+
+  color: var(--primary-color-text);
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.estado-objetos p {
+  max-width: 38rem;
+  margin: 0;
+
+  color: var(--secondary-color-gray);
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .estado-objetos {
+    min-height: 18rem;
+    padding: 2.4rem 1.6rem;
+    gap: 1rem;
+  }
+
+  .estado-objetos-icone,
+  .estado-objetos-vazio-icone {
+    width: 4.6rem;
+    height: 4.6rem;
+  }
+
+  .estado-objetos-icone svg,
+  .estado-objetos-vazio-icone svg {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .estado-objetos h3 {
+    font-size: 1.5rem;
+  }
+
+  .estado-objetos p {
+    max-width: 30rem;
+    font-size: 1.3rem;
+    line-height: 1.5;
+  }
+}
