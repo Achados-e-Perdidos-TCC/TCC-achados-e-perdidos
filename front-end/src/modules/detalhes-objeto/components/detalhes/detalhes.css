@@ -161,7 +161,6 @@
     height: auto;
     min-height: 0;
     gap: 1.6rem;
-    overflow: visible;
   }
 
   /* Mantém o título confortável em telas menores. */
@@ -179,7 +178,7 @@
     padding: 1.6rem;
 
     gap: 1.6rem;
-    overflow: visible;
+    overflow-x: auto;
   }
 
   .detalhes .detalhes__objeto__title {

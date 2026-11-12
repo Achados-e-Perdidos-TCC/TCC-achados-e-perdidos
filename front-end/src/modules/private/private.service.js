@@ -1,14 +1,11 @@
 import request from "../../lib/api/api.js";
 import { ENDPOINTS } from "../../lib/api/endpoints.js";
-
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+import { resolverUrlImagem } from "../../utils/images/urlImagem.js";
 
 export async function userInformation() {
   const data = await request(ENDPOINTS.users.me, {
     method: "GET",
   });
-
-  console.log("DADOS DO USUARIO", data);
 
   return data;
 }
@@ -23,7 +20,7 @@ export async function findOwnedObject(id) {
       `${ENDPOINTS.item.me}?page=${pagina}&size=${tamanhoPagina}`,
       {
         method: "GET",
-      }
+      },
     );
 
     const objetos = Array.isArray(data)
@@ -33,7 +30,7 @@ export async function findOwnedObject(id) {
         : [];
 
     const objetoEncontrado = objetos.find(
-      (objeto) => String(objeto.id) === String(id)
+      (objeto) => String(objeto.id) === String(id),
     );
 
     if (objetoEncontrado) {
@@ -49,7 +46,7 @@ export async function findOwnedObject(id) {
 
 export async function loadAvatar(avatarUrl) {
   // .slice() para cortar /api/v1
-  const response = await fetch(`${API_URL.slice(0, 21)}${avatarUrl}`);
+  const response = await fetch(resolverUrlImagem(avatarUrl));
 
   if (!response.ok) {
     throw new Error("Erro ao carregar avatar");
@@ -109,8 +106,6 @@ export async function markAllNotificationsAsRead() {
   const data = await request(ENDPOINTS.notification.readAll, {
     method: "PATCH",
   });
-
-  console.log("MARCAR TODAS:", data);
 
   return data;
 }
