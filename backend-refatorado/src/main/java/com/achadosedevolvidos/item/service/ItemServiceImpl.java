@@ -209,6 +209,18 @@ public class ItemServiceImpl implements ItemService {
         return itemMapper.toResponse(saved);
     }
 
+    @Override
+    @Transactional
+    public ItemResponse updateType(UUID currentUserId, UUID itemId, Item.ItemType newType) {
+        Item item = findItemOrThrow(itemId);
+        ensureOwner(item, currentUserId);
+
+        item.setType(newType);
+        Item saved = itemRepository.save(item);
+
+        return itemMapper.toResponse(saved);
+    }
+
     private Specification<Item> parseCombinedStatusFilter(String rawStatus) {
         if (rawStatus == null || rawStatus.isBlank()) {
             return null;

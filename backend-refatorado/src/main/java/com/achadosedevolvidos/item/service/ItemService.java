@@ -25,4 +25,6 @@ public interface ItemService {
     void delete(UUID currentUserId, UUID itemId);
 
     ItemResponse updateStatus(UUID currentUserId, UUID itemId, Item.ItemStatus newStatus);
+
+    ItemResponse updateType(UUID currentUserId, UUID itemId, Item.ItemType newType);
 }

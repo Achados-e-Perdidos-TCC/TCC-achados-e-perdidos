@@ -72,9 +72,10 @@ Implementação: `UserController` → `UserService`/`UserServiceImpl` →
 | `GET /search` | público | Busca com filtros combináveis (`type`, `categoryId`, `query`, `estado`, `cidade`, `bairro`, intervalo de datas), paginada. | Implementado via `ItemSpecifications` (Spring Data JPA Specification), cada filtro isolado. `estado`/`cidade`/`bairro` são colunas estruturadas (não mais texto livre). Busca por raio geográfico (lat/lng) ainda **não** filtra de fato — ver pendências no `ARQUITETURA.md`. Nunca inclui `emailResponsavel` (ver `GET /{id}`). |
 | `GET /{id}` | público | Detalhe do item. Inclui `emailResponsavel` (e-mail do dono) se o dono não tiver desligado `showEmailOnItems`. | `404` se não existir **ou** se estiver `INATIVO` (soft-deletado) — a menos que quem pergunta seja o próprio dono via `GET /me`. `emailResponsavel` só é resolvido aqui, nunca em listagem/busca — ver `ARQUITETURA.md`, seção 16. |
 | `GET /me` | 🔒 | "Meus objetos", com filtro combinado `status`. | `status` aceita tanto um `ItemType` (PERDIDO/ENCONTRADO) quanto um `ItemStatus` real — `parseCombinedStatusFilter` tenta os dois, `400` se não bater com nenhum. |
-| `PATCH /{id}` | 🔒 (dono) | Atualização parcial dos campos editáveis. | `403` se quem chama não for `item.getUser().getId()`. `type` não é editável (fixo desde a criação); status tem endpoint próprio. |
+| `PATCH /{id}` | 🔒 (dono) | Atualização parcial dos campos editáveis. | `403` se quem chama não for `item.getUser().getId()`. `type` e `status` não entram aqui — cada um tem endpoint próprio. |
 | `DELETE /{id}` | 🔒 (dono) | Soft delete — marca `status=INATIVO`, não apaga a linha. | `403` se não for o dono. |
 | `PATCH /{id}/status` | 🔒 (dono) | Muda só o status de workflow (`ANALISANDO`/`PROCURANDO`/`RESOLVIDO`/`INATIVO`). | `403` se não for o dono. |
+| `PATCH /{id}/type` | 🔒 (dono) | Muda o tipo (`PERDIDO`/`ENCONTRADO`). | `403` se não for o dono. Não dispara notificação (diferente de `/status`). |
 
 Implementação: `ItemController` → `ItemService`/`ItemServiceImpl` →
 `ItemRepository` (+ `ItemSpecifications` para a busca). Verificação de dono

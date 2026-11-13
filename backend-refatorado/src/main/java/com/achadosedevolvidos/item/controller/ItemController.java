@@ -5,6 +5,7 @@ import com.achadosedevolvidos.item.dto.ItemResponse;
 import com.achadosedevolvidos.item.dto.ItemSearchFilter;
 import com.achadosedevolvidos.item.dto.UpdateItemRequest;
 import com.achadosedevolvidos.item.dto.UpdateItemStatusRequest;
+import com.achadosedevolvidos.item.dto.UpdateItemTypeRequest;
 import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.item.service.ItemService;
 import com.achadosedevolvidos.user.model.AuthenticatedUser;
@@ -128,5 +129,14 @@ public class ItemController {
             @Valid @RequestBody UpdateItemStatusRequest request
     ) {
         return ResponseEntity.ok(itemService.updateStatus(currentUser.getId(), id, request.status()));
+    }
+
+    @PatchMapping("/{id}/type")
+    public ResponseEntity<ItemResponse> updateType(
+            @AuthenticationPrincipal AuthenticatedUser currentUser,
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateItemTypeRequest request
+    ) {
+        return ResponseEntity.ok(itemService.updateType(currentUser.getId(), id, request.type()));
     }
 }

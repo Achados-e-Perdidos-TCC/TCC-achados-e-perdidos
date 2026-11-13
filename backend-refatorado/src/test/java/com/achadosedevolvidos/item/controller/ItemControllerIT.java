@@ -4,6 +4,7 @@ import com.achadosedevolvidos.item.dto.CreateItemRequest;
 import com.achadosedevolvidos.item.dto.ItemResponse;
 import com.achadosedevolvidos.item.dto.UpdateItemRequest;
 import com.achadosedevolvidos.item.dto.UpdateItemStatusRequest;
+import com.achadosedevolvidos.item.dto.UpdateItemTypeRequest;
 import com.achadosedevolvidos.item.model.Item;
 import com.achadosedevolvidos.support.IntegrationTestSupport;
 import com.achadosedevolvidos.user.dto.UpdatePreferencesRequest;
@@ -596,6 +597,71 @@ class ItemControllerIT extends IntegrationTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payloadInvalido))
                 .andExpect(status().isBadRequest());
+    }
+
+    // ---------- PATCH /items/{id}/type ----------
+
+    @Test
+    void sunnyDay_donoDeveTrocarTipoDePerdidoParaEncontrado() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Tipo");
+        ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, "Item com tipo trocado");
+
+        UpdateItemTypeRequest request = new UpdateItemTypeRequest(Item.ItemType.ENCONTRADO);
+
+        mockMvc.perform(patch("/api/v1/items/" + item.id() + "/type")
+                        .header("Authorization", dono.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("ENCONTRADO"));
+
+        mockMvc.perform(get("/api/v1/items/" + item.id()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("ENCONTRADO"));
+    }
+
+    @Test
+    void rainyDay_naoDonoNaoPodeAlterarTipo() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Tipo Protegido");
+        AuthenticatedTestUser outraPessoa = registerAndAuthenticate("Intruso Tipo");
+        ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, "Item com tipo protegido");
+
+        UpdateItemTypeRequest request = new UpdateItemTypeRequest(Item.ItemType.ENCONTRADO);
+
+        mockMvc.perform(patch("/api/v1/items/" + item.id() + "/type")
+                        .header("Authorization", outraPessoa.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void rainyDay_deveRecusarTipoInvalidoNoPayload() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Tipo Invalido Payload");
+        ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, "Item com tipo invalido");
+
+        String payloadInvalido = """
+                { "type": "ISSO_NAO_EXISTE" }
+                """;
+
+        mockMvc.perform(patch("/api/v1/items/" + item.id() + "/type")
+                        .header("Authorization", dono.authorizationHeader())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payloadInvalido))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void rainyDay_deveRecusarTrocaDeTipoSemAutenticacao() throws Exception {
+        AuthenticatedTestUser dono = registerAndAuthenticate("Dono Tipo Sem Auth");
+        ItemResponse item = criarItem(dono, Item.ItemType.PERDIDO, "Item sem autenticacao na troca de tipo");
+
+        UpdateItemTypeRequest request = new UpdateItemTypeRequest(Item.ItemType.ENCONTRADO);
+
+        mockMvc.perform(patch("/api/v1/items/" + item.id() + "/type")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
     }
 
     private ItemResponse criarItem(AuthenticatedTestUser user, Item.ItemType type, String title) throws Exception {
