@@ -85,7 +85,14 @@ function Detalhes({ objeto }) {
             <div>
               <span className="infos__categoria">{infos[index]}</span>
 
-              <p className="infos__text">{descricaoInfo[index]}</p>
+              {descricaoInfo[index].length >= 32 ? (
+                <p className="infos__text">
+                  {" "}
+                  {descricaoInfo[index].slice(0, 32)}...
+                </p>
+              ) : (
+                <p className="infos__text"> {descricaoInfo[index]}</p>
+              )}
 
               <p className="responsive infos__text">
                 {descricaoInfo[index].length > 17

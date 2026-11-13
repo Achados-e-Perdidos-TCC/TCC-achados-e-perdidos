@@ -37,6 +37,7 @@
   border: 0.2rem solid var(--border-color);
   border-radius: 10rem;
   max-width: 17.6rem;
+  max-height: 5.5rem;
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
