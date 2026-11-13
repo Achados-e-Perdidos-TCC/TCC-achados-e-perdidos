@@ -1,8 +1,8 @@
 import "./hero.css";
 import { useEffect, useState } from "react";
 import { NavLink, useOutletContext } from "react-router";
-import direitawhite from "../../../assets/icons/home/direita-white.svg";
-import direitablack from "../../../assets/icons/home/direita-black.svg";
+// import direitawhite from "../../../assets/icons/home/direita-white.svg";
+import direitablack from "../../../assets/icons/home/direita-bl.png";
 import localizacao from "../../../assets/icons/buscarObjetos/pin-gray.svg";
 import calendar from "../../../assets/icons/buscarObjetos/calendar-gray.svg";
 import warningRed from "../../../assets/icons/buscarObjetos/warning-red.svg";
@@ -99,12 +99,14 @@ function Hero() {
 
       {/* Lado Direito */}
 
-      <div className="hero-imagem ">
-        {tema === "light" ? (
-          <img src={direitawhite} alt="Direita-white" />
-        ) : (
-          <img src={direitablack} alt="Direitablack" />
-        )}
+      <div className="hero-imagem no__responsive">
+        <div className="hero-imagem__composicao">
+          <img
+            className="hero-imagem__produto"
+            src={direitablack}
+            alt="Caixa com objetos encontrados"
+          />
+        </div>
       </div>
 
       {/* Campo de Busca*/}
