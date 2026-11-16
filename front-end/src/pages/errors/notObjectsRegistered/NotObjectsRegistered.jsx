@@ -4,22 +4,28 @@ import "./notObjectsRegistered.css";
 
 function NotObjectsRegistered() {
   return (
-    <div className="notobjectsRegistered__container">
-      <div className="notobjectRegistered__content">
-        <img className="notobjectRegistered__img" src={notFoundIllustration} />
+    <section className="notobjects-registered">
+      {/* ILUSTRAÇÃO */}
 
-        <div>
-          <h1 className="notobjectRegistered__title">
-            {" "}
-            Ops! Não encontramos nenhum objeto cadastrado
-          </h1>
-          <p className="notobjectRegistered__subtitle">
-            {" "}
-            cadastre um objeto para conseguir visualiza-lo.{" "}
-          </p>
-        </div>
+      <img
+        className="notobjects-registered__illustration"
+        src={notFoundIllustration}
+        alt="Ilustração representando a ausência de objetos cadastrados"
+      />
+
+      {/* TEXTOS */}
+
+      <div className="notobjects-registered__texts">
+        <h2 className="notobjects-registered__title">
+          Ops! Você ainda não possui objetos cadastrados
+        </h2>
+
+        <p className="notobjects-registered__subtitle">
+          Cadastre seu primeiro objeto para começar a visualizar e gerenciar
+          seus registros por aqui.
+        </p>
       </div>
-    </div>
+    </section>
   );
 }
 

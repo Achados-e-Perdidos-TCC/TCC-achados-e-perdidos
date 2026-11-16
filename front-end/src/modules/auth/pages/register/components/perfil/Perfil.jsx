@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useOutletContext } from "react-router";
 
 import "./perfil.css";
@@ -10,54 +10,164 @@ import arrowBlack from "../../../../../../assets/icons/register/arrow-black.png"
 import arrowWhite from "../../../../../../assets/icons/register/arrow-white.png";
 
 function Perfil({ proximaPagina, error, setInput }) {
-  const [foto, setFoto] = useState("");
-  const { tema } = useOutletContext();
+  const [foto, setFoto] = useState(null);
+  const [arrastando, setArrastando] = useState(false);
 
-  async function continuarCriacaoConta() {
+  const { tema } = useOutletContext();
+  const inputRef = useRef(null);
+
+  const [preview, setPreview] = useState("");
+
+  // Cria e limpa a URL temporária da imagem
+  useEffect(() => {
+    if (!foto) {
+      setPreview("");
+      return;
+    }
+
+    const url = URL.createObjectURL(foto);
+    setPreview(url);
+
+    return () => URL.revokeObjectURL(url);
+  }, [foto]);
+
+  // Validação e seleção da imagem
+  function selecionarImagem(arquivo) {
+    if (!arquivo) return;
+
     error(null);
+
+    const formatosPermitidos = ["image/jpeg", "image/png"];
+
+    if (!formatosPermitidos.includes(arquivo.type)) {
+      error("Selecione uma imagem no formato JPG ou PNG.");
+      return;
+    }
+
+    if (arquivo.size > 5 * 1024 * 1024) {
+      error("A imagem deve ter no máximo 5 MB.");
+      return;
+    }
+
+    setFoto(arquivo);
+  }
+
+  function excluirImagem() {
+    setFoto(null);
+
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+
+    error(null);
+  }
+
+  function handleDrop(evento) {
+    evento.preventDefault();
+    setArrastando(false);
+
+    const arquivo = evento.dataTransfer.files[0];
+
+    selecionarImagem(arquivo);
+  }
+
+  function continuarCriacaoConta() {
+    error(null);
+
     if (!foto) {
       return error(
         "Adicione uma foto para continuar ou clique em “Pular por enquanto”.",
       );
     }
 
-    setInput((valorAntigo) => ({ ...valorAntigo, avatarUrl: foto }));
+    setInput((valorAntigo) => ({
+      ...valorAntigo,
+      avatarUrl: foto,
+    }));
 
-    return proximaPagina(3);
+    proximaPagina(3);
   }
 
   function pularProximaPagina() {
     error(null);
-    setInput((valorAntigo) => ({ ...valorAntigo, avatarUrl: "" }));
 
-    return proximaPagina(3);
+    setInput((valorAntigo) => ({
+      ...valorAntigo,
+      avatarUrl: "",
+    }));
+
+    proximaPagina(3);
+  }
+
+  function voltarPagina() {
+    proximaPagina(1);
+    error(null);
   }
 
   return (
     <div className="perfil">
-      <div className="register__container__foto">
-        <img
-          className={!foto ? "sem__foto" : "com__foto"}
-          src={!foto ? userBlue : URL.createObjectURL(foto)}
-        />
+      {/* APRESENTAÇÃO DA FOTO */}
 
-        <div>
-          <p className="register__foto__title">Adicionar foto</p>
+      <div className="register__container__foto">
+        <div className="perfil__foto-wrapper">
+          {preview ? (
+            <img
+              className="com__foto"
+              src={preview}
+              alt="Pré-visualização da foto de perfil"
+            />
+          ) : (
+            <div className="sem__foto">
+              <img src={userBlue} alt="" />
+            </div>
+          )}
+
+          {preview && (
+            <span className="perfil__foto-status">
+              <span />
+              Foto selecionada
+            </span>
+          )}
+        </div>
+
+        <div className="perfil__foto-informacoes">
+          <h3 className="register__foto__title">
+            {foto ? "Sua foto de perfil" : "Adicione uma foto"}
+          </h3>
+
           <span className="register__foto__subtitle">
-            {" "}
-            JPG ou PNG • recomendado até 5 MB{" "}
+            JPG ou PNG · Recomendado até 5 MB
           </span>
         </div>
       </div>
 
-      <div className="register__upload">
-        <div className="register__upload__container">
-          <img className="upload__image" src={uploadBlue} />
+      {/* ÁREA DE UPLOAD */}
 
-          <div>
+      <div
+        className={`register__upload ${
+          arrastando ? "register__upload--arrastando" : ""
+        }`}
+        onDragOver={(evento) => {
+          evento.preventDefault();
+          setArrastando(true);
+        }}
+        onDragLeave={(evento) => {
+          if (!evento.currentTarget.contains(evento.relatedTarget)) {
+            setArrastando(false);
+          }
+        }}
+        onDrop={handleDrop}
+      >
+        <div className="register__upload__container">
+          <div className="perfil__upload-icone">
+            <img className="upload__image" src={uploadBlue} alt="" />
+          </div>
+
+          <div className="perfil__upload-textos">
             <h4 className="register__upload__title">
               Selecione uma imagem do seu dispositivo
             </h4>
+
             <p className="register__upload__subtitle">
               Ou arraste e solte aqui
             </p>
@@ -66,15 +176,13 @@ function Perfil({ proximaPagina, error, setInput }) {
 
         <div className="register__selecionar__imagem">
           {foto ? (
-            <p
-              className="upload__image__label no__responsive"
-              onClick={() => {
-                setFoto("");
-              }}
+            <button
+              className="upload__image__label upload__image__label--excluir no__responsive"
+              type="button"
+              onClick={excluirImagem}
             >
-              {" "}
-              Excluir imagem{" "}
-            </p>
+              Excluir imagem
+            </button>
           ) : (
             <label
               htmlFor="uploadimage"
@@ -85,27 +193,29 @@ function Perfil({ proximaPagina, error, setInput }) {
           )}
 
           <input
+            ref={inputRef}
             id="uploadimage"
             type="file"
-            accept=".jpg,.png"
-            onChange={(event) => {
-              setFoto(event.target.files[0]);
+            accept="image/jpeg,image/png"
+            onChange={(evento) => {
+              selecionarImagem(evento.target.files[0]);
+              evento.target.value = "";
             }}
             hidden
           />
         </div>
       </div>
 
+      {/* AÇÕES MOBILE */}
+
       {foto ? (
-        <p
-          className="upload__image__label register__responsive"
-          onClick={() => {
-            setFoto("");
-          }}
+        <button
+          className="upload__image__label upload__image__label--excluir register__responsive"
+          type="button"
+          onClick={excluirImagem}
         >
-          {" "}
-          Excluir imagem{" "}
-        </p>
+          Excluir imagem
+        </button>
       ) : (
         <label
           htmlFor="uploadimage"
@@ -115,41 +225,41 @@ function Perfil({ proximaPagina, error, setInput }) {
         </label>
       )}
 
-      <div
+      {/* PULAR ETAPA */}
+
+      <button
         className="register__perfil__skip"
-        onClick={() => {
-          pularProximaPagina();
-        }}
+        type="button"
+        onClick={pularProximaPagina}
       >
-        <img src={skipGray} />
-        <p>Pular por enquanto</p>
-      </div>
+        <img src={skipGray} alt="" />
+        <span>Pular por enquanto</span>
+      </button>
+
+      {/* NAVEGAÇÃO */}
 
       <div className="container__buttons">
-        <div
+        <button
           className="register__button__voltar"
-          onClick={() => {
-            proximaPagina(1);
-            error(null);
-          }}
+          type="button"
+          onClick={voltarPagina}
         >
-          {tema === "light" ? (
-            <img className="perfil__arrow__black" src={arrowBlack} />
-          ) : (
-            <img className="perfil__arrow__black" src={arrowWhite} />
-          )}
+          <img
+            className="perfil__arrow__black"
+            src={tema === "light" ? arrowBlack : arrowWhite}
+            alt=""
+          />
           <p>Voltar</p>
-        </div>
+        </button>
 
-        <div
+        <button
           className="register__button__continuar"
-          onClick={() => {
-            continuarCriacaoConta();
-          }}
+          type="button"
+          onClick={continuarCriacaoConta}
         >
-          <img className="perfil__arrow__white" src={arrowWhite} />
+          <img className="perfil__arrow__white" src={arrowWhite} alt="" />
           <p>Continuar</p>
-        </div>
+        </button>
       </div>
     </div>
   );

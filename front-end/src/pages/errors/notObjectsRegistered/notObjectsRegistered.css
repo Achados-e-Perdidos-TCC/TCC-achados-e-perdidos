@@ -1,67 +1,124 @@
-.notobjectsRegistered__container {
-  display: flex;
-  justify-content: center;
-  border: 0.1rem solid var(--border-color);
-  border-radius: 1rem;
-  padding: 3rem;
+/* NOT OBJECTS REGISTERED — ESTRUTURA */
+
+.notobjects-registered,
+.notobjects-registered *,
+.notobjects-registered *::before,
+.notobjects-registered *::after {
+  box-sizing: border-box;
 }
 
-.notobjectRegistered__content {
+.notobjects-registered {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
-  height: 45rem;
+
+  width: 100%;
+  min-height: 38rem;
+
+  padding: 4rem 3rem;
+
+  background-color: var(--card-color);
+  border: 0.1rem solid var(--border-color);
+  border-radius: 1.2rem;
+
+  gap: 2.4rem;
 }
 
-/* img */
+/* ILUSTRAÇÃO */
 
-.notobjectRegistered__img {
-  height: 16rem;
+.notobjects-registered__illustration {
+  display: block;
+
+  width: auto;
+  height: 15rem;
+  max-width: 100%;
+
+  object-fit: contain;
 }
 
-.notobjectRegistered__img__button {
-  height: 1.8rem;
-}
+/* TEXTOS */
 
-/* texts */
-
-.notobjectRegistered__title {
-  font-weight: 500;
-  color: var(--primary-color-text);
-  font-size: clamp(2rem, 3vw, 2.8rem);
-  line-height: 2.7rem;
-  text-align: center;
-}
-
-.notobjectRegistered__subtitle {
-  text-align: center;
-  color: var(--secondary-color-gray);
-  font-size: clamp(1.1rem, 2vw, 1.6rem);
-}
-
-/* button */
-
-.notobjectRegistered__form__button {
+.notobjects-registered__texts {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  font-size: clamp(1.4rem, 2vw, 1.6rem);
-  gap: 1rem;
-  padding: 1rem 3rem;
-  border: none;
-  border-radius: 1rem;
-  cursor: pointer;
+
+  width: 100%;
+  gap: 0.9rem;
+
+  text-align: center;
 }
 
-.notobjectRegistered__button__blue {
-  background-color: var(--primary-color-blue);
-  color: var(--secondary-color-white);
+.notobjects-registered__title {
+  max-width: 38ch;
+  margin: 0;
+
+  color: var(--primary-color-text);
+
+  font-size: clamp(2rem, 2.5vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.3;
 }
+
+.notobjects-registered__subtitle {
+  max-width: 48ch;
+  margin: 0;
+
+  color: var(--secondary-color-gray);
+
+  font-size: 1.45rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* TABLET */
 
 @media (max-width: 768px) {
-  .notobjectRegistered__img {
+  .notobjects-registered {
+    min-height: 34rem;
+    padding: 3.5rem 2.5rem;
+    gap: 2rem;
+  }
+
+  .notobjects-registered__illustration {
     height: 13rem;
+  }
+
+  .notobjects-registered__title {
+    font-size: 2.2rem;
+  }
+
+  .notobjects-registered__subtitle {
+    font-size: 1.4rem;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+  .notobjects-registered {
+    min-height: 31rem;
+    padding: 3rem 1.8rem;
+    gap: 1.8rem;
+
+    border-radius: 1rem;
+  }
+
+  .notobjects-registered__illustration {
+    height: 11rem;
+  }
+
+  .notobjects-registered__texts {
+    gap: 0.7rem;
+  }
+
+  .notobjects-registered__title {
+    font-size: 1.9rem;
+  }
+
+  .notobjects-registered__subtitle {
+    font-size: 1.3rem;
+    line-height: 1.55;
   }
 }

@@ -1,32 +1,48 @@
-import './notObjects.css';
+import "./notObjects.css";
 
-import notFoundIllustration from '../../../assets/icons/notobjects/notFound-illustration.png'; 
-import garbageWhite from '../../../assets/icons/notobjects/garbage-white.png'; 
+import notFoundIllustration from "../../../assets/icons/notobjects/notFound-illustration.png";
+import garbageWhite from "../../../assets/icons/notobjects/garbage-white.png";
 
-function NotObjects(){
+function NotObjects() {
+  function limparFiltros() {
+    window.location.reload();
+  }
 
-    return (
-        <div className='notobjects__container'>
-            <div className='notobject__content'>
-                <img className="notobject__img" src={notFoundIllustration} />
+  return (
+    <section className="notobjects">
+      {/* ILUSTRAÇÃO */}
 
-                <div>
-                    <h1 className='notobject__title'> Ops! Não encontramos nenhum objeto</h1>
-                    <p className='notobject__subtitle'> Se você aplicou algum filtro, tente removê-lo. </p>
-                </div>
+      <img
+        className="notobjects__illustration"
+        src={notFoundIllustration}
+        alt="Ilustração representando uma busca sem resultados"
+      />
 
-                <div>
+      {/* TEXTOS */}
 
-                    <div className='notobject__form__button notobject__button__blue' onClick={() => { window.location.reload() }} >
-                        <img className='notobject__img__button' src={garbageWhite} />
-                        <p>Limpar filtros</p>
-                    </div>
+      <div className="notobjects__texts">
+        <h2 className="notobjects__title">
+          Ops! Não encontramos nenhum objeto
+        </h2>
 
-                </div>
-            </div>
-        </div>
-    )
+        <p className="notobjects__subtitle">
+          Se você aplicou algum filtro, tente removê-lo para ampliar os
+          resultados da sua busca.
+        </p>
+      </div>
 
+      {/* AÇÃO */}
+
+      <button
+        className="notobjects__button"
+        type="button"
+        onClick={limparFiltros}
+      >
+        <img src={garbageWhite} alt="" />
+        <span>Limpar filtros</span>
+      </button>
+    </section>
+  );
 }
 
 export default NotObjects;

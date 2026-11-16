@@ -1,78 +1,143 @@
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 
-import './imagesCard.css';
+import "./imagesCard.css";
 
-import arrowButton from '../../../../assets/icons/detalhesObjeto/arrow-gray.svg';
-import imageOpcional from '../../../../assets/icons/noImage/no-picture.svg';
-import { resolverUrlImagem } from '../../../../utils/images/urlImagem.js';
+import arrowButton from "../../../../assets/icons/detalhesObjeto/arrow-gray.svg";
+import imageOpcional from "../../../../assets/icons/noImage/no-picture.svg";
 
-function ImagesCards({ objeto }) {
-    const imagemPrincipal = resolverUrlImagem(objeto.imagemPrincipal);
-    const imagensRecebidas = Array.isArray(objeto.imagensSecundarias)
-        ? objeto.imagensSecundarias
-        : [];
+import { resolverUrlImagem } from "../../../../utils/images/urlImagem.js";
 
-    const imagensSecundarias = [...new Set(
-        [objeto.imagemPrincipal, ...imagensRecebidas]
-            .filter(Boolean)
-            .map(resolverUrlImagem)
-    )];
+function ImagesCard({ objeto }) {
+  const imagemPrincipal = objeto?.imagemPrincipal
+    ? resolverUrlImagem(objeto.imagemPrincipal)
+    : "";
 
-    const [imagemExibida, setImagemExibida] = useState(imagemPrincipal || imageOpcional);
-    const [inicio, setInicio] = useState(0);
-    const [fim, setFim] = useState(4);
+  const imagensRecebidas = Array.isArray(objeto?.imagensSecundarias)
+    ? objeto.imagensSecundarias
+    : [];
 
-    function alternarImagem(imagemClicada) {
-        setImagemExibida(imagemClicada);
-    }
+  const imagensSecundarias = [
+    ...new Set(
+      [objeto?.imagemPrincipal, ...imagensRecebidas]
+        .filter(Boolean)
+        .map(resolverUrlImagem)
+        .filter(Boolean),
+    ),
+  ];
 
-    function setarInicio() {
-        setInicio((valorInicial) => Math.max(0, valorInicial - 1));
-        setFim((valorFinal) => Math.max(4, valorFinal - 1));
-    }
+  const [imagemExibida, setImagemExibida] = useState(
+    imagemPrincipal || imageOpcional,
+  );
 
-    function setarFim() {
-        setFim((valorFinal) => Math.min(imagensSecundarias.length, valorFinal + 1));
-        setInicio((valorInicial) =>
-            fim >= imagensSecundarias.length ? valorInicial : valorInicial + 1
-        );
-    }
+  const [inicio, setInicio] = useState(0);
 
-    return (
-        <div>
-            <div className='container__images'>
-                <img
-                    className={!imagemPrincipal ? 'image__opcional' : 'imagem__principal'}
-                    src={imagemExibida}
-                    alt={objeto.nome || 'Imagem do objeto'}
-                />
+  const quantidadeVisivel = 4;
+  const existemMaisImagens = imagensSecundarias.length > quantidadeVisivel;
 
-                <div className={imagensSecundarias.length <= 4 ? 'imagens__secundarias__limitadas' : 'imagens__secundarias__ilimitadas'}>
-                    <div className={imagensSecundarias.length <= 4 || inicio <= 0 ? 'button__desativo' : 'button__ativo'}>
-                        <div className='arrow__button' onClick={setarInicio}>
-                            <img className='arrow__button__icon voltar' src={arrowButton} alt="Imagens anteriores" />
-                        </div>
-                    </div>
+  // Atualiza a galeria quando outro objeto é carregado.
+  useEffect(() => {
+    setImagemExibida(imagemPrincipal || imageOpcional);
+    setInicio(0);
+  }, [imagemPrincipal]);
 
-                    {imagensSecundarias.slice(inicio, fim).map((imagem) => (
-                        <div key={imagem} onClick={() => alternarImagem(imagem)}>
-                            <img
-                                className={imagemExibida === imagem ? 'imagem__secundaria card__ativo' : 'imagem__secundaria'}
-                                src={imagem}
-                                alt="Foto adicional do objeto"
-                            />
-                        </div>
-                    ))}
+  // Exibe a imagem selecionada.
+  function alternarImagem(imagem) {
+    setImagemExibida(imagem);
+  }
 
-                    <div className={imagensSecundarias.length <= 4 ? 'button__desativo' : 'button__ativo'}>
-                        <div className='arrow__button' onClick={setarFim}>
-                            <img className='arrow__button__icon' src={arrowButton} alt="Próximas imagens" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  // Volta uma posição na galeria.
+  function mostrarImagensAnteriores() {
+    setInicio((valorAtual) => Math.max(0, valorAtual - 1));
+  }
+
+  // Avança uma posição na galeria.
+  function mostrarProximasImagens() {
+    setInicio((valorAtual) =>
+      Math.min(
+        Math.max(0, imagensSecundarias.length - quantidadeVisivel),
+        valorAtual + 1,
+      ),
     );
+  }
+
+  const imagensVisiveis = imagensSecundarias.slice(
+    inicio,
+    inicio + quantidadeVisivel,
+  );
+
+  return (
+    <div className="images-card">
+      <div className="container__images">
+        {/* Imagem principal */}
+        <img
+          className={!imagemPrincipal ? "image__opcional" : "imagem__principal"}
+          src={imagemExibida}
+          alt={objeto?.nome || "Imagem do objeto"}
+        />
+
+        {/* Miniaturas */}
+        <div
+          className={
+            existemMaisImagens
+              ? "imagens__secundarias__ilimitadas"
+              : "imagens__secundarias__limitadas"
+          }
+        >
+          {/* Imagens anteriores */}
+          {existemMaisImagens && (
+            <button
+              className="arrow__button"
+              type="button"
+              onClick={mostrarImagensAnteriores}
+              disabled={inicio === 0}
+              aria-label="Mostrar imagens anteriores"
+            >
+              <img
+                className="arrow__button__icon voltar"
+                src={arrowButton}
+                alt=""
+              />
+            </button>
+          )}
+
+          {/* Miniaturas disponíveis */}
+          {imagensVisiveis.map((imagem, index) => (
+            <button
+              key={`${imagem}-${index}`}
+              className="imagem__secundaria__botao"
+              type="button"
+              onClick={() => alternarImagem(imagem)}
+              aria-label={`Exibir imagem ${inicio + index + 1}`}
+              aria-pressed={imagemExibida === imagem}
+            >
+              <img
+                className={
+                  imagemExibida === imagem
+                    ? "imagem__secundaria card__ativo"
+                    : "imagem__secundaria"
+                }
+                src={imagem}
+                alt={`Foto adicional ${inicio + index + 1} do objeto`}
+              />
+            </button>
+          ))}
+
+          {/* Próximas imagens */}
+          {existemMaisImagens && (
+            <button
+              className="arrow__button"
+              type="button"
+              onClick={mostrarProximasImagens}
+              disabled={inicio >= imagensSecundarias.length - quantidadeVisivel}
+              aria-label="Mostrar próximas imagens"
+            >
+              <img className="arrow__button__icon" src={arrowButton} alt="" />
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default ImagesCards;
+export default ImagesCard;

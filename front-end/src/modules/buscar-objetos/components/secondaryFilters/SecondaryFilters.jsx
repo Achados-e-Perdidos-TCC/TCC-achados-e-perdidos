@@ -65,10 +65,6 @@ function SecondaryFilters() {
                   alternarAtivo(valor.categoria);
                 }}
               >
-                <span className="text__secondary__filters">
-                  {" "}
-                  {valor.categoria}{" "}
-                </span>
                 {
                   <AlternarCategoria
                     categoria={valor.categoria}
@@ -76,6 +72,11 @@ function SecondaryFilters() {
                     iconBlack={valor.iconBlack}
                   />
                 }
+
+                <span className="text__secondary__filters">
+                  {" "}
+                  {valor.categoria}{" "}
+                </span>
               </div>
             </div>
           </div>

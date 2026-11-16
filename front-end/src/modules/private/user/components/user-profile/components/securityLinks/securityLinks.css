@@ -1,49 +1,78 @@
-.user__security{
-    display: flex;
-    flex-direction: column;
-    border: 0.1rem solid var(--border-color);
-    border-radius: 1rem;
-    margin-top: 3.5rem;
+.user__security {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  border: 0.1rem solid var(--border-color);
+  border-radius: 0.8rem;
+  overflow: hidden;
 }
 
-.user__security hr{
-    border: none;
-    border-top: 0.1rem solid var(--border-color);
+.user__security__links__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.2rem 1.4rem;
+  color: var(--primary-color-text);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
 }
 
-.user__security__links__container{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.3rem;
-    color: var(--primary-color-text);
-    cursor: pointer;
+.user__security__links__container:hover {
+  background-color: var(--input-blocked);
 }
 
-.user__security__links__content{
-    display: flex;
-    align-items: center;
-    gap: 1.3rem;
+.user__security__links__content {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  min-width: 0;
 }
 
-/* img */
-
-.user__security__img{ height: 2.3rem }
-.user__security__arrow{ height: 1.1rem }
-
-/* content */
-
-.user__security__title{
-    font-size: 1.4rem;
-    font-weight: 500;
-    line-height: 1.5rem;
+.user__security__text {
+  min-width: 0;
 }
 
-.user__security__subtitle{
-    font-size: 1.2rem;
-    color: var(--secondary-color-gray);
+.user__security__img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
-@media(max-width: 769px){
-    .user__security{ margin-top: 3rem }
+.user__security__arrow {
+  width: 0.9rem;
+  height: 0.9rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.user__security__title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.8rem;
+}
+
+.user__security__subtitle {
+  margin-top: 0.2rem;
+  font-size: 1.15rem;
+  color: var(--secondary-color-gray);
+}
+
+@media (max-width: 768px) {
+  .user__security {
+    margin-top: 1.6rem;
+  }
+
+  .user__security__links__container {
+    padding: 1.1rem;
+  }
+
+  .user__security__title {
+    font-size: 1.25rem;
+  }
+
+  .user__security__subtitle {
+    font-size: 1.05rem;
+  }
 }

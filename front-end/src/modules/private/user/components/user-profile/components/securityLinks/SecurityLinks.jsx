@@ -1,32 +1,32 @@
-import { NavLink } from 'react-router'; 
-import './securityLinks.css'; 
+import { NavLink } from "react-router";
+import "./securityLinks.css";
 
-import padlockBlue from '../../../../../../../assets/icons/userArea/padlock-blue.png';
-import arrowGray from '../../../../../../../assets/icons/detalhesObjeto/arrow-gray.svg';
+import padlockBlue from "../../../../../../../assets/icons/userArea/padlock-blue.png";
+import arrowGray from "../../../../../../../assets/icons/detalhesObjeto/arrow-gray.svg";
 
-function SecurityLinks(){
+function SecurityLinks() {
+  return (
+    <div className="user__security">
+      <NavLink
+        className="user__security__links__container"
+        to="/user-area/change-password"
+      >
+        <div className="user__security__links__content">
+          <img className="user__security__img" src={padlockBlue} alt="" />
 
-    return (
-        <div className='user__security'>
-            <NavLink className='user__security__links__container' to='/user-area/change-password'>
+          <div className="user__security__text">
+            <h4 className="user__security__title">Alterar Senha</h4>
 
-                <div className='user__security__links__content'>
-
-                    <img className='user__security__img' src={padlockBlue} />
-
-                    <div>
-                        <h4 className='user__security__title'>Alterar Senha</h4>
-                        <p className='user__security__subtitle'>Atualize sua senha regularmente.</p>
-                    </div>
-
-                </div>
-
-                <img className='user__security__arrow' src={arrowGray} />
-
-            </NavLink>
-
+            <p className="user__security__subtitle">
+              Atualize sua senha regularmente.
+            </p>
+          </div>
         </div>
-    )
+
+        <img className="user__security__arrow" src={arrowGray} alt="" />
+      </NavLink>
+    </div>
+  );
 }
 
 export default SecurityLinks;

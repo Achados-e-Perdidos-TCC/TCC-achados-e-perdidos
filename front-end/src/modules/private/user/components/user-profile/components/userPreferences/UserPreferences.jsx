@@ -17,13 +17,13 @@ function UserPreferences({
     <div className="user__profile__preferences">
       {/* Notificações */}
       <div className="user__profile__preferences__container">
-        <div>
+        <div className="user__profile__preferences__info">
           <h4 className="user__profile__preferences__title">
-            Receber Notificações
+            Receber notificações
           </h4>
 
           <p className="user__profile__preferences__subtitle">
-            Receba notificações sobre novidades da plataforma
+            Receba notificações sobre novidades da plataforma.
           </p>
         </div>
 
@@ -42,7 +42,7 @@ function UserPreferences({
 
       {/* Divulgação do e-mail */}
       <div className="user__profile__preferences__container">
-        <div>
+        <div className="user__profile__preferences__info">
           <h4 className="user__profile__preferences__title">
             Exibir meu e-mail nos objetos
           </h4>
@@ -67,11 +67,17 @@ function UserPreferences({
       <hr />
 
       {/* Tema */}
-      <div className="user__profile__preferences__container">
+      <div className="user__profile__preferences__container user__profile__preferences__theme">
         <div className="user__profile__select__container">
-          <h4 className="user__profile__preferences__title preferences__theme__title">
-            Tema
-          </h4>
+          <div>
+            <h4 className="user__profile__preferences__title">
+              Tema da plataforma
+            </h4>
+
+            <p className="user__profile__preferences__subtitle">
+              Escolha a aparência que prefere utilizar.
+            </p>
+          </div>
 
           <div className="custom__select">
             <button

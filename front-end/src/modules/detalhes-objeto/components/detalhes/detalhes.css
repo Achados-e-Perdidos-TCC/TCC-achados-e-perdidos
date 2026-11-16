@@ -1,85 +1,128 @@
-/* DETALHES DO OBJETO */
+/* CABEÇALHO DO OBJETO */
 
-/* Estrutura principal */
+.cabecalho__detalhes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  width: 100%;
+  min-width: 0;
+}
+
+.cabecalho__detalhes .detalhes__descricao {
+  margin: 0;
+
+  max-width: 65ch;
+
+  color: var(--secondary-color-gray);
+  font-size: 1.5rem;
+  line-height: 1.5;
+}
+
+.cabecalho__detalhes .responsive {
+  display: none;
+}
+
+/* ESTRUTURA PRINCIPAL */
 
 .detalhes {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+
+  width: 100%;
   min-width: 0;
   height: 100%;
 }
 
-/* Ícones */
+/* ÍCONES */
 
 .detalhes .icons {
   flex-shrink: 0;
+
   width: auto;
   height: 2.7rem;
 }
 
 .detalhes .circulo__blue {
   flex-shrink: 0;
+
   width: auto;
   height: 1.5rem;
 }
 
-/* TÍTULO E TEXTOS */
+/* TEXTOS */
 
-.detalhes .detalhes__titulo {
-  color: var(--primary-color-text);
-  font-size: clamp(2.4rem, 4vw, 3.5rem);
-  font-weight: 500;
-  line-height: 1.2;
-  overflow-wrap: anywhere;
-}
-
-.detalhes .detalhes__descricao,
 .detalhes .detalhes__descricao__completa {
   max-width: 65ch;
+  margin: 0;
+
   color: var(--secondary-color-gray);
   font-size: 1.5rem;
+  line-height: 1.6;
+
   overflow-wrap: anywhere;
 }
 
 .detalhes .detalhes__descricao__adicional {
   min-width: 0;
   max-width: 65ch;
+  margin: 0;
+
   color: var(--primary-color-text);
   font-size: 1.5rem;
   line-height: 1.5;
+
   overflow-wrap: anywhere;
 }
 
-/*CATEGORIA, LOCALIZAÇÃO E DATA*/
+/* CATEGORIA, LOCALIZAÇÃO E DATA */
 
 .detalhes .detalhes__infos {
   display: flex;
   flex-wrap: wrap;
   gap: 1.6rem clamp(2rem, 5vw, 5.5rem);
+
   margin-top: 1.8rem;
 }
 
 .detalhes .infos__icons {
   display: flex;
+  align-items: flex-start;
   gap: 0.8rem;
+
   min-width: 0;
 }
 
-.detalhes .infos__categoria,
-.detalhes .infos__text {
+.detalhes .infos__icons > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  min-width: 0;
+}
+
+.detalhes .infos__categoria {
   color: var(--secondary-color-gray);
   font-size: 1.4rem;
 }
 
 .detalhes .infos__text {
   max-width: 28ch;
+  margin: 0;
+
   color: var(--primary-color-text);
   font-size: 1.5rem;
+
   overflow-wrap: anywhere;
 }
 
-/* CARD — DETALHES DO OBJETO */
+/* Versão resumida *
+.detalhes .infos__text.responsive {
+  display: none;
+}
+
+/* CARD DE DETALHES */
 
 .detalhes .card__infos {
   display: flex;
@@ -87,45 +130,77 @@
   flex-direction: column;
   gap: clamp(1.6rem, 2.5vw, 2.5rem);
 
+  width: 100%;
   min-width: 0;
+  min-height: 50.5rem;
+  max-height: 52.8rem;
+
   padding: clamp(1.6rem, 3vw, 2.5rem);
 
   border: 0.2rem solid var(--border-color);
   border-radius: 1rem;
+
   background-color: var(--card-color);
 
-  overflow: auto;
+  overflow-y: auto;
 }
 
-/* Separadores */
+/* Título do card *
+.detalhes .detalhes__objeto__title {
+  margin: 0;
 
+  color: var(--primary-color-text);
+  font-size: clamp(1.7rem, 2.6vw, 2rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Seções internas *
+.detalhes .detalhes__secao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  min-width: 0;
+}
+
+.detalhes .detalhes__objeto__subtitle {
+  margin: 0;
+
+  color: var(--primary-color-text);
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* Separadores *
 .detalhes .card__infos hr {
   width: 100%;
   margin: 0;
+
   border: none;
   border-top: 0.1rem solid var(--border-color);
 }
 
-/* Títulos internos */
+/* INFORMAÇÕES ADICIONAIS */
 
-.detalhes .detalhes__objeto__title {
-  color: var(--primary-color-text);
-  font-size: clamp(1.7rem, 2.6vw, 2rem);
-  font-weight: 600;
+.detalhes .detalhes__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  min-width: 0;
 }
-
-.detalhes .detalhes__objeto__subtitle {
-  color: var(--primary-color-text);
-  font-weight: 500;
-}
-
-/* Informações adicionais */
 
 .detalhes .informacoes__adicionais {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
+
   min-width: 0;
+}
+
+.detalhes .informacoes__adicionais .circulo__blue {
+  margin-top: 0;
 }
 
 /* ELEMENTOS RESPONSIVOS */
@@ -136,15 +211,19 @@
 
 /* RESPONSIVIDADE */
 
-/* Até 1024px */
-
+/* Telas até 1024px *
 @media (max-width: 1024px) {
-  .detalhes .detalhes__descricao,
-  .detalhes .infos__text {
+  /* Cabeçalho *
+  .cabecalho__detalhes .detalhes__descricao.responsive {
+    display: flex;
+  }
+
+  /* Informações resumidas *
+  .detalhes .infos__text:not(.responsive) {
     display: none;
   }
 
-  .detalhes .responsive {
+  .detalhes .infos__text.responsive {
     display: flex;
   }
 
@@ -153,32 +232,33 @@
   }
 }
 
-/* Até 768px */
-
+/* Telas até 768px *
 @media (max-width: 768px) {
-  /* A coluna de detalhes passa a acompanhar o conteúdo. */
   .detalhes {
     height: auto;
     min-height: 0;
     gap: 1.6rem;
   }
 
-  /* Mantém o título confortável em telas menores. */
-  .detalhes .detalhes__titulo {
-    margin: 0.8rem 0;
-    font-size: clamp(2.2rem, 6vw, 2.8rem);
+  /* Informações resumidas deixam de ocupar espaço no mobile. *
+  .detalhes .detalhes__infos {
+    display: none;
   }
 
-  /* O card não terá rolagem interna no celular. */
+  /* Card acompanha o conteúdo. *
   .detalhes .card__infos {
     flex: none;
+
     width: 100%;
     height: auto;
-    min-width: 0;
+    min-height: 0;
+    max-height: none;
+
     padding: 1.6rem;
 
     gap: 1.6rem;
-    overflow-x: auto;
+
+    overflow: visible;
   }
 
   .detalhes .detalhes__objeto__title {
@@ -186,7 +266,6 @@
   }
 
   .detalhes .detalhes__objeto__subtitle {
-    margin-bottom: 0.8rem;
     font-size: 1.5rem;
   }
 
@@ -196,26 +275,16 @@
     line-height: 1.5;
   }
 
-  /* As informações resumidas continuam dentro do card. */
-  .detalhes .detalhes__infos {
-    display: none;
-  }
-
-  .detalhes .responsive {
-    display: flex;
-  }
-
   .detalhes .informacoes__adicionais {
     align-items: flex-start;
   }
 
-  .detalhes .circulo__blue {
+  .detalhes .informacoes__adicionais .circulo__blue {
     margin-top: 0.3rem;
   }
 }
 
-/* Até 480px */
-
+/* Telas até 480px *
 @media (max-width: 480px) {
   .detalhes {
     gap: 1.2rem;
@@ -226,8 +295,8 @@
     border-radius: 0.8rem;
   }
 
-  .detalhes .detalhes__titulo {
-    font-size: 2.2rem;
+  .detalhes .detalhes__objeto__title {
+    font-size: 1.7rem;
   }
 
   .detalhes .detalhes__descricao__completa,
@@ -235,9 +304,12 @@
     font-size: 1.35rem;
   }
 }
-/* Aproxima categoria, localização e data do cabeçalho no desktop */
-@media (min-width: 769px) {
-  .detalhes .detalhes__infos {
-    margin-top: 0.5rem;
+
+/* ACESSIBILIDADE */
+
+@media (prefers-reduced-motion: reduce) {
+  .detalhes * {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms !important;
   }
 }

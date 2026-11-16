@@ -1,75 +1,95 @@
-/* Estrutura principal */
+/* ESTRUTURA PRINCIPAL */
 
 .detalhe__objetos {
   display: flex;
   flex-direction: column;
   gap: 3rem;
 
-  min-height: 100dvh;
   min-width: 0;
+  min-height: 100dvh;
 }
 
-/* Ícones */
+.detalhe__objetos * {
+  box-sizing: border-box;
+}
 
-.house__gray,
-.x__white {
-  height: 1.8rem;
+/*  ÍCONES */
+
+.detalhe__objetos .house__gray,
+.detalhe__objetos .x__white {
   width: auto;
+  height: 1.8rem;
 }
 
-/* CAMINHO DE NAVEGAÇÃO / VOLTAR  */
+/*  CAMINHO DE NAVEGAÇÃO / VOLTAR */
 
-.caminho__voltar {
+.detalhe__objetos .caminho__voltar {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.caminho,
-.voltar__navlink {
+.detalhe__objetos .caminho,
+.detalhe__objetos .voltar__navlink {
   display: flex;
   align-items: center;
   gap: 0.8rem;
 
   cursor: pointer;
+  text-decoration: none;
 }
 
-.caminho__text {
+.detalhe__objetos .caminho__text {
   font-size: 1.2rem;
   color: var(--secondary-color-gray);
 }
 
-.voltar__text {
+.detalhe__objetos .voltar__text {
   font-size: 1.3rem;
   color: var(--primary-color-blue);
 }
 
-/* CONTEÚDO PRINCIPAL */
+/* CONTEÚDO PRINCIPAL
+ */
 
-.container__detalhes {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.detalhe__objetos .container__detalhes {
+  display: flex;
 }
 
-/* Cabeçalho */
+.detalhe__objetos .esquerda,
+.detalhe__objetos .coluna__detalhes {
+  min-width: 0;
+}
 
-.topo__detalhes {
+/* COLUNA DIREITA
+ */
+
+.detalhe__objetos .coluna__detalhes {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100%;
+}
+
+.detalhe__objetos .topo__detalhes {
   width: 100%;
   min-width: 0;
 }
 
-/* Descrição e informações */
-
-.direita {
+.detalhe__objetos .direita {
   display: flex;
   flex-direction: column;
   flex: 1;
   gap: 2rem;
+
+  min-width: 0;
+  width: 100%;
 }
 
-/* Cabeçalho do objeto */
+/* CABEÇALHO DO OBJETO
+ */
 
-.cabecalho__detalhes {
+.detalhe__objetos .cabecalho__detalhes {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -78,7 +98,7 @@
   min-width: 0;
 }
 
-.cabecalho__detalhes .detalhes__titulo {
+.detalhe__objetos .cabecalho__detalhes .detalhes__titulo {
   margin: 0;
 
   color: var(--primary-color-text);
@@ -89,84 +109,98 @@
   overflow-wrap: anywhere;
 }
 
-.coluna__detalhes {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-}
-
-/* AJUSTES DO CONTEÚDO INTERNO Somente desktop. */
+/* AJUSTES DO CONTEÚDO INTERNO
+   SOMENTE DESKTOP
+ */
 
 @media (min-width: 769px) {
-  /* Aproxima os campos do cabeçalho */
-
-  .coluna__detalhes {
+  .detalhe__objetos .coluna__detalhes {
     gap: 0.8rem;
   }
 
-  .coluna__detalhes .direita .detalhes {
+  .detalhe__objetos .coluna__detalhes .direita .detalhes {
     height: auto;
     min-height: 0;
 
     gap: 1rem;
   }
 
-  .coluna__detalhes .direita .detalhes__infos {
+  .detalhe__objetos .coluna__detalhes .direita .detalhes__infos {
     margin-top: 0;
   }
 
-  .coluna__detalhes .direita .card__infos {
+  .detalhe__objetos .coluna__detalhes .direita .card__infos {
     flex: none;
   }
 }
 
-.card__infos {
-  min-height: 50.5rem;
-  max-height: 52.8rem;
+/* CARDS DE INFORMAÇÕES
+ */
+
+.detalhe__objetos .card__infos {
+  min-height: 48.5rem;
+  max-height: 48.8rem;
 }
 
-/* BOTÕES */
+/* BOTÃO DE CONTATO
+ */
 
-.container__botoes {
+.detalhe__objetos .container__botoes {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 4rem;
 }
 
-.botoes {
+.detalhe__objetos .botao__azul {
+  width: 100%;
+  padding: 1.4rem;
+
+  border: none;
+  border-radius: 1rem;
+
+  background-color: var(--primary-color-blue);
+  color: #fff;
+
+  font-size: 1.7rem;
+  cursor: pointer;
+
+  transition: background-color 0.3s ease;
+}
+
+.detalhe__objetos .botao__azul:hover {
+  background-color: #003cbe;
+}
+
+.detalhe__objetos .botao__azul:focus-visible {
+  outline: 0.2rem solid var(--primary-color-blue);
+  outline-offset: 0.3rem;
+}
+
+.detalhe__objetos .botoes {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
 
-  cursor: pointer;
   font-weight: 600;
 }
 
-.botao__azul {
-  flex: 1;
-  width: 100%;
-  padding: 1.5rem;
-
-  border: none;
-  border-radius: 1rem;
-
-  font-size: 1.7rem;
-
-  background-color: var(--primary-color-blue);
-  color: #fff;
-
-  transition: background-color 0.3s ease;
+.detalhe__objetos .botoes img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
-.botao__azul:hover {
-  background-color: #003cbe;
+.detalhe__objetos .botoes p {
+  margin: 0;
 }
 
-/* MODAL DE INFORMAÇÕES */
+/* MODAL DE INFORMAÇÕES
+ */
 
-.modal__informacoes__overlay {
+.detalhe__objetos .modal__informacoes__overlay {
   position: fixed;
   inset: 0;
   z-index: 1000;
@@ -181,7 +215,7 @@
   backdrop-filter: blur(3px);
 }
 
-.modal__informacoes {
+.detalhe__objetos .modal__informacoes {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -202,84 +236,100 @@
   box-shadow: 0 1rem 4rem rgba(0, 0, 0, 0.18);
 }
 
-.modal__informacoes__header {
+/* CABEÇALHO DO MODAL */
+
+.detalhe__objetos .modal__informacoes__header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1.5rem;
 }
 
-.modal__informacoes__header > button {
-  outline: none;
-  border: none;
-  cursor: pointer;
-}
-
-.modal__informacoes__header h2,
-.modal__informacoes__header p {
-  display: block;
-  width: 100%;
-}
-
-.modal__informacoes__header h2 {
-  font-size: 2rem;
-}
-
-.modal__informacoes__header > div {
+.detalhe__objetos .modal__informacoes__header > div {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+
+  min-width: 0;
 }
 
-.modal__informacoes__header p {
+.detalhe__objetos .modal__informacoes__header h2,
+.detalhe__objetos .modal__informacoes__header p {
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+
+.detalhe__objetos .modal__informacoes__header h2 {
+  color: var(--primary-color-text);
+  font-size: 2rem;
+  line-height: 1.3;
+}
+
+.detalhe__objetos .modal__informacoes__header p {
+  color: var(--secondary-color-gray);
   font-size: 1.3rem;
   line-height: 1.5;
-  color: var(--secondary-color-gray);
 }
 
-.modal__informacoes__fechar {
-  flex-shrink: 0;
+/* Botão de fechar */
 
+.detalhe__objetos .modal__informacoes__fechar {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 
-  height: 1.2rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0.7rem;
 
   border: none;
   border-radius: 0.8rem;
 
   background: transparent;
   cursor: pointer;
+
+  transition: background-color 0.2s ease;
 }
 
-.modal__informacoes__fechar img {
+.detalhe__objetos .modal__informacoes__fechar:hover {
+  background-color: var(--background-color);
+}
+
+.detalhe__objetos .modal__informacoes__fechar:focus-visible {
+  outline: 0.2rem solid var(--primary-color-blue);
+  outline-offset: 0.2rem;
+}
+
+.detalhe__objetos .modal__informacoes__fechar img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-/* Formulário do modal */
+/*  FORMULÁRIO DO MODAL */
 
-.formulario__informacoes {
+.detalhe__objetos .formulario__informacoes {
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
 }
 
-.campo__informacoes {
+.detalhe__objetos .campo__informacoes {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
 
-.campo__informacoes label {
+.detalhe__objetos .campo__informacoes label {
+  color: var(--primary-color-text);
   font-size: 1.3rem;
   font-weight: 600;
 }
 
-.campo__informacoes input,
-.campo__informacoes textarea {
+.detalhe__objetos .campo__informacoes input,
+.detalhe__objetos .campo__informacoes textarea {
   width: 100%;
   padding: 1.2rem 1.4rem;
 
@@ -293,21 +343,30 @@
   font-size: 1.3rem;
 
   outline: none;
+
+  transition: border-color 0.2s ease;
 }
 
-.campo__informacoes input:focus,
-.campo__informacoes textarea:focus {
+.detalhe__objetos .campo__informacoes input:focus,
+.detalhe__objetos .campo__informacoes textarea:focus {
   border-color: var(--primary-color-blue);
 }
 
-.campo__informacoes textarea {
+.detalhe__objetos .campo__informacoes input::placeholder,
+.detalhe__objetos .campo__informacoes textarea::placeholder {
+  color: var(--secondary-color-gray);
+  opacity: 0.8;
+}
+
+.detalhe__objetos .campo__informacoes textarea {
   min-height: 12rem;
   resize: vertical;
 }
 
-/* Erros do formulário  */
+/*  ERROS DO FORMULÁRIO */
 
-.modal__informacoes__erro {
+.detalhe__objetos .modal__informacoes__erro {
+  margin: 0;
   padding: 1.2rem;
 
   border: 0.1rem solid #e7b7b7;
@@ -317,18 +376,19 @@
   color: #d64545;
 
   font-size: 1.2rem;
+  line-height: 1.5;
 }
 
-/* Ações do modal */
+/*  AÇÕES DO MODAL */
 
-.modal__informacoes__botoes {
+.detalhe__objetos .modal__informacoes__botoes {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 }
 
-.botao__cancelar__informacoes,
-.botao__enviar__informacoes {
+.detalhe__objetos .botao__cancelar__informacoes,
+.detalhe__objetos .botao__enviar__informacoes {
   padding: 1.2rem 2rem;
 
   border-radius: 0.8rem;
@@ -337,38 +397,56 @@
   font-weight: 600;
 
   cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.botao__cancelar__informacoes {
+.detalhe__objetos .botao__cancelar__informacoes {
   border: 0.1rem solid var(--border-color);
 
   background-color: var(--card-color);
   color: var(--primary-color-text);
 }
 
-.botao__enviar__informacoes {
+.detalhe__objetos .botao__cancelar__informacoes:hover {
+  background-color: var(--background-color);
+}
+
+.detalhe__objetos .botao__enviar__informacoes {
   border: none;
 
   background-color: var(--primary-color-blue);
   color: #fff;
 }
 
-/* Aviso de e-mail */
-
-.aviso__email {
-  font-size: 1.05rem;
-  color: var(--secondary-color-gray);
-  text-align: center;
-  line-height: 1.4;
-  margin: 0;
+.detalhe__objetos .botao__enviar__informacoes:hover {
+  background-color: #003cbe;
 }
 
-/* RESPONSIVIDADE */
+.detalhe__objetos .botao__cancelar__informacoes:focus-visible,
+.detalhe__objetos .botao__enviar__informacoes:focus-visible {
+  outline: 0.2rem solid var(--primary-color-blue);
+  outline-offset: 0.3rem;
+}
+
+/*  AVISO DE E-MAIL */
+
+.detalhe__objetos .aviso__email {
+  margin: 0;
+
+  color: var(--secondary-color-gray);
+  font-size: 1.05rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/*  RESPONSIVIDADE */
 
 /* Tablets */
 
 @media (max-width: 1024px) and (min-width: 769px) {
-  .container__detalhes {
+  .detalhe__objetos .container__detalhes {
     grid-template-columns:
       minmax(0, 45%)
       minmax(0, 1fr);
@@ -377,25 +455,17 @@
   }
 }
 
-/* CELULARES Ordem: nome/status → imagens → informações. */
+/* Celulares */
 
 @media (max-width: 768px) {
-  .direita {
-    width: 100%;
-  }
-
-  .modal__informacoes__header {
-    align-items: flex-start;
-  }
-
   .detalhe__objetos {
     gap: 1.5rem;
     min-height: 0;
   }
 
-  .container__detalhes {
-    display: flex !important;
-    flex-direction: column !important;
+  .detalhe__objetos .container__detalhes {
+    display: flex;
+    flex-direction: column;
     align-items: stretch;
 
     width: 100%;
@@ -403,23 +473,24 @@
     gap: 2.5rem;
   }
 
-  /* Retira o wrapper da estrutura visual, permitindo reorganizar seus elementos internos. */
+  /* Permite reorganizar os elementos internos da coluna. */
 
-  .coluna__detalhes {
+  .detalhe__objetos .coluna__detalhes {
     display: contents;
   }
 
   /* Primeiro: nome e status */
 
-  .topo__detalhes {
+  .detalhe__objetos .topo__detalhes {
     order: 0;
+
     width: 100%;
     min-width: 0;
   }
 
   /* Segundo: galeria de imagens */
 
-  .esquerda {
+  .detalhe__objetos .esquerda {
     order: 1;
 
     flex: none;
@@ -429,7 +500,7 @@
 
   /* Terceiro: descrição e demais informações */
 
-  .direita {
+  .detalhe__objetos .direita {
     order: 2;
 
     flex: none;
@@ -439,74 +510,98 @@
 
   /* Cabeçalho */
 
-  .cabecalho__detalhes .detalhes__titulo {
+  .detalhe__objetos .cabecalho__detalhes .detalhes__titulo {
     margin: 0.8rem 0;
     font-size: clamp(2.2rem, 6vw, 2.8rem);
   }
 
-  /* Botões */
+  /* Cards */
 
-  .container__botoes {
+  .detalhe__objetos .card__infos {
+    min-height: 0;
+    max-height: none;
+  }
+
+  /* Botão de contato */
+
+  .detalhe__objetos .container__botoes {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
+
     width: 100%;
   }
 
-  .botao__azul {
+  .detalhe__objetos .botao__azul {
     width: 100%;
   }
 
-  .botoes p {
+  .detalhe__objetos .botoes p {
     font-size: 1.3rem;
   }
 
   /* Modal */
 
-  .modal__informacoes {
+  .detalhe__objetos .modal__informacoes {
     padding: 2rem;
   }
 
-  .modal__informacoes__header h2 {
+  .detalhe__objetos .modal__informacoes__header {
+    align-items: flex-start;
+  }
+
+  .detalhe__objetos .modal__informacoes__header h2 {
     font-size: 1.7rem;
   }
 
-  .modal__informacoes__botoes {
+  .detalhe__objetos .modal__informacoes__botoes {
     flex-direction: column-reverse;
   }
 
-  .botao__cancelar__informacoes,
-  .botao__enviar__informacoes {
+  .detalhe__objetos .botao__cancelar__informacoes,
+  .detalhe__objetos .botao__enviar__informacoes {
     width: 100%;
   }
 }
 
-/* Celulares menores  */
+/* Celulares menores */
 
 @media (max-width: 480px) {
   .detalhe__objetos {
     gap: 1.5rem;
   }
 
-  .container__detalhes {
+  .detalhe__objetos .container__detalhes {
     gap: 2rem;
   }
 
-  .modal__informacoes__overlay {
+  .detalhe__objetos .modal__informacoes__overlay {
     padding: 1.2rem;
   }
 
-  .modal__informacoes {
-    padding: 1.8rem;
+  .detalhe__objetos .modal__informacoes {
     gap: 1.6rem;
+    padding: 1.8rem;
+
     border-radius: 1rem;
   }
 
-  .modal__informacoes__header h2 {
+  .detalhe__objetos .modal__informacoes__header h2 {
     font-size: 1.6rem;
   }
 
-  .caminho__text {
+  .detalhe__objetos .caminho__text {
     font-size: 1.1rem;
+  }
+}
+
+/* 
+   ACESSIBILIDADE
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  .detalhe__objetos * {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms !important;
   }
 }
