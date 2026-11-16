@@ -522,7 +522,7 @@
     display: none;
   }
 
-  Filtros */ .busca__filtros,
+  .busca__filtros,
   .busca__resultados {
     gap: 1.5rem;
     padding: 1.6rem;
@@ -576,7 +576,7 @@
     font-size: 1.2rem;
   }
 
-  Resultados */ .busca__resultados__titulo {
+  .busca__resultados__titulo {
     align-items: flex-start;
     gap: 0.8rem;
   }
@@ -585,7 +585,7 @@
     font-size: 1.1rem;
   }
 
-  Paginação */ .principal__footer {
+  .principal__footer {
     flex-direction: column;
     align-items: flex-start;
   }
