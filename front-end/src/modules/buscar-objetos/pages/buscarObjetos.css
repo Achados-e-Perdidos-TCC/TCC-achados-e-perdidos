@@ -500,7 +500,7 @@
     gap: 1.5rem;
   }
 
-  Cabeçalho */ .busca__header {
+  .busca__header {
     align-items: flex-start;
     padding-top: 0;
   }
