@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
 import { IMaskInput } from "react-imask";
+
 import {
   verificaEmailSenha,
   verificaTelefone,
@@ -20,6 +21,17 @@ import infoBlue from "../../../../../../assets/icons/register/info-blue.png";
 import pinGray from "../../../../../../assets/icons/buscarObjetos/pin-gray.svg";
 import openEyeGray from "../../../../../../assets/icons/login/open-eye-gray.png";
 import closeEyeGray from "../../../../../../assets/icons/login/close-eye-gray.png";
+
+/* ========================================
+   CIDADES
+======================================== */
+
+const todasAsCidades = cidadesBrasil.estados.flatMap((estado) =>
+  estado.cidades.map((cidade) => ({
+    cidade,
+    estado: estado.sigla,
+  })),
+);
 
 function PreliminaryData({ proximaPagina, error, setInput }) {
   const [obrigatorio, setObrigatorio] = useState(false);
@@ -41,16 +53,6 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
   const [autorizaCompartilharEmail, setAutorizaCompartilharEmail] =
     useState(false);
 
-  const todasAsCidades = [];
-  cidadesBrasil.estados.forEach((estado) => {
-    estado.cidades.forEach((cidade) => {
-      todasAsCidades.push({
-        cidade: cidade,
-        estado: estado.sigla,
-      });
-    });
-  });
-
   const requisitosSenha = {
     tamanho: inputPasswordState.length >= 8,
     maiuscula: /[A-Z]/.test(inputPasswordState),
@@ -59,10 +61,12 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
     especial: /[^A-Za-z0-9]/.test(inputPasswordState),
   };
 
-  function buscarCidades(valor) {
-    setInputCityState(valor);
+  /* ========================================
+     CIDADES
+  ======================================== */
 
-    if (valor.trim() === "") {
+  function filtrarCidades(valor, estado = inputState) {
+    if (!valor.trim()) {
       setCidadesFiltradas([]);
       return;
     }
@@ -70,9 +74,16 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
     const resultado = todasAsCidades.filter((cidade) => {
       const mesmaCidade = cidade.cidade
         .toLowerCase()
-        .startsWith(valor.toLowerCase());
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .startsWith(
+          valor
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, ""),
+        );
 
-      const mesmoEstado = inputState ? cidade.estado === inputState : true;
+      const mesmoEstado = estado ? cidade.estado === estado : true;
 
       return mesmaCidade && mesmoEstado;
     });
@@ -80,26 +91,52 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
     setCidadesFiltradas(resultado);
   }
 
+  function buscarCidades(valor) {
+    setInputCityState(valor);
+    filtrarCidades(valor);
+  }
+
+  function selecionarCidade(cidade) {
+    setInputCityState(cidade.cidade);
+    setInputState(cidade.estado);
+    setCidadesFiltradas([]);
+  }
+
+  function alterarEstado(valor) {
+    setInputState(valor);
+    filtrarCidades(inputCityState, valor);
+  }
+
+  /* ========================================
+     VALIDAÇÃO E CONTINUAÇÃO
+  ======================================== */
+
   function continuarCriacaoConta() {
     try {
       error(null);
+
       if (
         !inputEmailState.trim() ||
         !inputPasswordState.trim() ||
         !inputNameState.trim()
       ) {
-        return setObrigatorio(true);
+        setObrigatorio(true);
+        return;
       }
+
       if (
         inputNameState.trim().length < 3 ||
         inputNameState.trim().length > 100
       ) {
         return error("Nome inválido");
       }
+
       validaCidade(inputCityState, inputState, todasAsCidades);
+
       if (inputTelephoneState) {
         verificaTelefone(inputTelephoneState);
       }
+
       if (!aceitouTermos) {
         return error(
           "Você precisa aceitar os Termos de Uso e a Política de Privacidade.",
@@ -110,145 +147,144 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
         inputEmailState.trim().toLowerCase(),
         inputPasswordState,
       );
+
       verificaSenhaCadastro(inputPasswordState);
 
-      const nome = inputNameState.trim();
-      const email = inputEmailState.trim().toLowerCase();
-      const password = inputPasswordState;
-      const telefone = inputTelephoneState ? inputTelephoneState : "";
-      const cidade = inputCityState ? inputCityState : "";
-
       setInput({
-        name: nome,
-        email: email,
-        password: password,
-        telefone: telefone,
-        city: cidade,
+        name: inputNameState.trim(),
+        email: inputEmailState.trim().toLowerCase(),
+        password: inputPasswordState,
+        telefone: inputTelephoneState || "",
+        city: inputCityState || "",
+        avatarUrl: "",
       });
 
       setObrigatorio(false);
 
       return proximaPagina(2);
     } catch (erro) {
-      if (erro.message === "Credenciais inválidas") {
-        return error(`Credenciais inválidas`);
-      }
-      if (erro.message === "Email inválido") {
-        return error("Email inválido");
-      }
-      if (erro.message === "Senha inválida") {
-        return error("Senha inválida");
-      }
-      if (erro.message === "Telefone inválido") {
-        return error("Telefone inválido");
-      }
-      if (erro.message === "Estado não selecionado") {
-        return error("Selecione o estado da cidade");
-      }
-      if (erro.message === "Cidade inválida") {
-        return error("Selecione uma cidade disponível na lista");
-      } else {
-        return error(
-          "Ocorreu um erro inesperado, verifique se os dados informados estão corretos e tente novamente mais tarde",
-        );
-      }
+      const mensagensErro = {
+        "Credenciais inválidas": "Credenciais inválidas",
+        "Email inválido": "Email inválido",
+        "Senha inválida": "Senha inválida",
+        "Telefone inválido": "Telefone inválido",
+        "Estado não selecionado": "Selecione o estado da cidade",
+        "Cidade inválida": "Selecione uma cidade disponível na lista",
+      };
+
+      return error(
+        mensagensErro[erro.message] ||
+          "Ocorreu um erro inesperado. Verifique se os dados informados estão corretos e tente novamente mais tarde.",
+      );
     }
   }
 
-  function setarEyeState() {
-    setEyeState((estadoAtual) => {
-      return estadoAtual === true ? false : true;
-    });
+  /* ========================================
+     VISIBILIDADE DA SENHA
+  ======================================== */
+
+  function alternarVisibilidadeSenha() {
+    setEyeState((estadoAtual) => !estadoAtual);
   }
 
   return (
     <div className="register__container__inputs">
-      <div>
+      {/* NOME COMPLETO */}
+
+      <div className="register__campo">
         <label className="register__label" htmlFor="nome">
-          {" "}
-          Nome Completo{" "}
+          Nome completo
         </label>
-        {obrigatorio ? (
-          <span className="register__obrigatorio__message"> | Obrigatório</span>
-        ) : (
-          ""
+
+        {obrigatorio && !inputNameState.trim() && (
+          <span className="register__obrigatorio__message">Obrigatório</span>
         )}
+
         <div className="register__input__container">
-          <img className="register__icon" src={personGray} />
+          <img className="register__icon" src={personGray} alt="" />
+
           <input
             id="nome"
+            name="nome"
             className="register__input"
             type="text"
-            placeholder="Ex: João da silva"
-            onChange={(e) => {
-              setInputNameState(e.target.value);
-            }}
+            placeholder="Ex: João da Silva"
+            autoComplete="name"
+            value={inputNameState}
+            onChange={(evento) => setInputNameState(evento.target.value)}
           />
         </div>
       </div>
 
-      <div>
+      {/* E-MAIL */}
+
+      <div className="register__campo">
         <label className="register__label" htmlFor="email">
-          {" "}
-          E-mail{" "}
+          E-mail
         </label>
-        {obrigatorio ? (
-          <span className="register__obrigatorio__message"> | Obrigatório</span>
-        ) : (
-          ""
+
+        {obrigatorio && !inputEmailState.trim() && (
+          <span className="register__obrigatorio__message">Obrigatório</span>
         )}
+
         <div className="register__input__container">
-          <img className="register__icon" src={emailGray} />
+          <img className="register__icon" src={emailGray} alt="" />
+
           <input
             id="email"
+            name="email"
             className="register__input"
             type="email"
             placeholder="Ex: joao@email.com"
-            onChange={(e) => {
-              setInputEmailState(e.target.value);
-            }}
+            autoComplete="email"
+            value={inputEmailState}
+            onChange={(evento) => setInputEmailState(evento.target.value)}
           />
         </div>
       </div>
 
-      <div>
+      {/* SENHA */}
+
+      <div className="register__campo">
         <label className="register__label" htmlFor="password">
-          {" "}
-          Senha{" "}
+          Senha
         </label>
-        {obrigatorio ? (
-          <span className="register__obrigatorio__message"> | Obrigatório</span>
-        ) : (
-          ""
+
+        {obrigatorio && !inputPasswordState.trim() && (
+          <span className="register__obrigatorio__message">Obrigatório</span>
         )}
+
         <div className="register__input__container">
-          <img className="register__icon" src={lockGray} />
+          <img className="register__icon" src={lockGray} alt="" />
+
           <input
             id="password"
+            name="password"
             className="register__input"
-            type={eyeState === true ? "password" : "text"}
+            type={eyeState ? "password" : "text"}
             placeholder="Sua senha"
-            onChange={(e) => {
-              setInputPasswordState(e.target.value);
-            }}
+            autoComplete="new-password"
+            value={inputPasswordState}
+            onChange={(evento) => setInputPasswordState(evento.target.value)}
             onFocus={() => setRequisitosSenhaPreenchido(true)}
             onBlur={() => setRequisitosSenhaPreenchido(false)}
           />
-          <div
+
+          <button
             className="register__eye__button"
-            onClick={() => {
-              setarEyeState();
-            }}
+            type="button"
+            onClick={alternarVisibilidadeSenha}
+            aria-label={eyeState ? "Mostrar senha" : "Ocultar senha"}
           >
-            {eyeState === true ? (
-              <img className="register__eye__icon" src={openEyeGray} />
-            ) : (
-              <img className="register__eye__icon" src={closeEyeGray} />
-            )}
-          </div>
+            <img
+              className="register__eye__icon"
+              src={eyeState ? openEyeGray : closeEyeGray}
+              alt=""
+            />
+          </button>
         </div>
 
-        {requisitosSenhaPreenchido ? (
+        {requisitosSenhaPreenchido && (
           <div className="register__password__requerimentos">
             <p
               className={
@@ -257,8 +293,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              {" "}
-              • Pelo menos 8 caracteres{" "}
+              • Pelo menos 8 caracteres
             </p>
 
             <p
@@ -268,8 +303,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              {" "}
-              • Uma letra maiúscula{" "}
+              • Uma letra maiúscula
             </p>
 
             <p
@@ -279,8 +313,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              {" "}
-              • Uma letra minúscula{" "}
+              • Uma letra minúscula
             </p>
 
             <p
@@ -290,8 +323,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              {" "}
-              • Um número{" "}
+              • Um número
             </p>
 
             <p
@@ -301,57 +333,66 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              {" "}
-              • Um caractere especial{" "}
+              • Um caractere especial
             </p>
           </div>
-        ) : (
-          ""
         )}
       </div>
 
-      <div>
+      {/* TELEFONE */}
+
+      <div className="register__campo">
         <label className="register__label" htmlFor="telefone">
-          {" "}
-          Telefone{" "}
+          Telefone
         </label>
+
         <div className="register__input__container">
-          <img className="register__icon" src={phoneGray} />
+          <img className="register__icon" src={phoneGray} alt="" />
+
           <IMaskInput
             id="telefone"
+            name="telefone"
             className="register__input"
             mask="(00) 00000-0000"
             placeholder="Ex: (11) 99999-9999"
+            type="tel"
+            autoComplete="tel"
             value={inputTelephoneState}
-            onAccept={(value) => setInputTelephoneState(value)}
+            onAccept={(valor) => setInputTelephoneState(valor)}
           />
         </div>
       </div>
 
-      <div>
+      {/* LOCALIZAÇÃO */}
+
+      <div className="register__campo register__campo__cidade">
         <label className="register__label" htmlFor="cidade">
-          {" "}
-          Cidade{" "}
+          Cidade
         </label>
+
         <div className="register__input__container">
-          <img className="register__icon" src={pinGray} />
+          <img className="register__icon" src={pinGray} alt="" />
+
           <input
             id="cidade"
+            name="cidade"
             className="register__input"
             type="text"
-            placeholder="Sua Cidade"
-            onChange={(e) => {
-              buscarCidades(e.target.value);
-            }}
+            placeholder="Sua cidade"
+            autoComplete="address-level2"
             value={inputCityState}
+            onChange={(evento) => buscarCidades(evento.target.value)}
+            aria-autocomplete="list"
+            aria-expanded={cidadesFiltradas.length > 0}
           />
 
           <select
             value={inputState}
             className="register__estado"
-            onChange={(event) => setInputState(event.target.value)}
+            aria-label="Estado"
+            onChange={(evento) => alterarEstado(evento.target.value)}
           >
-            <option value=""> UF </option>
+            <option value="">UF</option>
 
             {cidadesBrasil.estados.map((estado) => (
               <option key={estado.sigla} value={estado.sigla}>
@@ -361,33 +402,33 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
           </select>
         </div>
 
-        {cidadesFiltradas.length > 0 ? (
-          <div className="register__container__sugestoes">
+        {cidadesFiltradas.length > 0 && (
+          <div className="register__container__sugestoes" role="listbox">
             {cidadesFiltradas.map((cidade) => (
-              <div
+              <button
                 className="register__cidades__sugestoes"
+                type="button"
                 key={`${cidade.cidade}-${cidade.estado}`}
-                onClick={() => {
-                  setInputCityState(cidade.cidade);
-                  setInputState(cidade.estado);
-                  setCidadesFiltradas([]);
-                }}
+                onClick={() => selecionarCidade(cidade)}
+                role="option"
+                aria-selected={false}
               >
-                <span>{cidade.cidade} </span>
-              </div>
+                <span>{cidade.cidade}</span>
+                <span className="register__cidade__uf">{cidade.estado}</span>
+              </button>
             ))}
           </div>
-        ) : (
-          ""
         )}
       </div>
+
+      {/* CONSENTIMENTOS */}
 
       <div className="register__consentimentos">
         <label className="register__consentimento">
           <input
             type="checkbox"
             checked={aceitouTermos}
-            onChange={(e) => setAceitouTermos(e.target.checked)}
+            onChange={(evento) => setAceitouTermos(evento.target.checked)}
           />
 
           <span>
@@ -404,7 +445,9 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
           <input
             type="checkbox"
             checked={autorizaCompartilharEmail}
-            onChange={(e) => setAutorizaCompartilharEmail(e.target.checked)}
+            onChange={(evento) =>
+              setAutorizaCompartilharEmail(evento.target.checked)
+            }
           />
 
           <span>
@@ -414,29 +457,36 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
         </label>
       </div>
 
+      {/* AVISO SOBRE O E-MAIL */}
+
       <div className="register__container__info">
-        <img className="info__image" src={infoBlue} />
+        <img className="info__image" src={infoBlue} alt="" />
+
         <p className="info__subtitle">
           Seu e-mail poderá ser exibido na página pública de objetos para
           permitir contato. Essa autorização é opcional.
         </p>
       </div>
 
-      <div
-        className="register__form__button"
-        onClick={() => {
-          continuarCriacaoConta();
-        }}
-      >
-        <p>Continuar</p>
-      </div>
+      {/* CONTINUAR */}
 
-      <hr />
+      <button
+        className="register__form__button"
+        type="button"
+        onClick={continuarCriacaoConta}
+      >
+        Continuar
+      </button>
+
+      <hr className="register__divider" />
+
+      {/* LOGIN */}
 
       <div className="register__container__com__conta">
         <p className="register__com__conta__text">Já possui uma conta?</p>
+
         <NavLink to="/auth/login" end className="register__navlink">
-          <p> Entrar </p>
+          Entrar
         </NavLink>
       </div>
     </div>

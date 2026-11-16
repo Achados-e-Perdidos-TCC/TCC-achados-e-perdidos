@@ -25,40 +25,36 @@ function Login() {
   const [error, setError] = useState(null);
 
   function setarEyeState() {
-    setEyeState((estadoAtual) => {
-      return estadoAtual === true ? false : true;
-    });
+    setEyeState((estadoAtual) => !estadoAtual);
   }
 
   async function logarUsuario(evento) {
+    evento.preventDefault();
+
     try {
-      evento.preventDefault();
       setError(null);
+
       verificaEmailSenha(inputEmailState.toLowerCase(), inputPasswordState);
 
-      // faz chamada API
       await login(
         inputEmailState.toLowerCase(),
         inputPasswordState,
         lembrarUsuario,
       );
 
-      return (window.location.href = "/user-area");
+      window.location.href = "/user-area";
     } catch (erro) {
       if (erro.message === "Credenciais inválidas") {
-        return setError(`Credenciais inválidas`);
-      }
-      if (erro.message === "Email inválido") {
-        return setError("Email inválido");
-      }
-      if (erro.message === "Senha inválida") {
-        return setError("Senha inválida");
-      }
-      if (erro.message === "campos precisam estar preenchidos") {
-        return setError("Todos os campos precisam estar preenchidos");
+        setError("Credenciais inválidas");
+      } else if (erro.message === "Email inválido") {
+        setError("Email inválido");
+      } else if (erro.message === "Senha inválida") {
+        setError("Senha inválida");
+      } else if (erro.message === "campos precisam estar preenchidos") {
+        setError("Todos os campos precisam estar preenchidos");
       } else {
-        return setError(
-          "Ocorreu um erro inesperado, verifique se os dados informados estão corretos e tente novamente mais tarde",
+        setError(
+          "Ocorreu um erro inesperado. Verifique se os dados informados estão corretos e tente novamente mais tarde.",
         );
       }
     }
@@ -70,73 +66,90 @@ function Login() {
         <Logado />
       ) : (
         <div className="login__container__form">
-          <img className="login__logo" src={logo} />
+          <img className="login__logo" src={logo} alt="Achados e Devolvidos" />
 
-          <div>
+          <div className="login__header">
             <h1 className="login__form__title">Bem-vindo de volta!</h1>
+
             <p className="login__form__subtitle">Faça login para continuar</p>
           </div>
 
-          <form
-            className="login__form"
-            action="POST"
-            noValidate
-            onSubmit={(evento) => {
-              logarUsuario(evento);
-            }}
-          >
-            <div className={!error ? "login__no__error" : "login__error"}>
+          <form className="login__form" noValidate onSubmit={logarUsuario}>
+            <div
+              className={error ? "login__error" : "login__no__error"}
+              aria-live="polite"
+            >
               <p className="login__error__message">{error}</p>
             </div>
 
             <div className="login__container__inputs">
-              <div>
+              <div className="login__field">
                 <label className="login__label" htmlFor="email">
-                  {" "}
-                  E-mail{" "}
+                  E-mail
                 </label>
+
                 <div className="login__input__email">
-                  <img className="login__email__icon" src={emailGray} />
+                  <img
+                    className="login__email__icon"
+                    src={emailGray}
+                    alt=""
+                    aria-hidden="true"
+                  />
+
                   <input
                     id="email"
+                    name="email"
                     className="login__input"
                     type="email"
                     placeholder="Seu@email.com"
-                    onChange={(e) => {
-                      setInputEmailState(e.target.value);
-                    }}
+                    autoComplete="email"
+                    value={inputEmailState}
+                    onChange={(evento) =>
+                      setInputEmailState(evento.target.value)
+                    }
                   />
                 </div>
               </div>
 
-              <div>
+              <div className="login__field">
                 <label className="login__label" htmlFor="password">
-                  {" "}
-                  Senha{" "}
+                  Senha
                 </label>
+
                 <div className="login__input__password">
-                  <img className="login__password__icon" src={lockGray} />
+                  <img
+                    className="login__password__icon"
+                    src={lockGray}
+                    alt=""
+                    aria-hidden="true"
+                  />
+
                   <input
                     id="password"
+                    name="password"
                     className="login__input"
-                    type={eyeState === true ? "password" : "text"}
+                    type={eyeState ? "password" : "text"}
                     placeholder="Sua senha"
-                    onChange={(e) => {
-                      setInputPasswordState(e.target.value);
-                    }}
+                    autoComplete="current-password"
+                    value={inputPasswordState}
+                    onChange={(evento) =>
+                      setInputPasswordState(evento.target.value)
+                    }
                   />
-                  <div
+
+                  <button
+                    type="button"
                     className="login__eye__button"
-                    onClick={() => {
-                      setarEyeState();
-                    }}
+                    onClick={setarEyeState}
+                    aria-label={eyeState ? "Mostrar senha" : "Ocultar senha"}
                   >
-                    {eyeState === true ? (
-                      <img className="login__eye__icon" src={openEyeGray} />
-                    ) : (
-                      <img className="login__eye__icon" src={closeEyeGray} />
-                    )}
-                  </div>
+                    <img
+                      className="login__eye__icon"
+                      src={eyeState ? openEyeGray : closeEyeGray}
+                      alt=""
+                      aria-hidden="true"
+                    />
+                  </button>
                 </div>
               </div>
             </div>
@@ -144,15 +157,16 @@ function Login() {
             <div className="login__container__esqueci__senha">
               <div className="login__container__checkbox">
                 <input
+                  id="lembrarUsuario"
                   className="login__input__checkbox"
                   type="checkbox"
-                  onClick={() => {
-                    setLembrarUsuario((valor) =>
-                      valor === false ? true : false,
-                    );
-                  }}
+                  checked={lembrarUsuario}
+                  onChange={(evento) =>
+                    setLembrarUsuario(evento.target.checked)
+                  }
                 />
-                <label htmlFor=""> Lembrar de mim </label>
+
+                <label htmlFor="lembrarUsuario">Lembrar de mim</label>
               </div>
 
               <NavLink
@@ -165,17 +179,24 @@ function Login() {
             </div>
 
             <button className="login__form__button" type="submit">
-              <img className="login__image__entrar" src={entrarWhite} />
-              <p>Entrar</p>
+              <img
+                className="login__image__entrar"
+                src={entrarWhite}
+                alt=""
+                aria-hidden="true"
+              />
+
+              <span>Entrar</span>
             </button>
           </form>
 
-          <hr />
+          <hr className="login__divider" />
 
           <div className="login__container__sem__conta">
             <p className="login__sem__conta__text">Ainda não tem uma conta?</p>
+
             <NavLink to="/auth/register" end className="login__navlink">
-              <p> Criar conta </p>
+              Criar conta
             </NavLink>
           </div>
         </div>

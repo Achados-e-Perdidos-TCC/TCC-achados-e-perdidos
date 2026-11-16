@@ -1,116 +1,423 @@
+/* PÁGINA DE EDIÇÃO */
+
+.editar-page {
+  width: 100%;
+}
+
+.editar-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+}
+
+.editar-header__eyebrow {
+  display: inline-block;
+  margin-bottom: 0.7rem;
+  color: var(--primary-color-blue);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.editar-header .page__title {
+  margin-bottom: 0.6rem;
+}
+
+.editar-header .page__subtitle {
+  margin: 0;
+}
+
+/* FORMULÁRIO E SEÇÕES */
+
+.editar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.8rem;
+}
+
+.editar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.editar-section + .editar-section {
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.editar-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.editar-section__header > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.editar-section__header .card__heading {
+  margin: 0;
+}
+
+.editar-section__header p {
+  margin: 0;
+  color: var(--secondary-color-gray);
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+
+.editar-field-error {
+  display: block;
+  margin-top: 0.6rem;
+  color: var(--error-text-color);
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+/* FOTOGRAFIAS */
+
+.editar-section__header--photos {
+  align-items: flex-start;
+}
+
+.editar-fotos-counter {
+  flex-shrink: 0;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.7rem;
+  background: var(--background-color);
+  color: var(--secondary-color-gray);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
 .editar-fotos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-    gap: 1.2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1.4rem;
 }
 
 .editar-foto-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    min-width: 0;
-    padding: 0.8rem;
-    border: 1px solid var(--border-color);
-    border-radius: 0.8rem;
-    background: var(--card-color);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 0.9rem;
+  background: var(--card-color);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.editar-foto-item img {
-    width: 100%;
-    height: 12rem;
-    object-fit: contain;
-    border-radius: 0.5rem;
+.editar-foto-item:hover {
+  border-color: var(--primary-color-blue);
+  box-shadow: var(--shadow-hover);
 }
 
-.editar-foto-item span {
-    color: var(--secondary-color-gray);
-    font-size: 1.2rem;
+.editar-foto-item__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 15rem;
+  padding: 0.8rem;
+  overflow: hidden;
+  background: var(--background-color);
 }
+
+.editar-foto-item__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.editar-foto-item__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 1rem;
+}
+
+.editar-foto-item__footer span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--secondary-color-gray);
+  font-size: 1.2rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editar-foto-remove {
+  flex-shrink: 0;
+  padding: 0.4rem 0.6rem;
+  border: none;
+  background: transparent;
+  color: var(--error-text-color);
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.editar-foto-remove:hover {
+  opacity: 0.7;
+}
+
+.editar-fotos-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 17rem;
+  padding: 2rem;
+  border: 1px dashed var(--border-color);
+  border-radius: 1rem;
+  background: var(--background-color);
+  text-align: center;
+}
+
+.editar-fotos-empty__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary-color-blue) 10%, transparent);
+  color: var(--primary-color-blue);
+  font-size: 2.8rem;
+}
+
+.editar-fotos-empty strong {
+  color: var(--primary-color-text);
+  font-size: 1.4rem;
+}
+
+.editar-fotos-empty p {
+  margin: 0;
+  color: var(--secondary-color-gray);
+  font-size: 1.2rem;
+}
+
 .editar-fotos-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.editar-foto-item button {
-    width: 100%;
-}
-
-.editar-foto-item button:hover {
-    cursor: pointer;
+.editar-fotos-footer > span {
+  color: var(--secondary-color-gray);
+  font-size: 1.2rem;
 }
 
 .editar-fotos-footer button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-.editar-feedback--sucesso {
-    color: #15803d;
-    font-weight: 600;
-    padding: 1rem;
-    margin-top: 1rem;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-/* Botão excluir - cor de perdido */
-.cadastrar-page .btn--danger {
-    background: var(--error-text-color);
-    color: var(--secondary-color-white);
-    border-color: var(--error-text-color);
+/* AÇÕES DO FORMULÁRIO */
+
+.editar-actions {
+  padding-top: 2.2rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
 }
 
-.cadastrar-page .btn--danger:hover {
-    background: color-mix(in srgb, var(--error-text-color) 85%, black);
-    border-color: color-mix(in srgb, var(--error-text-color) 85%, black);
+.editar-actions .btn--danger {
+  background: var(--error-text-color);
+  border-color: var(--error-text-color);
+  color: var(--secondary-color-white);
 }
 
-.cadastrar-page .btn--danger:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.editar-actions .btn--danger:hover {
+  background: color-mix(in srgb, var(--error-text-color) 85%, black);
+  border-color: color-mix(in srgb, var(--error-text-color) 85%, black);
 }
 
-.cadastrar-page .btn--danger:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.editar-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-/* Ícone do modal de exclusão */
-.cadastrar-page .confirmation-modal--danger
-.confirmation-modal__icon {
-    background: #fee2e2;
-    color: #dc2626;
+/* MODAIS */
+
+.confirmation-modal--danger .confirmation-modal__icon {
+  background: #fee2e2;
+  color: #dc2626;
 }
 
-/* Botão salvar - cor de encontrado */
-.cadastrar-page .actions .btn--primary {
-    background: var(--primary-color-green);
-    border-color: var(--primary-color-green);
-    color: var(--secondary-color-white);
+.confirmation-modal--success .confirmation-modal__icon {
+  background: #dcfce7;
+  color: #15803d;
 }
 
-.cadastrar-page .actions .btn--primary:hover {
-    background: color-mix(in srgb, var(--primary-color-green) 85%, black);
-    border-color: color-mix(in srgb, var(--primary-color-green) 85%, black);
-}
-/* Botão de confirmação do salvamento */
-.cadastrar-page .btn--save-confirm {
-    background: var(--primary-color-green);
-    border-color: var(--primary-color-green);
-    color: var(--secondary-color-white);
+.confirmation-modal--success .confirmation-modal__actions {
+  justify-content: center;
 }
 
-.cadastrar-page .btn--save-confirm:hover {
-    background: color-mix(
-        in srgb,
-        var(--primary-color-green) 85%,
-        black
-    );
+/* CARREGAMENTO E ESTADOS */
 
-    border-color: color-mix(
-        in srgb,
-        var(--primary-color-green) 85%,
-        black
-    );
+.editar-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 35rem;
+  color: var(--secondary-color-gray);
+  font-size: 1.4rem;
+}
+
+.editar-loading__spinner {
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-color-blue);
+  border-radius: 50%;
+  animation: editar-spin 0.8s linear infinite;
+}
+
+@keyframes editar-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.editar-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 30rem;
+  padding: 3rem;
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  background: var(--card-color);
+  text-align: center;
+}
+
+.editar-estado h1 {
+  color: var(--primary-color-text);
+  font-size: 2.2rem;
+}
+
+.editar-estado p {
+  max-width: 48rem;
+  color: var(--secondary-color-gray);
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 900px) {
+  .editar-fotos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  }
+
+  .editar-foto-item__image {
+    height: 13rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .editar-header {
+    margin-bottom: 2rem;
+  }
+
+  .editar-form {
+    gap: 2.2rem;
+  }
+
+  .editar-section {
+    gap: 1.5rem;
+  }
+
+  .editar-section + .editar-section {
+    padding-top: 2rem;
+  }
+
+  .editar-section__header p {
+    font-size: 1.2rem;
+  }
+
+  .editar-fotos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .editar-foto-item__image {
+    height: 12rem;
+  }
+
+  .editar-foto-item__footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.8rem;
+  }
+
+  .editar-foto-remove {
+    padding-left: 0;
+  }
+
+  .editar-fotos-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .editar-fotos-footer button {
+    width: 100%;
+  }
+
+  .editar-actions {
+    gap: 1rem;
+  }
+
+  .editar-actions button {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .editar-section__header--photos {
+    flex-direction: column;
+  }
+
+  .editar-fotos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+
+  .editar-foto-item__image {
+    height: 10rem;
+  }
+
+  .editar-foto-item__footer span {
+    font-size: 1.1rem;
+  }
+
+  .editar-foto-remove {
+    font-size: 1.1rem;
+  }
+
+  .editar-fotos-empty {
+    min-height: 14rem;
+  }
+
+  .editar-estado {
+    padding: 2rem;
+  }
 }

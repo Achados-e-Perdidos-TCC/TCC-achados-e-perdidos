@@ -1,90 +1,193 @@
+/* CONTAINER PRINCIPAL */
+
 .register {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 3rem auto;
+  padding: 0 2rem;
+  color: var(--primary-color-text);
 }
 
-/* img */
+/* CARD DO FORMULÁRIO */
 
-.register__logo{ 
-    align-self: center;
-    max-height: 80px;
-    max-width: 80px;
+.register__container__form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2rem;
+
+  width: 100%;
+  max-width: 95rem;
+
+  padding: 3rem 12.5rem;
+
+  border: 0.1rem solid var(--border-color);
+  border-radius: 1rem;
+
+  background-color: var(--card-color);
+  box-shadow: var(--shadow-hover);
 }
 
-/* container form */
+/* LOGO */
 
-.register__container__form{
-    display: flex;
-    flex-direction: column;
-    padding: 3rem 12.5rem;
-    border: 0.1rem solid var(--border-color);
-    border-radius: 1rem;
-    box-shadow: var(--shadow-hover);
-    background-color: var(--card-color);
-    max-width: 95rem;
-    width: 100%;
-    gap: 2rem; 
-    color: var(--primary-color-text);
+.register__logo {
+  display: block;
+  align-self: center;
+  width: 8rem;
+  height: 8rem;
+  max-width: 100%;
+  object-fit: contain;
 }
 
-/* form */
+/* CABEÇALHO */
 
-.register__form{
-    display: flex;
-    flex-direction: column;
+.register__cabecalho {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  text-align: center;
+}
+
+.register__form__title {
+  color: var(--primary-color-blue);
+  font-size: clamp(2.8rem, 4vw, 4rem);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.register__form__subtitle {
+  color: var(--secondary-color-gray);
+  font-size: clamp(1.2rem, 2vw, 1.4rem);
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ETAPAS */
+
+.register__etapas {
+  width: 100%;
+}
+
+/* FORMULÁRIO */
+
+.register__form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.register__inputs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* NAVEGAÇÃO */
+
+.register__navlink {
+  color: var(--primary-color-blue);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.register__navlink:hover {
+  text-decoration: underline;
+}
+
+/* ERROS E ESTADOS */
+
+.register .register__none,
+.register .register__no__error {
+  display: none;
+}
+
+.register__error {
+  width: 100%;
+  line-height: 1.8rem;
+}
+
+.register__error__message {
+  color: #ed4337;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 1024px) {
+  .register__container__form {
+    max-width: 85rem;
+    padding: 3rem 7rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .register {
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .register__container__form {
+    padding: 3rem 2.5rem;
     gap: 2rem;
+  }
+
+  .register__logo {
+    width: 7rem;
+    height: 7rem;
+  }
+
+  .personalize__perfil__title {
+    font-size: 2.5rem;
+  }
+
+  .personalize__perfil__subtitle,
+  .preferencias__subtitle {
+    font-size: 1.2rem;
+  }
+
+  .preferencias__title {
+    font-size: 2.5rem;
+  }
 }
 
-.register__form__title{
-    font-weight: 600;
-    font-size: clamp(3rem, 4vw, 4.5rem);
-    line-height: clamp(3rem, 5vw, 5rem);
-    color: var(--primary-color-blue);
-    text-align: center;
-}
+@media (max-width: 480px) {
+  .register {
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+  }
 
-.register__form__subtitle{
-    text-align: center;
-    font-size: clamp(1.2rem, 2vw, 1.4rem);
-    color: var(--secondary-color-gray)
-}
+  .register__container__form {
+    padding: 2.5rem 1.5rem;
+    gap: 1.8rem;
+    border-radius: 0.8rem;
+  }
 
-/* navLink */
+  .register__logo {
+    width: 6.5rem;
+    height: 6.5rem;
+  }
 
-.register__navlink{ color: var(--primary-color-blue) }
+  .register__form__title {
+    font-size: 2.5rem;
+  }
 
-/* error */
+  .register__form__subtitle {
+    font-size: 1.2rem;
+  }
 
-.register__no__error, .register__none{ display: none }
+  .personalize__perfil__title {
+    font-size: 2.2rem;
+  }
 
-.register__error{ line-height: 1.8rem }
-
-.register__error__message{
-    text-align: center;
-    font-size: 1.4rem;
-    color: #ed4337;
-}
-
-/* responsividade */
-
-@media( max-width: 768px ){ .register__container__form{ padding: 3rem 2.5rem; } }
-
-@media( max-width: 767px ){
-
-    /* img */
-
-    .register__logo{ 
-        max-height: 70px;
-        max-width: 70px;
-    }
-
-    .register__container__form{ padding: 3rem 1.5rem }
-
-    .personalize__perfil__title{ font-size: 2.5rem }
-    .personalize__perfil__subtitle, .preferencias__subtitle{ font-size: 1rem;}
-
-    .preferencias__title{ font-size: 2rem}
+  .preferencias__title {
+    font-size: 2rem;
+  }
 }

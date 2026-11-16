@@ -1,31 +1,49 @@
-import './logado.css';
+import { useNavigate } from "react-router";
 
-import logo from '../../../../../../assets/logo_iniciais.png';
+import "./logado.css";
 
-function Logado(){
+import logo from "../../../../../../assets/logo_iniciais.png";
 
-    return (
-        <div className='register__container__form'>
-            <img className="register__logo" src={logo} />
+function Logado() {
+  const navigate = useNavigate();
 
-            <div>
-                <h1 className="register__ja__logado" >Você já está logado</h1>
-                <p className="register__ja__logado__subtitle">Sua conta já está ativa.</p>
-            </div>
+  return (
+    <div className="logado">
+      {/* LOGO */}
 
-            <div className='register__logado'>
-                <div className='success__button' onClick={() => {window.location.href = "/"}}>
-                    <p className='success__link'> Ir para meu perfil </p>
-                </div>
+      <img className="logado__logo" src={logo} alt="Achados e Devolvidos" />
 
-                <div  onClick={() => {window.location.href = "/"}}>
-                    <p className='success__link__voltar'> Voltar para início</p>
-                </div>
-            </div>
+      {/* MENSAGEM */}
 
-                
-        </div>
-    )
+      <div className="logado__conteudo">
+        <h1 className="register__ja__logado">Você já está logado!</h1>
+
+        <p className="register__ja__logado__subtitle">
+          Sua conta já está ativa. Você não precisa criar uma nova conta.
+        </p>
+      </div>
+
+      {/* AÇÕES */}
+
+      <div className="register__logado">
+        <button
+          className="logado__botao-principal"
+          type="button"
+          onClick={() => navigate("/user-area")}
+        >
+          Ir para meu perfil
+        </button>
+
+        <button
+          className="logado__botao-secundario"
+          type="button"
+          onClick={() => navigate("/")}
+        >
+          Voltar para início
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default Logado;

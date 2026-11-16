@@ -1,91 +1,152 @@
-import { useState } from 'react'; 
-import { IMaskInput } from 'react-imask';
+import { useState } from "react";
+import { IMaskInput } from "react-imask";
 
-import cidadesBrasil from '../../../../../../../utils/json/cidade-estados.json';
+import cidadesBrasil from "../../../../../../../utils/json/cidade-estados.json";
 
-import './formInfos.css';
+import "./formInfos.css";
 
-function FormInfos({ inputState, inputCityState, inputEmailState, setInputNameState, inputNameState, inputTelephoneState, setInputCityState, 
-setInputEmailState, setInputTelephoneState, setInputState, todasAsCidades }){
+function FormInfos({
+  inputState,
+  inputCityState,
+  inputEmailState,
+  setInputNameState,
+  inputNameState,
+  inputTelephoneState,
+  setInputCityState,
+  setInputEmailState,
+  setInputTelephoneState,
+  setInputState,
+  todasAsCidades,
+}) {
+  const [cidadesFiltradas, setCidadesFiltradas] = useState([]);
 
-    const [cidadesFiltradas, setCidadesFiltradas] = useState([]); 
+  function buscarCidades(valor) {
+    setInputCityState(valor);
 
-    function buscarCidades(valor) {
-        setInputCityState(valor);
-
-        if (valor.trim() === '') {
-            setCidadesFiltradas([]);
-            return;
-        }
-
-        const resultado = todasAsCidades.filter((cidade) => {
-            const mesmaCidade = cidade.cidade.toLowerCase().startsWith(valor.toLowerCase());
-
-            const mesmoEstado = inputState ? cidade.estado === inputState : true;
-
-            return mesmaCidade && mesmoEstado;   
-        });
-
-        setCidadesFiltradas(resultado);
+    if (valor.trim() === "") {
+      setCidadesFiltradas([]);
+      return;
     }
 
-    return (
-        <div className='user__profile__inputs__container'>
-            <div>
-                <label className="user__profile__label" htmlFor="nome"> Nome </label>
-                <div>
-                    <input id='nome' className='user__profile__input' type="text" value={inputNameState} onChange={(e) => {setInputNameState(e.target.value)}} />
-                </div>
-            </div>
+    const resultado = todasAsCidades.filter((cidade) => {
+      const mesmaCidade = cidade.cidade
+        .toLowerCase()
+        .startsWith(valor.toLowerCase());
 
-            <div>
-                <label className="user__profile__label" htmlFor="email"> E-mail </label>
-                <div>
-                    <input id='email' className='user__profile__input user__just__read' type="email" value={inputEmailState}  onChange={(e) => {setInputEmailState(e.target.value)}} disabled />
-                </div>
-            </div>
+      const mesmoEstado = inputState ? cidade.estado === inputState : true;
 
-            <div className='user__profile__phone__city'>
+      return mesmaCidade && mesmoEstado;
+    });
 
-                <div className='user__profile__input__phone'>
-                    <label className="user__profile__label" htmlFor="telefone"> Telefone </label>
-                    <div>
-                        <IMaskInput id='telefone' className='user__profile__input' mask={"(00) 00000-0000"} value={inputTelephoneState} 
-                        placeholder='(00) 00000-0000' onAccept={(value) => setInputTelephoneState(value)}/>
-                    </div>
-                </div>
+    setCidadesFiltradas(resultado);
+  }
 
-                <div className='user__profile__input__city'>
-                    <label className="user__profile__label" htmlFor="cidade"> Cidade </label>
-                    <div>
-                        <input id='cidade' className='user__profile__input' type="text" onChange={(e) => {buscarCidades(e.target.value)}} value={inputCityState} />
+  function selecionarCidade(cidade) {
+    setInputCityState(cidade.cidade);
+    setInputState(cidade.estado);
+    setCidadesFiltradas([]);
+  }
 
-                        <select value={inputState}  className="user__profile__estado"  onChange={(event) => setInputState(event.target.value)}>
-                            <option value=""> UF </option>
+  return (
+    <div className="user__profile__inputs__container">
+      <div className="user__profile__field">
+        <label className="user__profile__label" htmlFor="nome">
+          Nome
+        </label>
 
-                            {cidadesBrasil.estados.map((estado) => (
-                                <option key={estado.sigla} value={estado.sigla}>
-                                    {estado.sigla}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+        <input
+          id="nome"
+          className="user__profile__input"
+          type="text"
+          value={inputNameState}
+          onChange={(e) => setInputNameState(e.target.value)}
+        />
+      </div>
 
-                    {cidadesFiltradas.length > 0 ? (
-                    <div className="user__profile__container__sugestoes">
+      <div className="user__profile__field">
+        <label className="user__profile__label" htmlFor="email">
+          E-mail
+        </label>
 
-                        {cidadesFiltradas.map((cidade) => (
+        <input
+          id="email"
+          className="user__profile__input user__just__read"
+          type="email"
+          value={inputEmailState}
+          onChange={(e) => setInputEmailState(e.target.value)}
+          disabled
+        />
+      </div>
 
-                            <div className="user__profile__cidades__sugestoes" key={`${cidade.cidade}-${cidade.estado}`} onClick={() => { setInputCityState(cidade.cidade); setInputState(cidade.estado); setCidadesFiltradas([]) }}>
-                                <span>{cidade.cidade} </span>
-                            </div>
-                        ))}
-                    </div> ) : ''}
-                </div>
+      <div className="user__profile__phone__city">
+        <div className="user__profile__input__phone user__profile__field">
+          <label className="user__profile__label" htmlFor="telefone">
+            Telefone
+          </label>
 
-            </div>
+          <IMaskInput
+            id="telefone"
+            className="user__profile__input"
+            mask="(00) 00000-0000"
+            value={inputTelephoneState}
+            placeholder="(00) 00000-0000"
+            onAccept={(value) => setInputTelephoneState(value)}
+          />
         </div>
-    )
+
+        <div className="user__profile__input__city user__profile__field">
+          <label className="user__profile__label" htmlFor="cidade">
+            Cidade
+          </label>
+
+          <div className="user__profile__city__control">
+            <input
+              id="cidade"
+              className="user__profile__input"
+              type="text"
+              value={inputCityState}
+              onChange={(e) => buscarCidades(e.target.value)}
+              autoComplete="off"
+            />
+
+            <select
+              value={inputState}
+              className="user__profile__estado"
+              onChange={(event) => {
+                setInputState(event.target.value);
+                setCidadesFiltradas([]);
+              }}
+              aria-label="Estado"
+            >
+              <option value="">UF</option>
+
+              {cidadesBrasil.estados.map((estado) => (
+                <option key={estado.sigla} value={estado.sigla}>
+                  {estado.sigla}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {cidadesFiltradas.length > 0 && (
+            <div className="user__profile__container__sugestoes">
+              {cidadesFiltradas.map((cidade) => (
+                <button
+                  className="user__profile__cidades__sugestoes"
+                  type="button"
+                  key={`${cidade.cidade}-${cidade.estado}`}
+                  onClick={() => selecionarCidade(cidade)}
+                >
+                  <span>{cidade.cidade}</span>
+                  <small>{cidade.estado}</small>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default FormInfos; 
+export default FormInfos;

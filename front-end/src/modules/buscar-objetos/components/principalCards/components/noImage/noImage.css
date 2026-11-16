@@ -1,11 +1,33 @@
-.principal__cards__noimage__card{
-    border-radius: 1rem;
-    height: clamp(12rem, 16vw, 20rem);
-    width: clamp(12rem, 16vw, 20rem);
+.noImage {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  width: 18rem;
+  min-height: 16rem;
+
+  background-color: var(--primary-color-blue-light);
+  border: 0.1rem solid var(--border-color);
+  border-radius: 0.9rem;
 }
 
-.noImage{
-    display: flex;
-    align-self: center;
-    justify-self: center;
+.principal__cards__noimage__card {
+  width: 7rem;
+  height: 7rem;
+  object-fit: contain;
+  opacity: 0.75;
+}
+
+@media (max-width: 768px) {
+  .noImage {
+    width: 12rem;
+    min-width: 12rem;
+    min-height: 15rem;
+  }
+
+  .principal__cards__noimage__card {
+    width: 5rem;
+    height: 5rem;
+  }
 }

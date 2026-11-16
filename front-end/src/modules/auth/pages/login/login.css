@@ -1,186 +1,382 @@
-.login{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 3rem;
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(100vh - 10rem);
+  padding: 3rem 2rem;
+  color: var(--primary-color-text);
 }
 
-.login__navlink{ color: var(--primary-color-blue) }
+/* 1. Container */
 
-/* img */
-
-.login__logo{ 
-    align-self: center;
-    max-height: 80px;
-    max-width: 80px;
+.login .login__container__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  width: 100%;
+  max-width: 48rem;
+  padding: 3rem;
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-hover);
 }
 
-.login__email__icon, .login__password__icon{
-    position: absolute;
-    height: 27px;
-    top: 1rem;
-    left: 1.5rem;
+/* 2. Cabeçalho */
+
+.login .login__logo {
+  align-self: center;
+  width: 8rem;
+  height: 8rem;
+  object-fit: contain;
 }
 
-.login__eye__icon{
-    position: absolute;
-    height: 18px;
-    right: 1.5rem;
-    top: 1.6rem; 
-    cursor: pointer
+.login .login__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
 }
 
-/* container form */
-
-.login__container__form{
-    display: flex;
-    flex-direction: column;
-    padding: 3rem 2.5rem;
-    border: 0.1rem solid var(--border-color);
-    border-radius: 10px;
-    box-shadow: var(--shadow-hover);
-    background-color: var(--card-color);
-    max-width: 52rem;
-    width: 100%;
-    gap: 1.5rem; 
-    color: var(--primary-color-text);
+.login .login__form__title {
+  margin: 0;
+  color: var(--primary-color-blue);
+  font-size: clamp(2.5rem, 5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.2;
 }
 
-/* form */
-
-.login__form{
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+.login .login__form__subtitle {
+  margin: 0;
+  color: var(--secondary-color-gray);
+  font-size: 1.5rem;
+  line-height: 1.5;
 }
 
-.login__form__title{
-    font-weight: 600;
-    font-size: clamp(2.5rem, 5vw, 3rem);
-    line-height: 3.5rem;
-    color: var(--primary-color-blue);
-    text-align: center;
+/* 3. Formulário */
+
+.login .login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.login__form__subtitle{
-    text-align: center;
-    color: var(--secondary-color-gray)
+.login .login__container__inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
 }
 
-/* inputs */
-
-.login__container__inputs{
-    display: flex;
-    flex-direction: column;
-    gap: clamp(1rem, 2vw, 2rem);
+.login .login__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 0;
 }
 
-.login__label{
-    font-size: 1.5rem;
-    color: var(--primary-color-blue);
-    font-weight: 600;
+.login .login__label {
+  color: var(--primary-color-blue);
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
-.login__input{
-    font-size: 1.6rem;
-    border-radius: 0.5rem;
-    padding: 1.4rem 5.3rem;
-    width: 100%;
-    border: 0.1rem solid var(--border-color);
-    color: var(--primary-color-text);
-    background-color: var(--card-color);
+/* 4. Inputs */
+
+.login .login__input__email,
+.login .login__input__password {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
-.login__input__checkbox{
-   width: 1.5rem;
-   height: 1.5rem;
+.login .login__input {
+  width: 100%;
+  min-width: 0;
+  min-height: 4.8rem;
+  padding: 1.2rem 4.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.6rem;
+  outline: none;
+  background-color: var(--card-color);
+  color: var(--primary-color-text);
+  font-family: inherit;
+  font-size: 1.5rem;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
-.login__input__email, .login__input__password { position: relative }
-
-
-/* esqueci minha senha */
-
-.login__container__esqueci__senha{
-    display: flex;
-    justify-content: space-between;
-    font-size: clamp(1.2rem, 2vw, 1.4rem);
+.login .login__input::placeholder {
+  color: var(--secondary-color-gray);
+  opacity: 0.8;
 }
 
-.login__container__checkbox{
-    display: flex;
-    gap: clamp(0.5rem, 2vw, 1rem);
-    align-items: center;
+.login .login__input:focus {
+  border-color: var(--primary-color-blue);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary-color-blue) 14%, transparent);
 }
 
-/* button */
-
-.login__form__button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: clamp(1.5rem, 2vw, 1.7rem);
-    gap: 0.8rem;
-    background-color: var(--primary-color-blue);
-    color: var(--secondary-color-white);
-    padding: clamp(1rem, 2vw, 1.3rem);
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
+.login .login__email__icon,
+.login .login__password__icon {
+  position: absolute;
+  left: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  pointer-events: none;
 }
 
-/* ainda não tem conta */
+/* 5. Mostrar / ocultar senha */
 
-hr{ border-color: rgba(0, 0, 0, 0.249) }
-
-.login__container__sem__conta{
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
+.login .login__eye__button {
+  position: absolute;
+  top: 50%;
+  right: 1.2rem;
+  display: grid;
+  place-items: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  padding: 0;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  transform: translateY(-50%);
 }
 
-.login__sem__conta__text{ color: var(--secondary-color-gray) }
+.login .login__eye__button:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--secondary-color-gray) 10%,
+    transparent
+  );
+}
 
-/* error */
+.login .login__eye__button:focus-visible {
+  outline: 2px solid var(--primary-color-blue);
+  outline-offset: 2px;
+}
 
-.login__no__error{ display: none }
+.login .login__eye__icon {
+  width: 1.8rem;
+  height: 1.8rem;
+  object-fit: contain;
+}
 
-.login__error{ line-height: 1.8rem }
+/* 6. Lembrar / recuperar senha */
 
-.login__error__message{
-    text-align: center;
+.login .login__container__esqueci__senha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 1.3rem;
+}
+
+.login .login__container__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.login .login__input__checkbox {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
+  accent-color: var(--primary-color-blue);
+  cursor: pointer;
+}
+
+.login .login__container__checkbox label {
+  color: var(--secondary-color-gray);
+  cursor: pointer;
+}
+
+/* 7. Links */
+
+.login .login__navlink {
+  color: var(--primary-color-blue);
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.login .login__navlink:hover {
+  text-decoration: underline;
+}
+
+.login .login__navlink:focus-visible {
+  outline: 2px solid var(--primary-color-blue);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* 8. Botão entrar */
+
+.login .login__form__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  width: 100%;
+  min-height: 4.8rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid transparent;
+  border-radius: 0.6rem;
+  background-color: var(--primary-color-blue);
+  color: var(--secondary-color-white);
+  font-family: inherit;
+  font-size: 1.6rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.login .login__form__button:hover {
+  background-color: color-mix(in srgb, var(--primary-color-blue) 85%, black);
+}
+
+.login .login__form__button:active {
+  transform: translateY(1px);
+}
+
+.login .login__form__button:focus-visible {
+  outline: 2px solid var(--primary-color-blue);
+  outline-offset: 3px;
+}
+
+.login .login__image__entrar {
+  width: 1.8rem;
+  height: 1.8rem;
+  object-fit: contain;
+}
+
+/* 9. Divisor / criar conta */
+
+.login .login__divider {
+  width: 100%;
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+
+.login .login__container__sem__conta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.login .login__sem__conta__text {
+  margin: 0;
+  color: var(--secondary-color-gray);
+}
+
+/* 10. Mensagens de erro */
+
+.login .login__no__error {
+  display: none;
+}
+
+.login .login__error {
+  padding: 1rem 1.2rem;
+  border: 1px solid color-mix(in srgb, #ed4337 30%, transparent);
+  border-radius: 0.6rem;
+  background-color: color-mix(in srgb, #ed4337 8%, var(--card-color));
+}
+
+.login .login__error__message {
+  margin: 0;
+  color: #ed4337;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ==========================================================
+   RESPONSIVIDADE
+   ========================================================== */
+
+@media (max-width: 768px) {
+  .login {
+    min-height: auto;
+    padding: 2.4rem 1.6rem;
+  }
+
+  .login .login__container__form {
+    max-width: 46rem;
+    padding: 2.6rem 2.2rem;
+    gap: 1.6rem;
+  }
+
+  .login .login__logo {
+    width: 7rem;
+    height: 7rem;
+  }
+
+  .login .login__form__subtitle {
     font-size: 1.4rem;
-    color: #ed4337;
+  }
+
+  .login .login__label {
+    font-size: 1.35rem;
+  }
+
+  .login .login__input {
+    min-height: 4.5rem;
+    padding: 1.1rem 4.5rem;
+    font-size: 1.4rem;
+  }
+
+  .login .login__email__icon,
+  .login .login__password__icon {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  .login .login__eye__icon {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  .login .login__container__esqueci__senha,
+  .login .login__container__sem__conta {
+    font-size: 1.25rem;
+  }
 }
 
-/* responsividade */
+@media (max-width: 480px) {
+  .login {
+    padding: 1.8rem 1.2rem;
+  }
 
-@media( max-width: 768px){ 
+  .login .login__container__form {
+    padding: 2.2rem 1.6rem;
+    gap: 1.6rem;
+  }
 
-    /* img */
+  .login .login__form__title {
+    font-size: 2.5rem;
+  }
 
-    .login__email__icon, .login__password__icon, .login__image__entrar { height: 20px }
+  .login .login__container__esqueci__senha {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
 
-    .login__eye__icon{
-        height: 14px;
-        top: 1.4rem; 
-    }
-
-    .login__logo{ 
-        max-height: 70px;
-        max-width: 70px;
-    }
-
-    /* login area */
-
-    .login__form__subtitle { font-size: 1.4rem }
-    .login__sem__conta__text, .login__navlink{ font-size: 1.25rem }
-    .login__label { font-size: 1.35rem }
-
-    .login__input{ 
-        font-size: 1.4rem;
-        padding: 1.2rem 4.5rem 
-    }
-    
+  .login .login__container__sem__conta {
+    gap: 0.4rem;
+  }
 }

@@ -21,7 +21,7 @@ import Detalhes, {
 } from "../components/detalhes/Detalhes.jsx";
 
 function DetalhesObjeto() {
-  const params = useParams();
+  const { id } = useParams();
   const { tema } = useOutletContext();
 
   const [objetos, setObjetos] = useState(null);
@@ -40,19 +40,68 @@ function DetalhesObjeto() {
 
   // Busca os dados do objeto.
   useEffect(() => {
+    let ativo = true;
+
     async function carregarObjeto() {
+      setCarregando(true);
+      setErro(null);
+      setObjetos(null);
+
       try {
-        const data = await objects(params.id);
-        setObjetos(data);
+        const data = await objects(id);
+
+        if (ativo) {
+          setObjetos(data);
+        }
       } catch (error) {
-        setErro(error);
+        if (ativo) {
+          setErro(error);
+        }
       } finally {
-        setCarregando(false);
+        if (ativo) {
+          setCarregando(false);
+        }
       }
     }
 
     carregarObjeto();
-  }, [params.id]);
+
+    return () => {
+      ativo = false;
+    };
+  }, [id]);
+
+  // Controla o fechamento do modal e o scroll da página.
+  useEffect(() => {
+    if (!modalAberto) return;
+
+    const overflowAnterior = document.body.style.overflow;
+
+    function fecharComEscape(event) {
+      if (event.key === "Escape") {
+        setModalAberto(false);
+      }
+    }
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", fecharComEscape);
+
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+      document.removeEventListener("keydown", fecharComEscape);
+    };
+  }, [modalAberto]);
+
+  // Abre o modal de contato.
+  function abrirModal() {
+    setErroEnvio("");
+    setModalAberto(true);
+  }
+
+  // Fecha o modal de contato.
+  function fecharModal() {
+    setModalAberto(false);
+  }
 
   // Valida os campos do formulário.
   function validarFormulario() {
@@ -143,7 +192,7 @@ Link do objeto: ${window.location.href}`;
       `width=${largura},height=${altura},left=${esquerda},top=${topo},resizable=yes,scrollbars=yes`,
     );
 
-    setModalAberto(false);
+    fecharModal();
   }
 
   if (carregando) {
@@ -200,10 +249,7 @@ Link do objeto: ${window.location.href}`;
               <button
                 className="botao__azul"
                 type="button"
-                onClick={() => {
-                  setErroEnvio("");
-                  setModalAberto(true);
-                }}
+                onClick={abrirModal}
               >
                 <div className="botoes">
                   <img src={chatWhite} alt="" />
@@ -222,17 +268,17 @@ Link do objeto: ${window.location.href}`;
 
       {/* Modal de informações */}
       {modalAberto && (
-        <div
-          className="modal__informacoes__overlay"
-          onClick={() => setModalAberto(false)}
-        >
+        <div className="modal__informacoes__overlay" onClick={fecharModal}>
           <div
             className="modal__informacoes"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-informacoes-titulo"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="modal__informacoes__header">
               <div>
-                <h2>
+                <h2 id="modal-informacoes-titulo">
                   {objetoEncontrado
                     ? "Tenho interesse neste objeto"
                     : "Tenho informações sobre este objeto"}
@@ -248,14 +294,17 @@ Link do objeto: ${window.location.href}`;
               <button
                 className="modal__informacoes__fechar"
                 type="button"
-                onClick={() => setModalAberto(false)}
+                onClick={fecharModal}
+                aria-label="Fechar modal"
               >
-                <img src={tema === "light" ? xBlack : xWhite} alt="Fechar" />
+                <img src={tema === "light" ? xBlack : xWhite} alt="" />
               </button>
             </div>
 
             {erroEnvio && (
-              <p className="modal__informacoes__erro">{erroEnvio}</p>
+              <p className="modal__informacoes__erro" role="alert">
+                {erroEnvio}
+              </p>
             )}
 
             <form className="formulario__informacoes" onSubmit={enviarEmail}>
@@ -304,7 +353,7 @@ Link do objeto: ${window.location.href}`;
                 <button
                   className="botao__cancelar__informacoes"
                   type="button"
-                  onClick={() => setModalAberto(false)}
+                  onClick={fecharModal}
                 >
                   Cancelar
                 </button>

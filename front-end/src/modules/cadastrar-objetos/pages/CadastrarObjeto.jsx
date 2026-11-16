@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import "./CadastrarObjeto.css";
+
 import cidadesBrasil from "../../../utils/json/cidade-estados.json";
 import { categories } from "../../buscar-objetos/buscarObjetos.service.js";
 import { cadastrarObjeto } from "../cadastraObjeto.service.js";
 
-function Icon({ children, className }) {
+/* ==========================================================
+   ÍCONES
+   ========================================================== */
+
+function Icon({ children, className = "" }) {
   return (
     <svg
       className={className}
@@ -30,6 +35,7 @@ const icons = {
       <path d="M2 13h20" />
     </>
   ),
+
   handHeart: (
     <>
       <path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16" />
@@ -38,12 +44,14 @@ const icons = {
       <path d="M19.5 8.5c.7-.7 1.5-1.6 1.5-2.7A2.73 2.73 0 0 0 16 4a2.78 2.78 0 0 0-5 1.8c0 1.2.8 2 1.5 2.8L16 12Z" />
     </>
   ),
+
   search: (
     <>
       <circle cx="11" cy="11" r="7" />
       <path d="m20 20-3.5-3.5" />
     </>
   ),
+
   grid: (
     <>
       <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -52,24 +60,28 @@ const icons = {
       <rect x="14" y="14" width="7" height="7" rx="1" />
     </>
   ),
+
   pin: (
     <>
       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
       <circle cx="12" cy="10" r="3" />
     </>
   ),
+
   calendar: (
     <>
       <rect x="3" y="4" width="18" height="18" rx="2" />
       <path d="M16 2v4M8 2v4M3 10h18" />
     </>
   ),
+
   clock: (
     <>
       <circle cx="12" cy="12" r="10" />
       <path d="M12 6v6l4 2" />
     </>
   ),
+
   upload: (
     <>
       <path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2" />
@@ -77,22 +89,29 @@ const icons = {
       <path d="m16 16-4-4-4 4" />
     </>
   ),
+
   chevron: <path d="m6 9 6 6 6-6" />,
+
   arrowRight: (
     <>
       <path d="M5 12h14" />
       <path d="m12 5 7 7-7 7" />
     </>
   ),
+
   shield: (
     <>
       <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
       <path d="m9 12 2 2 4-4" />
     </>
   ),
+
   chevronLeft: <path d="m15 18-6-6 6-6" />,
+
   chevronRight: <path d="m9 18 6-6-6-6" />,
+
   plus: <path d="M12 5v14M5 12h14" />,
+
   trash: (
     <>
       <path d="M3 6h18" />
@@ -102,6 +121,10 @@ const icons = {
     </>
   ),
 };
+
+/* ==========================================================
+   CONSTANTES E UTILITÁRIOS
+   ========================================================== */
 
 const MAX_FOTOS = 6;
 const MAX_TAMANHO_FOTO = 5 * 1024 * 1024;
@@ -122,15 +145,12 @@ function obterDataLocalISO() {
   return `${ano}-${mes}-${dia}`;
 }
 
+/* ==========================================================
+   COMPONENTE
+   ========================================================== */
+
 export default function CadastrarObjeto() {
-  const [confirmacaoContatoAberta, setConfirmacaoContatoAberta] =
-    useState(false);
-
-  const [cadastrando, setCadastrando] = useState(false);
-
-  const [categoriasDisponiveis, setCategoriasDisponiveis] = useState([]);
-  const [carregandoCategorias, setCarregandoCategorias] = useState(true);
-  const [erroCategorias, setErroCategorias] = useState("");
+  /* ---------- Estados do cadastro ---------- */
 
   const [status, setStatus] = useState("");
   const [nomeObjeto, setNomeObjeto] = useState("");
@@ -146,49 +166,46 @@ export default function CadastrarObjeto() {
   const [descricao, setDescricao] = useState("");
   const [caracteristicas, setCaracteristicas] = useState("");
 
+  /* ---------- Categorias ---------- */
+
+  const [categoriasDisponiveis, setCategoriasDisponiveis] = useState([]);
+  const [carregandoCategorias, setCarregandoCategorias] = useState(true);
+  const [erroCategorias, setErroCategorias] = useState("");
+
+  /* ---------- Fotos ---------- */
+
   const [fotos, setFotos] = useState([]);
   const [fotoAtual, setFotoAtual] = useState(0);
   const [erroFotos, setErroFotos] = useState("");
 
-  const [mensagemSucesso, setMensagemSucesso] = useState("");
+  /* ---------- Cadastro e feedback ---------- */
+
+  const [cadastrando, setCadastrando] = useState(false);
   const [mensagemErro, setMensagemErro] = useState("");
+  const [mensagemSucesso, setMensagemSucesso] = useState("");
+  const [erroData, setErroData] = useState("");
+
+  /* ---------- Modais ---------- */
+
+  const [confirmacaoContatoAberta, setConfirmacaoContatoAberta] =
+    useState(false);
+
+  /* ---------- Referências ---------- */
 
   const inputFotosRef = useRef(null);
+  const modalConfirmacaoRef = useRef(null);
+  const modalSucessoRef = useRef(null);
+
   const previewsCriadasRef = useRef(new Set());
+
   const dataMaxima = obterDataLocalISO();
 
-  useEffect(() => {
-    return () => {
-      previewsCriadasRef.current.forEach((url) =>
-        URL.revokeObjectURL(url)
-      );
-
-      previewsCriadasRef.current.clear();
-    };
-  }, []);
-
-  useEffect(() => {
-    async function carregarCategorias() {
-      try {
-        const resultado = await categories();
-
-        setCategoriasDisponiveis(
-          Array.isArray(resultado) ? resultado : []
-        );
-      } catch (error) {
-        console.error("Erro ao carregar categorias:", error);
-
-        setErroCategorias("Não foi possível carregar as categorias.");
-      } finally {
-        setCarregandoCategorias(false);
-      }
-    }
-
-    carregarCategorias();
-  }, []);
+  /* ========================================================
+     DADOS DE LOCALIZAÇÃO
+     ======================================================== */
 
   const estadoSelecionado = cidadesBrasil.estados.find(
-    (item) => item.sigla === estado
+    (item) => item.sigla === estado,
   );
 
   const cidadesDisponiveis = estadoSelecionado?.cidades ?? [];
@@ -196,8 +213,97 @@ export default function CadastrarObjeto() {
   const bairrosDisponiveis =
     estadoSelecionado?.bairrosPorCidade?.[cidade] ?? [];
 
-  function handleSelecionarFotos(e) {
-    const arquivosSelecionados = Array.from(e.target.files ?? []);
+  /* ========================================================
+     LIMPEZA DE RECURSOS
+     ======================================================== */
+
+  useEffect(() => {
+    return () => {
+      previewsCriadasRef.current.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
+
+      previewsCriadasRef.current.clear();
+    };
+  }, []);
+
+  /* ========================================================
+     CARREGAMENTO DE CATEGORIAS
+     ======================================================== */
+
+  useEffect(() => {
+    let ativo = true;
+
+    async function carregarCategorias() {
+      try {
+        const resultado = await categories();
+
+        if (!ativo) return;
+
+        setCategoriasDisponiveis(Array.isArray(resultado) ? resultado : []);
+      } catch (error) {
+        console.error("Erro ao carregar categorias:", error);
+
+        if (ativo) {
+          setErroCategorias("Não foi possível carregar as categorias.");
+        }
+      } finally {
+        if (ativo) {
+          setCarregandoCategorias(false);
+        }
+      }
+    }
+
+    carregarCategorias();
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
+  /* ========================================================
+     COMPORTAMENTO DOS MODAIS
+     ======================================================== */
+
+  const modalAberto = confirmacaoContatoAberta || Boolean(mensagemSucesso);
+
+  useEffect(() => {
+    if (!modalAberto) return;
+
+    const overflowAnterior = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    const modalAtivo = mensagemSucesso
+      ? modalSucessoRef.current
+      : modalConfirmacaoRef.current;
+
+    const primeiroBotao = modalAtivo?.querySelector("button");
+
+    primeiroBotao?.focus();
+
+    function handleEscape(event) {
+      if (event.key !== "Escape") return;
+
+      if (confirmacaoContatoAberta && !cadastrando) {
+        setConfirmacaoContatoAberta(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.body.style.overflow = overflowAnterior;
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [modalAberto, confirmacaoContatoAberta, mensagemSucesso, cadastrando]);
+
+  /* ========================================================
+     SELEÇÃO DE FOTOS
+     ======================================================== */
+
+  function handleSelecionarFotos(event) {
+    const arquivosSelecionados = Array.from(event.target.files ?? []);
 
     if (arquivosSelecionados.length === 0) return;
 
@@ -220,10 +326,7 @@ export default function CadastrarObjeto() {
 
     const vagasDisponiveis = MAX_FOTOS - fotos.length;
 
-    const arquivosAdicionados = arquivosValidos.slice(
-      0,
-      vagasDisponiveis
-    );
+    const arquivosAdicionados = arquivosValidos.slice(0, vagasDisponiveis);
 
     if (arquivosAdicionados.length > 0) {
       const novasFotos = arquivosAdicionados.map((arquivo) => {
@@ -231,7 +334,10 @@ export default function CadastrarObjeto() {
 
         previewsCriadasRef.current.add(preview);
 
-        return { arquivo, preview };
+        return {
+          arquivo,
+          preview,
+        };
       });
 
       setFotos((atuais) => [...atuais, ...novasFotos]);
@@ -239,54 +345,103 @@ export default function CadastrarObjeto() {
     }
 
     if (arquivosValidos.length > vagasDisponiveis) {
-      problemas.push(
-        `Você pode adicionar no máximo ${MAX_FOTOS} fotos.`
-      );
+      problemas.push(`Você pode adicionar no máximo ${MAX_FOTOS} fotos.`);
+    }
+
+    if (arquivosAdicionados.length === 0 && problemas.length === 0) {
+      problemas.push("Não foi possível adicionar as fotos selecionadas.");
     }
 
     setErroFotos(problemas.join(" "));
-    e.target.value = "";
+    event.target.value = "";
   }
 
   function removerFotoAtual() {
     const fotoRemovida = fotos[fotoAtual];
 
-    if (fotoRemovida) {
-      URL.revokeObjectURL(fotoRemovida.preview);
-      previewsCriadasRef.current.delete(fotoRemovida.preview);
-    }
+    if (!fotoRemovida) return;
 
-    const fotosAtualizadas = fotos.filter(
-      (_, indice) => indice !== fotoAtual
-    );
+    URL.revokeObjectURL(fotoRemovida.preview);
+    previewsCriadasRef.current.delete(fotoRemovida.preview);
+
+    const fotosAtualizadas = fotos.filter((_, indice) => indice !== fotoAtual);
 
     setFotos(fotosAtualizadas);
 
-    setFotoAtual(
-      Math.max(0, Math.min(fotoAtual, fotosAtualizadas.length - 1))
-    );
+    setFotoAtual((indiceAtual) => {
+      if (fotosAtualizadas.length === 0) return 0;
 
-    if (fotosAtualizadas.length === 0) {
-      setErroFotos("Adicione pelo menos uma foto do objeto.");
-    } else {
-      setErroFotos("");
-    }
+      return Math.min(indiceAtual, fotosAtualizadas.length - 1);
+    });
+
+    setErroFotos(
+      fotosAtualizadas.length === 0
+        ? "Adicione pelo menos uma foto do objeto."
+        : "",
+    );
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function abrirSeletorFotos() {
+    inputFotosRef.current?.click();
+  }
 
-    if (data && data > dataMaxima) return;
+  function navegarFotos(direcao) {
+    setFotoAtual((indiceAtual) => {
+      if (direcao === "anterior") {
+        return (indiceAtual - 1 + fotos.length) % fotos.length;
+      }
+
+      return (indiceAtual + 1) % fotos.length;
+    });
+  }
+
+  /* ========================================================
+     VALIDAÇÃO E ENVIO DO FORMULÁRIO
+     ======================================================== */
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    setMensagemErro("");
+    setErroData("");
+
+    if (data && data > dataMaxima) {
+      setErroData("A data não pode ser posterior ao dia de hoje.");
+      return;
+    }
+
+    if (
+      !status ||
+      !nomeObjeto.trim() ||
+      !categoria ||
+      !estado ||
+      !cidade ||
+      !data ||
+      !horario ||
+      !descricao.trim()
+    ) {
+      setMensagemErro("Revise os campos obrigatórios antes de continuar.");
+      return;
+    }
+
+    if (erroCategorias || carregandoCategorias) {
+      setMensagemErro(
+        "Aguarde o carregamento das categorias antes de continuar.",
+      );
+      return;
+    }
 
     if (fotos.length === 0) {
       setErroFotos("Adicione pelo menos uma foto do objeto.");
       return;
     }
 
-    setMensagemErro("");
-    setMensagemSucesso("");
     setConfirmacaoContatoAberta(true);
   }
+
+  /* ========================================================
+     CONFIRMAÇÃO E CADASTRO NA API
+     ======================================================== */
 
   async function confirmarCienciaContato() {
     if (cadastrando) return;
@@ -311,7 +466,6 @@ export default function CadastrarObjeto() {
         fotos: fotos.map(({ arquivo }) => arquivo),
       });
 
-      // Fecha a tela de ciência e abre a confirmação de sucesso.
       setConfirmacaoContatoAberta(false);
       setMensagemSucesso("Objeto cadastrado com sucesso!");
     } catch (error) {
@@ -319,118 +473,126 @@ export default function CadastrarObjeto() {
 
       setMensagemErro(
         error.message ||
-        "Não foi possível cadastrar o objeto. Tente novamente."
+          "Não foi possível cadastrar o objeto. Tente novamente.",
       );
     } finally {
       setCadastrando(false);
     }
   }
 
+  /* ========================================================
+     LIMPEZA DO FORMULÁRIO
+     ======================================================== */
+
   function limparFormulario() {
-    // Revoga as URLs temporárias das imagens.
     previewsCriadasRef.current.forEach((url) => {
       URL.revokeObjectURL(url);
     });
 
     previewsCriadasRef.current.clear();
 
-    // Limpa os campos do formulário.
     setStatus("");
     setNomeObjeto("");
     setCategoria("");
+
     setEstado("");
     setCidade("");
     setBairro("");
+
     setData("");
     setHorario("");
+
     setDescricao("");
     setCaracteristicas("");
 
-    // Limpa as fotos.
     setFotos([]);
     setFotoAtual(0);
     setErroFotos("");
 
+    setErroData("");
+    setMensagemErro("");
+    setMensagemSucesso("");
+    setConfirmacaoContatoAberta(false);
+
     if (inputFotosRef.current) {
       inputFotosRef.current.value = "";
     }
-
-    // Fecha a confirmação de sucesso.
-    setMensagemSucesso("");
-    setMensagemErro("");
   }
+
+  /* ========================================================
+     RENDERIZAÇÃO
+     ======================================================== */
 
   return (
     <main className="cadastrar-page">
-      <h1 className="page__title">Cadastrar objeto</h1>
+      <header className="cadastrar-page__header">
+        <h1 className="page__title">Cadastrar objeto</h1>
 
-      <p className="page__subtitle">
-        Conte alguns detalhes para ajudarmos a encontrar uma possível correspondência.
-      </p>
+        <p className="page__subtitle">
+          Conte alguns detalhes para ajudarmos a encontrar uma possível
+          correspondência.
+        </p>
+      </header>
 
       <form className="card" onSubmit={handleSubmit}>
-        {/* ---------- O que aconteceu? ---------- */}
-        <h2 className="card__heading">O que aconteceu?</h2>
+        {/* O QUE ACONTECEU? */}
 
-        <div className="options">
-          <label
-            className={`option ${status === "lost" ? "option--active" : ""
-              }`}
-          >
-            <input
-              type="radio"
-              name="status"
-              value="lost"
-              checked={status === "lost"}
-              onChange={() => setStatus("lost")}
-              required
-            />
+        <section className="form-section">
+          <h2 className="card__heading">O que aconteceu?</h2>
 
-            <span className="option__icon option__icon--blue">
-              <Icon>{icons.briefcase}</Icon>
-            </span>
+          <div className="options">
+            <label
+              className={`option ${status === "lost" ? "option--active" : ""}`}
+            >
+              <input
+                type="radio"
+                name="status"
+                value="lost"
+                checked={status === "lost"}
+                onChange={() => setStatus("lost")}
+                required
+              />
 
-            <span>
-              <strong className="option__title">
-                Perdi um objeto
-              </strong>
-
-              <span className="option__desc">
-                Meu objeto foi perdido.
+              <span className="option__icon option__icon--blue">
+                <Icon>{icons.briefcase}</Icon>
               </span>
-            </span>
-          </label>
 
-          <label
-            className={`option ${status === "found" ? "option--active" : ""
-              }`}
-          >
-            <input
-              type="radio"
-              name="status"
-              value="found"
-              checked={status === "found"}
-              onChange={() => setStatus("found")}
-              required
-            />
+              <span className="option__content">
+                <strong className="option__title">Perdi um objeto</strong>
 
-            <span className="option__icon option__icon--green">
-              <Icon>{icons.handHeart}</Icon>
-            </span>
-
-            <span>
-              <strong className="option__title">
-                Encontrei um objeto
-              </strong>
-
-              <span className="option__desc">
-                Encontrei um objeto e quero devolver.
+                <span className="option__desc">Meu objeto foi perdido.</span>
               </span>
-            </span>
-          </label>
-        </div>
+            </label>
 
-        {/* ---------- Tipo e Categoria ---------- */}
+            <label
+              className={`option ${status === "found" ? "option--active" : ""}`}
+            >
+              <input
+                type="radio"
+                name="status"
+                value="found"
+                checked={status === "found"}
+                onChange={() => setStatus("found")}
+                required
+              />
+
+              <span className="option__icon option__icon--green">
+                <Icon>{icons.handHeart}</Icon>
+              </span>
+
+              <span className="option__content">
+                <strong className="option__title">Encontrei um objeto</strong>
+
+                <span className="option__desc">
+                  Encontrei um objeto e quero devolver.
+                </span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        {/* NOME E CATEGORIA */}
+
         <div className="grid grid--2">
           <div className="field">
             <label htmlFor="nomeObjeto">Nome do objeto</label>
@@ -444,7 +606,7 @@ export default function CadastrarObjeto() {
                 type="text"
                 placeholder="Ex.: Carteira preta, Samsung Galaxy..."
                 value={nomeObjeto}
-                onChange={(e) => setNomeObjeto(e.target.value)}
+                onChange={(event) => setNomeObjeto(event.target.value)}
                 required
               />
             </div>
@@ -460,9 +622,9 @@ export default function CadastrarObjeto() {
                 id="categoria"
                 name="categoryId"
                 value={categoria}
-                onChange={(e) => setCategoria(e.target.value)}
+                onChange={(event) => setCategoria(event.target.value)}
                 required
-                disabled={carregandoCategorias || !!erroCategorias}
+                disabled={carregandoCategorias || Boolean(erroCategorias)}
               >
                 <option value="" disabled>
                   {carregandoCategorias
@@ -477,18 +639,19 @@ export default function CadastrarObjeto() {
                 ))}
               </select>
 
-              <Icon className="control__chevron">
-                {icons.chevron}
-              </Icon>
+              <Icon className="control__chevron">{icons.chevron}</Icon>
             </div>
 
             {erroCategorias && (
-              <small role="alert">{erroCategorias}</small>
+              <small className="field__error" role="alert">
+                {erroCategorias}
+              </small>
             )}
           </div>
         </div>
 
-        {/* ---------- Localização: Estado, Cidade e Bairro ---------- */}
+        {/* LOCALIZAÇÃO */}
+
         <div className="grid grid--3">
           <div className="field">
             <label htmlFor="estado">Estado</label>
@@ -500,8 +663,8 @@ export default function CadastrarObjeto() {
                 id="estado"
                 value={estado}
                 required
-                onChange={(e) => {
-                  setEstado(e.target.value);
+                onChange={(event) => {
+                  setEstado(event.target.value);
                   setCidade("");
                   setBairro("");
                 }}
@@ -517,9 +680,7 @@ export default function CadastrarObjeto() {
                 ))}
               </select>
 
-              <Icon className="control__chevron">
-                {icons.chevron}
-              </Icon>
+              <Icon className="control__chevron">{icons.chevron}</Icon>
             </div>
           </div>
 
@@ -534,8 +695,8 @@ export default function CadastrarObjeto() {
                 value={cidade}
                 disabled={!estado}
                 required
-                onChange={(e) => {
-                  setCidade(e.target.value);
+                onChange={(event) => {
+                  setCidade(event.target.value);
                   setBairro("");
                 }}
               >
@@ -552,14 +713,14 @@ export default function CadastrarObjeto() {
                 ))}
               </select>
 
-              <Icon className="control__chevron">
-                {icons.chevron}
-              </Icon>
+              <Icon className="control__chevron">{icons.chevron}</Icon>
             </div>
           </div>
 
           <div className="field">
-            <label htmlFor="bairro">Bairro</label>
+            <label htmlFor="bairro">
+              Bairro <span className="optional">(opcional)</span>
+            </label>
 
             <div className="control">
               <Icon>{icons.pin}</Icon>
@@ -568,9 +729,9 @@ export default function CadastrarObjeto() {
                 id="bairro"
                 value={bairro}
                 disabled={!cidade || bairrosDisponiveis.length === 0}
-                onChange={(e) => setBairro(e.target.value)}
+                onChange={(event) => setBairro(event.target.value)}
               >
-                <option value="" disabled>
+                <option value="">
                   {!cidade
                     ? "Selecione primeiro a cidade"
                     : bairrosDisponiveis.length === 0
@@ -585,25 +746,25 @@ export default function CadastrarObjeto() {
                 ))}
               </select>
 
-              <Icon className="control__chevron">
-                {icons.chevron}
-              </Icon>
+              <Icon className="control__chevron">{icons.chevron}</Icon>
             </div>
 
             {cidade && bairrosDisponiveis.length === 0 && (
-              <small>
-                Não há bairros disponíveis para esta cidade. A localização será registrada com cidade e estado.
+              <small className="field__hint">
+                Não há bairros disponíveis para esta cidade. A localização será
+                registrada com cidade e estado.
               </small>
             )}
           </div>
         </div>
 
-        {/* ---------- Data e Horário ---------- */}
+        {/* DATA E HORÁRIO */}
+
         <div className="grid grid--2">
           <div className="field">
             <label htmlFor="data">Data</label>
 
-            <div className="control">
+            <div className={`control ${erroData ? "control--error" : ""}`}>
               <Icon>{icons.calendar}</Icon>
 
               <input
@@ -612,10 +773,19 @@ export default function CadastrarObjeto() {
                 lang="pt-BR"
                 max={dataMaxima}
                 value={data}
-                onChange={(e) => setData(e.target.value)}
+                onChange={(event) => {
+                  setData(event.target.value);
+                  setErroData("");
+                }}
                 required
               />
             </div>
+
+            {erroData && (
+              <small className="field__error" role="alert">
+                {erroData}
+              </small>
+            )}
           </div>
 
           <div className="field">
@@ -630,18 +800,21 @@ export default function CadastrarObjeto() {
                 lang="pt-BR"
                 step="60"
                 value={horario}
-                onChange={(e) => setHorario(e.target.value)}
+                onChange={(event) => setHorario(event.target.value)}
                 required
               />
             </div>
           </div>
         </div>
 
-        {/* ---------- Fotos do objeto ---------- */}
-        <div className="field">
-          <span className="field__label">
-            Fotos do objeto (mínimo 1 e máximo 6)
-          </span>
+        {/* FOTOS */}
+
+        <section className="field">
+          <div className="field__heading">
+            <label htmlFor="fotos">Fotos do objeto</label>
+
+            <span className="field__hint">Mínimo 1 e máximo 6 fotos</span>
+          </div>
 
           <input
             ref={inputFotosRef}
@@ -659,14 +832,10 @@ export default function CadastrarObjeto() {
                 <Icon>{icons.upload}</Icon>
               </span>
 
-              <span>
-                <strong>
-                  Clique para selecionar as fotos do objeto
-                </strong>
+              <span className="upload__content">
+                <strong>Clique para selecionar as fotos do objeto</strong>
 
-                <small>
-                  JPEG, PNG, WEBP ou GIF. Até 5 MB por foto.
-                </small>
+                <small>JPEG, PNG, WEBP ou GIF. Até 5 MB por foto.</small>
               </span>
             </label>
           ) : (
@@ -684,12 +853,7 @@ export default function CadastrarObjeto() {
                       type="button"
                       className="photo-carousel__arrow photo-carousel__arrow--previous"
                       aria-label="Ver foto anterior"
-                      onClick={() =>
-                        setFotoAtual(
-                          (indice) =>
-                            (indice - 1 + fotos.length) % fotos.length
-                        )
-                      }
+                      onClick={() => navegarFotos("anterior")}
                     >
                       <Icon>{icons.chevronLeft}</Icon>
                     </button>
@@ -698,11 +862,7 @@ export default function CadastrarObjeto() {
                       type="button"
                       className="photo-carousel__arrow photo-carousel__arrow--next"
                       aria-label="Ver próxima foto"
-                      onClick={() =>
-                        setFotoAtual(
-                          (indice) => (indice + 1) % fotos.length
-                        )
-                      }
+                      onClick={() => navegarFotos("proxima")}
                     >
                       <Icon>{icons.chevronRight}</Icon>
                     </button>
@@ -732,7 +892,7 @@ export default function CadastrarObjeto() {
                 <button
                   type="button"
                   className="btn btn--outline photo-carousel__add"
-                  onClick={() => inputFotosRef.current?.click()}
+                  onClick={abrirSeletorFotos}
                   disabled={fotos.length >= MAX_FOTOS}
                 >
                   <Icon>{icons.plus}</Icon>
@@ -743,13 +903,14 @@ export default function CadastrarObjeto() {
           )}
 
           {erroFotos && (
-            <small className="upload__error" role="alert">
+            <small className="field__error" role="alert">
               {erroFotos}
             </small>
           )}
-        </div>
+        </section>
 
-        {/* ---------- Descrição ---------- */}
+        {/* DESCRIÇÃO */}
+
         <div className="field">
           <label htmlFor="descricao">Descreva o objeto</label>
 
@@ -759,17 +920,16 @@ export default function CadastrarObjeto() {
               maxLength={500}
               placeholder="Descreva o objeto com o máximo de detalhes possível..."
               value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
+              onChange={(event) => setDescricao(event.target.value)}
               required
             />
 
-            <span className="textarea__counter">
-              {descricao.length}/500
-            </span>
+            <span className="textarea__counter">{descricao.length}/500</span>
           </div>
         </div>
 
-        {/* ---------- Características ---------- */}
+        {/* CARACTERÍSTICAS */}
+
         <div className="field">
           <label htmlFor="caracteristicas">
             Alguma característica específica?{" "}
@@ -782,7 +942,7 @@ export default function CadastrarObjeto() {
               maxLength={100}
               placeholder="Ex.: cor, marcas, logo, avarias, número de série, etc."
               value={caracteristicas}
-              onChange={(e) => setCaracteristicas(e.target.value)}
+              onChange={(event) => setCaracteristicas(event.target.value)}
             />
 
             <span className="textarea__counter">
@@ -791,7 +951,14 @@ export default function CadastrarObjeto() {
           </div>
         </div>
 
-        {/* ---------- Botões ---------- */}
+        {/* FEEDBACK E AÇÕES */}
+
+        {mensagemErro && (
+          <p className="cadastro-feedback cadastro-feedback--erro" role="alert">
+            {mensagemErro}
+          </p>
+        )}
+
         <div className="actions">
           <button
             type="button"
@@ -804,6 +971,7 @@ export default function CadastrarObjeto() {
           <button
             type="submit"
             className="btn btn--primary btn--lg"
+            disabled={cadastrando}
           >
             Cadastrar objeto
             <Icon>{icons.arrowRight}</Icon>
@@ -811,29 +979,31 @@ export default function CadastrarObjeto() {
         </div>
       </form>
 
-      {/* ---------- Modal original de ciência dos termos ---------- */}
+      {/* ====================================================
+         MODAL DE CIÊNCIA SOBRE CONTATO
+         ==================================================== */}
+
       {confirmacaoContatoAberta && (
         <div className="confirmation-overlay">
           <section
+            ref={modalConfirmacaoRef}
             className="confirmation-modal"
             role="dialog"
             aria-modal="true"
             aria-labelledby="confirmation-title"
+            aria-describedby="confirmation-description"
             aria-busy={cadastrando}
           >
             <div className="confirmation-modal__icon">
               <Icon>{icons.shield}</Icon>
             </div>
 
-            <h2 id="confirmation-title">
-              Antes de publicar seu objeto
-            </h2>
+            <h2 id="confirmation-title">Antes de publicar seu objeto</h2>
 
-            <p>
-              Você está ciente de que outras pessoas poderão ter
-              informações sobre o objeto cadastrado e poderão entrar
-              em contato com você por meio das informações
-              disponibilizadas na plataforma?
+            <p id="confirmation-description">
+              Você está ciente de que outras pessoas poderão ter informações
+              sobre o objeto cadastrado e poderão entrar em contato com você por
+              meio das informações disponibilizadas na plataforma?
             </p>
 
             <p className="confirmation-modal__notice">
@@ -865,33 +1035,34 @@ export default function CadastrarObjeto() {
                 onClick={confirmarCienciaContato}
                 disabled={cadastrando}
               >
-                {cadastrando
-                  ? "Publicando..."
-                  : "Estou ciente, continuar"}
+                {cadastrando ? "Publicando..." : "Estou ciente, continuar"}
               </button>
             </div>
           </section>
         </div>
       )}
 
-      {/* ---------- Segunda tela: cadastro concluído ---------- */}
+      {/* ====================================================
+         MODAL DE SUCESSO
+         ==================================================== */}
+
       {mensagemSucesso && (
         <div className="confirmation-overlay">
           <section
+            ref={modalSucessoRef}
             className="confirmation-modal confirmation-modal--success"
             role="dialog"
             aria-modal="true"
             aria-labelledby="success-title"
+            aria-describedby="success-description"
           >
             <div className="confirmation-modal__icon">
               <Icon>{icons.shield}</Icon>
             </div>
 
-            <h2 id="success-title">
-              Objeto cadastrado com sucesso!
-            </h2>
+            <h2 id="success-title">Objeto cadastrado com sucesso!</h2>
 
-            <p>
+            <p id="success-description">
               Seu objeto foi publicado e já está disponível na plataforma.
             </p>
 

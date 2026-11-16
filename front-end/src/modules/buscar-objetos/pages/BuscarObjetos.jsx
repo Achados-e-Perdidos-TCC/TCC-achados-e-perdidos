@@ -18,14 +18,18 @@ function BuscarObjetos() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
 
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const [exibidos, setExibidos] = useState(0);
+  const [totalEncontrados, setTotalEncontrados] = useState(0);
+
   useEffect(() => {
     async function buscarObjetos() {
       try {
         setCarregando(true);
+        setErro(null);
 
         const resposta = await objects();
-
-        setObjetos(resposta ? resposta : []);
+        setObjetos(Array.isArray(resposta) ? resposta : []);
       } catch (error) {
         setErro(error);
       } finally {
@@ -36,21 +40,17 @@ function BuscarObjetos() {
     buscarObjetos();
   }, []);
 
-  const [paginaAtual, setPaginaAtual] = useState(1);
-  const [exibidos, setExibidos] = useState(0);
-  const [totalEncontrados, setTotalEncontrados] = useState(0);
-
-  const total = totalEncontrados; // Aqui vai o total de obj encontrados
+  const total = totalEncontrados;
   const totalPorPagina = 6;
-  const totalDePaginas = [];
   const totalDePaginasNumerico = Math.ceil(total / totalPorPagina);
 
-  for (let i = 1; i < totalDePaginasNumerico + 1; i++) {
-    totalDePaginas.push(i);
-  }
+  const totalDePaginas = Array.from(
+    { length: totalDePaginasNumerico },
+    (_, index) => index + 1,
+  );
 
-  let inicio = totalPorPagina * (paginaAtual - 1);
-  let fim = inicio + totalPorPagina;
+  const inicio = totalPorPagina * (paginaAtual - 1);
+  const fim = inicio + totalPorPagina;
 
   function alternarPagina(pagina) {
     setPaginaAtual(pagina);
@@ -67,73 +67,113 @@ function BuscarObjetos() {
   return (
     <FilterProvider>
       <section className="buscar__objetos">
-        <div className="head">
-          <div className="left">
+        {/* Cabeçalho */}
+        <header className="busca__header">
+          <div className="busca__header__texto">
+            <span className="busca__eyebrow">ENCONTRE O QUE PROCURA</span>
+
             <h1 className="title__buscar">Buscar objetos</h1>
+
             <p className="subtitle subtitle__description">
-              Encontre objetos perdidos ou verifique se alguém encontrou oque
-              você procura.
+              Encontre objetos perdidos ou descubra se alguém encontrou aquilo
+              que você procura.
             </p>
           </div>
 
-          <div className="right">
-            <div>
-              <h2 className="head__encontrados"> {total} </h2>
-              <p className="subtitle">objetos encontrados</p>
+          <div className="busca__resumo">
+            <div className="busca__resumo__icone">
+              <img src={sumaryIcon} alt="" />
             </div>
 
-            <img className="sumary__icon" src={sumaryIcon} />
-          </div>
-        </div>
+            <div className="busca__resumo__informacoes">
+              <span className="busca__resumo__numero">{total}</span>
 
-        <div className="container__card">{<PrimaryFilters />}</div>
-
-        <div className="container__card">
-          <SecondaryFilters />
-        </div>
-
-        <div className="principal container__card">
-          <div className="container__principal">
-            <div className="principal__cabecalho">
-              <span className="text__principal">
-                {" "}
-                {totalEncontrados} objetos encontrados{" "}
+              <span className="busca__resumo__descricao">
+                objetos encontrados
               </span>
-              <p className="subtitle">Resultados relacionados à sua busca</p>
             </div>
+          </div>
+        </header>
 
-            <div className="principal__cards">
-              {carregando ? (
-                <Loading />
-              ) : erro ? (
-                <p>Não foi possível carregar os objetos.</p>
-              ) : (
-                <PrincipalCards
-                  objetos={objetos}
-                  inicio={inicio}
-                  fim={fim}
-                  resultadosExibidos={resultadosExibidos}
-                  resultadoTotalEncontrados={resultadoTotalEncontrados}
-                />
-              )}
+        {/* Filtros principais */}
+        <section className="busca__filtros container__card">
+          <div className="busca__secao__titulo">
+            <div>
+              <h2>Encontre um objeto</h2>
+              <p>Utilize os filtros para refinar sua pesquisa.</p>
             </div>
+          </div>
 
-            <div className="principal__footer">
-              <span>
-                mostrando {exibidos} de {total} resultados
+          <div className="busca__filtros__conteudo">
+            <PrimaryFilters />
+          </div>
+
+          <div className="busca__filtros__divisor" />
+
+          <div className="busca__filtros__status">
+            <span className="busca__filtros__label">Tipo de publicação</span>
+
+            <SecondaryFilters />
+          </div>
+        </section>
+
+        {/* Resultados */}
+        <section className="busca__resultados container__card">
+          <div className="busca__resultados__header">
+            <div className="busca__resultados__titulo">
+              <div>
+                <h2>Resultados da busca</h2>
+
+                <p>Objetos relacionados aos filtros selecionados</p>
+              </div>
+
+              <span className="busca__resultados__contador">
+                {totalEncontrados} resultados
+              </span>
+            </div>
+          </div>
+
+          {/* Cards */}
+          <div className="principal__cards">
+            {carregando ? (
+              <Loading />
+            ) : erro ? (
+              <div className="busca__estado">
+                <h3>Não foi possível carregar os objetos</h3>
+                <p>
+                  Ocorreu um problema ao buscar as publicações. Tente novamente
+                  mais tarde.
+                </p>
+              </div>
+            ) : (
+              <PrincipalCards
+                objetos={objetos}
+                inicio={inicio}
+                fim={fim}
+                resultadosExibidos={resultadosExibidos}
+                resultadoTotalEncontrados={resultadoTotalEncontrados}
+              />
+            )}
+          </div>
+
+          {/* Paginação */}
+          {!carregando && !erro && total > 0 && (
+            <footer className="principal__footer">
+              <span className="principal__footer__texto">
+                Mostrando <strong>{exibidos}</strong> de{" "}
+                <strong>{total}</strong> resultados
               </span>
 
               <div className="paginas__principal">
-                <div
-                  onClick={() =>
-                    paginaAtual <= 1
-                      ? setPaginaAtual(1)
-                      : setPaginaAtual(paginaAtual - 1)
-                  }
-                  className="button button__arrow"
+                <button
+                  type="button"
+                  className="button__arrow"
+                  disabled={paginaAtual <= 1}
+                  onClick={() => alternarPagina(Math.max(1, paginaAtual - 1))}
+                  aria-label="Página anterior"
                 >
-                  <img className="arrow__left" src={arrowGray} />
-                </div>
+                  <img className="arrow__left" src={arrowGray} alt="" />
+                </button>
 
                 <div className="paginas__exibidas">
                   {totalDePaginas
@@ -141,25 +181,22 @@ function BuscarObjetos() {
                       Math.floor((paginaAtual - 1) / 10) * 10,
                       Math.floor((paginaAtual - 1) / 10) * 10 + 10,
                     )
-                    .map((valor) => {
-                      return (
-                        <p
-                          key={valor}
-                          onClick={() => {
-                            alternarPagina(valor);
-                          }}
-                          className={
-                            paginaAtual === valor
-                              ? "paginas pagina__ativa"
-                              : "paginas"
-                          }
-                        >
-                          {" "}
-                          {valor}{" "}
-                        </p>
-                      );
-                    })}
-                  <span>{totalDePaginas.length > 10 ? "..." : ""}</span>
+                    .map((valor) => (
+                      <button
+                        type="button"
+                        key={valor}
+                        onClick={() => alternarPagina(valor)}
+                        className={
+                          paginaAtual === valor
+                            ? "paginas pagina__ativa"
+                            : "paginas"
+                        }
+                      >
+                        {valor}
+                      </button>
+                    ))}
+
+                  {totalDePaginas.length > 10 && <span>...</span>}
                 </div>
 
                 <div className="paginas__responsivas">
@@ -168,41 +205,41 @@ function BuscarObjetos() {
                       Math.floor((paginaAtual - 1) / 5) * 5,
                       Math.floor((paginaAtual - 1) / 5) * 5 + 5,
                     )
-                    .map((valor) => {
-                      return (
-                        <p
-                          key={valor}
-                          onClick={() => {
-                            alternarPagina(valor);
-                          }}
-                          className={
-                            paginaAtual === valor
-                              ? "paginas pagina__ativa"
-                              : "paginas"
-                          }
-                        >
-                          {" "}
-                          {valor}{" "}
-                        </p>
-                      );
-                    })}
-                  <span>{totalDePaginas.length > 5 ? "..." : ""}</span>
+                    .map((valor) => (
+                      <button
+                        type="button"
+                        key={valor}
+                        onClick={() => alternarPagina(valor)}
+                        className={
+                          paginaAtual === valor
+                            ? "paginas pagina__ativa"
+                            : "paginas"
+                        }
+                      >
+                        {valor}
+                      </button>
+                    ))}
+
+                  {totalDePaginas.length > 5 && <span>...</span>}
                 </div>
 
-                <div
+                <button
+                  type="button"
+                  className="button__arrow"
+                  disabled={paginaAtual >= totalDePaginasNumerico}
                   onClick={() =>
-                    paginaAtual >= totalDePaginasNumerico
-                      ? setPaginaAtual(totalDePaginasNumerico)
-                      : setPaginaAtual(paginaAtual + 1)
+                    alternarPagina(
+                      Math.min(totalDePaginasNumerico, paginaAtual + 1),
+                    )
                   }
-                  className="button button__arrow"
+                  aria-label="Próxima página"
                 >
-                  <img className="arrow__right" src={arrowGray} />
-                </div>
+                  <img className="arrow__right" src={arrowGray} alt="" />
+                </button>
               </div>
-            </div>
-          </div>
-        </div>
+            </footer>
+          )}
+        </section>
       </section>
     </FilterProvider>
   );

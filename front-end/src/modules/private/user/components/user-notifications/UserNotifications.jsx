@@ -20,6 +20,7 @@ function UserNotifications({ setNotifications }) {
   const [notifications, setNotificationsState] = useState([]);
   const [notificationEnabled, setNotificationEnabled] = useState(true);
   const [erro, setErro] = useState(false);
+  const [marcandoTodas, setMarcandoTodas] = useState(false);
 
   useEffect(() => {
     async function findMyNotifications() {
@@ -29,17 +30,16 @@ function UserNotifications({ setNotifications }) {
 
         const usuario = await userInformation();
 
-        // Verifica se o usuário habilitou as notificações
-        if (!usuario.preferences.notificationsEnabled) {
+        if (!usuario.preferences?.notificationsEnabled) {
           setNotificationEnabled(false);
           setNotificationsState([]);
-          setNotifications(0);
           return;
         }
 
+        setNotificationEnabled(true);
+
         const resposta = await getNotifications();
 
-        // Proteção: garante que o estado sempre receba um array
         setNotificationsState(Array.isArray(resposta) ? resposta : []);
       } catch (error) {
         setErro(true);
@@ -52,7 +52,6 @@ function UserNotifications({ setNotifications }) {
     findMyNotifications();
   }, []);
 
-  // Atualiza a quantidade de notificações não lidas no componente pai
   useEffect(() => {
     const notificationsDisplayed = notifications.filter(
       (value) => value.read === false,
@@ -72,11 +71,17 @@ function UserNotifications({ setNotifications }) {
             : notification,
         ),
       );
-    } catch (error) {}
+    } catch (error) {
+      console.error("Não foi possível marcar a notificação como lida.", error);
+    }
   }
 
   async function handleReadAllNotifications() {
+    if (marcandoTodas || notifications.every((value) => value.read)) return;
+
     try {
+      setMarcandoTodas(true);
+
       await markAllNotificationsAsRead();
 
       setNotificationsState((prev) =>
@@ -85,10 +90,16 @@ function UserNotifications({ setNotifications }) {
           read: true,
         })),
       );
-    } catch (error) {}
+    } catch (error) {
+      console.error(
+        "Não foi possível marcar todas as notificações como lidas.",
+        error,
+      );
+    } finally {
+      setMarcandoTodas(false);
+    }
   }
 
-  // Agrupa as notificações por data
   const notificationsByDate = notifications.reduce((value, array) => {
     if (!array.createdAt) return value;
 
@@ -104,83 +115,93 @@ function UserNotifications({ setNotifications }) {
   }, {});
 
   function renderNotifications() {
-    const grupos = [];
+    return Object.entries(notificationsByDate).map(([data, grupo]) => (
+      <div key={data} className="user__notifications__principal__container">
+        <h2 className="notification__dateTime">
+          {data === hoje()
+            ? "Hoje"
+            : data === ontem()
+              ? "Ontem"
+              : `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`}
+        </h2>
 
-    for (const data in notificationsByDate) {
-      grupos.push(
-        <div key={data} className="user__notifications__principal__container">
-          <h2 className="notification__dateTime">
-            {data === hoje()
-              ? "Hoje"
-              : data === ontem()
-                ? "Ontem"
-                : `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`}
-          </h2>
-
-          {notificationsByDate[data].map((value) => (
-            <div
+        <div className="user__notifications__list">
+          {grupo.map((value) => (
+            <button
               key={value.id}
-              onClick={() => handleReadNotification(value.id)}
+              type="button"
+              className={`user__notifications__container ${
+                value.read === false ? "read__pending" : ""
+              }`}
+              onClick={() => {
+                if (value.read === false) {
+                  handleReadNotification(value.id);
+                }
+              }}
+              aria-label={`Notificação: ${value.title}. ${
+                value.read === false ? "Não lida" : "Lida"
+              }`}
             >
-              <div
-                className={`user__notifications__container ${
-                  value.read === false ? "read__pending" : ""
-                }`}
-              >
-                <div className="user__notifications__content">
-                  {value.type === "PROFILE_UPDATED" ? (
-                    <img
-                      className="notification__img notification__green__bg"
-                      src={editProfileWhite}
-                    />
-                  ) : value.type === "ITEM_UPDATED" ? (
-                    <img
-                      className="notification__img notification__orange__bg"
-                      src={pencilWhite}
-                    />
-                  ) : value.type === "POSSIBLE_MATCH" ? (
-                    <img
-                      className="notification__img notification__blue__bg"
-                      src={magnifyingGlassWhite}
-                    />
-                  ) : (
-                    ""
-                  )}
+              <div className="user__notifications__content">
+                {value.type === "PROFILE_UPDATED" ? (
+                  <img
+                    className="notification__img notification__green__bg"
+                    src={editProfileWhite}
+                    alt=""
+                  />
+                ) : value.type === "ITEM_UPDATED" ? (
+                  <img
+                    className="notification__img notification__orange__bg"
+                    src={pencilWhite}
+                    alt=""
+                  />
+                ) : value.type === "POSSIBLE_MATCH" ? (
+                  <img
+                    className="notification__img notification__blue__bg"
+                    src={magnifyingGlassWhite}
+                    alt=""
+                  />
+                ) : null}
 
-                  <div>
-                    <h3 className="notification__content__title">
-                      {value.title}
-                    </h3>
+                <div className="notification__content">
+                  <h3 className="notification__content__title">
+                    {value.title}
+                  </h3>
 
-                    <p className="notification__content__subtitle">
-                      {value.message}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="user__notifications__extra__infos">
-                  <p className="notification__content__hour">
-                    {new Date(value.createdAt).toLocaleTimeString("pt-BR", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                  <p className="notification__content__subtitle">
+                    {value.message}
                   </p>
-
-                  {value.read === false ? (
-                    <span className="notification__pending"></span>
-                  ) : (
-                    <span className="notification__no__pending"></span>
-                  )}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>,
-      );
-    }
 
-    return grupos;
+              <div className="user__notifications__extra__infos">
+                <p className="notification__content__hour">
+                  {value.createdAt
+                    ? new Date(value.createdAt).toLocaleTimeString("pt-BR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                    : "--:--"}
+                </p>
+
+                <span
+                  className={
+                    value.read === false
+                      ? "notification__pending"
+                      : "notification__no__pending"
+                  }
+                />
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    ));
   }
+
+  const possuiNotificacoesNaoLidas = notifications.some(
+    (value) => value.read === false,
+  );
 
   return (
     <div className="user__notifications">
@@ -189,29 +210,41 @@ function UserNotifications({ setNotifications }) {
           <h1 className="user__notifications__text">Notificações</h1>
 
           <p className="user__notifications__subtitle">
-            Acompanhe as novidades sobre seus objetos e interações.{" "}
+            Acompanhe as novidades sobre seus objetos e interações.
           </p>
         </div>
 
-        <div
+        <button
+          type="button"
           className="user__notifications__read"
           onClick={handleReadAllNotifications}
+          disabled={!possuiNotificacoesNaoLidas || marcandoTodas}
         >
-          <img className="notifications__email" src={emailBlue} />
+          <img className="notifications__email" src={emailBlue} alt="" />
 
-          <p>Marcar todas como lidas</p>
-        </div>
+          <span>
+            {marcandoTodas ? "Atualizando..." : "Marcar todas como lidas"}
+          </span>
+        </button>
       </div>
 
-      <div>
+      <div className="user__notifications__body">
         {carregando ? (
-          <p>Carregando notificações...</p>
+          <div className="user__notifications__state">
+            <p>Carregando notificações...</p>
+          </div>
         ) : erro ? (
-          <p>Não foi possível carregar as notificações.</p>
+          <div className="user__notifications__state">
+            <p>Não foi possível carregar as notificações.</p>
+          </div>
         ) : !notificationEnabled ? (
-          <p>Você desativou as notificações nas suas preferências.</p>
+          <div className="user__notifications__state">
+            <p>Você desativou as notificações nas suas preferências.</p>
+          </div>
         ) : notifications.length === 0 ? (
-          <p>Você não possui notificações.</p>
+          <div className="user__notifications__state">
+            <p>Você não possui notificações.</p>
+          </div>
         ) : (
           renderNotifications()
         )}

@@ -23,6 +23,7 @@ function Register() {
   const { isAuthenticated } = useContext(AuthContext);
 
   const [paginaActive, setPaginaActive] = useState(1);
+
   const [input, setInput] = useState({
     name: "",
     email: "",
@@ -31,10 +32,12 @@ function Register() {
     city: "",
     avatarUrl: "",
   });
+
   const [error, setError] = useState(null);
 
   function passarPagina(valor) {
     setPaginaActive(valor);
+    setError(null);
   }
 
   async function criarConta(preferences) {
@@ -48,6 +51,7 @@ function Register() {
     }
 
     await updateProfile(input.name, input.telefone, input.city, avatarUrl);
+
     await updatePreferences(preferences);
   }
 
@@ -60,44 +64,59 @@ function Register() {
           <img
             className={paginaActive === 4 ? "register__none" : "register__logo"}
             src={logo}
+            alt="Achados e Devolvidos"
           />
 
-          <div className={paginaActive === 1 ? "" : "register__none"}>
-            <h1 className="register__form__title">Crie sua conta</h1>
-            <p className="register__form__subtitle">
-              vamos comecar com seus dados básicos.
-            </p>
-          </div>
+          {paginaActive === 1 && (
+            <div className="register__cabecalho">
+              <h1 className="register__form__title">Crie sua conta</h1>
 
-          <div className={paginaActive === 2 ? "" : "register__none"}>
-            <h1 className="register__form__title personalize__perfil__title">
-              Personalize seu perfil
-            </h1>
-            <p className="register__form__subtitle personalize__perfil__subtitle">
-              Adicione uma foto para deixar seu perfil mais pessoal.
-            </p>
-          </div>
+              <p className="register__form__subtitle">
+                Vamos começar com seus dados básicos.
+              </p>
+            </div>
+          )}
 
-          <div className={paginaActive === 3 ? "" : "register__none"}>
-            <h1 className="register__form__title preferencias__title">
-              Configure suas preferências
-            </h1>
-            <p className="register__form__subtitle preferencias__subtitle">
-              Escolha como deseja receber avisos e atualizações
-            </p>
-          </div>
+          {paginaActive === 2 && (
+            <div className="register__cabecalho">
+              <h1 className="register__form__title personalize__perfil__title">
+                Personalize seu perfil
+              </h1>
 
-          <div className={paginaActive === 4 ? "register__none" : ""}>
-            <Circles paginaAtual={paginaActive} />
-          </div>
+              <p className="register__form__subtitle personalize__perfil__subtitle">
+                Adicione uma foto para deixar seu perfil mais pessoal.
+              </p>
+            </div>
+          )}
+
+          {paginaActive === 3 && (
+            <div className="register__cabecalho">
+              <h1 className="register__form__title preferencias__title">
+                Configure suas preferências
+              </h1>
+
+              <p className="register__form__subtitle preferencias__subtitle">
+                Escolha como deseja receber avisos e atualizações.
+              </p>
+            </div>
+          )}
+
+          {paginaActive !== 4 && (
+            <div className="register__etapas">
+              <Circles paginaAtual={paginaActive} />
+            </div>
+          )}
 
           <form
             className="register__form"
-            action="POST"
             noValidate
             onSubmit={(evento) => evento.preventDefault()}
           >
-            <div className={!error ? "register__no__error" : "register__error"}>
+            <div
+              className={error ? "register__error" : "register__no__error"}
+              role="alert"
+              aria-live="polite"
+            >
               <p className="register__error__message">{error}</p>
             </div>
 
