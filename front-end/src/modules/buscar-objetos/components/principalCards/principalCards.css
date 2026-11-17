@@ -228,8 +228,9 @@
   object-fit: contain;
 }
 
-/* Elementos mobile *
-.card__principal:no.objeto-card) .button__responsive,
+/* Elementos mobile */
+
+.button__responsive,
 .card__principal:not(.objeto-card) .divisoria {
   display: none;
 }

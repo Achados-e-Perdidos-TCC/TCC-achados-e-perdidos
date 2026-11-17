@@ -199,30 +199,6 @@ function BuscarObjetos() {
                   {totalDePaginas.length > 10 && <span>...</span>}
                 </div>
 
-                <div className="paginas__responsivas">
-                  {totalDePaginas
-                    .slice(
-                      Math.floor((paginaAtual - 1) / 5) * 5,
-                      Math.floor((paginaAtual - 1) / 5) * 5 + 5,
-                    )
-                    .map((valor) => (
-                      <button
-                        type="button"
-                        key={valor}
-                        onClick={() => alternarPagina(valor)}
-                        className={
-                          paginaAtual === valor
-                            ? "paginas pagina__ativa"
-                            : "paginas"
-                        }
-                      >
-                        {valor}
-                      </button>
-                    ))}
-
-                  {totalDePaginas.length > 5 && <span>...</span>}
-                </div>
-
                 <button
                   type="button"
                   className="button__arrow"
