@@ -53,7 +53,9 @@
  */
 
 .detalhe__objetos .container__detalhes {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8rem;
 }
 
 .detalhe__objetos .esquerda,

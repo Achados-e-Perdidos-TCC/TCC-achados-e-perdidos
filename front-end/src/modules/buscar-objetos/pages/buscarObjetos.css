@@ -402,8 +402,7 @@
 }
 
 .paginas__principal,
-.paginas__exibidas,
-.paginas__responsivas {
+.paginas__exibidas {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -593,14 +592,6 @@
   .paginas__principal {
     width: 100%;
     justify-content: space-between;
-  }
-
-  .paginas__exibidas {
-    display: none;
-  }
-
-  .paginas__responsivas {
-    display: flex;
   }
 
   .paginas {
