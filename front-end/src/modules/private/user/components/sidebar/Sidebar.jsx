@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import { loadAvatar } from "../../../private.service.js";
 
@@ -20,6 +21,8 @@ function Sidebar({
   open,
   setOpen,
 }) {
+  const { t } = useTranslation();
+
   let initialName = userInfos.name.slice(0, 2).toUpperCase();
 
   if (userInfos.name.includes(" ")) {
@@ -118,7 +121,7 @@ function Sidebar({
             ) : (
               <img src={inboxGray} />
             )}
-            <p>Meus objetos</p>
+            <p>{t("account.sidebar.myObjects")}</p>
           </div>
 
           <div
@@ -133,7 +136,7 @@ function Sidebar({
               ) : (
                 <img className="sidebar__bell" src={bellGray} />
               )}
-              <p>Notificações</p>
+              <p>{t("account.sidebar.notifications")}</p>
             </div>
 
             <div>
@@ -158,7 +161,7 @@ function Sidebar({
         <NavLink end className="sidebar__link sidebar__help__container">
           <div className="sidebar__help__content">
             <img src={helpBlue} />
-            <p>Central de ajuda</p>
+            <p>{t("account.sidebar.helpCenter")}</p>
           </div>
         </NavLink>
       </div>

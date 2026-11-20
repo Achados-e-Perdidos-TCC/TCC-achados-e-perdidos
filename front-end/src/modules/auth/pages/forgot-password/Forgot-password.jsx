@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../../../contexts/authContexts/AuthContext.jsx";
 import { NavLink } from "react-router";
 
@@ -15,6 +16,7 @@ import sentWhite from "../../../../assets/icons/esqueciSenha/sent-white.png";
 
 function EsqueciSenha() {
   const { isAuthenticated } = useContext(AuthContext);
+  const { t } = useTranslation();
 
   const [inputEmailState, setInputEmailState] = useState("");
   const [error, setError] = useState(null);
@@ -38,32 +40,18 @@ function EsqueciSenha() {
       setLoading(true);
 
       // Chamada à API
-      const response = await forgetPassword({ email });
+      await forgetPassword({ email });
 
-      if (
-        response?.message ===
-        "Se o e-mail informado estiver cadastrado, enviaremos instruções para redefinir a senha."
-      ) {
-        setSuccess(response.message);
-        return;
-      }
-
-      // Resposta inesperada
-      setSuccess(
-        response?.message ||
-          "Se o e-mail informado estiver cadastrado, enviaremos instruções para redefinir a senha.",
-      );
+      setSuccess(t("auth.forgot.success"));
     } catch (erro) {
       if (erro.message === "Credenciais inválidas") {
-        setError("Credenciais inválidas.");
+        setError(t("errors.invalidCredentials"));
       } else if (erro.message === "Email inválido") {
-        setError("Informe um endereço de e-mail válido.");
+        setError(t("auth.forgot.emailInvalid"));
       } else if (erro.message === "campos precisam estar preenchidos") {
-        setError("O campo e-mail precisa estar preenchido.");
+        setError(t("auth.forgot.emailRequired"));
       } else {
-        setError(
-          "Ocorreu um erro inesperado. Verifique o e-mail informado e tente novamente.",
-        );
+        setError(t("auth.forgot.unexpected"));
       }
     } finally {
       setLoading(false);
@@ -94,12 +82,9 @@ function EsqueciSenha() {
           {/* CABEÇALHO */}
 
           <div className="esqueci__header">
-            <h1 className="esqueci__form__title">Recupere sua senha</h1>
+            <h1 className="esqueci__form__title">{t("auth.forgot.title")}</h1>
 
-            <p className="esqueci__form__subtitle">
-              Informe seu e-mail abaixo para receber as instruções de
-              recuperação da sua senha.
-            </p>
+            <p className="esqueci__form__subtitle">{t("auth.forgot.intro")}</p>
           </div>
 
           {/* FORMULÁRIO */}
@@ -138,7 +123,7 @@ function EsqueciSenha() {
             <div className="esqueci__container__inputs">
               <div className="esqueci__input__group">
                 <label className="esqueci__label" htmlFor="email">
-                  E-mail
+                  {t("auth.forgot.email")}
                 </label>
 
                 <div className="esqueci__input__email">
@@ -153,7 +138,7 @@ function EsqueciSenha() {
                     className="esqueci__input"
                     type="email"
                     name="email"
-                    placeholder="seu@email.com"
+                    placeholder={t("auth.login.emailPlaceholder")}
                     autoComplete="email"
                     value={inputEmailState}
                     onChange={alterarEmail}
@@ -175,7 +160,7 @@ function EsqueciSenha() {
                 <>
                   <span className="esqueci__loading" aria-hidden="true" />
 
-                  <span>Enviando...</span>
+                  <span>{t("auth.forgot.sending")}</span>
                 </>
               ) : (
                 <>
@@ -185,7 +170,7 @@ function EsqueciSenha() {
                     alt=""
                   />
 
-                  <span>Enviar link de recuperação</span>
+                  <span>{t("auth.forgot.submit")}</span>
                 </>
               )}
             </button>
@@ -198,10 +183,12 @@ function EsqueciSenha() {
           {/* VOLTAR PARA LOGIN */}
 
           <div className="esqueci__container__com__conta">
-            <p className="esqueci__sem__conta__text">Lembrou sua senha?</p>
+            <p className="esqueci__sem__conta__text">
+              {t("auth.forgot.remembered")}
+            </p>
 
             <NavLink to="/auth/login" end className="esqueci__navlink">
-              Entrar
+              {t("auth.forgot.signIn")}
             </NavLink>
           </div>
         </div>

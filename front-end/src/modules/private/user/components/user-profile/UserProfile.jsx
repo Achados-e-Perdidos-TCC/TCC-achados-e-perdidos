@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   updateProfile,
@@ -28,6 +29,8 @@ import dangerRed from "../../../../../assets/icons/userArea/danger-red.png";
 import saveWhite from "../../../../../assets/icons/userArea/save-white.png";
 
 function UserProfile({ userInfos }) {
+  const { t } = useTranslation();
+
   const [inputNameState, setInputNameState] = useState(userInfos.name ?? "");
   const [inputEmailState, setInputEmailState] = useState(userInfos.email ?? "");
   const [inputTelephoneState, setInputTelephoneState] = useState(
@@ -94,7 +97,7 @@ function UserProfile({ userInfos }) {
           inputNameState.trim().length < 3 ||
           inputNameState.trim().length > 100
         ) {
-          return setError("Nome inválido");
+          return setError(t("errors.invalidName"));
         }
 
         verificaTelefone(inputTelephoneState);
@@ -130,25 +133,23 @@ function UserProfile({ userInfos }) {
         return window.location.reload();
       }
 
-      setError(
-        "Não foi possível atualizar os dados. Verifique se realizou alguma alteração.",
-      );
+      setError(t("account.profile.updateFailed"));
     } catch (erro) {
       if (erro.message === "Telefone inválido") {
-        return setError("Telefone inválido");
+        return setError(t("errors.invalidPhone"));
       }
 
       if (erro.message === "Estado não selecionado") {
-        return setError("Selecione o estado da cidade");
+        return setError(t("errors.stateNotSelected"));
       }
 
       if (erro.message === "Cidade inválida") {
-        return setError("Selecione uma cidade disponível na lista");
+        return setError(t("errors.invalidCity"));
       }
 
       console.error("Erro ao atualizar perfil:", erro);
 
-      setError("Não foi possível salvar as alterações.");
+      setError(t("account.profile.saveFailed"));
     }
   }
 
@@ -156,13 +157,14 @@ function UserProfile({ userInfos }) {
     <section className="user__profile">
       <header className="user__profile__intro">
         <div>
-          <span className="user__profile__eyebrow">MINHA CONTA</span>
+          <span className="user__profile__eyebrow">
+            {t("account.profile.eyebrow")}
+          </span>
 
-          <h1 className="user__profile__text">Meu perfil</h1>
+          <h1 className="user__profile__text">{t("account.profile.title")}</h1>
 
           <p className="user__profile__subtitle">
-            Gerencie suas informações pessoais, preferências e segurança da sua
-            conta.
+            {t("account.profile.subtitle")}
           </p>
         </div>
       </header>
@@ -187,11 +189,11 @@ function UserProfile({ userInfos }) {
 
             <div>
               <h2 className="user__profile__header__subtitle">
-                Informações pessoais
+                {t("account.profile.personalInfoTitle")}
               </h2>
 
               <p className="user__profile__header__description">
-                Atualize seus dados de identificação e contato.
+                {t("account.profile.personalInfoSubtitle")}
               </p>
             </div>
           </div>
@@ -218,10 +220,12 @@ function UserProfile({ userInfos }) {
             </div>
 
             <div>
-              <h2 className="user__profile__header__subtitle">Segurança</h2>
+              <h2 className="user__profile__header__subtitle">
+                {t("account.profile.securityTitle")}
+              </h2>
 
               <p className="user__profile__header__description">
-                Gerencie o acesso e a proteção da sua conta.
+                {t("account.profile.securitySubtitle")}
               </p>
             </div>
           </div>
@@ -236,10 +240,12 @@ function UserProfile({ userInfos }) {
             </div>
 
             <div>
-              <h2 className="user__profile__header__subtitle">Preferências</h2>
+              <h2 className="user__profile__header__subtitle">
+                {t("account.profile.preferencesTitle")}
+              </h2>
 
               <p className="user__profile__header__description">
-                Personalize sua experiência na plataforma.
+                {t("account.profile.preferencesSubtitle")}
               </p>
             </div>
           </div>
@@ -260,11 +266,11 @@ function UserProfile({ userInfos }) {
 
             <div>
               <h2 className="user__profile__header__subtitle user__profile__header__subtitle__danger">
-                Zona de perigo
+                {t("account.profile.dangerTitle")}
               </h2>
 
               <p className="user__profile__header__description">
-                Ações importantes relacionadas à sua conta.
+                {t("account.profile.dangerSubtitle")}
               </p>
             </div>
           </div>
@@ -286,7 +292,7 @@ function UserProfile({ userInfos }) {
           onClick={changeDataAccount}
         >
           <img className="user__profile__save" src={saveWhite} alt="" />
-          <span>Salvar alterações</span>
+          <span>{t("common.saveChanges")}</span>
         </button>
 
         <button
@@ -294,7 +300,7 @@ function UserProfile({ userInfos }) {
           className="user__profile__cancel__button"
           onClick={() => window.location.reload()}
         >
-          Cancelar
+          {t("common.cancel")}
         </button>
       </div>
     </section>

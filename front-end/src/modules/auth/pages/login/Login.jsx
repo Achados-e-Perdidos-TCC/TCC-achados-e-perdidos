@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../../../contexts/authContexts/AuthContext.jsx";
 import { NavLink } from "react-router";
 import { verificaEmailSenha } from "../../../../utils/inputs/inputs.js";
@@ -17,6 +18,7 @@ import entrarWhite from "../../../../assets/icons/login/entrar-white.png";
 
 function Login() {
   const { isAuthenticated } = useContext(AuthContext);
+  const { t } = useTranslation();
 
   const [eyeState, setEyeState] = useState(true);
   const [inputEmailState, setInputEmailState] = useState("");
@@ -45,17 +47,15 @@ function Login() {
       window.location.href = "/user-area";
     } catch (erro) {
       if (erro.message === "Credenciais inválidas") {
-        setError("Credenciais inválidas");
+        setError(t("errors.invalidCredentials"));
       } else if (erro.message === "Email inválido") {
-        setError("Email inválido");
+        setError(t("errors.invalidEmail"));
       } else if (erro.message === "Senha inválida") {
-        setError("Senha inválida");
+        setError(t("errors.invalidPassword"));
       } else if (erro.message === "campos precisam estar preenchidos") {
-        setError("Todos os campos precisam estar preenchidos");
+        setError(t("errors.requiredFields"));
       } else {
-        setError(
-          "Ocorreu um erro inesperado. Verifique se os dados informados estão corretos e tente novamente mais tarde.",
-        );
+        setError(t("errors.unexpected"));
       }
     }
   }
@@ -69,9 +69,9 @@ function Login() {
           <img className="login__logo" src={logo} alt="Achados e Devolvidos" />
 
           <div className="login__header">
-            <h1 className="login__form__title">Bem-vindo de volta!</h1>
+            <h1 className="login__form__title">{t("auth.login.title")}</h1>
 
-            <p className="login__form__subtitle">Faça login para continuar</p>
+            <p className="login__form__subtitle">{t("auth.login.subtitle")}</p>
           </div>
 
           <form className="login__form" noValidate onSubmit={logarUsuario}>
@@ -85,7 +85,7 @@ function Login() {
             <div className="login__container__inputs">
               <div className="login__field">
                 <label className="login__label" htmlFor="email">
-                  E-mail
+                  {t("auth.login.email")}
                 </label>
 
                 <div className="login__input__email">
@@ -101,7 +101,7 @@ function Login() {
                     name="email"
                     className="login__input"
                     type="email"
-                    placeholder="Seu@email.com"
+                    placeholder={t("auth.login.emailPlaceholder")}
                     autoComplete="email"
                     value={inputEmailState}
                     onChange={(evento) =>
@@ -113,7 +113,7 @@ function Login() {
 
               <div className="login__field">
                 <label className="login__label" htmlFor="password">
-                  Senha
+                  {t("auth.login.password")}
                 </label>
 
                 <div className="login__input__password">
@@ -129,7 +129,7 @@ function Login() {
                     name="password"
                     className="login__input"
                     type={eyeState ? "password" : "text"}
-                    placeholder="Sua senha"
+                    placeholder={t("auth.login.passwordPlaceholder")}
                     autoComplete="current-password"
                     value={inputPasswordState}
                     onChange={(evento) =>
@@ -141,7 +141,11 @@ function Login() {
                     type="button"
                     className="login__eye__button"
                     onClick={setarEyeState}
-                    aria-label={eyeState ? "Mostrar senha" : "Ocultar senha"}
+                    aria-label={
+                      eyeState
+                        ? t("common.showPassword")
+                        : t("common.hidePassword")
+                    }
                   >
                     <img
                       className="login__eye__icon"
@@ -166,7 +170,9 @@ function Login() {
                   }
                 />
 
-                <label htmlFor="lembrarUsuario">Lembrar de mim</label>
+                <label htmlFor="lembrarUsuario">
+                  {t("auth.login.remember")}
+                </label>
               </div>
 
               <NavLink
@@ -174,7 +180,7 @@ function Login() {
                 end
                 className="login__navlink"
               >
-                Esqueci minha senha
+                {t("auth.login.forgot")}
               </NavLink>
             </div>
 
@@ -186,17 +192,19 @@ function Login() {
                 aria-hidden="true"
               />
 
-              <span>Entrar</span>
+              <span>{t("auth.login.submit")}</span>
             </button>
           </form>
 
           <hr className="login__divider" />
 
           <div className="login__container__sem__conta">
-            <p className="login__sem__conta__text">Ainda não tem uma conta?</p>
+            <p className="login__sem__conta__text">
+              {t("auth.login.noAccount")}
+            </p>
 
             <NavLink to="/auth/register" end className="login__navlink">
-              Criar conta
+              {t("auth.login.createAccount")}
             </NavLink>
           </div>
         </div>

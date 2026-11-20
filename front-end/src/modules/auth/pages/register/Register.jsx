@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../../../contexts/authContexts/AuthContext.jsx";
 
 import {
@@ -21,6 +22,7 @@ import logo from "../../../../assets/logo_iniciais.png";
 
 function Register() {
   const { isAuthenticated } = useContext(AuthContext);
+  const { t } = useTranslation();
 
   const [paginaActive, setPaginaActive] = useState(1);
 
@@ -69,10 +71,12 @@ function Register() {
 
           {paginaActive === 1 && (
             <div className="register__cabecalho">
-              <h1 className="register__form__title">Crie sua conta</h1>
+              <h1 className="register__form__title">
+                {t("auth.register.title")}
+              </h1>
 
               <p className="register__form__subtitle">
-                Vamos começar com seus dados básicos.
+                {t("auth.register.subtitle")}
               </p>
             </div>
           )}
@@ -80,11 +84,11 @@ function Register() {
           {paginaActive === 2 && (
             <div className="register__cabecalho">
               <h1 className="register__form__title personalize__perfil__title">
-                Personalize seu perfil
+                {t("auth.register.profileTitle")}
               </h1>
 
               <p className="register__form__subtitle personalize__perfil__subtitle">
-                Adicione uma foto para deixar seu perfil mais pessoal.
+                {t("auth.register.profileSubtitle")}
               </p>
             </div>
           )}
@@ -92,11 +96,11 @@ function Register() {
           {paginaActive === 3 && (
             <div className="register__cabecalho">
               <h1 className="register__form__title preferencias__title">
-                Configure suas preferências
+                {t("auth.register.preferencesTitle")}
               </h1>
 
               <p className="register__form__subtitle preferencias__subtitle">
-                Escolha como deseja receber avisos e atualizações.
+                {t("auth.register.preferencesSubtitle")}
               </p>
             </div>
           )}

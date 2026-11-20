@@ -1,11 +1,15 @@
 import "./CardDicas.css";
 
+import { useTranslation } from "react-i18next";
+
 function CardDicas() {
+  const { t } = useTranslation();
+
   const dicas = [
     {
       id: 1,
-      titulo: "Observe as fotos",
-      descricao: "Compare a aparência e as características dos objetos.",
+      titulo: t("home.tips.photos.title"),
+      descricao: t("home.tips.photos.description"),
       icone: (
         <svg viewBox="0 0 24 24" fill="none">
           <rect
@@ -36,8 +40,8 @@ function CardDicas() {
     },
     {
       id: 2,
-      titulo: "Confira os detalhes",
-      descricao: "Verifique as características e a localização informada.",
+      titulo: t("home.tips.details.title"),
+      descricao: t("home.tips.details.description"),
       icone: (
         <svg viewBox="0 0 24 24" fill="none">
           <path
@@ -58,8 +62,8 @@ function CardDicas() {
     },
     {
       id: 3,
-      titulo: "Entre em contato",
-      descricao: "Encontrou uma possível correspondência? Envie um e-mail.",
+      titulo: t("home.tips.contact.title"),
+      descricao: t("home.tips.contact.description"),
       icone: (
         <svg viewBox="0 0 24 24" fill="none">
           <rect
@@ -99,8 +103,8 @@ function CardDicas() {
         </div>
 
         <div>
-          <h3>Dicas para encontrar seu objeto</h3>
-          <p>Pequenos detalhes podem fazer toda a diferença na sua busca.</p>
+          <h3>{t("home.tips.title")}</h3>
+          <p>{t("home.tips.subtitle")}</p>
         </div>
       </div>
 

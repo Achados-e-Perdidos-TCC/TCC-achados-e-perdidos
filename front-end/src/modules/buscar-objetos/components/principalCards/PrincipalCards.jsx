@@ -1,6 +1,7 @@
 import { useFilter } from "../../../../hooks/filters/filterHook.jsx";
 import { useEffect, useRef } from "react";
 import { NavLink } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import { hoje, ontem } from "../../../../utils/date/date.js";
 import filtros from "../../../../utils/filters/filtrarObjetos.js";
@@ -17,11 +18,6 @@ import arrowBlue from "../../../../assets/icons/buscarObjetos/arrow-blue.svg";
 import { formatarLocalizacao } from "../../../../utils/location/localizacao.js";
 import { resolverUrlImagem } from "../../../../utils/images/urlImagem.js";
 
-// falta adicionar logica de filtrar por periodo
-
-// Vai receber de buscarObjetos.jsx depois
-// import objetos from './objetos.json';
-
 function PrincipalCards({
   objetos,
   inicio,
@@ -29,6 +25,7 @@ function PrincipalCards({
   resultadosExibidos,
   resultadoTotalEncontrados,
 }) {
+  const { t } = useTranslation();
   const { state } = useFilter();
   const { primaryFilters, secondaryFilters } = state;
   const objetosFiltrados = objetos.filter((valor) => {
@@ -60,10 +57,10 @@ function PrincipalCards({
 
   function dataFormatada(data, hora) {
     if (data === hoje()) {
-      return `Hoje, ${hora}`;
+      return `${t("common.today")}, ${hora}`;
     }
     if (data === ontem()) {
-      return `Ontem, ${hora}`;
+      return `${t("common.yesterday")}, ${hora}`;
     }
 
     return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}, ${hora}`;
@@ -77,8 +74,8 @@ function PrincipalCards({
         objetosFiltrados.slice(inicio, fim).map((valor) => {
           cardsExibidos++;
 
-          const nome = valor.nome || "Objeto sem nome"; //obrigatorio
-          const descricao = valor.descricao || "Sem descrição disponível"; //obrigatorio
+          const nome = valor.nome || t("common.unnamedItem"); //obrigatorio
+          const descricao = valor.descricao || t("common.noDescription"); //obrigatorio
 
           const textoLocalizacao = formatarLocalizacao(valor.localizacao);
 
@@ -129,7 +126,7 @@ function PrincipalCards({
 
                         {!textoLocalizacao ? (
                           <p className="endereco__principal">
-                            Localização não informada
+                            {t("common.noLocation")}
                           </p>
                         ) : (
                           <p className="endereco__principal">
@@ -141,7 +138,7 @@ function PrincipalCards({
 
                         <span className="endereco__responsive">
                           {!textoLocalizacao
-                            ? "Localização não informada"
+                            ? t("common.noLocation")
                             : textoLocalizacao.length < 27
                               ? textoLocalizacao
                               : `${textoLocalizacao.slice(0, 27)}...`}
@@ -159,7 +156,7 @@ function PrincipalCards({
                   <div className="principal__embaixo">
                     <div className="busca__descricao">
                       <span className="busca__descricao__titulo">
-                        Descrição
+                        {t("search.card.description")}
                       </span>
 
                       <p className="descricao__principal">
@@ -175,7 +172,7 @@ function PrincipalCards({
                         className="detalhes__principal"
                         to={`/buscar-objetos/${valor.id}`}
                       >
-                        Ver detalhes
+                        {t("common.viewDetails")}
                       </NavLink>
 
                       <img
@@ -194,7 +191,7 @@ function PrincipalCards({
                     className="detalhes__principal"
                     to={`/buscar-objetos/${valor.id}`}
                   >
-                    Ver detalhes
+                    {t("common.viewDetails")}
                   </NavLink>
                   <img
                     className="arrow__button__principal"

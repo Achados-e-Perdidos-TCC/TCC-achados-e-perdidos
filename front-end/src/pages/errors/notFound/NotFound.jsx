@@ -1,4 +1,5 @@
 import { NavLink } from "react-router";
+import { useTranslation } from "react-i18next";
 import "./notFound.css";
 
 import findBlue from "../../../assets/icons/notFound/find-blue.png";
@@ -6,6 +7,8 @@ import houseWhite from "../../../assets/icons/notFound/house-white.png";
 import notFoundBlue from "../../../assets/icons/notFound/notFound-blue.png";
 
 function NotFound() {
+  const { t } = useTranslation();
+
   return (
     <main className="notfound">
       <section className="notfound__card">
@@ -15,21 +18,18 @@ function NotFound() {
           <img
             className="notfound__image"
             src={notFoundBlue}
-            alt="Ilustração representando uma página não encontrada"
+            alt={t("pages.notFound.illustrationAlt")}
           />
         </div>
 
         {/* TEXTOS */}
 
         <div className="notfound__texts">
-          <span className="notfound__label">ERRO 404</span>
+          <span className="notfound__label">{t("pages.notFound.code")}</span>
 
-          <h1 className="notfound__title">Ops! Página não encontrada</h1>
+          <h1 className="notfound__title">{t("pages.notFound.title")}</h1>
 
-          <p className="notfound__subtitle">
-            Não conseguimos encontrar a página que você está procurando. Talvez
-            ela tenha sido removida ou o endereço esteja incorreto.
-          </p>
+          <p className="notfound__subtitle">{t("pages.notFound.text")}</p>
         </div>
 
         {/* AÇÕES */}
@@ -41,7 +41,7 @@ function NotFound() {
             end
           >
             <img src={houseWhite} alt="" />
-            <span>Voltar para o início</span>
+            <span>{t("pages.notFound.backHome")}</span>
           </NavLink>
 
           <NavLink
@@ -50,7 +50,7 @@ function NotFound() {
             end
           >
             <img src={findBlue} alt="" />
-            <span>Buscar objetos</span>
+            <span>{t("pages.notFound.search")}</span>
           </NavLink>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { NavLink } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import { logout, deleteAccount } from "../../../../../private.service";
 import { AuthContext } from "../../../../../../../contexts/authContexts/AuthContext.jsx";
@@ -7,6 +8,8 @@ import { AuthContext } from "../../../../../../../contexts/authContexts/AuthCont
 import "./dangerZone.css";
 
 function DangerZone() {
+  const { t } = useTranslation();
+
   const { setIsAuthenticated } = useContext(AuthContext);
   const [attempts, setAttempts] = useState(0);
 
@@ -29,10 +32,10 @@ function DangerZone() {
     <div className="user__danger__zone">
       <div className="user__danger__container">
         <div className="user__danger__content">
-          <h3 className="user__danger__title">Deslogar</h3>
+          <h3 className="user__danger__title">{t("account.danger.logout")}</h3>
 
           <p className="user__danger__subtitle">
-            Você poderá entrar novamente quando quiser.
+            {t("account.danger.logoutDescription")}
           </p>
         </div>
 
@@ -42,7 +45,7 @@ function DangerZone() {
           end
           onClick={userLogout}
         >
-          Deslogar
+          {t("account.danger.logout")}
         </NavLink>
       </div>
 
@@ -54,11 +57,11 @@ function DangerZone() {
 
           <div className="user__delete__confirmation__content">
             <strong className="user__delete__confirmation__title">
-              Tem certeza que deseja excluir sua conta?
+              {t("account.danger.confirmQuestion")}
             </strong>
 
             <p className="user__delete__confirmation__subtitle">
-              Essa ação não poderá ser desfeita.
+              {t("account.danger.confirmWarning")}
             </p>
           </div>
         </div>
@@ -66,10 +69,12 @@ function DangerZone() {
 
       <div className="user__danger__container">
         <div className="user__danger__content">
-          <h3 className="user__danger__title">Excluir conta</h3>
+          <h3 className="user__danger__title">
+            {t("account.danger.deleteAccount")}
+          </h3>
 
           <p className="user__danger__subtitle">
-            Esta ação é permanente e não pode ser desfeita.
+            {t("account.danger.deleteDescription")}
           </p>
         </div>
 
@@ -80,7 +85,9 @@ function DangerZone() {
           type="button"
           onClick={deleteUserAccount}
         >
-          {attempts === 1 ? "Confirmar exclusão" : "Excluir conta"}
+          {attempts === 1
+            ? t("account.danger.confirmDelete")
+            : t("account.danger.deleteAccount")}
         </button>
       </div>
     </div>

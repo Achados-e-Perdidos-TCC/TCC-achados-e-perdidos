@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
 import { IMaskInput } from "react-imask";
+import { useTranslation } from "react-i18next";
 
 import {
   verificaEmailSenha,
@@ -22,9 +23,7 @@ import pinGray from "../../../../../../assets/icons/buscarObjetos/pin-gray.svg";
 import openEyeGray from "../../../../../../assets/icons/login/open-eye-gray.png";
 import closeEyeGray from "../../../../../../assets/icons/login/close-eye-gray.png";
 
-/* ========================================
-   CIDADES
-======================================== */
+/* CIDADES */
 
 const todasAsCidades = cidadesBrasil.estados.flatMap((estado) =>
   estado.cidades.map((cidade) => ({
@@ -34,6 +33,8 @@ const todasAsCidades = cidadesBrasil.estados.flatMap((estado) =>
 );
 
 function PreliminaryData({ proximaPagina, error, setInput }) {
+  const { t } = useTranslation();
+
   const [obrigatorio, setObrigatorio] = useState(false);
   const [eyeState, setEyeState] = useState(true);
   const [requisitosSenhaPreenchido, setRequisitosSenhaPreenchido] =
@@ -61,9 +62,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
     especial: /[^A-Za-z0-9]/.test(inputPasswordState),
   };
 
-  /* ========================================
-     CIDADES
-  ======================================== */
+  /* CIDADES */
 
   function filtrarCidades(valor, estado = inputState) {
     if (!valor.trim()) {
@@ -107,9 +106,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
     filtrarCidades(inputCityState, valor);
   }
 
-  /* ========================================
-     VALIDAÇÃO E CONTINUAÇÃO
-  ======================================== */
+  /*VALIDAÇÃO E CONTINUAÇÃO */
 
   function continuarCriacaoConta() {
     try {
@@ -128,7 +125,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
         inputNameState.trim().length < 3 ||
         inputNameState.trim().length > 100
       ) {
-        return error("Nome inválido");
+        return error(t("errors.invalidName"));
       }
 
       validaCidade(inputCityState, inputState, todasAsCidades);
@@ -138,9 +135,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
       }
 
       if (!aceitouTermos) {
-        return error(
-          "Você precisa aceitar os Termos de Uso e a Política de Privacidade.",
-        );
+        return error(t("auth.register.data.acceptError"));
       }
 
       verificaEmailSenha(
@@ -163,25 +158,21 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
 
       return proximaPagina(2);
     } catch (erro) {
+      // As chaves continuam em português: são as mensagens lançadas pelas funções de validação.
       const mensagensErro = {
-        "Credenciais inválidas": "Credenciais inválidas",
-        "Email inválido": "Email inválido",
-        "Senha inválida": "Senha inválida",
-        "Telefone inválido": "Telefone inválido",
-        "Estado não selecionado": "Selecione o estado da cidade",
-        "Cidade inválida": "Selecione uma cidade disponível na lista",
+        "Credenciais inválidas": t("errors.invalidCredentials"),
+        "Email inválido": t("errors.invalidEmail"),
+        "Senha inválida": t("errors.invalidPassword"),
+        "Telefone inválido": t("errors.invalidPhone"),
+        "Estado não selecionado": t("errors.stateNotSelected"),
+        "Cidade inválida": t("errors.invalidCity"),
       };
 
-      return error(
-        mensagensErro[erro.message] ||
-          "Ocorreu um erro inesperado. Verifique se os dados informados estão corretos e tente novamente mais tarde.",
-      );
+      return error(mensagensErro[erro.message] || t("errors.unexpected"));
     }
   }
 
-  /* ========================================
-     VISIBILIDADE DA SENHA
-  ======================================== */
+  /* VISIBILIDADE DA SENHA */
 
   function alternarVisibilidadeSenha() {
     setEyeState((estadoAtual) => !estadoAtual);
@@ -193,11 +184,13 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
 
       <div className="register__campo">
         <label className="register__label" htmlFor="nome">
-          Nome completo
+          {t("auth.register.data.fullName")}
         </label>
 
         {obrigatorio && !inputNameState.trim() && (
-          <span className="register__obrigatorio__message">Obrigatório</span>
+          <span className="register__obrigatorio__message">
+            {t("common.required")}
+          </span>
         )}
 
         <div className="register__input__container">
@@ -208,7 +201,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
             name="nome"
             className="register__input"
             type="text"
-            placeholder="Ex: João da Silva"
+            placeholder={t("auth.register.data.namePlaceholder")}
             autoComplete="name"
             value={inputNameState}
             onChange={(evento) => setInputNameState(evento.target.value)}
@@ -220,11 +213,13 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
 
       <div className="register__campo">
         <label className="register__label" htmlFor="email">
-          E-mail
+          {t("common.email")}
         </label>
 
         {obrigatorio && !inputEmailState.trim() && (
-          <span className="register__obrigatorio__message">Obrigatório</span>
+          <span className="register__obrigatorio__message">
+            {t("common.required")}
+          </span>
         )}
 
         <div className="register__input__container">
@@ -235,7 +230,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
             name="email"
             className="register__input"
             type="email"
-            placeholder="Ex: joao@email.com"
+            placeholder={t("auth.register.data.emailPlaceholder")}
             autoComplete="email"
             value={inputEmailState}
             onChange={(evento) => setInputEmailState(evento.target.value)}
@@ -247,11 +242,13 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
 
       <div className="register__campo">
         <label className="register__label" htmlFor="password">
-          Senha
+          {t("auth.login.password")}
         </label>
 
         {obrigatorio && !inputPasswordState.trim() && (
-          <span className="register__obrigatorio__message">Obrigatório</span>
+          <span className="register__obrigatorio__message">
+            {t("common.required")}
+          </span>
         )}
 
         <div className="register__input__container">
@@ -262,7 +259,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
             name="password"
             className="register__input"
             type={eyeState ? "password" : "text"}
-            placeholder="Sua senha"
+            placeholder={t("auth.register.data.passwordPlaceholder")}
             autoComplete="new-password"
             value={inputPasswordState}
             onChange={(evento) => setInputPasswordState(evento.target.value)}
@@ -274,7 +271,9 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
             className="register__eye__button"
             type="button"
             onClick={alternarVisibilidadeSenha}
-            aria-label={eyeState ? "Mostrar senha" : "Ocultar senha"}
+            aria-label={
+              eyeState ? t("common.showPassword") : t("common.hidePassword")
+            }
           >
             <img
               className="register__eye__icon"
@@ -293,7 +292,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              • Pelo menos 8 caracteres
+              • {t("passwordRules.length")}
             </p>
 
             <p
@@ -303,7 +302,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              • Uma letra maiúscula
+              • {t("passwordRules.uppercase")}
             </p>
 
             <p
@@ -313,7 +312,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              • Uma letra minúscula
+              • {t("passwordRules.lowercase")}
             </p>
 
             <p
@@ -323,7 +322,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              • Um número
+              • {t("passwordRules.number")}
             </p>
 
             <p
@@ -333,7 +332,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
                   : "requisito__pendente"
               }
             >
-              • Um caractere especial
+              • {t("passwordRules.special")}
             </p>
           </div>
         )}
@@ -343,7 +342,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
 
       <div className="register__campo">
         <label className="register__label" htmlFor="telefone">
-          Telefone
+          {t("common.phone")}
         </label>
 
         <div className="register__input__container">
@@ -354,7 +353,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
             name="telefone"
             className="register__input"
             mask="(00) 00000-0000"
-            placeholder="Ex: (11) 99999-9999"
+            placeholder={t("auth.register.data.phonePlaceholder")}
             type="tel"
             autoComplete="tel"
             value={inputTelephoneState}
@@ -367,7 +366,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
 
       <div className="register__campo register__campo__cidade">
         <label className="register__label" htmlFor="cidade">
-          Cidade
+          {t("common.city")}
         </label>
 
         <div className="register__input__container">
@@ -378,7 +377,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
             name="cidade"
             className="register__input"
             type="text"
-            placeholder="Sua cidade"
+            placeholder={t("auth.register.data.cityPlaceholder")}
             autoComplete="address-level2"
             value={inputCityState}
             onChange={(evento) => buscarCidades(evento.target.value)}
@@ -389,10 +388,10 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
           <select
             value={inputState}
             className="register__estado"
-            aria-label="Estado"
+            aria-label={t("common.state")}
             onChange={(evento) => alterarEstado(evento.target.value)}
           >
-            <option value="">UF</option>
+            <option value="">{t("common.uf")}</option>
 
             {cidadesBrasil.estados.map((estado) => (
               <option key={estado.sigla} value={estado.sigla}>
@@ -432,10 +431,13 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
           />
 
           <span>
-            Li e aceito os <NavLink to="/termos-de-uso">Termos de Uso</NavLink>{" "}
-            e a{" "}
+            {t("auth.register.data.acceptPrefix")}{" "}
+            <NavLink to="/termos-de-uso">
+              {t("auth.register.data.termsOfUse")}
+            </NavLink>{" "}
+            {t("auth.register.data.and")}{" "}
             <NavLink to="/politica-de-privacidade">
-              Política de Privacidade
+              {t("auth.register.data.privacyPolicy")}
             </NavLink>
             .
           </span>
@@ -450,10 +452,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
             }
           />
 
-          <span>
-            Autorizo que meu e-mail seja disponibilizado para contato quando
-            alguém encontrar um objeto que publiquei na plataforma.
-          </span>
+          <span>{t("auth.register.data.emailConsent")}</span>
         </label>
       </div>
 
@@ -463,8 +462,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
         <img className="info__image" src={infoBlue} alt="" />
 
         <p className="info__subtitle">
-          Seu e-mail poderá ser exibido na página pública de objetos para
-          permitir contato. Essa autorização é opcional.
+          {t("auth.register.data.emailConsentHint")}
         </p>
       </div>
 
@@ -475,7 +473,7 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
         type="button"
         onClick={continuarCriacaoConta}
       >
-        Continuar
+        {t("common.continue")}
       </button>
 
       <hr className="register__divider" />
@@ -483,10 +481,12 @@ function PreliminaryData({ proximaPagina, error, setInput }) {
       {/* LOGIN */}
 
       <div className="register__container__com__conta">
-        <p className="register__com__conta__text">Já possui uma conta?</p>
+        <p className="register__com__conta__text">
+          {t("auth.register.data.hasAccount")}
+        </p>
 
         <NavLink to="/auth/login" end className="register__navlink">
-          Entrar
+          {t("auth.register.data.signIn")}
         </NavLink>
       </div>
     </div>

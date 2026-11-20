@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import "./preferences.css";
 
@@ -8,6 +9,7 @@ import arrowWhite from "../../../../../../assets/icons/register/arrow-white.png"
 
 function Preferences({ proximaPagina, criarConta, error }) {
   const { tema } = useOutletContext();
+  const { t } = useTranslation();
 
   const [ativo1, setAtivo1] = useState(true);
   const [ativo3, setAtivo3] = useState(false);
@@ -17,18 +19,16 @@ function Preferences({ proximaPagina, criarConta, error }) {
   const preferencias = [
     {
       id: 1,
-      titulo: "Notificações",
-      descricao:
-        "Receba atualizações importantes sobre sua conta e suas atividades na plataforma.",
+      titulo: t("auth.register.preferences.notificationsTitle"),
+      descricao: t("auth.register.preferences.notificationsDescription"),
       ativo: ativo1,
       alterar: setAtivo1,
       icone: "bell",
     },
     {
       id: 3,
-      titulo: "Exibir meu e-mail nos objetos",
-      descricao:
-        "Permita que outras pessoas visualizem seu e-mail nos anúncios de objetos publicados por você.",
+      titulo: t("auth.register.preferences.showEmailTitle"),
+      descricao: t("auth.register.preferences.showEmailDescription"),
       ativo: ativo3,
       alterar: setAtivo3,
       icone: "mail",
@@ -64,9 +64,7 @@ function Preferences({ proximaPagina, criarConta, error }) {
     } catch (err) {
       console.error("Erro ao finalizar cadastro:", err);
 
-      error(
-        err?.message || "Não foi possível criar sua conta. Tente novamente.",
-      );
+      error(err?.message || t("auth.register.preferences.error"));
     } finally {
       setCriandoConta(false);
     }
@@ -183,10 +181,7 @@ function Preferences({ proximaPagina, criarConta, error }) {
           </svg>
         </div>
 
-        <p>
-          Você poderá alterar essas preferências posteriormente nas
-          configurações da sua conta.
-        </p>
+        <p>{t("auth.register.preferences.later")}</p>
       </div>
 
       {/* BOTÕES */}
@@ -200,7 +195,7 @@ function Preferences({ proximaPagina, criarConta, error }) {
         >
           <img src={tema === "light" ? arrowBlack : arrowWhite} alt="" />
 
-          <span>Voltar</span>
+          <span>{t("common.back")}</span>
         </button>
 
         <button
@@ -210,7 +205,9 @@ function Preferences({ proximaPagina, criarConta, error }) {
           disabled={criandoConta}
         >
           <span>
-            {criandoConta ? "Criando conta..." : "Finalizar cadastro"}
+            {criandoConta
+              ? t("auth.register.preferences.creating")
+              : t("auth.register.preferences.finish")}
           </span>
 
           {!criandoConta && (

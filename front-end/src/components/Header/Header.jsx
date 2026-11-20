@@ -1,6 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import { NavLink } from "react-router";
 import { AuthContext } from "../../contexts/authContexts/AuthContext.jsx";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher.jsx";
 
 import "./Header.css";
 
@@ -19,6 +21,7 @@ import personDark from "../../assets/icons/header/cabecalho_person_dark.png";
 function Header({ tema }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { isAuthenticated } = useContext(AuthContext);
+  const { t } = useTranslation();
 
   const rotaPerfil = isAuthenticated ? "/user-area" : "/auth/login";
 
@@ -77,7 +80,7 @@ function Header({ tema }) {
           className="header__logo-link"
           to="/"
           onClick={fecharMenu}
-          aria-label="Achados e Devolvidos - Página inicial"
+          aria-label={t("header.homeAria")}
         >
           <img className="header__logo" src={logo} alt="Achados e Devolvidos" />
         </NavLink>
@@ -85,14 +88,18 @@ function Header({ tema }) {
         {/* NAVEGAÇÃO DESKTOP */}
 
         <nav className="header__nav header__nav--desktop">
-          {renderLink("/", "Início")}
-          {renderLink("/buscar-objetos", "Buscar objetos")}
-          {renderLink("/como-funciona", "Como funciona")}
+          {renderLink("/", t("header.home"))}
+          {renderLink("/buscar-objetos", t("header.search"))}
+          {renderLink("/como-funciona", t("header.howItWorks"))}
         </nav>
 
         {/* AÇÕES */}
 
         <div className="header__acoes">
+          {/* IDIOMA */}
+
+          <LanguageSwitcher />
+
           {/* CADASTRAR OBJETO */}
 
           <NavLink
@@ -106,7 +113,7 @@ function Header({ tema }) {
               className="header__icone-cadastrar"
             />
 
-            <span>Cadastrar objeto</span>
+            <span>{t("header.register")}</span>
           </NavLink>
 
           {/* ENTRAR / MEU PERFIL */}
@@ -116,7 +123,7 @@ function Header({ tema }) {
             to={rotaPerfil}
             onClick={fecharMenu}
           >
-            {isAuthenticated ? "Meu perfil" : "Entrar"}
+            {isAuthenticated ? t("header.myProfile") : t("header.signIn")}
           </NavLink>
 
           {/* ÍCONE DO PERFIL */}
@@ -126,7 +133,9 @@ function Header({ tema }) {
             to={rotaPerfil}
             onClick={fecharMenu}
             aria-label={
-              isAuthenticated ? "Acessar meu perfil" : "Entrar na conta"
+              isAuthenticated
+                ? t("header.openProfile")
+                : t("header.signInAccount")
             }
           >
             <img src={iconePerfil} alt="" />
@@ -138,7 +147,7 @@ function Header({ tema }) {
             className="header__menu-botao"
             type="button"
             onClick={toggleMenu}
-            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-label={menuOpen ? t("header.closeMenu") : t("header.openMenu")}
             aria-expanded={menuOpen}
             aria-controls="header-menu-mobile"
           >
@@ -164,22 +173,22 @@ function Header({ tema }) {
         inert={!menuOpen}
       >
         <div className="header__menu-cabecalho">
-          <span className="header__menu-titulo">Navegação</span>
+          <span className="header__menu-titulo">{t("header.navigation")}</span>
 
           <button
             className="header__menu-fechar"
             type="button"
             onClick={fecharMenu}
-            aria-label="Fechar menu"
+            aria-label={t("header.closeMenu")}
           >
             <img src={iconeFechar} alt="" />
           </button>
         </div>
 
         <nav className="header__nav header__nav--mobile">
-          {renderLink("/", "Início")}
-          {renderLink("/buscar-objetos", "Buscar objetos")}
-          {renderLink("/como-funciona", "Como funciona")}
+          {renderLink("/", t("header.home"))}
+          {renderLink("/buscar-objetos", t("header.search"))}
+          {renderLink("/como-funciona", t("header.howItWorks"))}
         </nav>
 
         <div className="header__menu-divisor" />
@@ -191,7 +200,7 @@ function Header({ tema }) {
             onClick={fecharMenu}
           >
             <img src={iconCadastrarObjeto} alt="" />
-            Cadastrar objeto
+            {t("header.register")}
           </NavLink>
 
           <NavLink
@@ -200,13 +209,19 @@ function Header({ tema }) {
             onClick={fecharMenu}
           >
             <img src={iconePerfil} alt="" />
-            {isAuthenticated ? "Meu perfil" : "Entrar na conta"}
+            {isAuthenticated
+              ? t("header.myProfile")
+              : t("header.signInAccount")}
           </NavLink>
+
+          {/* IDIOMA (MOBILE) */}
+
+          <LanguageSwitcher />
         </div>
 
         <div className="header__menu-rodape">
           <span>Achados e Devolvidos</span>
-          <span>Conectando pessoas e histórias.</span>
+          <span>{t("header.tagline")}</span>
         </div>
       </div>
     </header>

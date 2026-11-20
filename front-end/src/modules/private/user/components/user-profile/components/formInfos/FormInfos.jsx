@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IMaskInput } from "react-imask";
+import { useTranslation } from "react-i18next";
 
 import cidadesBrasil from "../../../../../../../utils/json/cidade-estados.json";
 
@@ -18,6 +19,8 @@ function FormInfos({
   setInputState,
   todasAsCidades,
 }) {
+  const { t } = useTranslation();
+
   const [cidadesFiltradas, setCidadesFiltradas] = useState([]);
 
   function buscarCidades(valor) {
@@ -51,7 +54,7 @@ function FormInfos({
     <div className="user__profile__inputs__container">
       <div className="user__profile__field">
         <label className="user__profile__label" htmlFor="nome">
-          Nome
+          {t("common.name")}
         </label>
 
         <input
@@ -65,7 +68,7 @@ function FormInfos({
 
       <div className="user__profile__field">
         <label className="user__profile__label" htmlFor="email">
-          E-mail
+          {t("common.email")}
         </label>
 
         <input
@@ -81,7 +84,7 @@ function FormInfos({
       <div className="user__profile__phone__city">
         <div className="user__profile__input__phone user__profile__field">
           <label className="user__profile__label" htmlFor="telefone">
-            Telefone
+            {t("common.phone")}
           </label>
 
           <IMaskInput
@@ -96,7 +99,7 @@ function FormInfos({
 
         <div className="user__profile__input__city user__profile__field">
           <label className="user__profile__label" htmlFor="cidade">
-            Cidade
+            {t("common.city")}
           </label>
 
           <div className="user__profile__city__control">
@@ -116,9 +119,9 @@ function FormInfos({
                 setInputState(event.target.value);
                 setCidadesFiltradas([]);
               }}
-              aria-label="Estado"
+              aria-label={t("common.state")}
             >
-              <option value="">UF</option>
+              <option value="">{t("common.uf")}</option>
 
               {cidadesBrasil.estados.map((estado) => (
                 <option key={estado.sigla} value={estado.sigla}>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import { hoje, ontem } from "../../../../../utils/date/date.js";
 
@@ -17,6 +18,8 @@ import { resolverUrlImagem } from "../../../../../utils/images/urlImagem.js";
 import { obterNomeCompletoEstado } from "../../../../../utils/location/localizacao.js";
 
 function UserObjects() {
+  const { t } = useTranslation();
+
   const [carregando, setCarregando] = useState(true);
   const [objetos, setObjetos] = useState([]);
   const [erro, setErro] = useState(false);
@@ -74,18 +77,18 @@ function UserObjects() {
   }, [paginaAtual, totalDePaginasNumerico]);
 
   function dataFormatada(data, hora) {
-    if (!data) return "Data não informada";
+    if (!data) return t("common.noDate");
 
     const dataConvertida = `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`;
 
     if (!hora) return dataConvertida;
 
     if (data === hoje()) {
-      return `Hoje, ${hora}`;
+      return `${t("common.today")}, ${hora}`;
     }
 
     if (data === ontem()) {
-      return `Ontem, ${hora}`;
+      return `${t("common.yesterday")}, ${hora}`;
     }
 
     return `${dataConvertida}, ${hora}`;
@@ -100,7 +103,7 @@ function UserObjects() {
 
     return (
       [cidadeEstado, endereco].filter(Boolean).join(", ") ||
-      "Localização não informada"
+      t("common.noLocation")
     );
   }
 
@@ -132,7 +135,7 @@ function UserObjects() {
   if (carregando) {
     return (
       <div className="user__objects user__objects--state">
-        <p>Carregando seus objetos...</p>
+        <p>{t("account.objects.loading")}</p>
       </div>
     );
   }
@@ -140,7 +143,7 @@ function UserObjects() {
   if (erro) {
     return (
       <div className="user__objects user__objects--state">
-        <p>Não foi possível carregar seus objetos.</p>
+        <p>{t("account.objects.loadError")}</p>
       </div>
     );
   }
@@ -149,17 +152,17 @@ function UserObjects() {
     <div className="user__objects">
       <div className="user__objects__header">
         <div>
-          <h1 className="user__objects__text">Meus objetos</h1>
+          <h1 className="user__objects__text">{t("account.objects.title")}</h1>
 
           <p className="user__objects__subtitle">
-            Gerencie os objetos que você perdeu ou encontrou.
+            {t("account.objects.subtitle")}
           </p>
         </div>
       </div>
 
       <div className="user__objects__principal">
         <span className="user__objects__text__principal">
-          {total} {total === 1 ? "objeto cadastrado" : "objetos cadastrados"}
+          {t("account.objects.count", { count: total })}
         </span>
       </div>
 
@@ -168,7 +171,7 @@ function UserObjects() {
       ) : (
         <div className="user__container__card">
           {objetosExibidos.map((valor) => {
-            const nome = valor.nome || "Objeto sem nome";
+            const nome = valor.nome || t("common.unnamedItem");
             const localizacao = formatarLocalizacao(valor.localizacao);
             const imagemPrincipal = resolverUrlImagem(valor.imagemPrincipal);
             const data = valor.data?.data;
@@ -192,9 +195,11 @@ function UserObjects() {
                       <button
                         type="button"
                         className="user__menu__editar__botao"
-                        aria-label={`Opções de ${nome}`}
+                        aria-label={t("account.objects.optionsOf", {
+                          name: nome,
+                        })}
                         aria-expanded={menuAberto === valor.id}
-                        title="Opções do objeto"
+                        title={t("account.objects.options")}
                         onClick={() => alternarMenu(valor.id)}
                       >
                         <span>⋮</span>
@@ -206,7 +211,7 @@ function UserObjects() {
                             to={`/user-area/editar-objeto/${valor.id}`}
                             onClick={() => setMenuAberto(null)}
                           >
-                            Editar objeto
+                            {t("account.objects.edit")}
                           </NavLink>
                         </div>
                       )}
@@ -239,7 +244,7 @@ function UserObjects() {
 
                     <div className="user__button__responsive">
                       <NavLink to={`/buscar-objetos/${valor.id}`}>
-                        Ver detalhes
+                        {t("common.viewDetails")}
                       </NavLink>
                     </div>
 
@@ -248,7 +253,7 @@ function UserObjects() {
                         className="user__button__principal"
                         to={`/buscar-objetos/${valor.id}`}
                       >
-                        Ver detalhes
+                        {t("common.viewDetails")}
                         <span aria-hidden="true">→</span>
                       </NavLink>
                     </div>
@@ -268,7 +273,7 @@ function UserObjects() {
               className="user__button__arrow"
               onClick={() => alternarPagina(Math.max(1, paginaAtual - 1))}
               disabled={paginaAtual === 1}
-              aria-label="Página anterior"
+              aria-label={t("common.previousPage")}
             >
               <img className="arrow__left" src={arrowGray} alt="" />
             </button>
@@ -304,7 +309,7 @@ function UserObjects() {
                 )
               }
               disabled={paginaAtual === totalDePaginasNumerico}
-              aria-label="Próxima página"
+              aria-label={t("common.nextPage")}
             >
               <img className="arrow__right" src={arrowGray} alt="" />
             </button>

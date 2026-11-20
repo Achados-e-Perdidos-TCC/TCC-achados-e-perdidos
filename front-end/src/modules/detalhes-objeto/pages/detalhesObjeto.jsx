@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, NavLink, useOutletContext } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import "./detalhesObjeto.css";
 
@@ -23,6 +24,7 @@ import Detalhes, {
 function DetalhesObjeto() {
   const { id } = useParams();
   const { tema } = useOutletContext();
+  const { t } = useTranslation();
 
   const [objetos, setObjetos] = useState(null);
   const [carregando, setCarregando] = useState(true);
@@ -106,24 +108,24 @@ function DetalhesObjeto() {
   // Valida os campos do formulário.
   function validarFormulario() {
     if (!nome.trim()) {
-      setErroEnvio("Informe seu nome.");
+      setErroEnvio(t("details.contact.errors.nameRequired"));
       return false;
     }
 
     if (!email.trim()) {
-      setErroEnvio("Informe seu e-mail.");
+      setErroEnvio(t("details.contact.errors.emailRequired"));
       return false;
     }
 
     const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailValido.test(email.trim())) {
-      setErroEnvio("Informe um endereço de e-mail válido.");
+      setErroEnvio(t("details.contact.errors.emailInvalid"));
       return false;
     }
 
     if (!informacoes.trim()) {
-      setErroEnvio("Descreva as informações que você possui sobre o objeto.");
+      setErroEnvio(t("details.contact.errors.infoRequired"));
       return false;
     }
 
@@ -141,33 +143,31 @@ function DetalhesObjeto() {
     const emailResponsavel = objetos?.emailResponsavel;
 
     if (!emailResponsavel) {
-      setErroEnvio(
-        "Não foi possível identificar o e-mail do responsável por este objeto.",
-      );
+      setErroEnvio(t("details.contact.errors.ownerEmailMissing"));
       return;
     }
 
     const nomeObjeto = objetos.nome;
 
     const assunto = objetoEncontrado
-      ? `Tenho interesse no objeto: ${nomeObjeto}`
-      : `Informações sobre o objeto: ${nomeObjeto}`;
+      ? t("details.contact.email.subjectInterest", { name: nomeObjeto })
+      : t("details.contact.email.subjectInfo", { name: nomeObjeto });
 
-    const mensagem = `Olá!
+    const mensagem = `${t("details.contact.email.greeting")}
 
 ${
   objetoEncontrado
-    ? `Tenho interesse no objeto "${nomeObjeto}" e gostaria de saber mais sobre ele.`
-    : `Tenho informações sobre o objeto "${nomeObjeto}" e gostaria de ajudar na sua identificação e recuperação.`
+    ? t("details.contact.email.bodyInterest", { name: nomeObjeto })
+    : t("details.contact.email.bodyInfo", { name: nomeObjeto })
 }
 
-Nome: ${nome.trim()}
-E-mail: ${email.trim()}
+${t("details.contact.email.nameLine", { name: nome.trim() })}
+${t("details.contact.email.emailLine", { email: email.trim() })}
 
-Mensagem:
+${t("details.contact.email.messageLabel")}
 ${informacoes.trim()}
 
-Link do objeto: ${window.location.href}`;
+${t("details.contact.email.linkLine", { link: window.location.href })}`;
 
     const parametros = new URLSearchParams({
       view: "cm",
@@ -200,7 +200,7 @@ Link do objeto: ${window.location.href}`;
   }
 
   if (erro || !objetos) {
-    return <p>Não foi possível carregar o objeto.</p>;
+    return <p>{t("details.loadError")}</p>;
   }
 
   return (
@@ -208,12 +208,12 @@ Link do objeto: ${window.location.href}`;
       {/* Caminho de navegação */}
       <div className="caminho__voltar">
         <div className="caminho">
-          <img className="house__gray" src={houseGray} alt="Início" />
+          <img className="house__gray" src={houseGray} alt={t("header.home")} />
 
           <img src={arrowGray} alt="" />
 
           <p className="caminho__text">
-            Buscar objetos / {objetos.nome || "Objeto encontrado"}
+            {t("header.search")} / {objetos.nome || t("details.foundBadge")}
           </p>
         </div>
 
@@ -221,7 +221,7 @@ Link do objeto: ${window.location.href}`;
           <NavLink className="voltar__navlink" to="/buscar-objetos" end>
             <img src={arrowBlue} alt="" />
 
-            <p className="voltar__text">Voltar para Buscar Objetos</p>
+            <p className="voltar__text">{t("details.backToSearch")}</p>
           </NavLink>
         </div>
       </div>
@@ -256,8 +256,8 @@ Link do objeto: ${window.location.href}`;
 
                   <p>
                     {objetoEncontrado
-                      ? "Tenho interesse neste objeto"
-                      : "Tenho informações sobre este objeto"}
+                      ? t("details.contact.interestTitle")
+                      : t("details.contact.infoTitle")}
                   </p>
                 </div>
               </button>
@@ -280,14 +280,14 @@ Link do objeto: ${window.location.href}`;
               <div>
                 <h2 id="modal-informacoes-titulo">
                   {objetoEncontrado
-                    ? "Tenho interesse neste objeto"
-                    : "Tenho informações sobre este objeto"}
+                    ? t("details.contact.interestTitle")
+                    : t("details.contact.infoTitle")}
                 </h2>
 
                 <p>
                   {objetoEncontrado
-                    ? "Gostaria de saber mais sobre este objeto? Envie uma mensagem ao responsável para obter mais informações."
-                    : "Possui informações sobre este objeto? Envie uma mensagem ao responsável para ajudar na sua identificação e recuperação."}
+                    ? t("details.contact.interestDescription")
+                    : t("details.contact.infoDescription")}
                 </p>
               </div>
 
@@ -295,7 +295,7 @@ Link do objeto: ${window.location.href}`;
                 className="modal__informacoes__fechar"
                 type="button"
                 onClick={fecharModal}
-                aria-label="Fechar modal"
+                aria-label={t("details.contact.closeModal")}
               >
                 <img src={tema === "light" ? xBlack : xWhite} alt="" />
               </button>
@@ -309,24 +309,24 @@ Link do objeto: ${window.location.href}`;
 
             <form className="formulario__informacoes" onSubmit={enviarEmail}>
               <div className="campo__informacoes">
-                <label htmlFor="nome">Seu nome</label>
+                <label htmlFor="nome">{t("details.contact.yourName")}</label>
 
                 <input
                   id="nome"
                   type="text"
-                  placeholder="Digite seu nome"
+                  placeholder={t("details.contact.namePlaceholder")}
                   value={nome}
                   onChange={(event) => setNome(event.target.value)}
                 />
               </div>
 
               <div className="campo__informacoes">
-                <label htmlFor="email">Seu e-mail</label>
+                <label htmlFor="email">{t("details.contact.yourEmail")}</label>
 
                 <input
                   id="email"
                   type="email"
-                  placeholder="Digite seu e-mail"
+                  placeholder={t("details.contact.emailPlaceholder")}
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                 />
@@ -334,15 +334,17 @@ Link do objeto: ${window.location.href}`;
 
               <div className="campo__informacoes">
                 <label htmlFor="informacoes">
-                  {objetoEncontrado ? "Sua mensagem" : "Suas informações"}
+                  {objetoEncontrado
+                    ? t("details.contact.yourMessage")
+                    : t("details.contact.yourInfo")}
                 </label>
 
                 <textarea
                   id="informacoes"
                   placeholder={
                     objetoEncontrado
-                      ? "Escreva sua mensagem ou dúvida sobre este objeto..."
-                      : "Descreva as informações que você tem sobre este objeto..."
+                      ? t("details.contact.messagePlaceholderInterest")
+                      : t("details.contact.messagePlaceholderInfo")
                   }
                   value={informacoes}
                   onChange={(event) => setInformacoes(event.target.value)}
@@ -355,18 +357,17 @@ Link do objeto: ${window.location.href}`;
                   type="button"
                   onClick={fecharModal}
                 >
-                  Cancelar
+                  {t("common.cancel")}
                 </button>
 
                 <button className="botao__enviar__informacoes" type="submit">
-                  {objetoEncontrado ? "Enviar mensagem" : "Enviar informações"}
+                  {objetoEncontrado
+                    ? t("details.contact.sendMessage")
+                    : t("details.contact.sendInfo")}
                 </button>
               </div>
 
-              <p className="aviso__email">
-                A mensagem será aberta no seu próprio Gmail. O e-mail informado
-                será usado apenas para identificação.
-              </p>
+              <p className="aviso__email">{t("details.contact.gmailNote")}</p>
             </form>
           </div>
         </div>

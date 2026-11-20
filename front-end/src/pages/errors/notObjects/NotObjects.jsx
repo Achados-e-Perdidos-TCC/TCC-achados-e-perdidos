@@ -1,9 +1,12 @@
+import { useTranslation } from "react-i18next";
 import "./notObjects.css";
 
 import notFoundIllustration from "../../../assets/icons/notobjects/notFound-illustration.png";
 import garbageWhite from "../../../assets/icons/notobjects/garbage-white.png";
 
 function NotObjects() {
+  const { t } = useTranslation();
+
   function limparFiltros() {
     window.location.reload();
   }
@@ -15,20 +18,15 @@ function NotObjects() {
       <img
         className="notobjects__illustration"
         src={notFoundIllustration}
-        alt="Ilustração representando uma busca sem resultados"
+        alt={t("pages.noObjects.illustrationAlt")}
       />
 
       {/* TEXTOS */}
 
       <div className="notobjects__texts">
-        <h2 className="notobjects__title">
-          Ops! Não encontramos nenhum objeto
-        </h2>
+        <h2 className="notobjects__title">{t("pages.noObjects.title")}</h2>
 
-        <p className="notobjects__subtitle">
-          Se você aplicou algum filtro, tente removê-lo para ampliar os
-          resultados da sua busca.
-        </p>
+        <p className="notobjects__subtitle">{t("pages.noObjects.text")}</p>
       </div>
 
       {/* AÇÃO */}
@@ -39,7 +37,7 @@ function NotObjects() {
         onClick={limparFiltros}
       >
         <img src={garbageWhite} alt="" />
-        <span>Limpar filtros</span>
+        <span>{t("pages.noObjects.clear")}</span>
       </button>
     </section>
   );

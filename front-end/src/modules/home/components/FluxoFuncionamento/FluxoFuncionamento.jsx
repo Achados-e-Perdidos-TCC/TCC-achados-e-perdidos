@@ -1,11 +1,15 @@
 import "./FluxoFuncionamento.css";
 
+import { useTranslation } from "react-i18next";
+
 function FluxoFuncionamento() {
+  const { t } = useTranslation();
+
   const etapas = [
     {
       id: 1,
-      titulo: "Cadastro",
-      descricao: "Você cadastra um objeto perdido ou encontrado na plataforma.",
+      titulo: t("home.flow.steps.register.title"),
+      descricao: t("home.flow.steps.register.description"),
       icone: (
         <svg viewBox="0 0 64 64" fill="none">
           <path
@@ -52,9 +56,8 @@ function FluxoFuncionamento() {
 
     {
       id: 2,
-      titulo: "Análise",
-      descricao:
-        "Você analisa os objetos cadastrados e procura possíveis correspondências.",
+      titulo: t("home.flow.steps.analysis.title"),
+      descricao: t("home.flow.steps.analysis.description"),
       icone: (
         <svg viewBox="0 0 64 64" fill="none">
           <circle
@@ -76,9 +79,8 @@ function FluxoFuncionamento() {
 
     {
       id: 3,
-      titulo: "Contato",
-      descricao:
-        "Encontrou uma possível correspondência? Envie um e-mail para quem cadastrou o objeto.",
+      titulo: t("home.flow.steps.contact.title"),
+      descricao: t("home.flow.steps.contact.description"),
       icone: (
         <svg viewBox="0 0 64 64" fill="none">
           <rect
@@ -132,9 +134,9 @@ function FluxoFuncionamento() {
           </div>
 
           <div className="fluxo-funcionamento__texto-cabecalho">
-            <h2>Do cadastro ao contato</h2>
+            <h2>{t("home.flow.title")}</h2>
 
-            <p>Todo o processo é simples e seguro. Veja como funciona:</p>
+            <p>{t("home.flow.subtitle")}</p>
           </div>
         </div>
 

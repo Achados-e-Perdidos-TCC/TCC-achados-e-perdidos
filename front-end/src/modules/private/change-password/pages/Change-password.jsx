@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../../../contexts/authContexts/AuthContext.jsx";
 import { NavLink, useNavigate } from "react-router";
 
@@ -9,44 +10,48 @@ import "./change-password.css";
 
 import logo from "../../../../assets/logo_iniciais.png";
 
+// "texto" guarda a chave de tradução; o texto é traduzido na renderização.
 const REQUISITOS_SENHA = [
   {
     id: "tamanho",
-    texto: "Pelo menos 8 caracteres",
+    texto: "passwordRules.length",
     validar: (senha) => senha.length >= 8,
   },
   {
     id: "maiuscula",
-    texto: "Uma letra maiúscula",
+    texto: "passwordRules.uppercase",
     validar: (senha) => /[A-Z]/.test(senha),
   },
   {
     id: "minuscula",
-    texto: "Uma letra minúscula",
+    texto: "passwordRules.lowercase",
     validar: (senha) => /[a-z]/.test(senha),
   },
   {
     id: "numero",
-    texto: "Um número",
+    texto: "passwordRules.number",
     validar: (senha) => /[0-9]/.test(senha),
   },
   {
     id: "especial",
-    texto: "Um caractere especial",
+    texto: "passwordRules.special",
     validar: (senha) => /[^A-Za-z0-9]/.test(senha),
   },
 ];
 
+// As chaves continuam em português: são as mensagens lançadas pela lógica/validações.
+// Os valores são chaves de tradução.
 const MENSAGENS_ERRO = {
-  "Credenciais inválidas": "Credenciais inválidas.",
-  "Senha inválida": "Nova senha inválida.",
-  "Senha atual incorreta": "Senha atual incorreta.",
-  "A senha precisa ser diferente": "As senhas não podem ser iguais.",
-  "campos precisam estar preenchidos": "Os campos precisam estar preenchidos.",
+  "Credenciais inválidas": "errors.invalidCredentials",
+  "Senha inválida": "account.changePassword.invalidNewPassword",
+  "Senha atual incorreta": "account.changePassword.wrongCurrent",
+  "A senha precisa ser diferente": "account.changePassword.samePassword",
+  "campos precisam estar preenchidos": "account.changePassword.requiredFields",
 };
 
 function ChangePassword() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { setIsAuthenticated } = useContext(AuthContext);
 
   const timeoutRef = useRef(null);
@@ -96,9 +101,7 @@ function ChangePassword() {
 
       await changeNewUserPassword(senhaAtual, novaSenha);
 
-      setSuccess(
-        "Senha alterada com sucesso! Você será redirecionado para a tela de login em instantes.",
-      );
+      setSuccess(t("account.changePassword.success"));
 
       timeoutRef.current = setTimeout(() => {
         localStorage.removeItem("accessToken");
@@ -112,8 +115,7 @@ function ChangePassword() {
       }, 3000);
     } catch (erro) {
       setError(
-        MENSAGENS_ERRO[erro.message] ||
-          "Ocorreu um erro inesperado. Verifique se os dados informados estão corretos.",
+        t(MENSAGENS_ERRO[erro.message] ?? "account.changePassword.unexpected"),
       );
     } finally {
       setCarregando(false);
@@ -126,10 +128,12 @@ function ChangePassword() {
         <img className="esqueci__logo" src={logo} alt="Achados e Devolvidos" />
 
         <div>
-          <h1 className="esqueci__form__title">Altere sua senha</h1>
+          <h1 className="esqueci__form__title">
+            {t("account.changePassword.title")}
+          </h1>
 
           <p className="esqueci__form__subtitle">
-            Informe a senha atual e a sua nova senha.
+            {t("account.changePassword.subtitle")}
           </p>
         </div>
 
@@ -153,14 +157,14 @@ function ChangePassword() {
           <div className="esqueci__container__inputs change__password__user">
             <div className="change__password__field">
               <label className="esqueci__label" htmlFor="oldPassword">
-                Senha atual
+                {t("account.changePassword.currentPassword")}
               </label>
 
               <input
                 id="oldPassword"
                 className="esqueci__input__change"
                 type="password"
-                placeholder="Sua senha atual"
+                placeholder={t("account.changePassword.currentPlaceholder")}
                 autoComplete="current-password"
                 value={senhaAtual}
                 onChange={(evento) => setSenhaAtual(evento.target.value)}
@@ -170,14 +174,14 @@ function ChangePassword() {
 
             <div className="change__password__field">
               <label className="register__label" htmlFor="newPassword">
-                Nova senha
+                {t("account.changePassword.newPassword")}
               </label>
 
               <input
                 id="newPassword"
                 className="esqueci__input__change"
                 type="password"
-                placeholder="Sua nova senha"
+                placeholder={t("account.changePassword.newPlaceholder")}
                 autoComplete="new-password"
                 value={novaSenha}
                 onChange={(evento) => setNovaSenha(evento.target.value)}
@@ -197,7 +201,7 @@ function ChangePassword() {
                           : "requisito__pendente"
                       }
                     >
-                      • {requisito.texto}
+                      • {t(requisito.texto)}
                     </p>
                   ))}
                 </div>
@@ -211,7 +215,11 @@ function ChangePassword() {
               type="submit"
               disabled={carregando}
             >
-              <p>{carregando ? "Alterando senha..." : "Alterar senha"}</p>
+              <p>
+                {carregando
+                  ? t("account.changePassword.submitting")
+                  : t("account.changePassword.submit")}
+              </p>
             </button>
           )}
         </form>
@@ -222,11 +230,11 @@ function ChangePassword() {
 
             <div className="esqueci__container__com__conta">
               <p className="esqueci__sem__conta__text">
-                Não deseja mais alterar?
+                {t("account.changePassword.cancelPrompt")}
               </p>
 
               <NavLink to="/user-area" end className="esqueci__navlink">
-                <p>Voltar</p>
+                <p>{t("common.back")}</p>
               </NavLink>
             </div>
           </>

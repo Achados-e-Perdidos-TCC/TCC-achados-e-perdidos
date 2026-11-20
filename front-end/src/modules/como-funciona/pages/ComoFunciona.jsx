@@ -1,83 +1,77 @@
 import "./ComoFunciona.css";
 
+import { useTranslation } from "react-i18next";
+
 const etapas = [
-  {
-    numero: "01",
-    titulo: "Cadastre um objeto",
-    descricao:
-      "Perdeu ou encontrou algo? Registre o objeto com uma descrição, local e outras informações importantes.",
-    tipo: "Cadastro",
-  },
-  {
-    numero: "02",
-    titulo: "Pesquise manualmente",
-    descricao:
-      "Explore os objetos cadastrados e utilize a busca para encontrar registros que correspondam ao que procura.",
-    tipo: "Busca",
-  },
-  {
-    numero: "03",
-    titulo: "Confira os detalhes",
-    descricao:
-      "Compare as informações dos registros e verifique se encontrou o objeto que estava procurando.",
-    tipo: "Identificação",
-  },
+  { chave: "register" },
+  { chave: "search" },
+  { chave: "details" },
 ];
 
 function ComoFunciona() {
+  const { t } = useTranslation();
+
   return (
     <section className="como__funciona" id="como-funciona">
       <div className="como__funciona__container">
         <div className="como__funciona__header">
-          <span className="como__funciona__eyebrow">SIMPLES E DIRETO</span>
+          <span className="como__funciona__eyebrow">
+            {t("howItWorks.eyebrow")}
+          </span>
 
           <h2>
-            Como funciona o{" "}
+            {t("howItWorks.howWork1")}{" "}
             <span className="title__h2">
-              Achados <span className="title__h2__e">e</span> Devolvidos?
-            </span>
+              {t("howItWorks.brandPart1")}{" "}
+              <span className="title__h2__e">{t("howItWorks.brandPart2")}</span>{" "}
+              {t("howItWorks.brandPart3")}
+            </span>{" "}
+            {t("howItWorks.howWork2")}
           </h2>
 
-          <p>
-            Encontrar ou cadastrar um objeto é simples. Tudo acontece em apenas
-            três etapas.
-          </p>
+          <p>{t("howItWorks.intro")}</p>
         </div>
 
         <div className="como__funciona__etapas">
-          {etapas.map((etapa, index) => (
-            <article
-              className={`como__funciona__card ${
-                index % 2 === 0 ? "card--azul" : "card--verde"
-              }`}
-              key={etapa.numero}
-            >
-              <div className="como__funciona__card__top">
-                <span className="como__funciona__numero">{etapa.numero}</span>
+          {etapas.map((etapa, index) => {
+            const numero = t(`howItWorks.steps.${etapa.chave}.number`);
 
-                <span className="como__funciona__tipo">{etapa.tipo}</span>
-              </div>
+            return (
+              <article
+                className={`como__funciona__card ${
+                  index % 2 === 0 ? "card--azul" : "card--verde"
+                }`}
+                key={numero}
+              >
+                <div className="como__funciona__card__top">
+                  <span className="como__funciona__numero">{numero}</span>
 
-              <div className="como__funciona__card__content">
-                <h3>{etapa.titulo}</h3>
+                  <span className="como__funciona__tipo">
+                    {t(`howItWorks.steps.${etapa.chave}.type`)}
+                  </span>
+                </div>
 
-                <p>{etapa.descricao}</p>
-              </div>
+                <div className="como__funciona__card__content">
+                  <h3>{t(`howItWorks.steps.${etapa.chave}.title`)}</h3>
 
-              <div className="como__funciona__card__footer">
-                <span className="como__funciona__indicador" />
-                <span>Etapa {etapa.numero}</span>
-              </div>
-            </article>
-          ))}
+                  <p>{t(`howItWorks.steps.${etapa.chave}.description`)}</p>
+                </div>
+
+                <div className="como__funciona__card__footer">
+                  <span className="como__funciona__indicador" />
+                  <span>{t("howItWorks.stepLabel", { number: numero })}</span>
+                </div>
+              </article>
+            );
+          })}
         </div>
 
         <div className="como__funciona__footer">
           <span className="como__funciona__footer__icon">✓</span>
 
           <p>
-            <strong>Você no controle.</strong> Cadastre e pesquise no seu
-            próprio ritmo.
+            <strong>{t("howItWorks.control")}</strong>{" "}
+            {t("howItWorks.controlText")}
           </p>
         </div>
       </div>

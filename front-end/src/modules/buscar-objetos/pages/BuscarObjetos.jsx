@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import Loading from "../../../components/loading/Loading.jsx";
 import "./buscarObjetos.css";
 
@@ -14,6 +15,8 @@ import SecondaryFilters from "../components/secondaryFilters/SecondaryFilters.js
 import PrincipalCards from "../components/principalCards/PrincipalCards.jsx";
 
 function BuscarObjetos() {
+  const { t } = useTranslation();
+
   const [objetos, setObjetos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
@@ -70,13 +73,12 @@ function BuscarObjetos() {
         {/* Cabeçalho */}
         <header className="busca__header">
           <div className="busca__header__texto">
-            <span className="busca__eyebrow">ENCONTRE O QUE PROCURA</span>
+            <span className="busca__eyebrow">{t("search.eyebrow")}</span>
 
-            <h1 className="title__buscar">Buscar objetos</h1>
+            <h1 className="title__buscar">{t("search.title")}</h1>
 
             <p className="subtitle subtitle__description">
-              Encontre objetos perdidos ou descubra se alguém encontrou aquilo
-              que você procura.
+              {t("search.subtitle")}
             </p>
           </div>
 
@@ -89,7 +91,7 @@ function BuscarObjetos() {
               <span className="busca__resumo__numero">{total}</span>
 
               <span className="busca__resumo__descricao">
-                objetos encontrados
+                {t("search.foundLabel", { count: total })}
               </span>
             </div>
           </div>
@@ -99,8 +101,8 @@ function BuscarObjetos() {
         <section className="busca__filtros container__card">
           <div className="busca__secao__titulo">
             <div>
-              <h2>Encontre um objeto</h2>
-              <p>Utilize os filtros para refinar sua pesquisa.</p>
+              <h2>{t("search.filtersTitle")}</h2>
+              <p>{t("search.filtersSubtitle")}</p>
             </div>
           </div>
 
@@ -111,7 +113,9 @@ function BuscarObjetos() {
           <div className="busca__filtros__divisor" />
 
           <div className="busca__filtros__status">
-            <span className="busca__filtros__label">Tipo de publicação</span>
+            <span className="busca__filtros__label">
+              {t("search.publicationType")}
+            </span>
 
             <SecondaryFilters />
           </div>
@@ -122,13 +126,13 @@ function BuscarObjetos() {
           <div className="busca__resultados__header">
             <div className="busca__resultados__titulo">
               <div>
-                <h2>Resultados da busca</h2>
+                <h2>{t("search.resultsTitle")}</h2>
 
-                <p>Objetos relacionados aos filtros selecionados</p>
+                <p>{t("search.resultsSubtitle")}</p>
               </div>
 
               <span className="busca__resultados__contador">
-                {totalEncontrados} resultados
+                {t("search.resultsCount", { count: totalEncontrados })}
               </span>
             </div>
           </div>
@@ -139,11 +143,8 @@ function BuscarObjetos() {
               <Loading />
             ) : erro ? (
               <div className="busca__estado">
-                <h3>Não foi possível carregar os objetos</h3>
-                <p>
-                  Ocorreu um problema ao buscar as publicações. Tente novamente
-                  mais tarde.
-                </p>
+                <h3>{t("search.loadError")}</h3>
+                <p>{t("search.loadErrorDescription")}</p>
               </div>
             ) : (
               <PrincipalCards
@@ -160,8 +161,11 @@ function BuscarObjetos() {
           {!carregando && !erro && total > 0 && (
             <footer className="principal__footer">
               <span className="principal__footer__texto">
-                Mostrando <strong>{exibidos}</strong> de{" "}
-                <strong>{total}</strong> resultados
+                <Trans
+                  i18nKey="search.showing"
+                  values={{ shown: exibidos, total }}
+                  components={{ strong: <strong /> }}
+                />
               </span>
 
               <div className="paginas__principal">
@@ -170,7 +174,7 @@ function BuscarObjetos() {
                   className="button__arrow"
                   disabled={paginaAtual <= 1}
                   onClick={() => alternarPagina(Math.max(1, paginaAtual - 1))}
-                  aria-label="Página anterior"
+                  aria-label={t("common.previousPage")}
                 >
                   <img className="arrow__left" src={arrowGray} alt="" />
                 </button>
@@ -208,7 +212,7 @@ function BuscarObjetos() {
                       Math.min(totalDePaginasNumerico, paginaAtual + 1),
                     )
                   }
-                  aria-label="Próxima página"
+                  aria-label={t("common.nextPage")}
                 >
                   <img className="arrow__right" src={arrowGray} alt="" />
                 </button>
