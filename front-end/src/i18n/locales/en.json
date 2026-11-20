@@ -1,0 +1,654 @@
+{
+  "header": {
+    "home": "Home",
+    "search": "Search items",
+    "howItWorks": "How it works",
+    "register": "Register item",
+    "signIn": "Sign in",
+    "myProfile": "My profile",
+    "signInAccount": "Sign in to your account",
+    "openProfile": "Go to my profile",
+    "homeAria": "Achados e Devolvidos - Home page",
+    "navigation": "Navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "tagline": "Connecting people and stories."
+  },
+  "common": {
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "back": "Back",
+    "continue": "Continue",
+    "finish": "Finish",
+    "save": "Save",
+    "saveChanges": "Save changes",
+    "remove": "Remove",
+    "optional": "(optional)",
+    "required": "Required",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "unnamedItem": "Unnamed item",
+    "noDescription": "No description available",
+    "noLocation": "Location not provided",
+    "noDate": "Date not provided",
+    "notInformedM": "Not provided",
+    "notInformedF": "Not provided",
+    "viewDetails": "View details",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "clearFilters": "Clear filters",
+    "backHome": "Back to home",
+    "goToProfile": "Go to my profile",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "state": "State",
+    "uf": "State",
+    "city": "City",
+    "neighborhood": "Neighborhood",
+    "date": "Date",
+    "time": "Time",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "category": "Category",
+    "description": "Description",
+    "status": {
+      "lost": "Lost",
+      "found": "Found",
+      "inAnalysis": "Under review",
+      "inactive": "Inactive"
+    },
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
+  },
+  "errors": {
+    "requestFailed": "Request error",
+    "invalidCredentials": "Invalid credentials.",
+    "invalidName": "Invalid name.",
+    "invalidEmail": "Invalid email.",
+    "invalidPassword": "Invalid password.",
+    "invalidPhone": "Invalid phone number.",
+    "stateNotSelected": "Select the city's state.",
+    "invalidCity": "Select a city from the available list.",
+    "requiredFields": "All fields must be filled in.",
+    "unexpected": "An unexpected error occurred. Check that the information provided is correct and try again later.",
+    "categoriesLoad": "Could not load the categories."
+  },
+  "passwordRules": {
+    "length": "At least 8 characters",
+    "uppercase": "One uppercase letter",
+    "lowercase": "One lowercase letter",
+    "number": "One number",
+    "special": "One special character"
+  },
+  "home": {
+    "hero": {
+      "tag": "Connecting people and stories",
+      "titlePrefix": "Your item may be",
+      "titleHighlight1": "closer",
+      "titleMiddle": "than you",
+      "titleHighlight2": "think.",
+      "description": "Lost something or found an item? Our platform connects those who are looking with those who found.",
+      "lostButton": "I lost an item",
+      "foundButton": "I found an item",
+      "trust": "A simple way to help and to find.",
+      "imageAlt": "Blue box with found items, including a phone, a bottle and headphones",
+      "badgeTitle": "Find",
+      "badgeSubtitle": "what you're looking for"
+    },
+    "search": {
+      "eyebrow": "ITEM SEARCH",
+      "title": "What are you looking for?",
+      "description": "Browse the registered items and find possible matches for what you lost.",
+      "button": "Explore items"
+    },
+    "how": {
+      "eyebrow": "SIMPLE FROM START TO FINISH",
+      "title": "How does the platform work?",
+      "description": "A simple process to help items find their true owners."
+    },
+    "flow": {
+      "title": "From registration to contact",
+      "subtitle": "The whole process is simple and safe. Here's how it works:",
+      "steps": {
+        "register": {
+          "title": "Registration",
+          "description": "You register a lost or found item on the platform."
+        },
+        "analysis": {
+          "title": "Review",
+          "description": "You review the registered items and look for possible matches."
+        },
+        "contact": {
+          "title": "Contact",
+          "description": "Found a possible match? Send an email to the person who registered the item."
+        }
+      }
+    },
+    "tips": {
+      "title": "Tips for finding your item",
+      "subtitle": "Small details can make all the difference in your search.",
+      "photos": {
+        "title": "Look at the photos",
+        "description": "Compare the appearance and characteristics of the items."
+      },
+      "details": {
+        "title": "Check the details",
+        "description": "Verify the characteristics and the reported location."
+      },
+      "contact": {
+        "title": "Get in touch",
+        "description": "Found a possible match? Send an email."
+      }
+    },
+    "recent": {
+      "eyebrow": "COMMUNITY UPDATES",
+      "title": "Recently registered items",
+      "description": "Check out the latest items shared on the platform.",
+      "seeAll": "See all items"
+    },
+    "item": {
+      "unnamed": "Unnamed item",
+      "noDescription": "No description available",
+      "noImage": "Image not available",
+      "noLocation": "Location not provided",
+      "noDate": "Date not provided",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "categoryFallback": "Others",
+      "status": {
+        "lost": "Lost",
+        "found": "Found",
+        "inAnalysis": "Under review"
+      }
+    },
+    "empty": {
+      "title": "No items here yet.",
+      "description": "We don't have any recently registered items yet. As soon as new records are added, they will appear here."
+    },
+    "error": {
+      "title": "Oops! Something went wrong.",
+      "description": "Could not load the recent items. Please try again later."
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "SIMPLE AND STRAIGHTFORWARD",
+    "brandPart1": "Achados",
+    "brandPart2": "e",
+    "brandPart3": "Devolvidos",
+    "howWork1": "How does the",
+    "howWork2": "work",
+    "control": "You're in control.",
+    "intro": "Finding or registering an item is simple. Everything happens in just three steps, at your own pace.",
+    "steps": {
+      "register": {
+        "number": "01",
+        "title": "Register an item",
+        "description": "Lost or found something? Register the item with a description, location and other important information.",
+        "type": "Registration"
+      },
+      "search": {
+        "number": "02",
+        "title": "Search manually",
+        "description": "Browse the registered items and use the search to find records that match what you're looking for.",
+        "type": "Search"
+      },
+      "details": {
+        "number": "03",
+        "title": "Check the details",
+        "description": "Compare the information in the records and check whether you found the item you were looking for.",
+        "type": "Identification"
+      }
+    },
+    "cardLost": "LOST ITEM",
+    "cardFound": "FOUND ITEM"
+  },
+  "search": {
+    "eyebrow": "FIND WHAT YOU'RE LOOKING FOR",
+    "title": "Search items",
+    "subtitle": "Find lost items or discover whether someone found what you're looking for.",
+    "filtersTitle": "Find an item",
+    "filtersSubtitle": "Use the filters to refine your search.",
+    "publicationType": "Listing type",
+    "resultsTitle": "Search results",
+    "resultsSubtitle": "Items matching the selected filters",
+    "found_one": "{{count}} item found",
+    "found_other": "{{count}} items found",
+    "showing": "Showing <strong>{{shown}}</strong> of <strong>{{total}}</strong> results",
+    "loadError": "Could not load the items",
+    "loadErrorDescription": "There was a problem fetching the listings. Please try again later.",
+    "foundLabel_one": "item found",
+    "foundLabel_other": "items found",
+    "resultsCount_one": "{{count}} result",
+    "resultsCount_other": "{{count}} results",
+    "filters": {
+      "object": "Item",
+      "objectPlaceholder": "E.g.: Wallet, phone, backpack...",
+      "location": "Location",
+      "locationPlaceholder": "E.g.: Porto Alegre, Downtown...",
+      "category": "Category",
+      "categoryPlaceholder": "All categories",
+      "period": "Period",
+      "periodPlaceholder": "Any period",
+      "clearPeriod": "Clear period",
+      "loadingCategories": "Loading categories...",
+      "searchButton": "Search"
+    },
+    "secondary": {
+      "all": "All",
+      "lost": "Lost",
+      "found": "Found"
+    },
+    "card": {
+      "description": "Description"
+    }
+  },
+  "details": {
+    "foundBadge": "Found item",
+    "title": "Item details",
+    "subtitle": "Information to help identify the item.",
+    "categories": "Categories",
+    "location": "Location",
+    "date": "Date",
+    "fullDescription": "Full description",
+    "information": "Information",
+    "notes": "Notes",
+    "descriptionUnavailable": "Description unavailable",
+    "categoryLabel": "Category: {{value}}",
+    "addressLabel": "Address: {{value}}",
+    "cityLabel": "City: {{value}}",
+    "stateLabel": "State: {{value}}",
+    "dateLabel": "Date: {{value}}",
+    "timeLabel": "Time: {{value}}",
+    "images": {
+      "main": "Item image",
+      "previous": "Show previous images",
+      "next": "Show next images",
+      "show": "Show image {{n}}",
+      "extra": "Additional photo {{n}} of the item"
+    },
+    "contact": {
+      "interestTitle": "I'm interested in this item",
+      "interestDescription": "Would you like to know more about this item? Send a message to the owner to get more information.",
+      "infoTitle": "I have information about this item",
+      "infoDescription": "Do you have information about this item? Send a message to the owner to help identify and recover it.",
+      "closeModal": "Close modal",
+      "yourName": "Your name",
+      "namePlaceholder": "Enter your name",
+      "yourEmail": "Your email",
+      "emailPlaceholder": "Enter your email",
+      "yourMessage": "Your message",
+      "yourInfo": "Your information",
+      "messagePlaceholderInterest": "Write your message or question about this item...",
+      "messagePlaceholderInfo": "Describe the information you have about this item...",
+      "sendMessage": "Send message",
+      "sendInfo": "Send information",
+      "gmailNote": "The message will open in your own Gmail. The email provided will only be used for identification.",
+      "errors": {
+        "nameRequired": "Enter your name.",
+        "emailRequired": "Enter your email.",
+        "emailInvalid": "Enter a valid email address.",
+        "infoRequired": "Describe the information you have about the item.",
+        "ownerEmailMissing": "Could not identify the email of the person responsible for this item."
+      },
+      "email": {
+        "subjectInterest": "I'm interested in the item: {{name}}",
+        "subjectInfo": "Information about the item: {{name}}",
+        "greeting": "Hello!",
+        "bodyInterest": "I'm interested in the item \"{{name}}\" posted on the Achados e Devolvidos platform.",
+        "bodyInfo": "I have information about the item \"{{name}}\" posted on the Achados e Devolvidos platform.",
+        "nameLine": "Name: {{name}}",
+        "emailLine": "Email: {{email}}",
+        "messageLabel": "Message:",
+        "linkLine": "Item link: {{link}}"
+      }
+    },
+    "loadError": "Could not load the item.",
+    "backToSearch": "Back to Search Items"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back!",
+      "subtitle": "Sign in to continue",
+      "email": "Email",
+      "emailPlaceholder": "Your@email.com",
+      "password": "Password",
+      "passwordPlaceholder": "Your password",
+      "remember": "Remember me",
+      "forgot": "Forgot my password",
+      "submit": "Sign in",
+      "noAccount": "Don't have an account yet?",
+      "createAccount": "Create account"
+    },
+    "forgot": {
+      "title": "Recover your password",
+      "intro": "Enter your email below to receive instructions for recovering your password.",
+      "email": "Email",
+      "sending": "Sending...",
+      "submit": "Send recovery link",
+      "remembered": "Remembered your password?",
+      "signIn": "Sign in",
+      "success": "If the email provided is registered, we will send instructions to reset your password.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailRequired": "The email field must be filled in.",
+      "unexpected": "An unexpected error occurred. Check the email provided and try again."
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Let's start with your basic information.",
+      "profileTitle": "Personalize your profile",
+      "profileSubtitle": "Add a photo to make your profile more personal.",
+      "preferencesTitle": "Set your preferences",
+      "preferencesSubtitle": "Choose how you want to receive notices and updates.",
+      "circles": {
+        "data": "Your details",
+        "profile": "Your profile",
+        "preferences": "Preferences"
+      },
+      "data": {
+        "fullName": "Full name",
+        "namePlaceholder": "E.g.: John Smith",
+        "emailPlaceholder": "E.g.: john@email.com",
+        "phonePlaceholder": "E.g.: (11) 99999-9999",
+        "cityPlaceholder": "Your city",
+        "passwordPlaceholder": "Your password",
+        "acceptPrefix": "I have read and accept the",
+        "termsOfUse": "Terms of Use",
+        "and": "and the",
+        "privacyPolicy": "Privacy Policy",
+        "acceptError": "You must accept the Terms of Use and the Privacy Policy.",
+        "emailConsent": "I authorize my email to be made available for contact when someone finds an item I posted on the platform.",
+        "emailConsentHint": "Your email may be displayed on the public items page to allow contact. This authorization is optional.",
+        "hasAccount": "Already have an account?",
+        "signIn": "Sign in"
+      },
+      "photo": {
+        "title": "Your profile photo",
+        "preview": "Profile photo preview",
+        "add": "Add a photo",
+        "selected": "Photo selected",
+        "hint": "JPG or PNG · Up to 5 MB recommended",
+        "pick": "Select an image from your device",
+        "drag": "Or drag and drop here",
+        "delete": "Delete image",
+        "select": "Select image",
+        "skip": "Skip for now",
+        "invalidFormat": "Select an image in JPG or PNG format.",
+        "tooLarge": "The image must be 5 MB or less.",
+        "required": "Add a photo to continue or click “Skip for now”."
+      },
+      "preferences": {
+        "notificationsTitle": "Notifications",
+        "notificationsDescription": "Receive important updates about your account and your activity on the platform.",
+        "showEmailTitle": "Show my email on items",
+        "showEmailDescription": "Allow other people to see your email on the item listings you publish.",
+        "later": "You can change these preferences later in your account settings.",
+        "creating": "Creating account...",
+        "finish": "Complete registration",
+        "error": "Could not create your account. Please try again."
+      },
+      "created": {
+        "title": "Account created successfully!",
+        "text": "Your Achados e Devolvidos account has been created. You can now explore and use the system."
+      },
+      "alreadyLoggedIn": {
+        "title": "You're already signed in!",
+        "text": "Your account is already active. You don't need to create a new one."
+      }
+    }
+  },
+  "form": {
+    "title": "Register item",
+    "subtitle": "Share a few details so we can help find a possible match.",
+    "whatHappened": "What happened?",
+    "lostTitle": "I lost an item",
+    "lostDescription": "My item was lost.",
+    "foundTitle": "I found an item",
+    "foundDescription": "I found an item and want to return it.",
+    "itemName": "Item name",
+    "itemNamePlaceholder": "E.g.: Black wallet, Samsung Galaxy...",
+    "selectCategory": "Select the category",
+    "loadingCategories": "Loading categories...",
+    "selectState": "Select the state",
+    "selectCity": "Select the city",
+    "selectStateFirst": "Select the state first",
+    "selectNeighborhood": "Select the neighborhood",
+    "selectCityFirst": "Select the city first",
+    "noNeighborhoods": "No neighborhoods available",
+    "noNeighborhoodsHint": "There are no neighborhoods available for this city. The location will be recorded with city and state.",
+    "photos": "Item photos",
+    "photosHint": "Minimum 1 and maximum 6 photos",
+    "uploadCta": "Click to select the item photos",
+    "uploadHint": "JPEG, PNG, WEBP or GIF. Up to 5 MB per photo.",
+    "photoAlt": "Photo {{n}} of the item",
+    "previousPhoto": "View previous photo",
+    "nextPhoto": "View next photo",
+    "removeSelectedPhoto": "Remove selected photo",
+    "selectedCount": "{{count}} of {{max}} photos selected",
+    "addPhotos": "Add photos",
+    "describeItem": "Describe the item",
+    "describePlaceholder": "Describe the item in as much detail as possible...",
+    "features": "Any specific characteristics?",
+    "featuresPlaceholder": "E.g.: color, marks, logo, damage, serial number, etc.",
+    "submit": "Register item",
+    "errors": {
+      "invalidFileType": "Use JPEG, PNG, WEBP or GIF images.",
+      "fileTooLarge": "Each image can be 5 MB at most.",
+      "maxPhotos": "You can add up to {{max}} photos.",
+      "couldNotAdd": "Could not add the selected photos.",
+      "minOnePhoto": "Add at least one photo of the item.",
+      "futureDate": "The date cannot be later than today.",
+      "reviewRequired": "Review the required fields before continuing.",
+      "waitCategories": "Wait for the categories to load before continuing.",
+      "submitFailed": "Could not register the item. Please try again."
+    },
+    "confirm": {
+      "title": "Before publishing your item",
+      "text": "Are you aware that other people may have information about the registered item and may contact you using the information made available on the platform?",
+      "notice": "By continuing, you confirm that you are aware of this possibility.",
+      "backToReview": "Go back and review",
+      "confirm": "I'm aware, continue",
+      "publishing": "Publishing..."
+    },
+    "success": {
+      "title": "Item registered successfully!",
+      "text": "Your item has been published and is now available on the platform."
+    }
+  },
+  "edit": {
+    "eyebrow": "MY ITEMS",
+    "title": "Edit item",
+    "subtitle": "Update the information of your registered item.",
+    "infoTitle": "Item information",
+    "infoSubtitle": "Review and update the main details.",
+    "locationTitle": "Location",
+    "locationSubtitle": "Enter where the item was lost or found.",
+    "dateTimeTitle": "Date and time",
+    "dateTimeSubtitle": "Update when the item was lost or found.",
+    "photosTitle": "Item photos",
+    "photosSubtitle": "Add or remove images to keep the listing up to date.",
+    "noPhotos": "No photos added",
+    "noPhotosHint": "Add at least one image of the item.",
+    "uploadHint": "JPG, PNG, WEBP or GIF · Up to 5 MB per image",
+    "addPhotos": "+ Add photos",
+    "existingPhoto": "Registered photo {{n}}",
+    "removeExisting": "Remove registered photo {{n}}",
+    "newPhoto": "New photo {{n}}",
+    "removeNew": "Remove new photo {{n}}",
+    "descriptionTitle": "Description",
+    "descriptionSubtitle": "Share the important details about the item.",
+    "descriptionLabel": "Item description",
+    "notes": "Note",
+    "delete": "Delete item",
+    "loading": "Loading item data...",
+    "openError": "Could not open this item",
+    "backToMine": "Back to my items",
+    "wait": "Please wait...",
+    "modals": {
+      "saveTitle": "Save changes?",
+      "saveText": "Do you really want to save the changes to this item?",
+      "saveNotice": "The updated information will be saved on the platform.",
+      "saveConfirm": "Confirm and save",
+      "deleteTitle": "Delete item?",
+      "deleteText": "Are you sure you want to delete this item?",
+      "deleteNotice": "It will no longer appear in public searches, but will remain in your item history.",
+      "successTitle": "Item updated!",
+      "successText": "Your item's changes have been saved and are now available on the platform."
+    },
+    "errors": {
+      "nameRequired": "Enter the item name.",
+      "categoryRequired": "Select a category.",
+      "locationRequired": "Enter the state and city.",
+      "dateRequired": "Enter the date and time.",
+      "descriptionRequired": "The item description is required.",
+      "photoLimit": "The limit is {{max}} photos.",
+      "invalidState": "Invalid state selected.",
+      "confirmFailed": "Could not confirm the item update.",
+      "saveFailed": "Could not save the changes. Please try again.",
+      "deleteFailed": "Could not delete the item. Please try again.",
+      "notFoundOrForbidden": "Item not found or you don't have permission to edit it.",
+      "categoryNotIdentified": "Could not identify the current category. Check the available categories.",
+      "loadFailed": "Could not load the item data.",
+      "notFound": "Item not found."
+    },
+    "saved": "Your item was saved successfully!"
+  },
+  "account": {
+    "sidebar": {
+      "myProfile": "My profile",
+      "myObjects": "My items",
+      "notifications": "Notifications",
+      "helpCenter": "Help center"
+    },
+    "objects": {
+      "title": "My items",
+      "subtitle": "Manage the items you lost or found.",
+      "loading": "Loading your items...",
+      "loadError": "Could not load your items.",
+      "count_one": "{{count}} registered item",
+      "count_other": "{{count}} registered items",
+      "optionsOf": "Options for {{name}}",
+      "options": "Item options",
+      "edit": "Edit item"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Keep up with news about your items and interactions.",
+      "markAllRead": "Mark all as read",
+      "updating": "Updating...",
+      "loading": "Loading notifications...",
+      "loadError": "Could not load the notifications.",
+      "disabled": "You have turned off notifications in your preferences.",
+      "empty": "You have no notifications.",
+      "markReadError": "Could not mark the notification as read.",
+      "markAllReadError": "Could not mark all notifications as read.",
+      "aria": "Notification: {{title}}. {{status}}",
+      "read": "Read",
+      "unread": "Unread"
+    },
+    "profile": {
+      "eyebrow": "MY ACCOUNT",
+      "title": "My profile",
+      "subtitle": "Manage your personal information, preferences and account security.",
+      "personalInfoTitle": "Personal information",
+      "personalInfoSubtitle": "Update your identification and contact details.",
+      "securityTitle": "Security",
+      "securitySubtitle": "Manage access to and protection of your account.",
+      "preferencesTitle": "Preferences",
+      "preferencesSubtitle": "Personalize your experience on the platform.",
+      "dangerTitle": "Danger zone",
+      "dangerSubtitle": "Important actions related to your account.",
+      "photoTitle": "Profile photo",
+      "editPhoto": "Edit photo",
+      "monthYear": "{{month}} {{year}}",
+      "updateFailed": "Could not update the data. Check whether you made any changes.",
+      "saveFailed": "Could not save the changes.",
+      "loadUserError": "Error loading user information"
+    },
+    "security": {
+      "changePassword": "Change password",
+      "changePasswordDescription": "Update your password regularly."
+    },
+    "preferences": {
+      "toggleNotifications": "Toggle notifications",
+      "toggleShowEmail": "Toggle email visibility on items",
+      "receiveNotifications": "Receive notifications",
+      "receiveNotificationsDescription": "Receive notifications about platform news.",
+      "showEmail": "Show my email on items",
+      "showEmailDescription": "Allow other people to see your email when viewing the details of items you published.",
+      "themeTitle": "Platform theme",
+      "themeDescription": "Choose the appearance you prefer to use.",
+      "themeLight": "Light",
+      "themeDark": "Dark"
+    },
+    "danger": {
+      "logout": "Sign out",
+      "logoutDescription": "You can sign back in whenever you want.",
+      "deleteAccount": "Delete account",
+      "deleteDescription": "This action is permanent and cannot be undone.",
+      "confirmQuestion": "Are you sure you want to delete your account?",
+      "confirmWarning": "This action cannot be undone.",
+      "confirmDelete": "Confirm deletion"
+    },
+    "changePassword": {
+      "title": "Change your password",
+      "subtitle": "Enter your current password and your new password.",
+      "currentPassword": "Current password",
+      "currentPlaceholder": "Your current password",
+      "newPassword": "New password",
+      "newPlaceholder": "Your new password",
+      "submit": "Change password",
+      "submitting": "Changing password...",
+      "cancelPrompt": "Don't want to change it anymore?",
+      "success": "Password changed successfully! You will be redirected to the sign-in screen shortly.",
+      "invalidNewPassword": "Invalid new password.",
+      "wrongCurrent": "Incorrect current password.",
+      "samePassword": "The passwords cannot be the same.",
+      "requiredFields": "The fields must be filled in.",
+      "unexpected": "An unexpected error occurred. Check that the information provided is correct."
+    }
+  },
+  "pages": {
+    "notAuthenticated": {
+      "title": "You need to sign in to your account",
+      "text": "To access this area and manage your information, sign in to your account or create a free account.",
+      "signIn": "Sign in to my account",
+      "createAccount": "Create my account"
+    },
+    "notFound": {
+      "illustrationAlt": "Illustration representing a page not found",
+      "code": "ERROR 404",
+      "title": "Oops! Page not found",
+      "text": "We couldn't find the page you're looking for. It may have been removed or the address may be incorrect.",
+      "backHome": "Back to home",
+      "search": "Search items"
+    },
+    "noObjects": {
+      "illustrationAlt": "Illustration representing a search with no results",
+      "title": "Oops! We couldn't find any items",
+      "text": "If you applied any filters, try removing them to broaden your search results.",
+      "clear": "Clear filters"
+    },
+    "noObjectsRegistered": {
+      "illustrationAlt": "Illustration representing no registered items",
+      "title": "Oops! You don't have any registered items yet",
+      "text": "Register your first item to start viewing and managing your records here."
+    },
+    "profileLoading": {
+      "title": "Loading your profile...",
+      "slow": "Taking too long? Try reloading the page."
+    }
+  }
+}

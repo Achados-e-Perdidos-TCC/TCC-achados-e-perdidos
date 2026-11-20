@@ -1,10 +1,13 @@
 import { NavLink } from "react-router";
+import { useTranslation } from "react-i18next";
 import "./securityLinks.css";
 
 import padlockBlue from "../../../../../../../assets/icons/userArea/padlock-blue.png";
 import arrowGray from "../../../../../../../assets/icons/detalhesObjeto/arrow-gray.svg";
 
 function SecurityLinks() {
+  const { t } = useTranslation();
+
   return (
     <div className="user__security">
       <NavLink
@@ -15,10 +18,12 @@ function SecurityLinks() {
           <img className="user__security__img" src={padlockBlue} alt="" />
 
           <div className="user__security__text">
-            <h4 className="user__security__title">Alterar Senha</h4>
+            <h4 className="user__security__title">
+              {t("account.security.changePassword")}
+            </h4>
 
             <p className="user__security__subtitle">
-              Atualize sua senha regularmente.
+              {t("account.security.changePasswordDescription")}
             </p>
           </div>
         </div>

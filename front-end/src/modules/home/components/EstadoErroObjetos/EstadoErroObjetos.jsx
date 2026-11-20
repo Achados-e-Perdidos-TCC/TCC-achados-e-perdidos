@@ -1,6 +1,10 @@
 import "./EstadoErroObjetos.css";
 
+import { useTranslation } from "react-i18next";
+
 function EstadoErroObjetos() {
+  const { t } = useTranslation();
+
   return (
     <div className="estado-objetos estado-objetos-erro" role="alert">
       <div className="estado-objetos-icone">
@@ -19,12 +23,9 @@ function EstadoErroObjetos() {
         </svg>
       </div>
 
-      <h3>Ops! Algo deu errado.</h3>
+      <h3>{t("home.error.title")}</h3>
 
-      <p>
-        Não foi possível carregar os objetos recentes. Tente novamente mais
-        tarde.
-      </p>
+      <p>{t("home.error.description")}</p>
     </div>
   );
 }

@@ -1,10 +1,13 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
+import { useTranslation } from "react-i18next";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./dateRange.css";
 
 function DateRange({ placeholder, arrow, close, change }) {
+  const { t } = useTranslation();
+
   const [data, setData] = useState([null, null]);
   const [calendarVisible, setCalendarVisible] = useState(false);
 
@@ -62,7 +65,7 @@ function DateRange({ placeholder, arrow, close, change }) {
         className="x"
         onClick={limparPeriodo}
         src={close}
-        alt="Limpar período"
+        alt={t("search.filters.clearPeriod")}
       />
     </div>
   );

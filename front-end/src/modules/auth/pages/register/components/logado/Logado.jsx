@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import "./logado.css";
 
@@ -6,6 +7,7 @@ import logo from "../../../../../../assets/logo_iniciais.png";
 
 function Logado() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="logado">
@@ -16,10 +18,12 @@ function Logado() {
       {/* MENSAGEM */}
 
       <div className="logado__conteudo">
-        <h1 className="register__ja__logado">Você já está logado!</h1>
+        <h1 className="register__ja__logado">
+          {t("auth.register.alreadyLoggedIn.title")}
+        </h1>
 
         <p className="register__ja__logado__subtitle">
-          Sua conta já está ativa. Você não precisa criar uma nova conta.
+          {t("auth.register.alreadyLoggedIn.text")}
         </p>
       </div>
 
@@ -31,7 +35,7 @@ function Logado() {
           type="button"
           onClick={() => navigate("/user-area")}
         >
-          Ir para meu perfil
+          {t("common.goToProfile")}
         </button>
 
         <button
@@ -39,7 +43,7 @@ function Logado() {
           type="button"
           onClick={() => navigate("/")}
         >
-          Voltar para início
+          {t("common.backHome")}
         </button>
       </div>
     </div>

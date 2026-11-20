@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { hoje, ontem } from "../../../../utils/date/date.js";
 
 import {
@@ -14,32 +16,33 @@ import calendarGray from "../../../../assets/icons/buscarObjetos/calendar-gray.s
 import gridGray from "../../../../assets/icons/buscarObjetos/grid-gray.svg";
 import circuloBlue from "../../../../assets/icons/detalhesObjeto/circulo-blue.png";
 
+// "titulo" guarda a chave de tradução; o texto é traduzido na renderização.
 const iconesInformacoes = [
   {
     icone: gridGray,
-    titulo: "Categorias",
+    titulo: "details.categories",
   },
   {
     icone: pinGray,
-    titulo: "Localização",
+    titulo: "details.location",
   },
   {
     icone: calendarGray,
-    titulo: "Data",
+    titulo: "details.date",
   },
 ];
 
 // Cabeçalho separado para permitir reposicionamento responsivo.
 export function DetalhesCabecalho({ objeto }) {
-  const nome = objeto?.nome || "Objeto sem nome";
+  const { t } = useTranslation();
+
+  const nome = objeto?.nome || t("common.unnamedItem");
 
   return (
     <div className="cabecalho__detalhes">
       <h1 className="detalhes__titulo">{nome}</h1>
 
-      <p className="detalhes__descricao responsive">
-        Informações para identificação do objeto.
-      </p>
+      <p className="detalhes__descricao responsive">{t("details.subtitle")}</p>
 
       <div className="status__detalhes">
         <Status objeto={objeto} />
@@ -49,48 +52,56 @@ export function DetalhesCabecalho({ objeto }) {
 }
 
 function Detalhes({ objeto }) {
+  const { t } = useTranslation();
+
   const objetoEncontrado = objeto ?? {};
 
   const localizacao = objetoEncontrado.localizacao ?? {};
   const dataObjeto = objetoEncontrado.data ?? {};
 
-  const descricao = objetoEncontrado.descricao || "Descrição indisponível";
+  const descricao =
+    objetoEncontrado.descricao || t("details.descriptionUnavailable");
 
   const descricaoCompleta = objetoEncontrado.descricaoCompleta?.trim() || "";
 
-  const cidade = localizacao.cidade || "Não informado";
+  const cidade = localizacao.cidade || t("common.notInformedM");
   const endereco = localizacao.endereco || "";
 
-  const estado = obterNomeCompletoEstado(localizacao.estado) || "Não informado";
+  const estado =
+    obterNomeCompletoEstado(localizacao.estado) || t("common.notInformedM");
 
   const localizacaoFormatada =
-    formatarLocalizacao(localizacao) || "Localização não informada";
+    formatarLocalizacao(localizacao) || t("common.noLocation");
 
   // Formata a data de publicação do objeto.
   function dataFormatada(data) {
-    if (!data) return "Data não informada";
+    if (!data) return t("common.noDate");
 
-    if (data === hoje()) return "Hoje";
-    if (data === ontem()) return "Ontem";
+    if (data === hoje()) return t("common.today");
+    if (data === ontem()) return t("common.yesterday");
 
     return `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`;
   }
 
   // Informações resumidas exibidas acima dos detalhes completos.
   const descricaoInfo = [
-    objetoEncontrado.categoria || "Não informada",
+    objetoEncontrado.categoria || t("common.notInformedF"),
     localizacaoFormatada,
     dataFormatada(dataObjeto.data),
   ];
 
   // Informações complementares do objeto.
   const informacoesAdicionais = [
-    `Categoria: ${objetoEncontrado.categoria || "Não informada"}`,
-    ...(endereco ? [`Endereço: ${endereco}`] : []),
-    `Cidade: ${cidade}`,
-    `Estado: ${estado}`,
-    `Data: ${dataFormatada(dataObjeto.data)}`,
-    `Horário: ${dataObjeto.hora || "Não informado"}`,
+    t("details.categoryLabel", {
+      value: objetoEncontrado.categoria || t("common.notInformedF"),
+    }),
+    ...(endereco ? [t("details.addressLabel", { value: endereco })] : []),
+    t("details.cityLabel", { value: cidade }),
+    t("details.stateLabel", { value: estado }),
+    t("details.dateLabel", { value: dataFormatada(dataObjeto.data) }),
+    t("details.timeLabel", {
+      value: dataObjeto.hora || t("common.notInformedM"),
+    }),
   ];
 
   return (
@@ -102,7 +113,7 @@ function Detalhes({ objeto }) {
             <img className="icons" src={informacao.icone} alt="" />
 
             <div>
-              <span className="infos__categoria">{informacao.titulo}</span>
+              <span className="infos__categoria">{t(informacao.titulo)}</span>
 
               {/* Texto completo */}
               <p className="infos__text">
@@ -124,11 +135,13 @@ function Detalhes({ objeto }) {
 
       {/* Card de detalhes */}
       <div className="card__infos">
-        <h2 className="detalhes__objeto__title">Detalhes do objeto</h2>
+        <h2 className="detalhes__objeto__title">{t("details.title")}</h2>
 
         {/* Descrição */}
         <div className="detalhes__secao">
-          <p className="detalhes__objeto__subtitle">Descrição Completa</p>
+          <p className="detalhes__objeto__subtitle">
+            {t("details.fullDescription")}
+          </p>
 
           <p className="detalhes__descricao__completa">{descricao}</p>
         </div>
@@ -137,7 +150,9 @@ function Detalhes({ objeto }) {
 
         {/* Informações adicionais */}
         <div className="detalhes__secao">
-          <p className="detalhes__objeto__subtitle">Informações</p>
+          <p className="detalhes__objeto__subtitle">
+            {t("details.information")}
+          </p>
 
           <div className="detalhes__lista">
             {informacoesAdicionais.map((informacao) => (
@@ -156,7 +171,7 @@ function Detalhes({ objeto }) {
             <hr />
 
             <div className="detalhes__secao">
-              <p className="detalhes__objeto__subtitle">Observações</p>
+              <p className="detalhes__objeto__subtitle">{t("details.notes")}</p>
 
               <p className="detalhes__descricao__completa">
                 {descricaoCompleta}

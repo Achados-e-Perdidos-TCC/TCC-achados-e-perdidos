@@ -1,8 +1,15 @@
 import "./circles.css";
+import { useTranslation } from "react-i18next";
 
 function Circles({ paginaAtual }) {
+  const { t } = useTranslation();
+
   const circles = [1, 2, 3];
-  const circlesDescription = ["Seus dados", "Seu perfil", "Preferências"];
+  const circlesDescription = [
+    t("auth.register.circles.data"),
+    t("auth.register.circles.profile"),
+    t("auth.register.circles.preferences"),
+  ];
 
   return (
     <div className="register__container__circles">

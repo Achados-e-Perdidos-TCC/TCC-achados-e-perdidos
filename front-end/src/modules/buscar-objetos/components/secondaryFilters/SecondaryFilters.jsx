@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router";
+import { useTranslation } from "react-i18next";
 import { useFilter } from "../../../../hooks/filters/filterHook.jsx";
 import "./secondaryFilters.css";
 
@@ -24,9 +25,18 @@ const icons = {
   encontradosBlack,
 };
 
+// "categoria" continua em português porque é usada na lógica do filtro;
+// aqui só mapeamos para a chave de tradução exibida na tela.
+const chavesTraducao = {
+  Todos: "search.secondary.all",
+  Perdidos: "search.secondary.lost",
+  Encontrados: "search.secondary.found",
+};
+
 function SecondaryFilters() {
   const [ativo, setAtivo] = useState("Todos");
   const { tema } = useOutletContext();
+  const { t } = useTranslation();
 
   const { dispatch } = useFilter();
 
@@ -35,13 +45,9 @@ function SecondaryFilters() {
     setAtivo(value);
   }
 
-  function AlternarCategoria({ categoria, iconWhite, iconBlack }) {
+  function AlternarCategoria({ iconWhite, iconBlack }) {
     if (tema === "light") {
-      return ativo === categoria ? (
-        <img className="icon__secondary__filter" src={icons[iconWhite]} />
-      ) : (
-        <img className="icon__secondary__filter" src={icons[iconBlack]} />
-      );
+      return <img className="icon__secondary__filter" src={icons[iconBlack]} />;
     }
 
     if (tema === "dark") {
@@ -75,7 +81,7 @@ function SecondaryFilters() {
 
                 <span className="text__secondary__filters">
                   {" "}
-                  {valor.categoria}{" "}
+                  {t(chavesTraducao[valor.categoria] ?? valor.categoria)}{" "}
                 </span>
               </div>
             </div>

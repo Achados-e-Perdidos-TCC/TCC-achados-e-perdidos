@@ -74,17 +74,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 4.5rem;
   height: 4.5rem;
-
-  background-color: var(--primary-color-blue-light);
+  background-color: #e3ecff8e;
   border-radius: 1rem;
 }
 
 .busca__resumo__icone img {
-  width: 2.4rem;
-  height: 2.4rem;
+  height: 3.5rem;
   object-fit: contain;
 }
 

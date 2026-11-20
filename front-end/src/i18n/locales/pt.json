@@ -1,0 +1,654 @@
+{
+  "header": {
+    "home": "Início",
+    "search": "Buscar objetos",
+    "howItWorks": "Como funciona",
+    "register": "Cadastrar objeto",
+    "signIn": "Entrar",
+    "myProfile": "Meu perfil",
+    "signInAccount": "Entrar na conta",
+    "openProfile": "Acessar meu perfil",
+    "homeAria": "Achados e Devolvidos - Página inicial",
+    "navigation": "Navegação",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "tagline": "Conectando pessoas e histórias."
+  },
+  "common": {
+    "loading": "Carregando...",
+    "cancel": "Cancelar",
+    "back": "Voltar",
+    "continue": "Continuar",
+    "finish": "Concluir",
+    "save": "Salvar",
+    "saveChanges": "Salvar alterações",
+    "remove": "Remover",
+    "optional": "(opcional)",
+    "required": "Obrigatório",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "unnamedItem": "Objeto sem nome",
+    "noDescription": "Sem descrição disponível",
+    "noLocation": "Localização não informada",
+    "noDate": "Data não informada",
+    "notInformedM": "Não informado",
+    "notInformedF": "Não informada",
+    "viewDetails": "Ver detalhes",
+    "previousPage": "Página anterior",
+    "nextPage": "Próxima página",
+    "clearFilters": "Limpar filtros",
+    "backHome": "Voltar para início",
+    "goToProfile": "Ir para meu perfil",
+    "showPassword": "Mostrar senha",
+    "hidePassword": "Ocultar senha",
+    "state": "Estado",
+    "uf": "UF",
+    "city": "Cidade",
+    "neighborhood": "Bairro",
+    "date": "Data",
+    "time": "Horário",
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "category": "Categoria",
+    "description": "Descrição",
+    "status": {
+      "lost": "Perdido",
+      "found": "Encontrado",
+      "inAnalysis": "Em análise",
+      "inactive": "Inativo"
+    },
+    "months": [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro"
+    ]
+  },
+  "errors": {
+    "requestFailed": "Erro na requisição",
+    "invalidCredentials": "Credenciais inválidas.",
+    "invalidName": "Nome inválido.",
+    "invalidEmail": "E-mail inválido.",
+    "invalidPassword": "Senha inválida.",
+    "invalidPhone": "Telefone inválido.",
+    "stateNotSelected": "Selecione o estado da cidade.",
+    "invalidCity": "Selecione uma cidade disponível na lista.",
+    "requiredFields": "Todos os campos precisam estar preenchidos.",
+    "unexpected": "Ocorreu um erro inesperado. Verifique se os dados informados estão corretos e tente novamente mais tarde.",
+    "categoriesLoad": "Não foi possível carregar as categorias."
+  },
+  "passwordRules": {
+    "length": "Pelo menos 8 caracteres",
+    "uppercase": "Uma letra maiúscula",
+    "lowercase": "Uma letra minúscula",
+    "number": "Um número",
+    "special": "Um caractere especial"
+  },
+  "home": {
+    "hero": {
+      "tag": "Conectando pessoas e histórias",
+      "titlePrefix": "Seu objeto pode estar mais",
+      "titleHighlight1": "perto",
+      "titleMiddle": "do que você",
+      "titleHighlight2": "imagina.",
+      "description": "Perdeu alguma coisa ou encontrou um objeto? Nossa plataforma aproxima quem procura de quem encontrou.",
+      "lostButton": "Perdi um objeto",
+      "foundButton": "Encontrei um objeto",
+      "trust": "Uma maneira simples de ajudar e encontrar.",
+      "imageAlt": "Caixa azul com objetos encontrados, incluindo celular, garrafa e fones de ouvido",
+      "badgeTitle": "Encontre",
+      "badgeSubtitle": "o que procura"
+    },
+    "search": {
+      "eyebrow": "BUSCA DE OBJETOS",
+      "title": "O que você está procurando?",
+      "description": "Explore os objetos cadastrados e encontre possíveis correspondências com aquilo que você perdeu.",
+      "button": "Explorar objetos"
+    },
+    "how": {
+      "eyebrow": "SIMPLES DO COMEÇO AO FIM",
+      "title": "Como funciona a plataforma?",
+      "description": "Um processo simples para ajudar objetos a encontrarem seus verdadeiros donos."
+    },
+    "flow": {
+      "title": "Do cadastro ao contato",
+      "subtitle": "Todo o processo é simples e seguro. Veja como funciona:",
+      "steps": {
+        "register": {
+          "title": "Cadastro",
+          "description": "Você cadastra um objeto perdido ou encontrado na plataforma."
+        },
+        "analysis": {
+          "title": "Análise",
+          "description": "Você analisa os objetos cadastrados e procura possíveis correspondências."
+        },
+        "contact": {
+          "title": "Contato",
+          "description": "Encontrou uma possível correspondência? Envie um e-mail para quem cadastrou o objeto."
+        }
+      }
+    },
+    "tips": {
+      "title": "Dicas para encontrar seu objeto",
+      "subtitle": "Pequenos detalhes podem fazer toda a diferença na sua busca.",
+      "photos": {
+        "title": "Observe as fotos",
+        "description": "Compare a aparência e as características dos objetos."
+      },
+      "details": {
+        "title": "Confira os detalhes",
+        "description": "Verifique as características e a localização informada."
+      },
+      "contact": {
+        "title": "Entre em contato",
+        "description": "Encontrou uma possível correspondência? Envie um e-mail."
+      }
+    },
+    "recent": {
+      "eyebrow": "ATUALIZAÇÕES DA COMUNIDADE",
+      "title": "Objetos recentemente cadastrados",
+      "description": "Confira os últimos objetos compartilhados na plataforma.",
+      "seeAll": "Ver todos os objetos"
+    },
+    "item": {
+      "unnamed": "Objeto sem nome",
+      "noDescription": "Sem descrição disponível",
+      "noImage": "Imagem não disponível",
+      "noLocation": "Localização não informada",
+      "noDate": "Data não informada",
+      "today": "Hoje",
+      "yesterday": "Ontem",
+      "categoryFallback": "Outros",
+      "status": {
+        "lost": "Perdido",
+        "found": "Encontrado",
+        "inAnalysis": "Em análise"
+      }
+    },
+    "empty": {
+      "title": "Nenhum objeto por aqui ainda.",
+      "description": "Ainda não temos objetos cadastrados recentemente. Assim que houver novos registros, eles aparecerão aqui."
+    },
+    "error": {
+      "title": "Ops! Algo deu errado.",
+      "description": "Não foi possível carregar os objetos recentes. Tente novamente mais tarde."
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "SIMPLES E DIRETO",
+    "brandPart1": "Achados",
+    "brandPart2": "e",
+    "brandPart3": "Devolvidos?",
+    "howWork1": "Como funciona o",
+    "howWork2": " ",
+    "control": "Você no controle.",
+    "intro": "Encontrar ou cadastrar um objeto é simples. Tudo acontece em apenas três etapas, no seu próprio ritmo.",
+    "steps": {
+      "register": {
+        "number": "01",
+        "title": "Cadastre um objeto",
+        "description": "Perdeu ou encontrou algo? Registre o objeto com uma descrição, local e outras informações importantes.",
+        "type": "Cadastro"
+      },
+      "search": {
+        "number": "02",
+        "title": "Pesquise manualmente",
+        "description": "Explore os objetos cadastrados e utilize a busca para encontrar registros que correspondam ao que procura.",
+        "type": "Busca"
+      },
+      "details": {
+        "number": "03",
+        "title": "Confira os detalhes",
+        "description": "Compare as informações dos registros e verifique se encontrou o objeto que estava procurando.",
+        "type": "Identificação"
+      }
+    },
+    "cardLost": "OBJETO PERDIDO",
+    "cardFound": "OBJETO ENCONTRADO"
+  },
+  "search": {
+    "eyebrow": "ENCONTRE O QUE PROCURA",
+    "title": "Buscar objetos",
+    "subtitle": "Encontre objetos perdidos ou descubra se alguém encontrou aquilo que você procura.",
+    "filtersTitle": "Encontre um objeto",
+    "filtersSubtitle": "Utilize os filtros para refinar sua pesquisa.",
+    "publicationType": "Tipo de publicação",
+    "resultsTitle": "Resultados da busca",
+    "resultsSubtitle": "Objetos relacionados aos filtros selecionados",
+    "found_one": "{{count}} objeto encontrado",
+    "found_other": "{{count}} objetos encontrados",
+    "showing": "Mostrando <strong>{{shown}}</strong> de <strong>{{total}}</strong> resultados",
+    "loadError": "Não foi possível carregar os objetos",
+    "loadErrorDescription": "Ocorreu um problema ao buscar as publicações. Tente novamente mais tarde.",
+    "foundLabel_one": "objeto encontrado",
+    "foundLabel_other": "objetos encontrados",
+    "resultsCount_one": "{{count}} resultado",
+    "resultsCount_other": "{{count}} resultados",
+    "filters": {
+      "object": "Objeto",
+      "objectPlaceholder": "Ex: Carteira, celular, mochila...",
+      "location": "Localização",
+      "locationPlaceholder": "Ex: Porto Alegre, Centro...",
+      "category": "Categoria",
+      "categoryPlaceholder": "Todas as categorias",
+      "period": "Período",
+      "periodPlaceholder": "Qualquer período",
+      "clearPeriod": "Limpar período",
+      "loadingCategories": "Carregando categorias...",
+      "searchButton": "Buscar"
+    },
+    "secondary": {
+      "all": "Todos",
+      "lost": "Perdidos",
+      "found": "Encontrados"
+    },
+    "card": {
+      "description": "Descrição"
+    }
+  },
+  "details": {
+    "foundBadge": "Objeto encontrado",
+    "title": "Detalhes do objeto",
+    "subtitle": "Informações para identificação do objeto.",
+    "categories": "Categorias",
+    "location": "Localização",
+    "date": "Data",
+    "fullDescription": "Descrição Completa",
+    "information": "Informações",
+    "notes": "Observações",
+    "descriptionUnavailable": "Descrição indisponível",
+    "categoryLabel": "Categoria: {{value}}",
+    "addressLabel": "Endereço: {{value}}",
+    "cityLabel": "Cidade: {{value}}",
+    "stateLabel": "Estado: {{value}}",
+    "dateLabel": "Data: {{value}}",
+    "timeLabel": "Horário: {{value}}",
+    "images": {
+      "main": "Imagem do objeto",
+      "previous": "Mostrar imagens anteriores",
+      "next": "Mostrar próximas imagens",
+      "show": "Exibir imagem {{n}}",
+      "extra": "Foto adicional {{n}} do objeto"
+    },
+    "contact": {
+      "interestTitle": "Tenho interesse neste objeto",
+      "interestDescription": "Gostaria de saber mais sobre este objeto? Envie uma mensagem ao responsável para obter mais informações.",
+      "infoTitle": "Tenho informações sobre este objeto",
+      "infoDescription": "Possui informações sobre este objeto? Envie uma mensagem ao responsável para ajudar na sua identificação e recuperação.",
+      "closeModal": "Fechar modal",
+      "yourName": "Seu nome",
+      "namePlaceholder": "Digite seu nome",
+      "yourEmail": "Seu e-mail",
+      "emailPlaceholder": "Digite seu e-mail",
+      "yourMessage": "Sua mensagem",
+      "yourInfo": "Suas informações",
+      "messagePlaceholderInterest": "Escreva sua mensagem ou dúvida sobre este objeto...",
+      "messagePlaceholderInfo": "Descreva as informações que você tem sobre este objeto...",
+      "sendMessage": "Enviar mensagem",
+      "sendInfo": "Enviar informações",
+      "gmailNote": "A mensagem será aberta no seu próprio Gmail. O e-mail informado será usado apenas para identificação.",
+      "errors": {
+        "nameRequired": "Informe seu nome.",
+        "emailRequired": "Informe seu e-mail.",
+        "emailInvalid": "Informe um endereço de e-mail válido.",
+        "infoRequired": "Descreva as informações que você possui sobre o objeto.",
+        "ownerEmailMissing": "Não foi possível identificar o e-mail do responsável por este objeto."
+      },
+      "email": {
+        "subjectInterest": "Tenho interesse no objeto: {{name}}",
+        "subjectInfo": "Informações sobre o objeto: {{name}}",
+        "greeting": "Olá!",
+        "bodyInterest": "Tenho interesse no objeto \"{{name}}\" publicado na plataforma Achados e Devolvidos.",
+        "bodyInfo": "Tenho informações sobre o objeto \"{{name}}\" publicado na plataforma Achados e Devolvidos.",
+        "nameLine": "Nome: {{name}}",
+        "emailLine": "E-mail: {{email}}",
+        "messageLabel": "Mensagem:",
+        "linkLine": "Link do objeto: {{link}}"
+      }
+    },
+    "loadError": "Não foi possível carregar o objeto.",
+    "backToSearch": "Voltar para Buscar Objetos"
+  },
+  "auth": {
+    "login": {
+      "title": "Bem-vindo de volta!",
+      "subtitle": "Faça login para continuar",
+      "email": "E-mail",
+      "emailPlaceholder": "Seu@email.com",
+      "password": "Senha",
+      "passwordPlaceholder": "Sua senha",
+      "remember": "Lembrar de mim",
+      "forgot": "Esqueci minha senha",
+      "submit": "Entrar",
+      "noAccount": "Ainda não tem uma conta?",
+      "createAccount": "Criar conta"
+    },
+    "forgot": {
+      "title": "Recupere sua senha",
+      "intro": "Informe seu e-mail abaixo para receber as instruções de recuperação da sua senha.",
+      "email": "E-mail",
+      "sending": "Enviando...",
+      "submit": "Enviar link de recuperação",
+      "remembered": "Lembrou sua senha?",
+      "signIn": "Entrar",
+      "success": "Se o e-mail informado estiver cadastrado, enviaremos instruções para redefinir a senha.",
+      "emailInvalid": "Informe um endereço de e-mail válido.",
+      "emailRequired": "O campo e-mail precisa estar preenchido.",
+      "unexpected": "Ocorreu um erro inesperado. Verifique o e-mail informado e tente novamente."
+    },
+    "register": {
+      "title": "Crie sua conta",
+      "subtitle": "Vamos começar com seus dados básicos.",
+      "profileTitle": "Personalize seu perfil",
+      "profileSubtitle": "Adicione uma foto para deixar seu perfil mais pessoal.",
+      "preferencesTitle": "Configure suas preferências",
+      "preferencesSubtitle": "Escolha como deseja receber avisos e atualizações.",
+      "circles": {
+        "data": "Seus dados",
+        "profile": "Seu perfil",
+        "preferences": "Preferências"
+      },
+      "data": {
+        "fullName": "Nome completo",
+        "namePlaceholder": "Ex: João da Silva",
+        "emailPlaceholder": "Ex: joao@email.com",
+        "phonePlaceholder": "Ex: (11) 99999-9999",
+        "cityPlaceholder": "Sua cidade",
+        "passwordPlaceholder": "Sua senha",
+        "acceptPrefix": "Li e aceito os",
+        "termsOfUse": "Termos de Uso",
+        "and": "e a",
+        "privacyPolicy": "Política de Privacidade",
+        "acceptError": "Você precisa aceitar os Termos de Uso e a Política de Privacidade.",
+        "emailConsent": "Autorizo que meu e-mail seja disponibilizado para contato quando alguém encontrar um objeto que publiquei na plataforma.",
+        "emailConsentHint": "Seu e-mail poderá ser exibido na página pública de objetos para permitir contato. Essa autorização é opcional.",
+        "hasAccount": "Já possui uma conta?",
+        "signIn": "Entrar"
+      },
+      "photo": {
+        "title": "Sua foto de perfil",
+        "preview": "Pré-visualização da foto de perfil",
+        "add": "Adicione uma foto",
+        "selected": "Foto selecionada",
+        "hint": "JPG ou PNG · Recomendado até 5 MB",
+        "pick": "Selecione uma imagem do seu dispositivo",
+        "drag": "Ou arraste e solte aqui",
+        "delete": "Excluir imagem",
+        "select": "Selecionar imagem",
+        "skip": "Pular por enquanto",
+        "invalidFormat": "Selecione uma imagem no formato JPG ou PNG.",
+        "tooLarge": "A imagem deve ter no máximo 5 MB.",
+        "required": "Adicione uma foto para continuar ou clique em “Pular por enquanto”."
+      },
+      "preferences": {
+        "notificationsTitle": "Notificações",
+        "notificationsDescription": "Receba atualizações importantes sobre sua conta e suas atividades na plataforma.",
+        "showEmailTitle": "Exibir meu e-mail nos objetos",
+        "showEmailDescription": "Permita que outras pessoas visualizem seu e-mail nos anúncios de objetos publicados por você.",
+        "later": "Você poderá alterar essas preferências posteriormente nas configurações da sua conta.",
+        "creating": "Criando conta...",
+        "finish": "Finalizar cadastro",
+        "error": "Não foi possível criar sua conta. Tente novamente."
+      },
+      "created": {
+        "title": "Conta criada com sucesso!",
+        "text": "Sua conta no Achados e Devolvidos foi criada. Agora você já pode explorar e usar o sistema."
+      },
+      "alreadyLoggedIn": {
+        "title": "Você já está logado!",
+        "text": "Sua conta já está ativa. Você não precisa criar uma nova conta."
+      }
+    }
+  },
+  "form": {
+    "title": "Cadastrar objeto",
+    "subtitle": "Conte alguns detalhes para ajudarmos a encontrar uma possível correspondência.",
+    "whatHappened": "O que aconteceu?",
+    "lostTitle": "Perdi um objeto",
+    "lostDescription": "Meu objeto foi perdido.",
+    "foundTitle": "Encontrei um objeto",
+    "foundDescription": "Encontrei um objeto e quero devolver.",
+    "itemName": "Nome do objeto",
+    "itemNamePlaceholder": "Ex.: Carteira preta, Samsung Galaxy...",
+    "selectCategory": "Selecione a categoria",
+    "loadingCategories": "Carregando categorias...",
+    "selectState": "Selecione o estado",
+    "selectCity": "Selecione a cidade",
+    "selectStateFirst": "Selecione primeiro o estado",
+    "selectNeighborhood": "Selecione o bairro",
+    "selectCityFirst": "Selecione primeiro a cidade",
+    "noNeighborhoods": "Sem bairros disponíveis",
+    "noNeighborhoodsHint": "Não há bairros disponíveis para esta cidade. A localização será registrada com cidade e estado.",
+    "photos": "Fotos do objeto",
+    "photosHint": "Mínimo 1 e máximo 6 fotos",
+    "uploadCta": "Clique para selecionar as fotos do objeto",
+    "uploadHint": "JPEG, PNG, WEBP ou GIF. Até 5 MB por foto.",
+    "photoAlt": "Foto {{n}} do objeto",
+    "previousPhoto": "Ver foto anterior",
+    "nextPhoto": "Ver próxima foto",
+    "removeSelectedPhoto": "Remover foto selecionada",
+    "selectedCount": "{{count}} de {{max}} fotos selecionadas",
+    "addPhotos": "Adicionar fotos",
+    "describeItem": "Descreva o objeto",
+    "describePlaceholder": "Descreva o objeto com o máximo de detalhes possível...",
+    "features": "Alguma característica específica?",
+    "featuresPlaceholder": "Ex.: cor, marcas, logo, avarias, número de série, etc.",
+    "submit": "Cadastrar objeto",
+    "errors": {
+      "invalidFileType": "Use imagens JPEG, PNG, WEBP ou GIF.",
+      "fileTooLarge": "Cada imagem pode ter no máximo 5 MB.",
+      "maxPhotos": "Você pode adicionar no máximo {{max}} fotos.",
+      "couldNotAdd": "Não foi possível adicionar as fotos selecionadas.",
+      "minOnePhoto": "Adicione pelo menos uma foto do objeto.",
+      "futureDate": "A data não pode ser posterior ao dia de hoje.",
+      "reviewRequired": "Revise os campos obrigatórios antes de continuar.",
+      "waitCategories": "Aguarde o carregamento das categorias antes de continuar.",
+      "submitFailed": "Não foi possível cadastrar o objeto. Tente novamente."
+    },
+    "confirm": {
+      "title": "Antes de publicar seu objeto",
+      "text": "Você está ciente de que outras pessoas poderão ter informações sobre o objeto cadastrado e poderão entrar em contato com você por meio das informações disponibilizadas na plataforma?",
+      "notice": "Ao continuar, você confirma que está ciente dessa possibilidade.",
+      "backToReview": "Voltar e revisar cadastro",
+      "confirm": "Estou ciente, continuar",
+      "publishing": "Publicando..."
+    },
+    "success": {
+      "title": "Objeto cadastrado com sucesso!",
+      "text": "Seu objeto foi publicado e já está disponível na plataforma."
+    }
+  },
+  "edit": {
+    "eyebrow": "MEUS OBJETOS",
+    "title": "Editar objeto",
+    "subtitle": "Atualize as informações do seu objeto cadastrado.",
+    "infoTitle": "Informações do objeto",
+    "infoSubtitle": "Confira e atualize os dados principais.",
+    "locationTitle": "Localização",
+    "locationSubtitle": "Informe onde o objeto foi perdido ou encontrado.",
+    "dateTimeTitle": "Data e horário",
+    "dateTimeSubtitle": "Atualize quando o objeto foi perdido ou encontrado.",
+    "photosTitle": "Fotos do objeto",
+    "photosSubtitle": "Adicione ou remova imagens para manter o anúncio atualizado.",
+    "noPhotos": "Nenhuma foto adicionada",
+    "noPhotosHint": "Adicione pelo menos uma imagem do objeto.",
+    "uploadHint": "JPG, PNG, WEBP ou GIF · Até 5 MB por imagem",
+    "addPhotos": "+ Adicionar fotos",
+    "existingPhoto": "Foto cadastrada {{n}}",
+    "removeExisting": "Remover foto cadastrada {{n}}",
+    "newPhoto": "Nova foto {{n}}",
+    "removeNew": "Remover nova foto {{n}}",
+    "descriptionTitle": "Descrição",
+    "descriptionSubtitle": "Conte os detalhes importantes sobre o objeto.",
+    "descriptionLabel": "Descrição do objeto",
+    "notes": "Observação",
+    "delete": "Excluir objeto",
+    "loading": "Carregando dados do objeto...",
+    "openError": "Não foi possível abrir este objeto",
+    "backToMine": "Voltar para meus objetos",
+    "wait": "Aguarde...",
+    "modals": {
+      "saveTitle": "Salvar alterações?",
+      "saveText": "Deseja realmente salvar as alterações deste objeto?",
+      "saveNotice": "As informações atualizadas serão salvas na plataforma.",
+      "saveConfirm": "Confirmar e salvar",
+      "deleteTitle": "Excluir objeto?",
+      "deleteText": "Tem certeza de que deseja excluir este objeto?",
+      "deleteNotice": "Ele deixará de aparecer nas buscas públicas, mas continuará no seu histórico de objetos.",
+      "successTitle": "Objeto atualizado!",
+      "successText": "As alterações do seu objeto foram salvas e já estão disponíveis na plataforma."
+    },
+    "errors": {
+      "nameRequired": "Informe o nome do objeto.",
+      "categoryRequired": "Selecione uma categoria.",
+      "locationRequired": "Informe o estado e a cidade.",
+      "dateRequired": "Informe a data e o horário.",
+      "descriptionRequired": "A descrição do objeto é obrigatória.",
+      "photoLimit": "O limite é de {{max}} fotografias.",
+      "invalidState": "Estado selecionado inválido.",
+      "confirmFailed": "Não foi possível confirmar a atualização do objeto.",
+      "saveFailed": "Não foi possível salvar as alterações. Tente novamente.",
+      "deleteFailed": "Não foi possível excluir o objeto. Tente novamente.",
+      "notFoundOrForbidden": "Objeto não encontrado ou você não tem permissão para editá-lo.",
+      "categoryNotIdentified": "Não foi possível identificar a categoria atual. Verifique as categorias disponíveis.",
+      "loadFailed": "Não foi possível carregar os dados do objeto.",
+      "notFound": "Objeto não encontrado."
+    },
+    "saved": "Seu objeto foi salvo com sucesso!"
+  },
+  "account": {
+    "sidebar": {
+      "myProfile": "Meu perfil",
+      "myObjects": "Meus objetos",
+      "notifications": "Notificações",
+      "helpCenter": "Central de ajuda"
+    },
+    "objects": {
+      "title": "Meus objetos",
+      "subtitle": "Gerencie os objetos que você perdeu ou encontrou.",
+      "loading": "Carregando seus objetos...",
+      "loadError": "Não foi possível carregar seus objetos.",
+      "count_one": "{{count}} objeto cadastrado",
+      "count_other": "{{count}} objetos cadastrados",
+      "optionsOf": "Opções de {{name}}",
+      "options": "Opções do objeto",
+      "edit": "Editar objeto"
+    },
+    "notifications": {
+      "title": "Notificações",
+      "subtitle": "Acompanhe as novidades sobre seus objetos e interações.",
+      "markAllRead": "Marcar todas como lidas",
+      "updating": "Atualizando...",
+      "loading": "Carregando notificações...",
+      "loadError": "Não foi possível carregar as notificações.",
+      "disabled": "Você desativou as notificações nas suas preferências.",
+      "empty": "Você não possui notificações.",
+      "markReadError": "Não foi possível marcar a notificação como lida.",
+      "markAllReadError": "Não foi possível marcar todas as notificações como lidas.",
+      "aria": "Notificação: {{title}}. {{status}}",
+      "read": "Lida",
+      "unread": "Não lida"
+    },
+    "profile": {
+      "eyebrow": "MINHA CONTA",
+      "title": "Meu perfil",
+      "subtitle": "Gerencie suas informações pessoais, preferências e segurança da sua conta.",
+      "personalInfoTitle": "Informações pessoais",
+      "personalInfoSubtitle": "Atualize seus dados de identificação e contato.",
+      "securityTitle": "Segurança",
+      "securitySubtitle": "Gerencie o acesso e a proteção da sua conta.",
+      "preferencesTitle": "Preferências",
+      "preferencesSubtitle": "Personalize sua experiência na plataforma.",
+      "dangerTitle": "Zona de perigo",
+      "dangerSubtitle": "Ações importantes relacionadas à sua conta.",
+      "photoTitle": "Foto de perfil",
+      "editPhoto": "Editar foto",
+      "monthYear": "{{month}} de {{year}}",
+      "updateFailed": "Não foi possível atualizar os dados. Verifique se realizou alguma alteração.",
+      "saveFailed": "Não foi possível salvar as alterações.",
+      "loadUserError": "Erro ao carregar informações do usuário"
+    },
+    "security": {
+      "changePassword": "Alterar Senha",
+      "changePasswordDescription": "Atualize sua senha regularmente."
+    },
+    "preferences": {
+      "toggleNotifications": "Alternar notificações",
+      "toggleShowEmail": "Alternar divulgação do e-mail nos objetos",
+      "receiveNotifications": "Receber notificações",
+      "receiveNotificationsDescription": "Receba notificações sobre novidades da plataforma.",
+      "showEmail": "Exibir meu e-mail nos objetos",
+      "showEmailDescription": "Permita que outras pessoas vejam seu e-mail ao acessar os detalhes dos objetos que você publicou.",
+      "themeTitle": "Tema da plataforma",
+      "themeDescription": "Escolha a aparência que prefere utilizar.",
+      "themeLight": "Claro",
+      "themeDark": "Escuro"
+    },
+    "danger": {
+      "logout": "Deslogar",
+      "logoutDescription": "Você poderá entrar novamente quando quiser.",
+      "deleteAccount": "Excluir conta",
+      "deleteDescription": "Esta ação é permanente e não pode ser desfeita.",
+      "confirmQuestion": "Tem certeza que deseja excluir sua conta?",
+      "confirmWarning": "Essa ação não poderá ser desfeita.",
+      "confirmDelete": "Confirmar exclusão"
+    },
+    "changePassword": {
+      "title": "Altere sua senha",
+      "subtitle": "Informe a senha atual e a sua nova senha.",
+      "currentPassword": "Senha atual",
+      "currentPlaceholder": "Sua senha atual",
+      "newPassword": "Nova senha",
+      "newPlaceholder": "Sua nova senha",
+      "submit": "Alterar senha",
+      "submitting": "Alterando senha...",
+      "cancelPrompt": "Não deseja mais alterar?",
+      "success": "Senha alterada com sucesso! Você será redirecionado para a tela de login em instantes.",
+      "invalidNewPassword": "Nova senha inválida.",
+      "wrongCurrent": "Senha atual incorreta.",
+      "samePassword": "As senhas não podem ser iguais.",
+      "requiredFields": "Os campos precisam estar preenchidos.",
+      "unexpected": "Ocorreu um erro inesperado. Verifique se os dados informados estão corretos."
+    }
+  },
+  "pages": {
+    "notAuthenticated": {
+      "title": "Você precisa entrar na sua conta",
+      "text": "Para acessar esta área e gerenciar suas informações, entre na sua conta ou crie um cadastro gratuito.",
+      "signIn": "Entrar na minha conta",
+      "createAccount": "Criar minha conta"
+    },
+    "notFound": {
+      "illustrationAlt": "Ilustração representando uma página não encontrada",
+      "code": "ERRO 404",
+      "title": "Ops! Página não encontrada",
+      "text": "Não conseguimos encontrar a página que você está procurando. Talvez ela tenha sido removida ou o endereço esteja incorreto.",
+      "backHome": "Voltar para o início",
+      "search": "Buscar objetos"
+    },
+    "noObjects": {
+      "illustrationAlt": "Ilustração representando uma busca sem resultados",
+      "title": "Ops! Não encontramos nenhum objeto",
+      "text": "Se você aplicou algum filtro, tente removê-lo para ampliar os resultados da sua busca.",
+      "clear": "Limpar filtros"
+    },
+    "noObjectsRegistered": {
+      "illustrationAlt": "Ilustração representando a ausência de objetos cadastrados",
+      "title": "Ops! Você ainda não possui objetos cadastrados",
+      "text": "Cadastre seu primeiro objeto para começar a visualizar e gerenciar seus registros por aqui."
+    },
+    "profileLoading": {
+      "title": "Carregando seu perfil...",
+      "slow": "Demorando demais? Tente recarregar a página."
+    }
+  }
+}
