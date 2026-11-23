@@ -10,6 +10,18 @@ export async function userInformation() {
   return data;
 }
 
+export async function myInactiveObjects() {
+  const data = await request(`${ENDPOINTS.item.me}?status=INATIVO&size=100`, {
+    method: "GET",
+  });
+
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  return Array.isArray(data?.content) ? data.content : [];
+}
+
 export async function findOwnedObject(id) {
   let pagina = 0;
   let totalPaginas = 1;

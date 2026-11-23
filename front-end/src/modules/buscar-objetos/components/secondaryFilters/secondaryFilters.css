@@ -35,6 +35,11 @@
   border-color: var(--primary-color-blue);
 }
 
+.busca__filtros__status .button__secondary__filter:focus-visible {
+  outline: 2px solid var(--primary-color-blue);
+  outline-offset: 2px;
+}
+
 .busca__filtros__status .icon__secondary__filter {
   position: static;
   width: 1.6rem;

@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useFilter } from "../../../hooks/filters/filterHook.jsx";
 import "./notObjects.css";
 
 import notFoundIllustration from "../../../assets/icons/notobjects/notFound-illustration.png";
@@ -6,9 +7,10 @@ import garbageWhite from "../../../assets/icons/notobjects/garbage-white.png";
 
 function NotObjects() {
   const { t } = useTranslation();
+  const { dispatch } = useFilter();
 
   function limparFiltros() {
-    window.location.reload();
+    dispatch({ type: "reset" });
   }
 
   return (

@@ -4,6 +4,7 @@ import { NavLink } from "react-router";
 import { useTranslation } from "react-i18next";
 
 import { hoje, ontem } from "../../../../utils/date/date.js";
+import { obterIconeCategoria } from "../../../../utils/categories/categoriaIcone.js";
 import filtros from "../../../../utils/filters/filtrarObjetos.js";
 
 import NoImage from "./components/noImage/NoImage.jsx";
@@ -112,7 +113,7 @@ function PrincipalCards({
                       <div className="categoria__principal">
                         <img
                           className="icon__categoria"
-                          src={valor.icon_url}
+                          src={obterIconeCategoria(valor.categoria)}
                           alt=""
                         />
                         <span>{valor.categoria}</span>
@@ -167,38 +168,38 @@ function PrincipalCards({
                     </div>
 
                     {/* Botão responsivo */}
-                    <div className="button__responsive">
-                      <NavLink
-                        className="detalhes__principal"
-                        to={`/buscar-objetos/${valor.id}`}
-                      >
+                    <NavLink
+                      className="button__responsive"
+                      to={`/buscar-objetos/${valor.id}`}
+                    >
+                      <div className="detalhes__principal">
                         {t("common.viewDetails")}
-                      </NavLink>
+                      </div>
 
                       <img
                         className="arrow__button__principal"
                         src={arrowBlue}
                         alt=""
                       />
-                    </div>
+                    </NavLink>
                   </div>
                 </div>
               </div>
 
               <div className="principal__direita">
-                <div className="button__principal">
-                  <NavLink
-                    className="detalhes__principal"
-                    to={`/buscar-objetos/${valor.id}`}
-                  >
+                <NavLink
+                  className="button__principal"
+                  to={`/buscar-objetos/${valor.id}`}
+                >
+                  <div className="detalhes__principal">
                     {t("common.viewDetails")}
-                  </NavLink>
+                  </div>
                   <img
                     className="arrow__button__principal"
                     src={arrowBlue}
                     alt=""
                   />
-                </div>
+                </NavLink>
               </div>
             </div>
           );

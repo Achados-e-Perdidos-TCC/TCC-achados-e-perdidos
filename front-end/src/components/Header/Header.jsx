@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { NavLink } from "react-router";
-import { AuthContext } from "../../contexts/authContexts/AuthContext.jsx";
+import { AuthContext } from "../../contexts/authContexts/context.js";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher.jsx";
 

@@ -602,6 +602,9 @@
   border: 1px solid var(--home-border);
   border-radius: 1.2rem;
 
+  color: inherit;
+  cursor: pointer;
+
   transition:
     transform 0.22s ease,
     border-color 0.22s ease,
@@ -612,6 +615,11 @@
   transform: translateY(-4px);
   border-color: rgba(0, 72, 232, 0.3);
   box-shadow: var(--shadow-hover);
+}
+
+.home-objeto:focus-visible {
+  outline: 2px solid var(--blue-color, #0048e8);
+  outline-offset: 3px;
 }
 
 .home-objeto__imagem-wrap {

@@ -44,7 +44,7 @@ function UserNotifications({ setNotifications }) {
         const resposta = await getNotifications();
 
         setNotificationsState(Array.isArray(resposta) ? resposta : []);
-      } catch (error) {
+      } catch {
         setErro(true);
         setNotificationsState([]);
       } finally {

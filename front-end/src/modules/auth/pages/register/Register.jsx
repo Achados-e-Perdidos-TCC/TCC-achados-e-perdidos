@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AuthContext } from "../../../../contexts/authContexts/AuthContext.jsx";
+import { AuthContext } from "../../../../contexts/authContexts/context.js";
 
 import {
   imageUpload,

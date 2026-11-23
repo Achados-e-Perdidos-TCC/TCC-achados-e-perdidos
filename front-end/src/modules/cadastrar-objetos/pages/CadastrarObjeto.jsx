@@ -226,7 +226,7 @@ export default function CadastrarObjeto() {
     return () => {
       ativo = false;
     };
-  }, []);
+  }, [t]);
 
   const modalAberto = confirmacaoContatoAberta || Boolean(mensagemSucesso);
 

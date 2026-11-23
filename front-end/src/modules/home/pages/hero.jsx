@@ -19,6 +19,7 @@ import { objects as buscarObjetos } from "../../buscar-objetos/buscarObjetos.ser
 
 import { formatarLocalizacao } from "../../../utils/location/localizacao.js";
 import { resolverUrlImagem } from "../../../utils/images/urlImagem.js";
+import { obterIconeCategoria } from "../../../utils/categories/categoriaIcone.js";
 
 import Loading from "../../../components/loading/Loading.jsx";
 import EstadoErroObjetos from "../components/EstadoErroObjetos/EstadoErroObjetos.jsx";
@@ -302,7 +303,11 @@ function Hero() {
               );
 
               return (
-                <article className="home-objeto" key={objeto.id}>
+                <NavLink
+                  className="home-objeto"
+                  key={objeto.id}
+                  to={`/buscar-objetos/${objeto.id}`}
+                >
                   <div className="home-objeto__imagem-wrap">
                     {objeto.imagemPrincipal ? (
                       <img
@@ -355,9 +360,10 @@ function Hero() {
                       </span>
 
                       <span className="home-objeto__categoria">
-                        {objeto.icon_url && (
-                          <img src={objeto.icon_url} alt="" />
-                        )}
+                        <img
+                          src={obterIconeCategoria(objeto.categoria)}
+                          alt=""
+                        />
                         {objeto.categoria || t("home.item.categoryFallback")}
                       </span>
                     </div>
@@ -382,7 +388,7 @@ function Hero() {
                       </span>
                     </div>
                   </div>
-                </article>
+                </NavLink>
               );
             })
           )}

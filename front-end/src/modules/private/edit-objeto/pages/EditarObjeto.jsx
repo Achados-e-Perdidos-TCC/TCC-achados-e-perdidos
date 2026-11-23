@@ -443,8 +443,6 @@ function EditarObjeto() {
 
       navigate("/user-area");
     } catch (error) {
-      console.error("Erro ao excluir objeto:", error);
-
       setErroExclusao(error.message || t("edit.errors.deleteFailed"));
     } finally {
       setExcluindo(false);

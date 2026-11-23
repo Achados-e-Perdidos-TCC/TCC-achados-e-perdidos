@@ -48,8 +48,14 @@ const chavesTraducao = {
 
 function BasicFilters() {
   const { t } = useTranslation();
-  const { dispatch } = useFilter();
+  const { state, dispatch } = useFilter();
   const [valorInput, setValorInput] = useState({});
+  const [resetAnterior, setResetAnterior] = useState(state.resetKey);
+
+  if (resetAnterior !== state.resetKey) {
+    setResetAnterior(state.resetKey);
+    setValorInput({});
+  }
 
   const [categorias, setCategorias] = useState([]);
   const [carregandoCategorias, setCarregandoCategorias] = useState(true);
@@ -98,7 +104,7 @@ function BasicFilters() {
   }, []);
 
   return (
-    <div className="filter">
+    <div className="filter" key={state.resetKey}>
       {filtros.map((valor) => {
         const chaves = chavesTraducao[valor.categoria];
         const label = chaves ? t(chaves.label) : valor.categoria;

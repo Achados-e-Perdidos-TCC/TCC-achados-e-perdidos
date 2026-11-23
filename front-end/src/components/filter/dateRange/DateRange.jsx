@@ -50,7 +50,7 @@ function DateRange({ placeholder, arrow, close, change }) {
         placeholderText={placeholder}
         dateFormat="dd/MM/yyyy"
         onChange={atualizarPeriodo}
-        minDate={new Date(2026, 0, 1)}
+        maxDate={new Date()}
         onCalendarOpen={() => setCalendarVisible(true)}
         onCalendarClose={() => setCalendarVisible(false)}
       />
@@ -61,12 +61,14 @@ function DateRange({ placeholder, arrow, close, change }) {
         alt=""
       />
 
-      <img
-        className="x"
+      <button
+        type="button"
+        className="x__button"
         onClick={limparPeriodo}
-        src={close}
-        alt={t("search.filters.clearPeriod")}
-      />
+        aria-label={t("search.filters.clearPeriod")}
+      >
+        <img className="x" src={close} alt="" />
+      </button>
     </div>
   );
 }

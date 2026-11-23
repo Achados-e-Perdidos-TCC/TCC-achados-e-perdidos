@@ -1,21 +1,21 @@
 // Protege rotas que precisam de login
 
-import { useContext } from 'react'
-import { AuthContext } from '../contexts/authContexts/AuthContext.jsx'; 
-import { Outlet, useOutletContext } from 'react-router'
+import { useContext } from "react";
+import { AuthContext } from "../contexts/authContexts/context.js";
+import { Outlet, useOutletContext } from "react-router";
 
-import NotAuthenticated from '../pages/errors/notAuthenticated/NotAuthenticated.jsx'; 
+import NotAuthenticated from "../pages/errors/notAuthenticated/NotAuthenticated.jsx";
 
-function PrivateRoute(){
+function PrivateRoute() {
+  const { isAuthenticated } = useContext(AuthContext);
 
-    const { isAuthenticated } = useContext(AuthContext);
+  const context = useOutletContext();
 
-    const context = useOutletContext();
+  if (!isAuthenticated) {
+    return <NotAuthenticated />;
+  }
 
-    if (!isAuthenticated){ return <NotAuthenticated /> }
-
-    return <Outlet context={context} />
-
+  return <Outlet context={context} />;
 }
 
-export default PrivateRoute
+export default PrivateRoute;

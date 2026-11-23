@@ -46,7 +46,7 @@ function Sidebar({
         const avatarUrl = await loadAvatar(userInfos.avatarUrl);
 
         setAvatar(avatarUrl);
-      } catch (error) {
+      } catch {
         setAvatarError(true);
       }
     }
@@ -90,7 +90,11 @@ function Sidebar({
               {!userInfos.avatarUrl || avatarError === true ? (
                 <p> {initialName} </p>
               ) : (
-                <img className="photo" src={`${avatar}`} />
+                <img
+                  className="photo"
+                  src={avatar}
+                  alt={t("account.sidebar.avatarAlt")}
+                />
               )}
             </div>
 

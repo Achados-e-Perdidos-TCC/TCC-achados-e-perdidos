@@ -13,7 +13,7 @@ import pinGray from "../../../../../assets/icons/buscarObjetos/pin-gray.svg";
 import calendarGray from "../../../../../assets/icons/buscarObjetos/calendar-gray.svg";
 import arrowGray from "../../../../../assets/icons/buscarObjetos/arrow-gray.png";
 
-import { myObjects } from "../../../private.service.js";
+import { myObjects, myInactiveObjects } from "../../../private.service.js";
 import { resolverUrlImagem } from "../../../../../utils/images/urlImagem.js";
 import { obterNomeCompletoEstado } from "../../../../../utils/location/localizacao.js";
 
@@ -37,15 +37,24 @@ function UserObjects() {
         setCarregando(true);
         setErro(false);
 
-        const resposta = await myObjects();
+        const [resposta, inativos] = await Promise.all([
+          myObjects(),
+          myInactiveObjects().catch(() => []),
+        ]);
 
-        const objetosAtivos = Array.isArray(resposta)
-          ? resposta.filter((objeto) => objeto.status !== "INATIVO")
+        const idsInativos = new Set(
+          inativos.map((objeto) => String(objeto.id)),
+        );
+
+        const lista = Array.isArray(resposta)
+          ? resposta.map((objeto) => ({
+              ...objeto,
+              inativo: idsInativos.has(String(objeto.id)),
+            }))
           : [];
 
-        setObjetos(objetosAtivos);
-      } catch (error) {
-        console.error("Erro ao buscar objetos:", error);
+        setObjetos(lista);
+      } catch {
         setErro(true);
       } finally {
         setCarregando(false);
@@ -68,13 +77,13 @@ function UserObjects() {
   }, []);
 
   const total = objetos.length;
+  const totalAtivos = objetos.filter((objeto) => !objeto.inativo).length;
   const totalDePaginasNumerico = Math.ceil(total / totalPorPagina);
 
-  useEffect(() => {
-    if (paginaAtual > totalDePaginasNumerico && totalDePaginasNumerico > 0) {
-      setPaginaAtual(totalDePaginasNumerico);
-    }
-  }, [paginaAtual, totalDePaginasNumerico]);
+  const paginaExibida = Math.min(
+    paginaAtual,
+    Math.max(totalDePaginasNumerico, 1),
+  );
 
   function dataFormatada(data, hora) {
     if (!data) return t("common.noDate");
@@ -116,7 +125,7 @@ function UserObjects() {
     setMenuAberto((atual) => (atual === id ? null : id));
   }
 
-  const inicio = totalPorPagina * (paginaAtual - 1);
+  const inicio = totalPorPagina * (paginaExibida - 1);
   const objetosExibidos = objetos.slice(inicio, inicio + totalPorPagina);
 
   const totalDePaginas = Array.from(
@@ -125,9 +134,9 @@ function UserObjects() {
   );
 
   const paginasVisiveis = totalDePaginas.slice(
-    Math.floor((paginaAtual - 1) / (totalPorPagina <= 3 ? 5 : 10)) *
+    Math.floor((paginaExibida - 1) / (totalPorPagina <= 3 ? 5 : 10)) *
       (totalPorPagina <= 3 ? 5 : 10),
-    Math.floor((paginaAtual - 1) / (totalPorPagina <= 3 ? 5 : 10)) *
+    Math.floor((paginaExibida - 1) / (totalPorPagina <= 3 ? 5 : 10)) *
       (totalPorPagina <= 3 ? 5 : 10) +
       (totalPorPagina <= 3 ? 5 : 10),
   );
@@ -162,7 +171,7 @@ function UserObjects() {
 
       <div className="user__objects__principal">
         <span className="user__objects__text__principal">
-          {t("account.objects.count", { count: total })}
+          {t("account.objects.count", { count: totalAtivos })}
         </span>
       </div>
 
@@ -176,9 +185,17 @@ function UserObjects() {
             const imagemPrincipal = resolverUrlImagem(valor.imagemPrincipal);
             const data = valor.data?.data;
             const hora = valor.data?.hora;
+            const inativo = valor.inativo;
 
             return (
-              <article className="user__card__principal" key={valor.id}>
+              <article
+                className={
+                  inativo
+                    ? "user__card__principal user__card__principal--inativo"
+                    : "user__card__principal"
+                }
+                key={valor.id}
+              >
                 <img
                   className="user__principal__cards__image__card"
                   src={imagemPrincipal}
@@ -191,19 +208,20 @@ function UserObjects() {
                       <h2 className="user__titulo__principal" title={nome}>
                         {nome}
                       </h2>
-
-                      <button
-                        type="button"
-                        className="user__menu__editar__botao"
-                        aria-label={t("account.objects.optionsOf", {
-                          name: nome,
-                        })}
-                        aria-expanded={menuAberto === valor.id}
-                        title={t("account.objects.options")}
-                        onClick={() => alternarMenu(valor.id)}
-                      >
-                        <span>⋮</span>
-                      </button>
+                      {!inativo && (
+                        <button
+                          type="button"
+                          className="user__menu__editar__botao"
+                          aria-label={t("account.objects.optionsOf", {
+                            name: nome,
+                          })}
+                          aria-expanded={menuAberto === valor.id}
+                          title={t("account.objects.options")}
+                          onClick={() => alternarMenu(valor.id)}
+                        >
+                          <span>⋮</span>
+                        </button>
+                      )}
 
                       {menuAberto === valor.id && (
                         <div className="user__menu__editar__opcoes">
@@ -218,8 +236,20 @@ function UserObjects() {
                     </div>
 
                     <div className="user__categoria__status">
-                      <Status objeto={valor} />
+                      {inativo ? (
+                        <span className="user__badge__excluido">
+                          {t("account.objects.deleted")}
+                        </span>
+                      ) : (
+                        <Status objeto={valor} />
+                      )}
                     </div>
+
+                    {inativo && (
+                      <p className="user__aviso__excluido" role="note">
+                        {t("account.objects.deletedNotice")}
+                      </p>
+                    )}
                   </div>
 
                   <div className="user__principal__embaixo">
@@ -243,19 +273,27 @@ function UserObjects() {
                     </div>
 
                     <div className="user__button__responsive">
-                      <NavLink to={`/buscar-objetos/${valor.id}`}>
-                        {t("common.viewDetails")}
-                      </NavLink>
+                      {inativo ? (
+                        ""
+                      ) : (
+                        <NavLink to={`/buscar-objetos/${valor.id}`}>
+                          {t("common.viewDetails")}
+                        </NavLink>
+                      )}
                     </div>
 
                     <div className="user__principal__direita">
-                      <NavLink
-                        className="user__button__principal"
-                        to={`/buscar-objetos/${valor.id}`}
-                      >
-                        {t("common.viewDetails")}
-                        <span aria-hidden="true">→</span>
-                      </NavLink>
+                      {inativo ? (
+                        ""
+                      ) : (
+                        <NavLink
+                          className="user__button__principal"
+                          to={`/buscar-objetos/${valor.id}`}
+                        >
+                          {t("common.viewDetails")}
+                          <span aria-hidden="true">→</span>
+                        </NavLink>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -271,8 +309,8 @@ function UserObjects() {
             <button
               type="button"
               className="user__button__arrow"
-              onClick={() => alternarPagina(Math.max(1, paginaAtual - 1))}
-              disabled={paginaAtual === 1}
+              onClick={() => alternarPagina(Math.max(1, paginaExibida - 1))}
+              disabled={paginaExibida === 1}
               aria-label={t("common.previousPage")}
             >
               <img className="arrow__left" src={arrowGray} alt="" />
@@ -285,11 +323,11 @@ function UserObjects() {
                   key={pagina}
                   onClick={() => alternarPagina(pagina)}
                   className={
-                    paginaAtual === pagina
+                    paginaExibida === pagina
                       ? "user__paginas user__pagina__ativa"
                       : "user__paginas"
                   }
-                  aria-current={paginaAtual === pagina ? "page" : undefined}
+                  aria-current={paginaExibida === pagina ? "page" : undefined}
                 >
                   {pagina}
                 </button>

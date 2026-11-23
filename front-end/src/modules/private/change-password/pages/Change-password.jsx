@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AuthContext } from "../../../../contexts/authContexts/AuthContext.jsx";
+import { AuthContext } from "../../../../contexts/authContexts/context.js";
 import { NavLink, useNavigate } from "react-router";
 
 import { verificaSenhaCadastro } from "../../../../utils/inputs/inputs.js";
