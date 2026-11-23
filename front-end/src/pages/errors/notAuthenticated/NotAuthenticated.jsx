@@ -40,7 +40,7 @@ function NotAuthenticated() {
             to="/auth/register"
             end
           >
-            <img classname="authenticated__img__button" src={addUserBlue} />
+            <img className="authenticated__img__button" src={addUserBlue} />
             <p>{t("pages.notAuthenticated.createAccount")}</p>
           </NavLink>
         </div>

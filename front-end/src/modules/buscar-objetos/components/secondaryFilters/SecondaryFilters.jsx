@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useOutletContext } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useFilter } from "../../../../hooks/filters/filterHook.jsx";
@@ -34,56 +33,45 @@ const chavesTraducao = {
 };
 
 function SecondaryFilters() {
-  const [ativo, setAtivo] = useState("Todos");
   const { tema } = useOutletContext();
   const { t } = useTranslation();
 
-  const { dispatch } = useFilter();
+  const { state, dispatch } = useFilter();
+  const ativo = state.secondaryFilters;
 
   function alternarAtivo(value) {
     dispatch({ type: "add", value: value.toUpperCase() });
-    setAtivo(value);
-  }
-
-  function AlternarCategoria({ iconWhite, iconBlack }) {
-    if (tema === "light") {
-      return <img className="icon__secondary__filter" src={icons[iconBlack]} />;
-    }
-
-    if (tema === "dark") {
-      return <img className="icon__secondary__filter" src={icons[iconWhite]} />;
-    }
   }
 
   return (
-    <div className="filter">
+    <div
+      className="filter"
+      role="group"
+      aria-label={t("search.publicationType")}
+    >
       {filtros.map((valor) => {
+        const selecionado = ativo === valor.categoria.toUpperCase();
+        const icone =
+          tema === "light" ? icons[valor.iconBlack] : icons[valor.iconWhite];
+
         return (
           <div key={valor.id}>
             <div className="input__container">
-              <div
+              <button
+                type="button"
                 className={
-                  ativo === valor.categoria
+                  selecionado
                     ? "button__secondary__filter secondary__active"
                     : "button__secondary__filter"
                 }
-                onClick={() => {
-                  alternarAtivo(valor.categoria);
-                }}
+                aria-pressed={selecionado}
+                onClick={() => alternarAtivo(valor.categoria)}
               >
-                {
-                  <AlternarCategoria
-                    categoria={valor.categoria}
-                    iconWhite={valor.iconWhite}
-                    iconBlack={valor.iconBlack}
-                  />
-                }
-
+                <img className="icon__secondary__filter" src={icone} alt="" />
                 <span className="text__secondary__filters">
-                  {" "}
-                  {t(chavesTraducao[valor.categoria] ?? valor.categoria)}{" "}
+                  {t(chavesTraducao[valor.categoria] ?? valor.categoria)}
                 </span>
-              </div>
+              </button>
             </div>
           </div>
         );

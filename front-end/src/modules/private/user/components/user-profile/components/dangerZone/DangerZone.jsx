@@ -3,7 +3,7 @@ import { NavLink } from "react-router";
 import { useTranslation } from "react-i18next";
 
 import { logout, deleteAccount } from "../../../../../private.service";
-import { AuthContext } from "../../../../../../../contexts/authContexts/AuthContext.jsx";
+import { AuthContext } from "../../../../../../../contexts/authContexts/context.js";
 
 import "./dangerZone.css";
 

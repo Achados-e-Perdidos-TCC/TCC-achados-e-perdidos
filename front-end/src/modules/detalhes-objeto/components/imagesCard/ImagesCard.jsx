@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import "./imagesCard.css";
 
@@ -8,6 +9,7 @@ import imageOpcional from "../../../../assets/icons/noImage/no-picture.svg";
 import { resolverUrlImagem } from "../../../../utils/images/urlImagem.js";
 
 function ImagesCard({ objeto }) {
+  const { t } = useTranslation();
   const imagemPrincipal = objeto?.imagemPrincipal
     ? resolverUrlImagem(objeto.imagemPrincipal)
     : "";
@@ -33,12 +35,6 @@ function ImagesCard({ objeto }) {
 
   const quantidadeVisivel = 4;
   const existemMaisImagens = imagensSecundarias.length > quantidadeVisivel;
-
-  // Atualiza a galeria quando outro objeto é carregado.
-  useEffect(() => {
-    setImagemExibida(imagemPrincipal || imageOpcional);
-    setInicio(0);
-  }, [imagemPrincipal]);
 
   // Exibe a imagem selecionada.
   function alternarImagem(imagem) {
@@ -72,7 +68,7 @@ function ImagesCard({ objeto }) {
         <img
           className={!imagemPrincipal ? "image__opcional" : "imagem__principal"}
           src={imagemExibida}
-          alt={objeto?.nome || "Imagem do objeto"}
+          alt={objeto?.nome || t("details.imageAlt")}
         />
 
         {/* Miniaturas */}
@@ -90,7 +86,7 @@ function ImagesCard({ objeto }) {
               type="button"
               onClick={mostrarImagensAnteriores}
               disabled={inicio === 0}
-              aria-label="Mostrar imagens anteriores"
+              aria-label={t("details.previousImages")}
             >
               <img
                 className="arrow__button__icon voltar"
@@ -129,7 +125,7 @@ function ImagesCard({ objeto }) {
               type="button"
               onClick={mostrarProximasImagens}
               disabled={inicio >= imagensSecundarias.length - quantidadeVisivel}
-              aria-label="Mostrar próximas imagens"
+              aria-label={t("details.nextImages")}
             >
               <img className="arrow__button__icon" src={arrowButton} alt="" />
             </button>

@@ -1,13 +1,14 @@
-import { useContext } from 'react'
-import { filterContext } from '../../contexts/filterContexts/filterContext.jsx'; 
+import { useContext } from "react";
+import { filterContext } from "../../contexts/filterContexts/context.js";
 
-function useFilter(){
+function useFilter() {
+  const context = useContext(filterContext);
 
-    const context = useContext(filterContext);
+  if (!context) {
+    throw new Error("Não existe o contexto Filter");
+  }
 
-    if (!context){ throw new Error('Não existe o contexto Filter') }
-
-    return context;
+  return context;
 }
 
-export { useFilter }
+export { useFilter };

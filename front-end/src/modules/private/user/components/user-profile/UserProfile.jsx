@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -38,7 +38,12 @@ function UserProfile({ userInfos }) {
   );
 
   const [inputCityState, setInputCityState] = useState(userInfos.city ?? "");
-  const [inputState, setInputState] = useState("");
+  const [inputState, setInputState] = useState(
+    () =>
+      cidadesBrasil.estados.find((estado) =>
+        estado.cidades.includes(userInfos.city),
+      )?.sigla ?? "",
+  );
 
   const [ativo1, setAtivo1] = useState(
     userInfos.preferences?.notificationsEnabled ?? true,
@@ -63,18 +68,6 @@ function UserProfile({ userInfos }) {
       });
     });
   });
-
-  useEffect(() => {
-    if (userInfos.city) {
-      const estadoEncontrado = cidadesBrasil.estados.find((estado) =>
-        estado.cidades.includes(userInfos.city),
-      );
-
-      if (estadoEncontrado) {
-        setInputState(estadoEncontrado.sigla);
-      }
-    }
-  }, [userInfos.city]);
 
   async function changeDataAccount() {
     try {

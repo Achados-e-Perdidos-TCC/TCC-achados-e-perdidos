@@ -7,6 +7,7 @@ import "./detalhesObjeto.css";
 import { objects } from "../detalhesObjeto.service.js";
 
 import Loading from "../../../components/loading/Loading.jsx";
+import ObjectUnavailable from "../../../pages/errors/objectUnavailable/ObjectUnavailable.jsx";
 
 import houseGray from "../../../assets/icons/detalhesObjeto/house-gray.svg";
 import arrowGray from "../../../assets/icons/detalhesObjeto/arrow-gray.svg";
@@ -200,7 +201,7 @@ ${t("details.contact.email.linkLine", { link: window.location.href })}`;
   }
 
   if (erro || !objetos) {
-    return <p>{t("details.loadError")}</p>;
+    return <ObjectUnavailable />;
   }
 
   return (
@@ -230,7 +231,7 @@ ${t("details.contact.email.linkLine", { link: window.location.href })}`;
       <div className="container__detalhes">
         {/* Galeria de imagens */}
         <div className="esquerda">
-          <ImagesCard objeto={objetos} />
+          <ImagesCard key={objetos.id} objeto={objetos} />
         </div>
 
         {/* Coluna direita */}

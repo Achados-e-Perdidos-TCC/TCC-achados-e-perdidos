@@ -30,7 +30,7 @@ function PhotoCard({
       try {
         const avatarUrl = await loadAvatar(userInfos.avatarUrl);
         setAvatar(avatarUrl);
-      } catch (error) {
+      } catch {
         setError(true);
       }
     }

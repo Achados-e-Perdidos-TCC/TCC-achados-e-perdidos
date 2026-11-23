@@ -242,6 +242,7 @@
       "categoryPlaceholder": "Todas as categorias",
       "period": "Período",
       "periodPlaceholder": "Qualquer período",
+      "clearCategory": "Limpar categoria",
       "clearPeriod": "Limpar período",
       "loadingCategories": "Carregando categorias...",
       "searchButton": "Buscar"
@@ -262,6 +263,9 @@
     "categories": "Categorias",
     "location": "Localização",
     "date": "Data",
+    "imageAlt": "Imagem do objeto",
+    "previousImages": "Mostrar imagens anteriores",
+    "nextImages": "Mostrar próximas imagens",
     "fullDescription": "Descrição Completa",
     "information": "Informações",
     "notes": "Observações",
@@ -530,6 +534,7 @@
       "myProfile": "Meu perfil",
       "myObjects": "Meus objetos",
       "notifications": "Notificações",
+      "avatarAlt": "Foto de perfil",
       "helpCenter": "Central de ajuda"
     },
     "objects": {
@@ -541,7 +546,9 @@
       "count_other": "{{count}} objetos cadastrados",
       "optionsOf": "Opções de {{name}}",
       "options": "Opções do objeto",
-      "edit": "Editar objeto"
+      "edit": "Editar objeto",
+      "deleted": "Excluído",
+      "deletedNotice": "Você excluiu este objeto. Ele não aparece mais nas buscas e não pode ser aberto nem editado."
     },
     "notifications": {
       "title": "Notificações",
@@ -634,6 +641,11 @@
       "text": "Não conseguimos encontrar a página que você está procurando. Talvez ela tenha sido removida ou o endereço esteja incorreto.",
       "backHome": "Voltar para o início",
       "search": "Buscar objetos"
+    },
+    "objectUnavailable": {
+      "illustrationAlt": "Ilustração representando um objeto indisponível",
+      "code": "OBJETO INDISPONÍVEL",
+      "text": "Ele pode ter sido excluído pelo dono, o link pode estar incorreto ou houve uma falha de conexão. Tente novamente em instantes."
     },
     "noObjects": {
       "illustrationAlt": "Ilustração representando uma busca sem resultados",

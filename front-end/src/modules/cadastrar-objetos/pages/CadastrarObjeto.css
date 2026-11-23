@@ -775,7 +775,15 @@
   color: var(--cad-green);
 }
 
-.cadastrar-page .confirmation-modal--success .confirmation-modal__actions {
+.editar-page .confirmation-modal {
+  text-align: center;
+}
+
+.editar-page .confirmation-modal__icon {
+  margin-inline: auto;
+}
+
+.editar-page .confirmation-modal__actions {
   justify-content: center;
 }
 

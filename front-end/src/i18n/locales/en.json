@@ -242,6 +242,7 @@
       "categoryPlaceholder": "All categories",
       "period": "Period",
       "periodPlaceholder": "Any period",
+      "clearCategory": "Clear category",
       "clearPeriod": "Clear period",
       "loadingCategories": "Loading categories...",
       "searchButton": "Search"
@@ -262,6 +263,9 @@
     "categories": "Categories",
     "location": "Location",
     "date": "Date",
+    "imageAlt": "Item image",
+    "previousImages": "Show previous images",
+    "nextImages": "Show next images",
     "fullDescription": "Full description",
     "information": "Information",
     "notes": "Notes",
@@ -530,6 +534,7 @@
       "myProfile": "My profile",
       "myObjects": "My items",
       "notifications": "Notifications",
+      "avatarAlt": "Profile photo",
       "helpCenter": "Help center"
     },
     "objects": {
@@ -541,7 +546,9 @@
       "count_other": "{{count}} registered items",
       "optionsOf": "Options for {{name}}",
       "options": "Item options",
-      "edit": "Edit item"
+      "edit": "Edit item",
+      "deleted": "Deleted",
+      "deletedNotice": "You deleted this item. It no longer appears in searches and can't be opened or edited."
     },
     "notifications": {
       "title": "Notifications",
@@ -634,6 +641,11 @@
       "text": "We couldn't find the page you're looking for. It may have been removed or the address may be incorrect.",
       "backHome": "Back to home",
       "search": "Search items"
+    },
+    "objectUnavailable": {
+      "illustrationAlt": "Illustration representing an unavailable item",
+      "code": "ITEM UNAVAILABLE",
+      "text": "It may have been deleted by its owner, the link may be incorrect, or there may have been a connection problem. Please try again in a moment."
     },
     "noObjects": {
       "illustrationAlt": "Illustration representing a search with no results",

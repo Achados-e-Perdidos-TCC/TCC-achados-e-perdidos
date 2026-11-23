@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useOutletContext } from "react-router";
 import { useTranslation } from "react-i18next";
 
@@ -22,17 +22,12 @@ function Perfil({ proximaPagina, error, setInput }) {
   const [preview, setPreview] = useState("");
 
   // Cria e limpa a URL temporária da imagem
-  useEffect(() => {
-    if (!foto) {
-      setPreview("");
-      return;
-    }
+  function atualizarFoto(arquivo) {
+    if (preview) URL.revokeObjectURL(preview);
 
-    const url = URL.createObjectURL(foto);
-    setPreview(url);
-
-    return () => URL.revokeObjectURL(url);
-  }, [foto]);
+    setFoto(arquivo);
+    setPreview(arquivo ? URL.createObjectURL(arquivo) : "");
+  }
 
   // Validação e seleção da imagem
   function selecionarImagem(arquivo) {
@@ -52,7 +47,7 @@ function Perfil({ proximaPagina, error, setInput }) {
       return;
     }
 
-    setFoto(arquivo);
+    atualizarFoto(arquivo);
   }
 
   function excluirImagem() {
@@ -62,7 +57,7 @@ function Perfil({ proximaPagina, error, setInput }) {
       inputRef.current.value = "";
     }
 
-    error(null);
+    atualizarFoto(null);
   }
 
   function handleDrop(evento) {

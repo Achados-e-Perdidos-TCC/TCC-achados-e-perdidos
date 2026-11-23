@@ -240,7 +240,7 @@
     gap: 1.6rem;
   }
 
-  /* Informações resumidas deixam de ocupar espaço no mobile. *
+  /* Informações resumidas deixam de ocupar espaço no mobile. */
   .detalhes .detalhes__infos {
     display: none;
   }
