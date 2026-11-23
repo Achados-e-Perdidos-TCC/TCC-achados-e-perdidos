@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import "./userPreferences.css";
 
@@ -9,6 +10,8 @@ function UserPreferences({
   setAtivo1,
   setShowEmailOnItems,
 }) {
+  const { t } = useTranslation();
+
   const [temaAberto, setTemaAberto] = useState(false);
 
   const { tema, setTema } = useOutletContext();
@@ -19,11 +22,11 @@ function UserPreferences({
       <div className="user__profile__preferences__container">
         <div className="user__profile__preferences__info">
           <h4 className="user__profile__preferences__title">
-            Receber notificações
+            {t("account.preferences.receiveNotifications")}
           </h4>
 
           <p className="user__profile__preferences__subtitle">
-            Receba notificações sobre novidades da plataforma.
+            {t("account.preferences.receiveNotificationsDescription")}
           </p>
         </div>
 
@@ -31,7 +34,7 @@ function UserPreferences({
           type="button"
           className={`preference__button ${ativo1 ? "ativo1" : ""}`}
           onClick={() => setAtivo1(!ativo1)}
-          aria-label="Alternar notificações"
+          aria-label={t("account.preferences.toggleNotifications")}
           aria-pressed={ativo1}
         >
           <span />
@@ -44,12 +47,11 @@ function UserPreferences({
       <div className="user__profile__preferences__container">
         <div className="user__profile__preferences__info">
           <h4 className="user__profile__preferences__title">
-            Exibir meu e-mail nos objetos
+            {t("account.preferences.showEmail")}
           </h4>
 
           <p className="user__profile__preferences__subtitle">
-            Permita que outras pessoas vejam seu e-mail ao acessar os detalhes
-            dos objetos que você publicou.
+            {t("account.preferences.showEmailDescription")}
           </p>
         </div>
 
@@ -57,7 +59,7 @@ function UserPreferences({
           type="button"
           className={`preference__button ${showEmailOnItems ? "ativo3" : ""}`}
           onClick={() => setShowEmailOnItems(!showEmailOnItems)}
-          aria-label="Alternar divulgação do e-mail nos objetos"
+          aria-label={t("account.preferences.toggleShowEmail")}
           aria-pressed={showEmailOnItems}
         >
           <span />
@@ -71,11 +73,11 @@ function UserPreferences({
         <div className="user__profile__select__container">
           <div>
             <h4 className="user__profile__preferences__title">
-              Tema da plataforma
+              {t("account.preferences.themeTitle")}
             </h4>
 
             <p className="user__profile__preferences__subtitle">
-              Escolha a aparência que prefere utilizar.
+              {t("account.preferences.themeDescription")}
             </p>
           </div>
 
@@ -88,7 +90,11 @@ function UserPreferences({
               onClick={() => setTemaAberto(!temaAberto)}
               aria-expanded={temaAberto}
             >
-              <span>{tema === "light" ? "Claro" : "Escuro"}</span>
+              <span>
+                {tema === "light"
+                  ? t("account.preferences.themeLight")
+                  : t("account.preferences.themeDark")}
+              </span>
             </button>
 
             {temaAberto && (
@@ -101,7 +107,7 @@ function UserPreferences({
                     setTemaAberto(false);
                   }}
                 >
-                  Claro
+                  {t("account.preferences.themeLight")}
                 </button>
 
                 <button
@@ -112,7 +118,7 @@ function UserPreferences({
                     setTemaAberto(false);
                   }}
                 >
-                  Escuro
+                  {t("account.preferences.themeDark")}
                 </button>
               </div>
             )}

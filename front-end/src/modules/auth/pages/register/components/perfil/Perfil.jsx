@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useOutletContext } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import "./perfil.css";
 
@@ -10,6 +11,8 @@ import arrowBlack from "../../../../../../assets/icons/register/arrow-black.png"
 import arrowWhite from "../../../../../../assets/icons/register/arrow-white.png";
 
 function Perfil({ proximaPagina, error, setInput }) {
+  const { t } = useTranslation();
+
   const [foto, setFoto] = useState(null);
   const [arrastando, setArrastando] = useState(false);
 
@@ -40,12 +43,12 @@ function Perfil({ proximaPagina, error, setInput }) {
     const formatosPermitidos = ["image/jpeg", "image/png"];
 
     if (!formatosPermitidos.includes(arquivo.type)) {
-      error("Selecione uma imagem no formato JPG ou PNG.");
+      error(t("auth.register.photo.invalidFormat"));
       return;
     }
 
     if (arquivo.size > 5 * 1024 * 1024) {
-      error("A imagem deve ter no máximo 5 MB.");
+      error(t("auth.register.photo.tooLarge"));
       return;
     }
 
@@ -75,9 +78,7 @@ function Perfil({ proximaPagina, error, setInput }) {
     error(null);
 
     if (!foto) {
-      return error(
-        "Adicione uma foto para continuar ou clique em “Pular por enquanto”.",
-      );
+      return error(t("auth.register.photo.required"));
     }
 
     setInput((valorAntigo) => ({
@@ -114,7 +115,7 @@ function Perfil({ proximaPagina, error, setInput }) {
             <img
               className="com__foto"
               src={preview}
-              alt="Pré-visualização da foto de perfil"
+              alt={t("auth.register.photo.preview")}
             />
           ) : (
             <div className="sem__foto">
@@ -125,18 +126,20 @@ function Perfil({ proximaPagina, error, setInput }) {
           {preview && (
             <span className="perfil__foto-status">
               <span />
-              Foto selecionada
+              {t("auth.register.photo.selected")}
             </span>
           )}
         </div>
 
         <div className="perfil__foto-informacoes">
           <h3 className="register__foto__title">
-            {foto ? "Sua foto de perfil" : "Adicione uma foto"}
+            {foto
+              ? t("auth.register.photo.title")
+              : t("auth.register.photo.add")}
           </h3>
 
           <span className="register__foto__subtitle">
-            JPG ou PNG · Recomendado até 5 MB
+            {t("auth.register.photo.hint")}
           </span>
         </div>
       </div>
@@ -165,11 +168,11 @@ function Perfil({ proximaPagina, error, setInput }) {
 
           <div className="perfil__upload-textos">
             <h4 className="register__upload__title">
-              Selecione uma imagem do seu dispositivo
+              {t("auth.register.photo.pick")}
             </h4>
 
             <p className="register__upload__subtitle">
-              Ou arraste e solte aqui
+              {t("auth.register.photo.drag")}
             </p>
           </div>
         </div>
@@ -181,14 +184,14 @@ function Perfil({ proximaPagina, error, setInput }) {
               type="button"
               onClick={excluirImagem}
             >
-              Excluir imagem
+              {t("auth.register.photo.delete")}
             </button>
           ) : (
             <label
               htmlFor="uploadimage"
               className="upload__image__label no__responsive"
             >
-              Selecionar imagem
+              {t("auth.register.photo.select")}
             </label>
           )}
 
@@ -214,14 +217,14 @@ function Perfil({ proximaPagina, error, setInput }) {
           type="button"
           onClick={excluirImagem}
         >
-          Excluir imagem
+          {t("auth.register.photo.delete")}
         </button>
       ) : (
         <label
           htmlFor="uploadimage"
           className="upload__image__label register__responsive"
         >
-          Selecionar imagem
+          {t("auth.register.photo.select")}
         </label>
       )}
 
@@ -233,7 +236,7 @@ function Perfil({ proximaPagina, error, setInput }) {
         onClick={pularProximaPagina}
       >
         <img src={skipGray} alt="" />
-        <span>Pular por enquanto</span>
+        <span>{t("auth.register.photo.skip")}</span>
       </button>
 
       {/* NAVEGAÇÃO */}
@@ -249,7 +252,7 @@ function Perfil({ proximaPagina, error, setInput }) {
             src={tema === "light" ? arrowBlack : arrowWhite}
             alt=""
           />
-          <p>Voltar</p>
+          <p>{t("common.back")}</p>
         </button>
 
         <button
@@ -258,7 +261,7 @@ function Perfil({ proximaPagina, error, setInput }) {
           onClick={continuarCriacaoConta}
         >
           <img className="perfil__arrow__white" src={arrowWhite} alt="" />
-          <p>Continuar</p>
+          <p>{t("common.continue")}</p>
         </button>
       </div>
     </div>

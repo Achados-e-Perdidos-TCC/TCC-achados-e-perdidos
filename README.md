@@ -1,81 +1,147 @@
-# Achados e Devolvidos
+# Achados e Devolvidos (Lost & Found)
 
-Projeto de TCC (+PraTI) — uma plataforma para ajudar a comunidade a reencontrar
-objetos perdidos.
+A web platform that helps a community find lost belongings. People can post
+items they **lost** or **found**, search them with filters, and get notified
+when an item they posted changes status.
 
-## Estrutura do repositório
+Built as a team capstone project for the Systems Analysis and Development
+program (Unisinos / +PraTI). The user interface is in Portuguese; the
+documentation is in English.
 
+## My role
+
+I was the **team lead** and the **back-end developer**. I designed and built
+the REST API (authentication, items, search, notifications), the database
+migrations, the test suite and the CI pipeline. The front-end was built by
+the rest of the team.
+
+## Features
+
+- Sign up, log in, refresh sessions and reset a forgotten password by e-mail
+- Post lost or found items with category, location, date and images
+- Search items with combined filters: type, category, text, state, city,
+  neighborhood and date range (paginated)
+- Manage your own items: edit, change status, soft delete
+- In-app notifications, with per-user preferences
+- User profile with preferences and account deactivation
+
+## Tech stack
+
+| Layer     | Technology                                                      |
+| --------- | --------------------------------------------------------------- |
+| Front-end | React 19, Vite, React Router                                    |
+| Back-end  | Java 21, Spring Boot 3.3, Spring Security 6, Spring Data JPA    |
+| Database  | PostgreSQL 16, Flyway migrations                                |
+| Auth      | Stateless JWT (access + refresh tokens), Bucket4j rate limiting |
+| Tests     | JUnit 5, Mockito, Testcontainers                                |
+| DevOps    | Docker, Docker Compose, GitHub Actions                          |
+| API docs  | OpenAPI / Swagger UI                                            |
+
+## Key technical decisions
+
+- **Feature-based packages** (`auth`, `user`, `item`, `category`,
+  `notification`, `upload`) instead of one package per layer.
+- **Database schema owned by Flyway.** Hibernate runs with `ddl-auto: validate`,
+  so it never changes tables on its own.
+- **Stateless JWT with refresh-token rotation.** Refresh tokens are stored on
+  the server and can be revoked (on logout, password change and password reset).
+- **Login protection.** Rate limiting by IP and by account, and a generic
+  `401` that does not reveal whether an e-mail exists.
+- **Event-driven notifications.** Item and profile changes publish domain
+  events, and the notification module listens to them, so the modules stay
+  decoupled.
+- **Dynamic search with JPA Specifications.** Each filter is isolated and
+  they can be combined freely.
+- **Soft delete** for items and accounts, so no data is lost by accident.
+- **Safe uploads.** Only image types are accepted, there is a 5 MB limit, and
+  files are stored under generated UUID names (never the original name).
+
+More detail (in Portuguese) is in
+[`backend-refatorado/ARQUITETURA.md`](backend-refatorado/ARQUITETURA.md).
+
+## API overview
+
+Base path: `/api/v1`. Interactive docs are available at `/swagger-ui`
+(protected with Basic Auth).
+
+| Area          | Endpoints                                                                                                                                     |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Auth          | `POST /auth/register`, `/login`, `/refresh`, `/logout`, `/forgot-password`, `/reset-password`                                                 |
+| Users         | `GET/PATCH/DELETE /users/me`, `PATCH /users/me/password`, `PATCH /users/me/preferences`                                                       |
+| Items         | `POST /items`, `GET /items/search`, `GET /items/{id}`, `GET /items/me`, `PATCH /items/{id}`, `PATCH /items/{id}/status`, `DELETE /items/{id}` |
+| Categories    | `GET /categories`                                                                                                                             |
+| Notifications | `GET /notifications`, `PATCH /notifications/{id}/read`, `PATCH /notifications/read-all`                                                       |
+| Uploads       | `POST /uploads/images`                                                                                                                        |
+
+## Getting started
+
+### Requirements
+
+Java 21, Maven 3.9+, Node.js (current LTS) and Docker.
+
+### 1. Back-end
+
+```bash
+cd backend-refatorado
+cp .env.example .env        # then fill in the values (see below)
+docker compose up -d        # starts PostgreSQL
+set -a && source .env && set +a
+mvn spring-boot:run         # API at http://localhost:8080
 ```
-.
-├── backend-refatorado/   # API (Java/Spring Boot)
-└── front-end/             # Aplicação web (React)
+
+The `.env` file needs at least `JWT_SECRET` (generate one with
+`openssl rand -base64 32`), the SMTP credentials used by the password-reset
+e-mail (for example a free Mailtrap sandbox), and the Swagger Basic Auth
+username and password. The app will not start without them. Never commit
+your `.env` file.
+
+### 2. Front-end
+
+```bash
+cd front-end
+npm install
+echo "VITE_API_BASE_URL=http://localhost:8080/api/v1" > .env
+npm run dev                 # http://localhost:5173
 ```
 
-Cada diretório tem sua própria documentação, mais específica:
+## Tests
 
-- **`backend-refatorado/README.md`** — visão geral do backend, como rodar o
-  projeto localmente do zero.
-- **`backend-refatorado/README-BACKEND-SETUP.md`** — stack, versões,
-  dependências e ferramentas necessárias na máquina de quem for desenvolver
-  no backend.
-- **`backend-refatorado/README-BACKEND-ENDPOINTS.md`** — catálogo de
-  endpoints implementados e o que ainda falta fazer.
-- **`backend-refatorado/README-FRONTEND.md`** — guia de integração para
-  quem consome a API (contratos de request/response, regras de segurança).
-- **`backend-refatorado/ARQUITETURA.md`** — decisões técnicas do backend e
-  o porquê de cada uma.
-
-## Equipe
-
-O grupo está dividido em dois times, cada um responsável por uma parte do
-sistema:
-
-- **Time de Backend** — API, banco de dados, autenticação, motor de match,
-  chat em tempo real (possível alteração).
-- **Time de Frontend** — interface web, integração com a API, experiência
-  do usuário.
-
-## Fluxo de contribuição e regras de Pull Request
-
-As branches `main` e `backend-develop` são **protegidas**: ninguém consegue
-dar `git push` direto nelas. Toda mudança precisa passar por um Pull
-Request, com pelo menos **1 aprovação** antes do merge.
-
-### Nomeação de branch
-
-Toda tarefa começa em uma branch própria, criada a partir da branch de
-integração correspondente (ver fluxo abaixo), com um nome claro e condizente
-com o que está sendo feito:
-
-- `feature/<o-que-foi-feito>` — para o time de backend (ex.:
-  `feature/user-preferences-and-delete-account`).
-- `feat/<o-que-foi-feito>` — para o time de frontend (ex.: `feat/home`).
-- `fix/<o-que-foi-corrigido>` — para correções pontuais, em qualquer time.
-
-Nada de misturar duas tarefas diferentes na mesma branch, nem commitar
-direto em `main` ou `backend-develop`.
-
-### Fluxo por time
-
-**Backend:**
-
-```
-feature/<tarefa>  →  PR + aprovação  →  backend-develop  →  PR + aprovação  →  main
+```bash
+cd backend-refatorado
+mvn test                                  # unit tests (no Docker needed)
+mvn verify -Dskip.unit.tests=true         # integration tests (needs Docker)
 ```
 
-`backend-develop` funciona como a branch de integração do backend — reúne
-várias features antes de irem para `main` de uma vez.
+Unit tests cover the JWT service, the auth service, the item service and the
+login rate limiter. Integration tests run against a real PostgreSQL started by
+Testcontainers and cover the auth, item, category, user, notification and
+upload endpoints, CORS and login rate limiting.
 
-**Frontend:**
+## Continuous integration
 
-```
-feat/<tarefa>  →  PR + aprovação  →  main
-```
+A GitHub Actions workflow (`.github/workflows/backend-ci.yml`) compiles the
+back-end and runs the unit and integration tests in parallel on every push
+and pull request to `main` and `backend-develop`.
 
-### Antes de abrir a PR
+## Known limitations and next steps
 
-- Confirme que o projeto compila e, no caso do backend, que a suíte de
-  testes passa localmente (`mvn verify` — ver `README-BACKEND-SETUP.md`).
-- Descreva na PR **o que** foi feito de forma clara e objetiva.
-- PRs pequenas e focadas em uma única tarefa são mais fáceis de revisar do
-  que uma PR gigante misturando várias mudanças não relacionadas.
+- Uploaded images are stored on local disk. A cloud storage service (S3 or
+  Cloudflare R2) would be the next step.
+- Search by geographic radius is not implemented yet.
+- The front-end has no automated tests yet and is written in JavaScript; a
+  gradual migration to TypeScript is planned.
+- An automatic match engine and a real-time chat were built and later removed
+  by team decision.
+
+## More documentation (Portuguese)
+
+- [`backend-refatorado/README.md`](backend-refatorado/README.md): full backend setup
+- [`backend-refatorado/README-BACKEND-ENDPOINTS.md`](backend-refatorado/README-BACKEND-ENDPOINTS.md): endpoint catalog
+- [`backend-refatorado/README-AUTH.md`](backend-refatorado/README-AUTH.md): authentication details
+- [`backend-refatorado/ARQUITETURA.md`](backend-refatorado/ARQUITETURA.md): architecture decisions
+
+## Contributing
+
+`main` and `backend-develop` are protected branches. Work on a branch named
+`feature/<task>` (back-end), `feat/<task>` (front-end) or `fix/<task>`, and
+open a pull request that needs at least one approval.

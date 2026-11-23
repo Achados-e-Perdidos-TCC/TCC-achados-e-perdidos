@@ -1,5 +1,6 @@
 import { hoje, ontem } from "../../../../../utils/date/date";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import "./userNotifications.css";
 
@@ -16,6 +17,8 @@ import pencilWhite from "../../../../../assets/icons/userArea/pencil-white.png";
 import emailBlue from "../../../../../assets/icons/userArea/email-blue.png";
 
 function UserNotifications({ setNotifications }) {
+  const { t } = useTranslation();
+
   const [carregando, setCarregando] = useState(true);
   const [notifications, setNotificationsState] = useState([]);
   const [notificationEnabled, setNotificationEnabled] = useState(true);
@@ -119,9 +122,9 @@ function UserNotifications({ setNotifications }) {
       <div key={data} className="user__notifications__principal__container">
         <h2 className="notification__dateTime">
           {data === hoje()
-            ? "Hoje"
+            ? t("common.today")
             : data === ontem()
-              ? "Ontem"
+              ? t("common.yesterday")
               : `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`}
         </h2>
 
@@ -138,9 +141,13 @@ function UserNotifications({ setNotifications }) {
                   handleReadNotification(value.id);
                 }
               }}
-              aria-label={`Notificação: ${value.title}. ${
-                value.read === false ? "Não lida" : "Lida"
-              }`}
+              aria-label={t("account.notifications.aria", {
+                title: value.title,
+                status:
+                  value.read === false
+                    ? t("account.notifications.unread")
+                    : t("account.notifications.read"),
+              })}
             >
               <div className="user__notifications__content">
                 {value.type === "PROFILE_UPDATED" ? (
@@ -207,10 +214,12 @@ function UserNotifications({ setNotifications }) {
     <div className="user__notifications">
       <div className="user__notifications__header__container">
         <div>
-          <h1 className="user__notifications__text">Notificações</h1>
+          <h1 className="user__notifications__text">
+            {t("account.notifications.title")}
+          </h1>
 
           <p className="user__notifications__subtitle">
-            Acompanhe as novidades sobre seus objetos e interações.
+            {t("account.notifications.subtitle")}
           </p>
         </div>
 
@@ -223,7 +232,9 @@ function UserNotifications({ setNotifications }) {
           <img className="notifications__email" src={emailBlue} alt="" />
 
           <span>
-            {marcandoTodas ? "Atualizando..." : "Marcar todas como lidas"}
+            {marcandoTodas
+              ? t("account.notifications.updating")
+              : t("account.notifications.markAllRead")}
           </span>
         </button>
       </div>
@@ -231,19 +242,19 @@ function UserNotifications({ setNotifications }) {
       <div className="user__notifications__body">
         {carregando ? (
           <div className="user__notifications__state">
-            <p>Carregando notificações...</p>
+            <p>{t("account.notifications.loading")}</p>
           </div>
         ) : erro ? (
           <div className="user__notifications__state">
-            <p>Não foi possível carregar as notificações.</p>
+            <p>{t("account.notifications.loadError")}</p>
           </div>
         ) : !notificationEnabled ? (
           <div className="user__notifications__state">
-            <p>Você desativou as notificações nas suas preferências.</p>
+            <p>{t("account.notifications.disabled")}</p>
           </div>
         ) : notifications.length === 0 ? (
           <div className="user__notifications__state">
-            <p>Você não possui notificações.</p>
+            <p>{t("account.notifications.empty")}</p>
           </div>
         ) : (
           renderNotifications()

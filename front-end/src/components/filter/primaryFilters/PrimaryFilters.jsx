@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useFilter } from "../../../hooks/filters/filterHook.jsx";
 import "./primaryFilters.css";
 
@@ -24,7 +25,29 @@ const icons = {
   calendarGray,
 };
 
+// "categoria" continua em português porque é usada na lógica do filtro;
+// aqui só mapeamos para as chaves de tradução exibidas na tela.
+const chavesTraducao = {
+  Objeto: {
+    label: "search.filters.object",
+    placeholder: "search.filters.objectPlaceholder",
+  },
+  Localização: {
+    label: "search.filters.location",
+    placeholder: "search.filters.locationPlaceholder",
+  },
+  Categoria: {
+    label: "search.filters.category",
+    placeholder: "search.filters.categoryPlaceholder",
+  },
+  Período: {
+    label: "search.filters.period",
+    placeholder: "search.filters.periodPlaceholder",
+  },
+};
+
 function BasicFilters() {
+  const { t } = useTranslation();
   const { dispatch } = useFilter();
   const [valorInput, setValorInput] = useState({});
 
@@ -77,11 +100,15 @@ function BasicFilters() {
   return (
     <div className="filter">
       {filtros.map((valor) => {
+        const chaves = chavesTraducao[valor.categoria];
+        const label = chaves ? t(chaves.label) : valor.categoria;
+        const placeholder = chaves ? t(chaves.placeholder) : valor.placeholder;
+
         return (
           <div key={valor.id}>
             <label htmlFor={valor.categoria} className="text__filter">
               {" "}
-              {valor.categoria}{" "}
+              {label}{" "}
             </label>
 
             <div className="input__container">
@@ -95,14 +122,14 @@ function BasicFilters() {
                     type={valor.type}
                     placeholder={
                       carregandoCategorias
-                        ? "Carregando categorias..."
-                        : valor.placeholder
+                        ? t("search.filters.loadingCategories")
+                        : placeholder
                     }
                     change={pegarValorInput}
                   />
                 ) : valor.categoria === "Período" ? (
                   <DateRange
-                    placeholder={valor.placeholder}
+                    placeholder={placeholder}
                     arrow={arrowGray}
                     close={closeGray}
                     change={pegarValorInput}
@@ -115,7 +142,7 @@ function BasicFilters() {
                     }}
                     className="input__filter"
                     type={valor.type}
-                    placeholder={valor.placeholder}
+                    placeholder={placeholder}
                   />
                 )}
 
@@ -134,7 +161,9 @@ function BasicFilters() {
           }}
         >
           <img className="lupa__icon" src={lupaIcon} alt="" />
-          <span className="buscar__text">buscar</span>
+          <span className="buscar__text">
+            {t("search.filters.searchButton")}
+          </span>
         </button>
       </div>
     </div>

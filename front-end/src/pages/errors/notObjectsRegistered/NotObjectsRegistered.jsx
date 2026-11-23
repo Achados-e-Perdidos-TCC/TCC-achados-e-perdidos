@@ -1,8 +1,12 @@
+import { useTranslation } from "react-i18next";
+
 import notFoundIllustration from "../../../assets/icons/notobjects/notFound-illustration.png";
 
 import "./notObjectsRegistered.css";
 
 function NotObjectsRegistered() {
+  const { t } = useTranslation();
+
   return (
     <section className="notobjects-registered">
       {/* ILUSTRAÇÃO */}
@@ -10,19 +14,18 @@ function NotObjectsRegistered() {
       <img
         className="notobjects-registered__illustration"
         src={notFoundIllustration}
-        alt="Ilustração representando a ausência de objetos cadastrados"
+        alt={t("pages.noObjectsRegistered.illustrationAlt")}
       />
 
       {/* TEXTOS */}
 
       <div className="notobjects-registered__texts">
         <h2 className="notobjects-registered__title">
-          Ops! Você ainda não possui objetos cadastrados
+          {t("pages.noObjectsRegistered.title")}
         </h2>
 
         <p className="notobjects-registered__subtitle">
-          Cadastre seu primeiro objeto para começar a visualizar e gerenciar
-          seus registros por aqui.
+          {t("pages.noObjectsRegistered.text")}
         </p>
       </div>
     </section>

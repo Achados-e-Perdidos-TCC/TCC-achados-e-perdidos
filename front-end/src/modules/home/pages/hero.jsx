@@ -2,6 +2,7 @@ import "./hero.css";
 
 import { useEffect, useState } from "react";
 import { NavLink, useOutletContext } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import direitawhite from "../../../assets/icons/home/direita-white.svg";
 import direitablack from "../../../assets/icons/home/direita-black.svg";
@@ -27,6 +28,7 @@ import CardDicas from "../components/CardDicas/CardDicas.jsx";
 
 function Hero() {
   const { tema } = useOutletContext();
+  const { t } = useTranslation();
 
   const [objetos, setObjetos] = useState([]);
   const [carregandoObjetos, setCarregandoObjetos] = useState(true);
@@ -72,21 +74,21 @@ function Hero() {
         <div className="home-hero__conteudo">
           <div className="home-hero__etiqueta">
             <span className="home-hero__etiqueta-ponto" />
-            Conectando pessoas e histórias
+            {t("home.hero.tag")}
           </div>
 
           <h1>
-            Seu objeto pode estar mais{" "}
-            <span className="home-hero__destaque">perto</span> do que você{" "}
+            {t("home.hero.titlePrefix")}{" "}
+            <span className="home-hero__destaque">
+              {t("home.hero.titleHighlight1")}
+            </span>{" "}
+            {t("home.hero.titleMiddle")}{" "}
             <span className="home-hero__destaque home-hero__destaque--verde">
-              imagina.
+              {t("home.hero.titleHighlight2")}
             </span>
           </h1>
 
-          <p className="home-hero__descricao">
-            Perdeu alguma coisa ou encontrou um objeto? Nossa plataforma
-            aproxima quem procura de quem encontrou.
-          </p>
+          <p className="home-hero__descricao">{t("home.hero.description")}</p>
 
           <div className="home-hero__acoes">
             <NavLink
@@ -101,14 +103,14 @@ function Hero() {
                   strokeLinecap="round"
                 />
               </svg>
-              Perdi um objeto
+              {t("home.hero.lostButton")}
             </NavLink>
 
             <NavLink
               className="home-botao home-botao--secundario"
               to="/cadastrar-objetos"
             >
-              Encontrei um objeto
+              {t("home.hero.foundButton")}
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="M5 12h14m-6-6 6 6-6 6"
@@ -140,7 +142,7 @@ function Hero() {
               </svg>
             </span>
 
-            <span>Uma maneira simples de ajudar e encontrar.</span>
+            <span>{t("home.hero.trust")}</span>
           </div>
         </div>
 
@@ -152,7 +154,7 @@ function Hero() {
           <img
             className="home-hero__imagem"
             src={imagemHero}
-            alt="Caixa azul com objetos encontrados, incluindo celular, garrafa e fones de ouvido"
+            alt={t("home.hero.imageAlt")}
           />
 
           <div className="home-hero__selo">
@@ -175,8 +177,8 @@ function Hero() {
             </span>
 
             <span>
-              <strong>Encontre</strong>
-              <small>o que procura</small>
+              <strong>{t("home.hero.badgeTitle")}</strong>
+              <small>{t("home.hero.badgeSubtitle")}</small>
             </span>
           </div>
         </div>
@@ -204,18 +206,17 @@ function Hero() {
         </div>
 
         <div className="home-busca__conteudo">
-          <span className="home-secao__sobretitulo">BUSCA DE OBJETOS</span>
+          <span className="home-secao__sobretitulo">
+            {t("home.search.eyebrow")}
+          </span>
 
-          <h2>O que você está procurando?</h2>
+          <h2>{t("home.search.title")}</h2>
 
-          <p>
-            Explore os objetos cadastrados e encontre possíveis correspondências
-            com aquilo que você perdeu.
-          </p>
+          <p>{t("home.search.description")}</p>
         </div>
 
         <NavLink className="home-busca__botao" to="/buscar-objetos">
-          Explorar objetos
+          {t("home.search.button")}
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
               d="M5 12h14m-6-6 6 6-6 6"
@@ -234,15 +235,12 @@ function Hero() {
         <div className="home-secao__cabecalho">
           <div>
             <span className="home-secao__sobretitulo">
-              SIMPLES DO COMEÇO AO FIM
+              {t("home.how.eyebrow")}
             </span>
 
-            <h2>Como funciona a plataforma?</h2>
+            <h2>{t("home.how.title")}</h2>
 
-            <p>
-              Um processo simples para ajudar objetos a encontrarem seus
-              verdadeiros donos.
-            </p>
+            <p>{t("home.how.description")}</p>
           </div>
         </div>
 
@@ -258,16 +256,16 @@ function Hero() {
         <div className="home-secao__cabecalho home-recentes__cabecalho">
           <div>
             <span className="home-secao__sobretitulo">
-              ATUALIZAÇÕES DA COMUNIDADE
+              {t("home.recent.eyebrow")}
             </span>
 
-            <h2>Objetos recentemente cadastrados</h2>
+            <h2>{t("home.recent.title")}</h2>
 
-            <p>Confira os últimos objetos compartilhados na plataforma.</p>
+            <p>{t("home.recent.description")}</p>
           </div>
 
           <NavLink className="home-recentes__ver-todos" to="/buscar-objetos">
-            Ver todos os objetos
+            {t("home.recent.seeAll")}
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
                 d="M5 12h14m-6-6 6 6-6 6"
@@ -291,9 +289,10 @@ function Hero() {
             objetos.map((objeto) => {
               const status = (objeto.status || "").trim().toUpperCase();
 
-              const nome = objeto.nome || "Objeto sem nome";
+              const nome = objeto.nome || t("home.item.unnamed");
 
-              const descricao = objeto.descricao || "Sem descrição disponível";
+              const descricao =
+                objeto.descricao || t("home.item.noDescription");
 
               const data = objeto.data?.data?.trim() || "";
               const hora = objeto.data?.hora?.trim() || "";
@@ -315,7 +314,7 @@ function Hero() {
                     ) : (
                       <div
                         className="home-objeto__placeholder"
-                        aria-label="Imagem não disponível"
+                        aria-label={t("home.item.noImage")}
                       >
                         <svg viewBox="0 0 48 48" fill="none">
                           <rect
@@ -352,14 +351,14 @@ function Hero() {
                         className={`home-objeto__status home-objeto__status--${classeStatus(status)}`}
                       >
                         <img src={verificaIconStatus(status)} alt="" />
-                        {textoStatus(status)}
+                        {textoStatus(status, t)}
                       </span>
 
                       <span className="home-objeto__categoria">
                         {objeto.icon_url && (
                           <img src={objeto.icon_url} alt="" />
                         )}
-                        {objeto.categoria || "Outros"}
+                        {objeto.categoria || t("home.item.categoryFallback")}
                       </span>
                     </div>
 
@@ -374,12 +373,12 @@ function Hero() {
                     <div className="home-objeto__informacoes">
                       <span>
                         <img src={localizacao} alt="" />
-                        {localizacaoFormatada || "Localização não informada"}
+                        {localizacaoFormatada || t("home.item.noLocation")}
                       </span>
 
                       <span>
                         <img src={calendar} alt="" />
-                        {dataFormatada(data, hora)}
+                        {dataFormatada(data, hora, t)}
                       </span>
                     </div>
                   </div>
@@ -407,25 +406,25 @@ function classeStatus(status) {
   return "analise";
 }
 
-function textoStatus(status) {
-  if (status === "PERDIDO") return "Perdido";
-  if (status === "ENCONTRADO") return "Encontrado";
+function textoStatus(status, t) {
+  if (status === "PERDIDO") return t("home.item.status.lost");
+  if (status === "ENCONTRADO") return t("home.item.status.found");
   if (status === "ANALISE" || status === "EM_ANALISE") {
-    return "Em análise";
+    return t("home.item.status.inAnalysis");
   }
 
-  return "Em análise";
+  return t("home.item.status.inAnalysis");
 }
 
-function dataFormatada(data, hora) {
-  if (!data) return "Data não informada";
+function dataFormatada(data, hora, t) {
+  if (!data) return t("home.item.noDate");
 
   if (data === hoje()) {
-    return `Hoje${hora ? `, ${hora}` : ""}`;
+    return `${t("home.item.today")}${hora ? `, ${hora}` : ""}`;
   }
 
   if (data === ontem()) {
-    return `Ontem${hora ? `, ${hora}` : ""}`;
+    return `${t("home.item.yesterday")}${hora ? `, ${hora}` : ""}`;
   }
 
   const dataLegivel = `${data.slice(8, 10)}/${data.slice(5, 7)}/${data.slice(0, 4)}`;

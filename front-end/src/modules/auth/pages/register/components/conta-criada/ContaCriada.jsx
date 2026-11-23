@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import "./contaCriada.css";
 
@@ -6,6 +7,7 @@ import success from "../../../../../../assets/icons/register/success.png";
 
 function ContaCriada() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="conta__criada">
@@ -15,19 +17,16 @@ function ContaCriada() {
         <img
           className="success__image"
           src={success}
-          alt="Conta criada com sucesso"
+          alt={t("auth.register.created.title")}
         />
       </div>
 
       {/* MENSAGEM */}
 
       <div className="success__content">
-        <h1 className="success__title">Conta criada com sucesso!</h1>
+        <h1 className="success__title">{t("auth.register.created.title")}</h1>
 
-        <p className="success__subtitle">
-          Sua conta no Achados e Devolvidos foi criada. Agora você já pode
-          explorar e usar o sistema.
-        </p>
+        <p className="success__subtitle">{t("auth.register.created.text")}</p>
       </div>
 
       {/* AÇÕES */}
@@ -38,7 +37,7 @@ function ContaCriada() {
           type="button"
           onClick={() => navigate("/user-area")}
         >
-          Ir para meu perfil
+          {t("common.goToProfile")}
         </button>
 
         <button
@@ -46,7 +45,7 @@ function ContaCriada() {
           type="button"
           onClick={() => navigate("/")}
         >
-          Voltar para início
+          {t("common.backHome")}
         </button>
       </div>
     </div>

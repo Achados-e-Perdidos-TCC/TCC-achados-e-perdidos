@@ -1,35 +1,67 @@
-import './status.css'
+import { useTranslation } from "react-i18next";
+import "./status.css";
 
-import warningRed from '../../assets/icons/buscarObjetos/warning-red.svg';
-import checkGreen from '../../assets/icons/buscarObjetos/check-green.svg';
-import hourglassOrange from '../../assets/icons/buscarObjetos/hourglass-orange.svg';
+import warningRed from "../../assets/icons/buscarObjetos/warning-red.svg";
+import checkGreen from "../../assets/icons/buscarObjetos/check-green.svg";
+import hourglassOrange from "../../assets/icons/buscarObjetos/hourglass-orange.svg";
+
+const chavesStatus = {
+  PERDIDO: "common.status.lost",
+  ENCONTRADO: "common.status.found",
+  ANALISE: "common.status.inAnalysis",
+  INATIVO: "common.status.inactive",
+};
 
 function Status(objeto) {
+  const { t } = useTranslation();
 
-    const objetoEncontrado = objeto.objeto;
+  const objetoEncontrado = objeto.objeto;
 
-    function verificaIconStatus(status) {
-        if (status === 'PERDIDO') { return warningRed }
-        if (status === 'ENCONTRADO') { return checkGreen }
-        if (status === 'ANALISE') { return hourglassOrange }
+  function verificaIconStatus(status) {
+    if (status === "PERDIDO") {
+      return warningRed;
     }
-
-    function adicionaClassNameStatus(status) {
-        if (status === 'PERDIDO') { return 'status__red' }
-        if (status === 'ENCONTRADO') { return 'status__green' }
-        if (status === 'ANALISE') { return 'status__orange' }
+    if (status === "ENCONTRADO") {
+      return checkGreen;
     }
+    if (status === "ANALISE") {
+      return hourglassOrange;
+    }
+  }
 
-    return (
-        <div className='status__principal'>
-            <div className={adicionaClassNameStatus(objetoEncontrado.status.trim().toUpperCase())} >
+  function adicionaClassNameStatus(status) {
+    if (status === "PERDIDO") {
+      return "status__red";
+    }
+    if (status === "ENCONTRADO") {
+      return "status__green";
+    }
+    if (status === "ANALISE") {
+      return "status__orange";
+    }
+  }
 
-                <img className="image__principal" src={verificaIconStatus(objetoEncontrado.status.trim().toUpperCase())} />
-                <span>{objetoEncontrado.status.trim().toUpperCase()}</span>
+  function textoStatus(status) {
+    return chavesStatus[status]
+      ? t(chavesStatus[status]).toUpperCase()
+      : status;
+  }
 
-            </div>
-        </div>
-    )
+  return (
+    <div className="status__principal">
+      <div
+        className={adicionaClassNameStatus(
+          objetoEncontrado.status.trim().toUpperCase(),
+        )}
+      >
+        <img
+          className="image__principal"
+          src={verificaIconStatus(objetoEncontrado.status.trim().toUpperCase())}
+        />
+        <span>{textoStatus(objetoEncontrado.status.trim().toUpperCase())}</span>
+      </div>
+    </div>
+  );
 }
 
 export default Status;

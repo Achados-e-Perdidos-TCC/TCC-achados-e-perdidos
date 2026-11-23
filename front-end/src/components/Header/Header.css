@@ -1,6 +1,4 @@
-/* =========================================
-   HEADER — ESTRUTURA
-========================================= */
+/* HEADER — ESTRUTURA */
 
 .header,
 .header *,
@@ -35,9 +33,7 @@
   padding: 1.2rem 0;
 }
 
-/* =========================================
-   LOGO
-========================================= */
+/* LOGO */
 
 .header__logo-link {
   display: flex;
@@ -54,9 +50,7 @@
   object-fit: contain;
 }
 
-/* =========================================
-   NAVEGAÇÃO DESKTOP
-========================================= */
+/* NAVEGAÇÃO DESKTOP */
 
 .header__nav {
   display: flex;
@@ -116,9 +110,7 @@
   transform: scaleX(1);
 }
 
-/* =========================================
-   AÇÕES DO HEADER
-========================================= */
+/* AÇÕES DO HEADER */
 
 .header__acoes {
   display: flex;
@@ -159,7 +151,6 @@
 }
 
 /* Cadastrar */
-
 .header__botao--cadastrar {
   color: var(--secondary-color-white);
   background: var(--header-blue);
@@ -181,7 +172,6 @@
 }
 
 /* Entrar / Perfil */
-
 .header__botao--perfil {
   color: var(--header-text);
   background: transparent;
@@ -195,7 +185,6 @@
 }
 
 /* Ícone de perfil */
-
 .header__perfil-icone {
   display: none;
   align-items: center;
@@ -218,9 +207,7 @@
   object-fit: contain;
 }
 
-/* =========================================
-   BOTÃO MENU MOBILE
-========================================= */
+/* BOTÃO MENU MOBILE */
 
 .header__menu-botao {
   display: none;
@@ -249,9 +236,7 @@
   object-fit: contain;
 }
 
-/* =========================================
-   OVERLAY
-========================================= */
+/* OVERLAY */
 
 .header__overlay {
   position: fixed;
@@ -276,17 +261,13 @@
   pointer-events: auto;
 }
 
-/* =========================================
-   MENU MOBILE
-========================================= */
+/* MENU MOBILE */
 
 .header__menu-mobile {
   display: none;
 }
 
-/* =========================================
-   TEMA ESCURO
-========================================= */
+/* TEMA ESCURO */
 
 [data-theme="dark"] .header {
   --header-border: rgba(255, 255, 255, 0.12);
@@ -301,9 +282,7 @@
   background: rgba(77, 131, 255, 0.12);
 }
 
-/* =========================================
-   TABLET / MENU LATERAL
-========================================= */
+/* TABLET / MENU LATERAL */
 
 @media (max-width: 1300px) {
   .header__container {
@@ -367,7 +346,6 @@
   }
 
   /* Cabeçalho do menu */
-
   .header__menu-cabecalho {
     display: flex;
     align-items: center;
@@ -386,15 +364,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 4rem;
     height: 4rem;
     padding: 0;
-
     background: rgba(255, 255, 255, 0.12);
     border: none;
     border-radius: 0.8rem;
-
     cursor: pointer;
     transition: background 0.2s ease;
   }
@@ -410,7 +385,6 @@
   }
 
   /* Links */
-
   .header__nav--mobile {
     display: flex;
     flex-direction: column;
@@ -447,7 +421,6 @@
   }
 
   /* Divisor */
-
   .header__menu-divisor {
     width: 100%;
     height: 1px;
@@ -457,7 +430,6 @@
   }
 
   /* Ações */
-
   .header__menu-acoes {
     display: flex;
     flex-direction: column;
@@ -515,7 +487,6 @@
   }
 
   /* Rodapé */
-
   .header__menu-rodape {
     display: flex;
     flex-direction: column;
@@ -537,9 +508,7 @@
   }
 }
 
-/* =========================================
-   MOBILE
-========================================= */
+/*  MOBILE */
 
 @media (max-width: 768px) {
   .header__container {
@@ -577,9 +546,7 @@
   }
 }
 
-/* =========================================
-   MOBILE PEQUENO
-========================================= */
+/*  MOBILE PEQUENO */
 
 @media (max-width: 480px) {
   .header__container {
@@ -602,9 +569,25 @@
   }
 }
 
-/* =========================================
-   ACESSIBILIDADE
-========================================= */
+/* IDIOMA */
+
+.header__menu-acoes .language-switcher {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .header__acoes .language-switcher {
+    display: none;
+  }
+
+  .header__menu-acoes .language-switcher {
+    display: grid;
+    width: 100%;
+    height: 4.4rem;
+  }
+}
+
+/*  ACESSIBILIDADE */
 
 @media (prefers-reduced-motion: reduce) {
   .header *,

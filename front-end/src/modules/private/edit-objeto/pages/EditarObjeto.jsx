@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import { findOwnedObject } from "../../private.service.js";
 import { categories } from "../../../buscar-objetos/buscarObjetos.service.js";
@@ -51,11 +52,13 @@ function ModalConfirmacao({
   aviso,
   erro,
   carregando = false,
-  textoCancelar = "Cancelar",
+  textoCancelar,
   textoConfirmar,
   onCancelar,
   onConfirmar,
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className="confirmation-overlay">
       <section
@@ -131,7 +134,7 @@ function ModalConfirmacao({
               onClick={onCancelar}
               disabled={carregando}
             >
-              {textoCancelar}
+              {textoCancelar ?? t("common.cancel")}
             </button>
           )}
 
@@ -142,7 +145,7 @@ function ModalConfirmacao({
               onClick={onConfirmar}
               disabled={carregando}
             >
-              {carregando ? "Aguarde..." : textoConfirmar}
+              {carregando ? t("edit.wait") : textoConfirmar}
             </button>
           )}
         </div>
@@ -154,6 +157,7 @@ function ModalConfirmacao({
 function EditarObjeto() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const inputFotosRef = useRef(null);
   const previewsCriadasRef = useRef(new Set());
@@ -218,12 +222,12 @@ function EditarObjeto() {
 
     arquivosSelecionados.forEach((arquivo) => {
       if (!TIPOS_FOTO_PERMITIDOS.has(arquivo.type)) {
-        problemas.push("Utilize imagens JPEG, PNG, WEBP ou GIF.");
+        problemas.push(t("form.errors.invalidFileType"));
         return;
       }
 
       if (arquivo.size > MAX_TAMANHO_FOTO) {
-        problemas.push("Cada imagem pode ter no máximo 5 MB.");
+        problemas.push(t("form.errors.fileTooLarge"));
         return;
       }
 
@@ -253,7 +257,7 @@ function EditarObjeto() {
     }
 
     if (arquivosValidos.length > arquivosAdicionados.length) {
-      problemas.push(`Você pode adicionar no máximo ${MAX_FOTOS} fotos.`);
+      problemas.push(t("form.errors.maxPhotos", { max: MAX_FOTOS }));
     }
 
     setErroFotos(problemas.join(" "));
@@ -274,9 +278,7 @@ function EditarObjeto() {
 
     const quantidadeRestante = fotosAtualizadas.length + fotosNovas.length;
 
-    setErroFotos(
-      quantidadeRestante === 0 ? "Adicione pelo menos uma foto do objeto." : "",
-    );
+    setErroFotos(quantidadeRestante === 0 ? t("form.errors.minOnePhoto") : "");
   }
 
   function removerFotoNova(preview) {
@@ -292,9 +294,7 @@ function EditarObjeto() {
     const quantidadeRestante =
       formulario.fotosExistentes.length + fotosAtualizadas.length;
 
-    setErroFotos(
-      quantidadeRestante === 0 ? "Adicione pelo menos uma foto do objeto." : "",
-    );
+    setErroFotos(quantidadeRestante === 0 ? t("form.errors.minOnePhoto") : "");
   }
 
   function validarFormulario() {
@@ -302,37 +302,37 @@ function EditarObjeto() {
     setErroFotos("");
 
     if (!formulario.nomeObjeto.trim()) {
-      setMensagemErro("Informe o nome do objeto.");
+      setMensagemErro(t("edit.errors.nameRequired"));
       return false;
     }
 
     if (!formulario.categoriaId) {
-      setMensagemErro("Selecione uma categoria.");
+      setMensagemErro(t("edit.errors.categoryRequired"));
       return false;
     }
 
     if (!formulario.estado || !formulario.cidade) {
-      setMensagemErro("Informe o estado e a cidade.");
+      setMensagemErro(t("edit.errors.locationRequired"));
       return false;
     }
 
     if (!formulario.data || !formulario.horario) {
-      setMensagemErro("Informe a data e o horário.");
+      setMensagemErro(t("edit.errors.dateRequired"));
       return false;
     }
 
     if (!formulario.descricao.trim()) {
-      setMensagemErro("A descrição do objeto é obrigatória.");
+      setMensagemErro(t("edit.errors.descriptionRequired"));
       return false;
     }
 
     if (totalFotos === 0) {
-      setErroFotos("Adicione pelo menos uma foto do objeto.");
+      setErroFotos(t("form.errors.minOnePhoto"));
       return false;
     }
 
     if (totalFotos > MAX_FOTOS) {
-      setErroFotos(`O limite é de ${MAX_FOTOS} fotografias.`);
+      setErroFotos(t("edit.errors.photoLimit", { max: MAX_FOTOS }));
       return false;
     }
 
@@ -341,7 +341,7 @@ function EditarObjeto() {
     );
 
     if (!estadoAtual) {
-      setMensagemErro("Estado selecionado inválido.");
+      setMensagemErro(t("edit.errors.invalidState"));
       return false;
     }
 
@@ -387,7 +387,7 @@ function EditarObjeto() {
       });
 
       if (!objetoAtualizado) {
-        throw new Error("Não foi possível confirmar a atualização do objeto.");
+        throw new Error(t("edit.errors.confirmFailed"));
       }
 
       const imagensAtualizadas = Array.isArray(
@@ -417,14 +417,11 @@ function EditarObjeto() {
       setMensagemErro("");
       setModalSalvarAberto(false);
 
-      setMensagemSucesso("Seu objeto foi salvo com sucesso!");
+      setMensagemSucesso(t("edit.saved"));
     } catch (error) {
       console.error("Erro ao atualizar objeto:", error);
 
-      setMensagemErro(
-        error.message ||
-          "Não foi possível salvar as alterações. Tente novamente.",
-      );
+      setMensagemErro(error.message || t("edit.errors.saveFailed"));
     } finally {
       setSalvando(false);
     }
@@ -448,9 +445,7 @@ function EditarObjeto() {
     } catch (error) {
       console.error("Erro ao excluir objeto:", error);
 
-      setErroExclusao(
-        error.message || "Não foi possível excluir o objeto. Tente novamente.",
-      );
+      setErroExclusao(error.message || t("edit.errors.deleteFailed"));
     } finally {
       setExcluindo(false);
     }
@@ -483,9 +478,7 @@ function EditarObjeto() {
 
         if (!objetoEncontrado) {
           setObjeto(null);
-          setErro(
-            "Objeto não encontrado ou você não tem permissão para editá-lo.",
-          );
+          setErro(t("edit.errors.notFoundOrForbidden"));
           return;
         }
 
@@ -503,9 +496,7 @@ function EditarObjeto() {
         );
 
         if (!categoriaEncontrada) {
-          setErroCategoria(
-            "Não foi possível identificar a categoria atual. Verifique as categorias disponíveis.",
-          );
+          setErroCategoria(t("edit.errors.categoryNotIdentified"));
         }
 
         const tipoObjeto =
@@ -540,9 +531,7 @@ function EditarObjeto() {
         console.error("Erro ao carregar objeto para edição:", error);
 
         if (componenteAtivo) {
-          setErro(
-            error.message || "Não foi possível carregar os dados do objeto.",
-          );
+          setErro(error.message || t("edit.errors.loadFailed"));
         }
       } finally {
         if (componenteAtivo) {
@@ -573,7 +562,7 @@ function EditarObjeto() {
       <main className="cadastrar-page editar-page">
         <div className="editar-loading">
           <span className="editar-loading__spinner" />
-          <p>Carregando dados do objeto...</p>
+          <p>{t("edit.loading")}</p>
         </div>
       </main>
     );
@@ -583,15 +572,15 @@ function EditarObjeto() {
     return (
       <main className="cadastrar-page editar-page">
         <section className="editar-estado">
-          <h1>Não foi possível abrir este objeto</h1>
-          <p role="alert">{erro || "Objeto não encontrado."}</p>
+          <h1>{t("edit.openError")}</h1>
+          <p role="alert">{erro || t("edit.errors.notFound")}</p>
 
           <button
             type="button"
             className="btn btn--primary"
             onClick={voltarParaMeusObjetos}
           >
-            Voltar para meus objetos
+            {t("edit.backToMine")}
           </button>
         </section>
       </main>
@@ -602,13 +591,11 @@ function EditarObjeto() {
     <main className="cadastrar-page editar-page">
       <header className="editar-header">
         <div>
-          <span className="editar-header__eyebrow">MEUS OBJETOS</span>
+          <span className="editar-header__eyebrow">{t("edit.eyebrow")}</span>
 
-          <h1 className="page__title">Editar objeto</h1>
+          <h1 className="page__title">{t("edit.title")}</h1>
 
-          <p className="page__subtitle">
-            Atualize as informações do seu objeto cadastrado.
-          </p>
+          <p className="page__subtitle">{t("edit.subtitle")}</p>
         </div>
       </header>
 
@@ -616,14 +603,14 @@ function EditarObjeto() {
         <section className="editar-section">
           <div className="editar-section__header">
             <div>
-              <h2 className="card__heading">Informações do objeto</h2>
-              <p>Confira e atualize os dados principais.</p>
+              <h2 className="card__heading">{t("edit.infoTitle")}</h2>
+              <p>{t("edit.infoSubtitle")}</p>
             </div>
           </div>
 
           <div className="grid grid--2">
             <div className="field">
-              <label htmlFor="nomeObjeto">Nome do objeto</label>
+              <label htmlFor="nomeObjeto">{t("form.itemName")}</label>
 
               <div className="control">
                 <input
@@ -637,7 +624,7 @@ function EditarObjeto() {
             </div>
 
             <div className="field">
-              <label htmlFor="categoria">Categoria</label>
+              <label htmlFor="categoria">{t("common.category")}</label>
 
               <div className="control">
                 <select
@@ -649,7 +636,7 @@ function EditarObjeto() {
                   required
                 >
                   <option value="" disabled>
-                    Selecione a categoria
+                    {t("form.selectCategory")}
                   </option>
 
                   {categoriasDisponiveis.map((item) => (
@@ -672,14 +659,14 @@ function EditarObjeto() {
         <section className="editar-section">
           <div className="editar-section__header">
             <div>
-              <h2 className="card__heading">Localização</h2>
-              <p>Informe onde o objeto foi perdido ou encontrado.</p>
+              <h2 className="card__heading">{t("edit.locationTitle")}</h2>
+              <p>{t("edit.locationSubtitle")}</p>
             </div>
           </div>
 
           <div className="grid grid--3">
             <div className="field">
-              <label htmlFor="estado">Estado</label>
+              <label htmlFor="estado">{t("common.state")}</label>
 
               <div className="control">
                 <select
@@ -696,7 +683,7 @@ function EditarObjeto() {
                   required
                 >
                   <option value="" disabled>
-                    Selecione o estado
+                    {t("form.selectState")}
                   </option>
 
                   {cidadesBrasil.estados.map((item) => (
@@ -709,7 +696,7 @@ function EditarObjeto() {
             </div>
 
             <div className="field">
-              <label htmlFor="cidade">Cidade</label>
+              <label htmlFor="cidade">{t("common.city")}</label>
 
               <div className="control">
                 <select
@@ -726,7 +713,7 @@ function EditarObjeto() {
                   required
                 >
                   <option value="" disabled>
-                    Selecione a cidade
+                    {t("form.selectCity")}
                   </option>
 
                   {cidadesDisponiveis.map((cidade) => (
@@ -739,7 +726,7 @@ function EditarObjeto() {
             </div>
 
             <div className="field">
-              <label htmlFor="bairro">Bairro</label>
+              <label htmlFor="bairro">{t("common.neighborhood")}</label>
 
               <div className="control">
                 <select
@@ -752,8 +739,8 @@ function EditarObjeto() {
                 >
                   <option value="">
                     {bairrosDisponiveis.length === 0
-                      ? "Sem bairros disponíveis"
-                      : "Selecione o bairro"}
+                      ? t("form.noNeighborhoods")
+                      : t("form.selectNeighborhood")}
                   </option>
 
                   {formulario.bairro &&
@@ -777,14 +764,14 @@ function EditarObjeto() {
         <section className="editar-section">
           <div className="editar-section__header">
             <div>
-              <h2 className="card__heading">Data e horário</h2>
-              <p>Atualize quando o objeto foi perdido ou encontrado.</p>
+              <h2 className="card__heading">{t("edit.dateTimeTitle")}</h2>
+              <p>{t("edit.dateTimeSubtitle")}</p>
             </div>
           </div>
 
           <div className="grid grid--2">
             <div className="field">
-              <label htmlFor="data">Data</label>
+              <label htmlFor="data">{t("common.date")}</label>
 
               <div className="control">
                 <input
@@ -798,7 +785,7 @@ function EditarObjeto() {
             </div>
 
             <div className="field">
-              <label htmlFor="horario">Horário</label>
+              <label htmlFor="horario">{t("common.time")}</label>
 
               <div className="control">
                 <input
@@ -816,14 +803,12 @@ function EditarObjeto() {
         <section className="editar-section">
           <div className="editar-section__header editar-section__header--photos">
             <div>
-              <h2 className="card__heading">Fotos do objeto</h2>
-              <p>
-                Adicione ou remova imagens para manter o anúncio atualizado.
-              </p>
+              <h2 className="card__heading">{t("edit.photosTitle")}</h2>
+              <p>{t("edit.photosSubtitle")}</p>
             </div>
 
             <span className="editar-fotos-counter">
-              {totalFotos} de {MAX_FOTOS} fotos
+              {t("form.selectedCount", { count: totalFotos, max: MAX_FOTOS })}
             </span>
           </div>
 
@@ -847,21 +832,21 @@ function EditarObjeto() {
                   <div className="editar-foto-item__image">
                     <img
                       src={resolverUrlImagem(imagem)}
-                      alt={`Foto cadastrada ${indice + 1}`}
+                      alt={t("edit.existingPhoto", { n: indice + 1 })}
                       loading="lazy"
                     />
                   </div>
 
                   <div className="editar-foto-item__footer">
-                    <span>Foto cadastrada {indice + 1}</span>
+                    <span>{t("edit.existingPhoto", { n: indice + 1 })}</span>
 
                     <button
                       type="button"
                       className="editar-foto-remove"
                       onClick={() => removerFotoExistente(indice)}
-                      aria-label={`Remover foto cadastrada ${indice + 1}`}
+                      aria-label={t("edit.removeExisting", { n: indice + 1 })}
                     >
-                      Remover
+                      {t("common.remove")}
                     </button>
                   </div>
                 </article>
@@ -873,19 +858,22 @@ function EditarObjeto() {
                   className="editar-foto-item editar-foto-item--new"
                 >
                   <div className="editar-foto-item__image">
-                    <img src={foto.preview} alt={`Nova foto ${indice + 1}`} />
+                    <img
+                      src={foto.preview}
+                      alt={t("edit.newPhoto", { n: indice + 1 })}
+                    />
                   </div>
 
                   <div className="editar-foto-item__footer">
-                    <span>Nova foto {indice + 1}</span>
+                    <span>{t("edit.newPhoto", { n: indice + 1 })}</span>
 
                     <button
                       type="button"
                       className="editar-foto-remove"
                       onClick={() => removerFotoNova(foto.preview)}
-                      aria-label={`Remover nova foto ${indice + 1}`}
+                      aria-label={t("edit.removeNew", { n: indice + 1 })}
                     >
-                      Remover
+                      {t("common.remove")}
                     </button>
                   </div>
                 </article>
@@ -894,13 +882,13 @@ function EditarObjeto() {
           ) : (
             <div className="editar-fotos-empty">
               <span className="editar-fotos-empty__icon">＋</span>
-              <strong>Nenhuma foto adicionada</strong>
-              <p>Adicione pelo menos uma imagem do objeto.</p>
+              <strong>{t("edit.noPhotos")}</strong>
+              <p>{t("edit.noPhotosHint")}</p>
             </div>
           )}
 
           <div className="editar-fotos-footer">
-            <span>JPG, PNG, WEBP ou GIF · Até 5 MB por imagem</span>
+            <span>{t("edit.uploadHint")}</span>
 
             <button
               type="button"
@@ -908,7 +896,7 @@ function EditarObjeto() {
               onClick={() => inputFotosRef.current?.click()}
               disabled={vagasDisponiveis <= 0}
             >
-              + Adicionar fotos
+              {t("edit.addPhotos")}
             </button>
           </div>
 
@@ -922,13 +910,13 @@ function EditarObjeto() {
         <section className="editar-section">
           <div className="editar-section__header">
             <div>
-              <h2 className="card__heading">Descrição</h2>
-              <p>Conte os detalhes importantes sobre o objeto.</p>
+              <h2 className="card__heading">{t("edit.descriptionTitle")}</h2>
+              <p>{t("edit.descriptionSubtitle")}</p>
             </div>
           </div>
 
           <div className="field">
-            <label htmlFor="descricao">Descrição do objeto</label>
+            <label htmlFor="descricao">{t("edit.descriptionLabel")}</label>
 
             <div className="textarea">
               <textarea
@@ -947,7 +935,8 @@ function EditarObjeto() {
 
           <div className="field">
             <label htmlFor="caracteristicas">
-              Observação <span className="optional">(opcional)</span>
+              {t("edit.notes")}{" "}
+              <span className="optional">{t("common.optional")}</span>
             </label>
 
             <div className="textarea">
@@ -980,7 +969,7 @@ function EditarObjeto() {
             disabled={salvando || excluindo}
             onClick={voltarParaMeusObjetos}
           >
-            Cancelar
+            {t("common.cancel")}
           </button>
 
           <button
@@ -988,7 +977,7 @@ function EditarObjeto() {
             className="btn btn--primary btn--lg"
             disabled={salvando || excluindo}
           >
-            Salvar alterações
+            {t("common.saveChanges")}
           </button>
 
           <button
@@ -1000,19 +989,19 @@ function EditarObjeto() {
               setModalExclusaoAberto(true);
             }}
           >
-            Excluir objeto
+            {t("edit.delete")}
           </button>
         </div>
       </form>
 
       {modalSalvarAberto && (
         <ModalConfirmacao
-          titulo="Salvar alterações?"
-          descricao="Deseja realmente salvar as alterações deste objeto?"
-          aviso="As informações atualizadas serão salvas na plataforma."
+          titulo={t("edit.modals.saveTitle")}
+          descricao={t("edit.modals.saveText")}
+          aviso={t("edit.modals.saveNotice")}
           erro={mensagemErro || erroFotos}
           carregando={salvando}
-          textoConfirmar="Confirmar e salvar"
+          textoConfirmar={t("edit.modals.saveConfirm")}
           onCancelar={() => {
             setModalSalvarAberto(false);
             setMensagemErro("");
@@ -1025,12 +1014,12 @@ function EditarObjeto() {
       {modalExclusaoAberto && (
         <ModalConfirmacao
           tipo="danger"
-          titulo="Excluir objeto?"
-          descricao="Tem certeza de que deseja excluir este objeto?"
-          aviso="Ele deixará de aparecer nas buscas públicas, mas continuará no seu histórico de objetos."
+          titulo={t("edit.modals.deleteTitle")}
+          descricao={t("edit.modals.deleteText")}
+          aviso={t("edit.modals.deleteNotice")}
           erro={erroExclusao}
           carregando={excluindo}
-          textoConfirmar="Excluir objeto"
+          textoConfirmar={t("edit.delete")}
           onCancelar={() => {
             setModalExclusaoAberto(false);
             setErroExclusao("");
@@ -1042,9 +1031,9 @@ function EditarObjeto() {
       {mensagemSucesso && (
         <ModalConfirmacao
           tipo="success"
-          titulo="Objeto atualizado!"
-          descricao="As alterações do seu objeto foram salvas e já estão disponíveis na plataforma."
-          textoConfirmar="Concluir"
+          titulo={t("edit.modals.successTitle")}
+          descricao={t("edit.modals.successText")}
+          textoConfirmar={t("common.finish")}
           onConfirmar={() => {
             localStorage.setItem("lastUserPage", "1");
             navigate("/user-area");

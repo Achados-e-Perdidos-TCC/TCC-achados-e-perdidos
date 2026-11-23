@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useOutletContext } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import { loadAvatar } from "../../../../../private.service.js";
 
@@ -18,6 +19,8 @@ function PhotoCard({
   setAvatar,
   setError,
 }) {
+  const { t } = useTranslation();
+
   const { tema } = useOutletContext();
 
   useEffect(() => {
@@ -36,20 +39,7 @@ function PhotoCard({
   }, [userInfos.avatarUrl, setAvatar, setError]);
 
   function formattedDate() {
-    const months = [
-      "Janeiro",
-      "Fevereiro",
-      "Março",
-      "Abril",
-      "Maio",
-      "Junho",
-      "Julho",
-      "Agosto",
-      "Setembro",
-      "Outubro",
-      "Novembro",
-      "Dezembro",
-    ];
+    const months = t("common.months", { returnObjects: true });
 
     const date = userInfos.createdAt;
 
@@ -58,7 +48,10 @@ function PhotoCard({
     const formattedMonth = months[Number(date.slice(5, 7)) - 1];
     const formattedYear = date.slice(0, 4);
 
-    return `${formattedMonth} de ${formattedYear}`;
+    return t("account.profile.monthYear", {
+      month: formattedMonth,
+      year: formattedYear,
+    });
   }
 
   function formattedNameMobile() {
@@ -76,7 +69,7 @@ function PhotoCard({
         <img
           className={photo || avatar ? "user__com__foto" : "user__sem__foto"}
           src={displayedAvatar}
-          alt="Foto de perfil"
+          alt={t("account.profile.photoTitle")}
         />
 
         <div className="user__profile__texts__content">
@@ -105,7 +98,7 @@ function PhotoCard({
               alt=""
             />
 
-            <p>Membro desde {formattedDate()}</p>
+            <p>{t("account.profile.memberSince", { date: formattedDate() })}</p>
           </div>
         </div>
       </div>
@@ -119,7 +112,7 @@ function PhotoCard({
           />
 
           <label htmlFor="uploadimage" className="user__profile__photo__upload">
-            Editar foto
+            {t("account.profile.editPhoto")}
           </label>
 
           <input

@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./CadastrarObjeto.css";
 
 import cidadesBrasil from "../../../utils/json/cidade-estados.json";
 import { categories } from "../../buscar-objetos/buscarObjetos.service.js";
 import { cadastrarObjeto } from "../cadastraObjeto.service.js";
-
-/* ==========================================================
-   ÍCONES
-   ========================================================== */
 
 function Icon({ children, className = "" }) {
   return (
@@ -122,10 +119,6 @@ const icons = {
   ),
 };
 
-/* ==========================================================
-   CONSTANTES E UTILITÁRIOS
-   ========================================================== */
-
 const MAX_FOTOS = 6;
 const MAX_TAMANHO_FOTO = 5 * 1024 * 1024;
 
@@ -145,12 +138,8 @@ function obterDataLocalISO() {
   return `${ano}-${mes}-${dia}`;
 }
 
-/* ==========================================================
-   COMPONENTE
-   ========================================================== */
-
 export default function CadastrarObjeto() {
-  /* ---------- Estados do cadastro ---------- */
+  const { t } = useTranslation();
 
   const [status, setStatus] = useState("");
   const [nomeObjeto, setNomeObjeto] = useState("");
@@ -166,31 +155,21 @@ export default function CadastrarObjeto() {
   const [descricao, setDescricao] = useState("");
   const [caracteristicas, setCaracteristicas] = useState("");
 
-  /* ---------- Categorias ---------- */
-
   const [categoriasDisponiveis, setCategoriasDisponiveis] = useState([]);
   const [carregandoCategorias, setCarregandoCategorias] = useState(true);
   const [erroCategorias, setErroCategorias] = useState("");
 
-  /* ---------- Fotos ---------- */
-
   const [fotos, setFotos] = useState([]);
   const [fotoAtual, setFotoAtual] = useState(0);
   const [erroFotos, setErroFotos] = useState("");
-
-  /* ---------- Cadastro e feedback ---------- */
 
   const [cadastrando, setCadastrando] = useState(false);
   const [mensagemErro, setMensagemErro] = useState("");
   const [mensagemSucesso, setMensagemSucesso] = useState("");
   const [erroData, setErroData] = useState("");
 
-  /* ---------- Modais ---------- */
-
   const [confirmacaoContatoAberta, setConfirmacaoContatoAberta] =
     useState(false);
-
-  /* ---------- Referências ---------- */
 
   const inputFotosRef = useRef(null);
   const modalConfirmacaoRef = useRef(null);
@@ -199,10 +178,6 @@ export default function CadastrarObjeto() {
   const previewsCriadasRef = useRef(new Set());
 
   const dataMaxima = obterDataLocalISO();
-
-  /* ========================================================
-     DADOS DE LOCALIZAÇÃO
-     ======================================================== */
 
   const estadoSelecionado = cidadesBrasil.estados.find(
     (item) => item.sigla === estado,
@@ -213,10 +188,6 @@ export default function CadastrarObjeto() {
   const bairrosDisponiveis =
     estadoSelecionado?.bairrosPorCidade?.[cidade] ?? [];
 
-  /* ========================================================
-     LIMPEZA DE RECURSOS
-     ======================================================== */
-
   useEffect(() => {
     return () => {
       previewsCriadasRef.current.forEach((url) => {
@@ -226,10 +197,6 @@ export default function CadastrarObjeto() {
       previewsCriadasRef.current.clear();
     };
   }, []);
-
-  /* ========================================================
-     CARREGAMENTO DE CATEGORIAS
-     ======================================================== */
 
   useEffect(() => {
     let ativo = true;
@@ -245,7 +212,7 @@ export default function CadastrarObjeto() {
         console.error("Erro ao carregar categorias:", error);
 
         if (ativo) {
-          setErroCategorias("Não foi possível carregar as categorias.");
+          setErroCategorias(t("errors.categoriesLoad"));
         }
       } finally {
         if (ativo) {
@@ -260,10 +227,6 @@ export default function CadastrarObjeto() {
       ativo = false;
     };
   }, []);
-
-  /* ========================================================
-     COMPORTAMENTO DOS MODAIS
-     ======================================================== */
 
   const modalAberto = confirmacaoContatoAberta || Boolean(mensagemSucesso);
 
@@ -298,10 +261,6 @@ export default function CadastrarObjeto() {
     };
   }, [modalAberto, confirmacaoContatoAberta, mensagemSucesso, cadastrando]);
 
-  /* ========================================================
-     SELEÇÃO DE FOTOS
-     ======================================================== */
-
   function handleSelecionarFotos(event) {
     const arquivosSelecionados = Array.from(event.target.files ?? []);
 
@@ -312,12 +271,12 @@ export default function CadastrarObjeto() {
 
     arquivosSelecionados.forEach((arquivo) => {
       if (!TIPOS_FOTO_PERMITIDOS.has(arquivo.type)) {
-        problemas.push("Use imagens JPEG, PNG, WEBP ou GIF.");
+        problemas.push(t("form.errors.invalidFileType"));
         return;
       }
 
       if (arquivo.size > MAX_TAMANHO_FOTO) {
-        problemas.push("Cada imagem pode ter no máximo 5 MB.");
+        problemas.push(t("form.errors.fileTooLarge"));
         return;
       }
 
@@ -345,11 +304,11 @@ export default function CadastrarObjeto() {
     }
 
     if (arquivosValidos.length > vagasDisponiveis) {
-      problemas.push(`Você pode adicionar no máximo ${MAX_FOTOS} fotos.`);
+      problemas.push(t("form.errors.maxPhotos", { max: MAX_FOTOS }));
     }
 
     if (arquivosAdicionados.length === 0 && problemas.length === 0) {
-      problemas.push("Não foi possível adicionar as fotos selecionadas.");
+      problemas.push(t("form.errors.couldNotAdd"));
     }
 
     setErroFotos(problemas.join(" "));
@@ -375,9 +334,7 @@ export default function CadastrarObjeto() {
     });
 
     setErroFotos(
-      fotosAtualizadas.length === 0
-        ? "Adicione pelo menos uma foto do objeto."
-        : "",
+      fotosAtualizadas.length === 0 ? t("form.errors.minOnePhoto") : "",
     );
   }
 
@@ -395,10 +352,6 @@ export default function CadastrarObjeto() {
     });
   }
 
-  /* ========================================================
-     VALIDAÇÃO E ENVIO DO FORMULÁRIO
-     ======================================================== */
-
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -406,7 +359,7 @@ export default function CadastrarObjeto() {
     setErroData("");
 
     if (data && data > dataMaxima) {
-      setErroData("A data não pode ser posterior ao dia de hoje.");
+      setErroData(t("form.errors.futureDate"));
       return;
     }
 
@@ -420,28 +373,22 @@ export default function CadastrarObjeto() {
       !horario ||
       !descricao.trim()
     ) {
-      setMensagemErro("Revise os campos obrigatórios antes de continuar.");
+      setMensagemErro(t("form.errors.reviewRequired"));
       return;
     }
 
     if (erroCategorias || carregandoCategorias) {
-      setMensagemErro(
-        "Aguarde o carregamento das categorias antes de continuar.",
-      );
+      setMensagemErro(t("form.errors.waitCategories"));
       return;
     }
 
     if (fotos.length === 0) {
-      setErroFotos("Adicione pelo menos uma foto do objeto.");
+      setErroFotos(t("form.errors.minOnePhoto"));
       return;
     }
 
     setConfirmacaoContatoAberta(true);
   }
-
-  /* ========================================================
-     CONFIRMAÇÃO E CADASTRO NA API
-     ======================================================== */
 
   async function confirmarCienciaContato() {
     if (cadastrando) return;
@@ -467,22 +414,15 @@ export default function CadastrarObjeto() {
       });
 
       setConfirmacaoContatoAberta(false);
-      setMensagemSucesso("Objeto cadastrado com sucesso!");
+      setMensagemSucesso(t("form.success.title"));
     } catch (error) {
       console.error("Erro ao cadastrar objeto:", error);
 
-      setMensagemErro(
-        error.message ||
-          "Não foi possível cadastrar o objeto. Tente novamente.",
-      );
+      setMensagemErro(error.message || t("form.errors.submitFailed"));
     } finally {
       setCadastrando(false);
     }
   }
-
-  /* ========================================================
-     LIMPEZA DO FORMULÁRIO
-     ======================================================== */
 
   function limparFormulario() {
     previewsCriadasRef.current.forEach((url) => {
@@ -519,26 +459,17 @@ export default function CadastrarObjeto() {
     }
   }
 
-  /* ========================================================
-     RENDERIZAÇÃO
-     ======================================================== */
-
   return (
     <main className="cadastrar-page">
       <header className="cadastrar-page__header">
-        <h1 className="page__title">Cadastrar objeto</h1>
+        <h1 className="page__title">{t("form.title")}</h1>
 
-        <p className="page__subtitle">
-          Conte alguns detalhes para ajudarmos a encontrar uma possível
-          correspondência.
-        </p>
+        <p className="page__subtitle">{t("form.subtitle")}</p>
       </header>
 
       <form className="card" onSubmit={handleSubmit}>
-        {/* O QUE ACONTECEU? */}
-
         <section className="form-section">
-          <h2 className="card__heading">O que aconteceu?</h2>
+          <h2 className="card__heading">{t("form.whatHappened")}</h2>
 
           <div className="options">
             <label
@@ -558,9 +489,11 @@ export default function CadastrarObjeto() {
               </span>
 
               <span className="option__content">
-                <strong className="option__title">Perdi um objeto</strong>
+                <strong className="option__title">{t("form.lostTitle")}</strong>
 
-                <span className="option__desc">Meu objeto foi perdido.</span>
+                <span className="option__desc">
+                  {t("form.lostDescription")}
+                </span>
               </span>
             </label>
 
@@ -581,21 +514,21 @@ export default function CadastrarObjeto() {
               </span>
 
               <span className="option__content">
-                <strong className="option__title">Encontrei um objeto</strong>
+                <strong className="option__title">
+                  {t("form.foundTitle")}
+                </strong>
 
                 <span className="option__desc">
-                  Encontrei um objeto e quero devolver.
+                  {t("form.foundDescription")}
                 </span>
               </span>
             </label>
           </div>
         </section>
 
-        {/* NOME E CATEGORIA */}
-
         <div className="grid grid--2">
           <div className="field">
-            <label htmlFor="nomeObjeto">Nome do objeto</label>
+            <label htmlFor="nomeObjeto">{t("form.itemName")}</label>
 
             <div className="control">
               <Icon>{icons.search}</Icon>
@@ -604,7 +537,7 @@ export default function CadastrarObjeto() {
                 id="nomeObjeto"
                 name="title"
                 type="text"
-                placeholder="Ex.: Carteira preta, Samsung Galaxy..."
+                placeholder={t("form.itemNamePlaceholder")}
                 value={nomeObjeto}
                 onChange={(event) => setNomeObjeto(event.target.value)}
                 required
@@ -613,7 +546,7 @@ export default function CadastrarObjeto() {
           </div>
 
           <div className="field">
-            <label htmlFor="categoria">Categoria</label>
+            <label htmlFor="categoria">{t("common.category")}</label>
 
             <div className="control">
               <Icon>{icons.grid}</Icon>
@@ -628,8 +561,8 @@ export default function CadastrarObjeto() {
               >
                 <option value="" disabled>
                   {carregandoCategorias
-                    ? "Carregando categorias..."
-                    : "Selecione a categoria"}
+                    ? t("form.loadingCategories")
+                    : t("form.selectCategory")}
                 </option>
 
                 {categoriasDisponiveis.map((item) => (
@@ -650,11 +583,9 @@ export default function CadastrarObjeto() {
           </div>
         </div>
 
-        {/* LOCALIZAÇÃO */}
-
         <div className="grid grid--3">
           <div className="field">
-            <label htmlFor="estado">Estado</label>
+            <label htmlFor="estado">{t("common.state")}</label>
 
             <div className="control">
               <Icon>{icons.pin}</Icon>
@@ -670,7 +601,7 @@ export default function CadastrarObjeto() {
                 }}
               >
                 <option value="" disabled>
-                  Selecione o estado
+                  {t("form.selectState")}
                 </option>
 
                 {cidadesBrasil.estados.map((item) => (
@@ -685,7 +616,7 @@ export default function CadastrarObjeto() {
           </div>
 
           <div className="field">
-            <label htmlFor="cidade">Cidade</label>
+            <label htmlFor="cidade">{t("common.city")}</label>
 
             <div className="control">
               <Icon>{icons.pin}</Icon>
@@ -701,9 +632,7 @@ export default function CadastrarObjeto() {
                 }}
               >
                 <option value="" disabled>
-                  {estado
-                    ? "Selecione a cidade"
-                    : "Selecione primeiro o estado"}
+                  {estado ? t("form.selectCity") : t("form.selectStateFirst")}
                 </option>
 
                 {cidadesDisponiveis.map((nomeCidade) => (
@@ -719,7 +648,8 @@ export default function CadastrarObjeto() {
 
           <div className="field">
             <label htmlFor="bairro">
-              Bairro <span className="optional">(opcional)</span>
+              {t("common.neighborhood")}{" "}
+              <span className="optional">{t("common.optional")}</span>
             </label>
 
             <div className="control">
@@ -733,10 +663,10 @@ export default function CadastrarObjeto() {
               >
                 <option value="">
                   {!cidade
-                    ? "Selecione primeiro a cidade"
+                    ? t("form.selectCityFirst")
                     : bairrosDisponiveis.length === 0
-                      ? "Sem bairros disponíveis"
-                      : "Selecione o bairro"}
+                      ? t("form.noNeighborhoods")
+                      : t("form.selectNeighborhood")}
                 </option>
 
                 {bairrosDisponiveis.map((nomeBairro) => (
@@ -751,18 +681,15 @@ export default function CadastrarObjeto() {
 
             {cidade && bairrosDisponiveis.length === 0 && (
               <small className="field__hint">
-                Não há bairros disponíveis para esta cidade. A localização será
-                registrada com cidade e estado.
+                {t("form.noNeighborhoodsHint")}
               </small>
             )}
           </div>
         </div>
 
-        {/* DATA E HORÁRIO */}
-
         <div className="grid grid--2">
           <div className="field">
-            <label htmlFor="data">Data</label>
+            <label htmlFor="data">{t("common.date")}</label>
 
             <div className={`control ${erroData ? "control--error" : ""}`}>
               <Icon>{icons.calendar}</Icon>
@@ -789,7 +716,7 @@ export default function CadastrarObjeto() {
           </div>
 
           <div className="field">
-            <label htmlFor="horario">Horário</label>
+            <label htmlFor="horario">{t("common.time")}</label>
 
             <div className="control">
               <Icon>{icons.clock}</Icon>
@@ -807,13 +734,11 @@ export default function CadastrarObjeto() {
           </div>
         </div>
 
-        {/* FOTOS */}
-
         <section className="field">
           <div className="field__heading">
-            <label htmlFor="fotos">Fotos do objeto</label>
+            <label htmlFor="fotos">{t("form.photos")}</label>
 
-            <span className="field__hint">Mínimo 1 e máximo 6 fotos</span>
+            <span className="field__hint">{t("form.photosHint")}</span>
           </div>
 
           <input
@@ -833,9 +758,9 @@ export default function CadastrarObjeto() {
               </span>
 
               <span className="upload__content">
-                <strong>Clique para selecionar as fotos do objeto</strong>
+                <strong>{t("form.uploadCta")}</strong>
 
-                <small>JPEG, PNG, WEBP ou GIF. Até 5 MB por foto.</small>
+                <small>{t("form.uploadHint")}</small>
               </span>
             </label>
           ) : (
@@ -844,7 +769,7 @@ export default function CadastrarObjeto() {
                 <img
                   className="photo-carousel__image"
                   src={fotos[fotoAtual]?.preview}
-                  alt={`Foto ${fotoAtual + 1} do objeto`}
+                  alt={t("form.photoAlt", { n: fotoAtual + 1 })}
                 />
 
                 {fotos.length > 1 && (
@@ -852,7 +777,7 @@ export default function CadastrarObjeto() {
                     <button
                       type="button"
                       className="photo-carousel__arrow photo-carousel__arrow--previous"
-                      aria-label="Ver foto anterior"
+                      aria-label={t("form.previousPhoto")}
                       onClick={() => navegarFotos("anterior")}
                     >
                       <Icon>{icons.chevronLeft}</Icon>
@@ -861,7 +786,7 @@ export default function CadastrarObjeto() {
                     <button
                       type="button"
                       className="photo-carousel__arrow photo-carousel__arrow--next"
-                      aria-label="Ver próxima foto"
+                      aria-label={t("form.nextPhoto")}
                       onClick={() => navegarFotos("proxima")}
                     >
                       <Icon>{icons.chevronRight}</Icon>
@@ -876,17 +801,20 @@ export default function CadastrarObjeto() {
                 <button
                   type="button"
                   className="photo-carousel__remove"
-                  aria-label="Remover foto selecionada"
+                  aria-label={t("form.removeSelectedPhoto")}
                   onClick={removerFotoAtual}
                 >
                   <Icon>{icons.trash}</Icon>
-                  <span>Remover</span>
+                  <span>{t("common.remove")}</span>
                 </button>
               </div>
 
               <div className="photo-carousel__footer">
                 <span className="photo-carousel__summary">
-                  {fotos.length} de {MAX_FOTOS} fotos selecionadas
+                  {t("form.selectedCount", {
+                    count: fotos.length,
+                    max: MAX_FOTOS,
+                  })}
                 </span>
 
                 <button
@@ -896,7 +824,7 @@ export default function CadastrarObjeto() {
                   disabled={fotos.length >= MAX_FOTOS}
                 >
                   <Icon>{icons.plus}</Icon>
-                  Adicionar fotos
+                  {t("form.addPhotos")}
                 </button>
               </div>
             </div>
@@ -909,16 +837,14 @@ export default function CadastrarObjeto() {
           )}
         </section>
 
-        {/* DESCRIÇÃO */}
-
         <div className="field">
-          <label htmlFor="descricao">Descreva o objeto</label>
+          <label htmlFor="descricao">{t("form.describeItem")}</label>
 
           <div className="textarea">
             <textarea
               id="descricao"
               maxLength={500}
-              placeholder="Descreva o objeto com o máximo de detalhes possível..."
+              placeholder={t("form.describePlaceholder")}
               value={descricao}
               onChange={(event) => setDescricao(event.target.value)}
               required
@@ -928,19 +854,17 @@ export default function CadastrarObjeto() {
           </div>
         </div>
 
-        {/* CARACTERÍSTICAS */}
-
         <div className="field">
           <label htmlFor="caracteristicas">
-            Alguma característica específica?{" "}
-            <span className="optional">(opcional)</span>
+            {t("form.features")}{" "}
+            <span className="optional">{t("common.optional")}</span>
           </label>
 
           <div className="textarea">
             <textarea
               id="caracteristicas"
               maxLength={100}
-              placeholder="Ex.: cor, marcas, logo, avarias, número de série, etc."
+              placeholder={t("form.featuresPlaceholder")}
               value={caracteristicas}
               onChange={(event) => setCaracteristicas(event.target.value)}
             />
@@ -950,8 +874,6 @@ export default function CadastrarObjeto() {
             </span>
           </div>
         </div>
-
-        {/* FEEDBACK E AÇÕES */}
 
         {mensagemErro && (
           <p className="cadastro-feedback cadastro-feedback--erro" role="alert">
@@ -965,7 +887,7 @@ export default function CadastrarObjeto() {
             className="btn btn--outline btn--lg"
             onClick={limparFormulario}
           >
-            Cancelar
+            {t("common.cancel")}
           </button>
 
           <button
@@ -973,15 +895,11 @@ export default function CadastrarObjeto() {
             className="btn btn--primary btn--lg"
             disabled={cadastrando}
           >
-            Cadastrar objeto
+            {t("form.submit")}
             <Icon>{icons.arrowRight}</Icon>
           </button>
         </div>
       </form>
-
-      {/* ====================================================
-         MODAL DE CIÊNCIA SOBRE CONTATO
-         ==================================================== */}
 
       {confirmacaoContatoAberta && (
         <div className="confirmation-overlay">
@@ -998,16 +916,12 @@ export default function CadastrarObjeto() {
               <Icon>{icons.shield}</Icon>
             </div>
 
-            <h2 id="confirmation-title">Antes de publicar seu objeto</h2>
+            <h2 id="confirmation-title">{t("form.confirm.title")}</h2>
 
-            <p id="confirmation-description">
-              Você está ciente de que outras pessoas poderão ter informações
-              sobre o objeto cadastrado e poderão entrar em contato com você por
-              meio das informações disponibilizadas na plataforma?
-            </p>
+            <p id="confirmation-description">{t("form.confirm.text")}</p>
 
             <p className="confirmation-modal__notice">
-              Ao continuar, você confirma que está ciente dessa possibilidade.
+              {t("form.confirm.notice")}
             </p>
 
             {mensagemErro && (
@@ -1026,7 +940,7 @@ export default function CadastrarObjeto() {
                 onClick={() => setConfirmacaoContatoAberta(false)}
                 disabled={cadastrando}
               >
-                Voltar e revisar cadastro
+                {t("form.confirm.backToReview")}
               </button>
 
               <button
@@ -1035,16 +949,14 @@ export default function CadastrarObjeto() {
                 onClick={confirmarCienciaContato}
                 disabled={cadastrando}
               >
-                {cadastrando ? "Publicando..." : "Estou ciente, continuar"}
+                {cadastrando
+                  ? t("form.confirm.publishing")
+                  : t("form.confirm.confirm")}
               </button>
             </div>
           </section>
         </div>
       )}
-
-      {/* ====================================================
-         MODAL DE SUCESSO
-         ==================================================== */}
 
       {mensagemSucesso && (
         <div className="confirmation-overlay">
@@ -1060,11 +972,9 @@ export default function CadastrarObjeto() {
               <Icon>{icons.shield}</Icon>
             </div>
 
-            <h2 id="success-title">Objeto cadastrado com sucesso!</h2>
+            <h2 id="success-title">{t("form.success.title")}</h2>
 
-            <p id="success-description">
-              Seu objeto foi publicado e já está disponível na plataforma.
-            </p>
+            <p id="success-description">{t("form.success.text")}</p>
 
             <div className="confirmation-modal__actions">
               <button
@@ -1072,7 +982,7 @@ export default function CadastrarObjeto() {
                 className="btn btn--primary"
                 onClick={limparFormulario}
               >
-                Concluir
+                {t("common.finish")}
               </button>
             </div>
           </section>

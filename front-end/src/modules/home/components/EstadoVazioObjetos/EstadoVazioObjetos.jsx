@@ -1,6 +1,10 @@
 import "./EstadoVazioObjetos.css";
 
+import { useTranslation } from "react-i18next";
+
 function EstadoVazioObjetos() {
+  const { t } = useTranslation();
+
   return (
     <div className="estado-objetos estado-objetos-vazio" role="status">
       <div className="estado-objetos-vazio-icone">
@@ -20,12 +24,9 @@ function EstadoVazioObjetos() {
         </svg>
       </div>
 
-      <h3>Nenhum objeto por aqui ainda.</h3>
+      <h3>{t("home.empty.title")}</h3>
 
-      <p>
-        Ainda não temos objetos cadastrados recentemente. Assim que houver novos
-        registros, eles aparecerão aqui.
-      </p>
+      <p>{t("home.empty.description")}</p>
     </div>
   );
 }
