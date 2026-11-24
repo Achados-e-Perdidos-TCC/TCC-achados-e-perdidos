@@ -349,6 +349,22 @@
       "emailRequired": "The email field must be filled in.",
       "unexpected": "An unexpected error occurred. Check the email provided and try again."
     },
+    "reset": {
+      "title": "Create a new password",
+      "subtitle": "Choose a strong password to protect your account.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "placeholder": "Enter your new password",
+      "confirmPlaceholder": "Repeat your new password",
+      "submit": "Reset password",
+      "submitting": "Saving...",
+      "success": "Password reset! You will be redirected to the login page.",
+      "required": "Please fill in both fields.",
+      "mismatch": "Passwords do not match.",
+      "weak": "The password does not meet the requirements.",
+      "invalidLink": "This link is invalid or has expired. Please request a new one.",
+      "requestNew": "Request a new link"
+    },
     "register": {
       "title": "Create your account",
       "subtitle": "Let's start with your basic information.",
@@ -535,97 +551,140 @@
       "myObjects": "My items",
       "notifications": "Notifications",
       "avatarAlt": "Profile photo",
-      "helpCenter": "Help center"
+      "helpCenter": "Help center",
+      "overview": "overview"
     },
-    "objects": {
-      "title": "My items",
-      "subtitle": "Manage the items you lost or found.",
-      "loading": "Loading your items...",
-      "loadError": "Could not load your items.",
-      "count_one": "{{count}} registered item",
-      "count_other": "{{count}} registered items",
-      "optionsOf": "Options for {{name}}",
-      "options": "Item options",
-      "edit": "Edit item",
-      "deleted": "Deleted",
-      "deletedNotice": "You deleted this item. It no longer appears in searches and can't be opened or edited."
+    "overview": {
+      "live": "Live",
+      "greeting": "Hello, {{name}}!",
+      "heroText": "See what's happening with lost and found items across the platform.",
+      "totalLabel": "items on the platform",
+      "loading": "Loading overview...",
+      "loadError": "Could not load the overview.",
+      "insight": "Most items get lost on <b>{{day}}</b>, around <b>{{hour}}</b>. Keep an eye out!",
+      "donut": {
+        "title": "Lost vs Found",
+        "subtitle": "All items on the platform",
+        "total": "items",
+        "lost": "Lost",
+        "found": "Found"
+      },
+      "city": {
+        "title": "In your city",
+        "subtitle": "Activity in {{city}}",
+        "share": "{{percent}}% of all items on the platform",
+        "none": "No items registered in {{city}} yet.",
+        "noCity": "Add your city to your profile to see activity near you.",
+        "cta": "Complete profile"
+      },
+      "categories": {
+        "title": "What gets lost most",
+        "subtitle": "Most frequent categories among lost items"
+      },
+      "footnote": "Categories and times are based on the {{count}} most recent records. Totals are exact.",
+      "empty": {
+        "title": "No activity yet",
+        "text": "Once the first items are registered, the overview will show up here."
+      }
     },
-    "notifications": {
-      "title": "Notifications",
-      "subtitle": "Keep up with news about your items and interactions.",
-      "markAllRead": "Mark all as read",
-      "updating": "Updating...",
-      "loading": "Loading notifications...",
-      "loadError": "Could not load the notifications.",
-      "disabled": "You have turned off notifications in your preferences.",
-      "empty": "You have no notifications.",
-      "markReadError": "Could not mark the notification as read.",
-      "markAllReadError": "Could not mark all notifications as read.",
-      "aria": "Notification: {{title}}. {{status}}",
-      "read": "Read",
-      "unread": "Unread"
-    },
-    "profile": {
-      "eyebrow": "MY ACCOUNT",
-      "title": "My profile",
-      "subtitle": "Manage your personal information, preferences and account security.",
-      "personalInfoTitle": "Personal information",
-      "personalInfoSubtitle": "Update your identification and contact details.",
-      "securityTitle": "Security",
-      "securitySubtitle": "Manage access to and protection of your account.",
-      "preferencesTitle": "Preferences",
-      "preferencesSubtitle": "Personalize your experience on the platform.",
-      "dangerTitle": "Danger zone",
-      "dangerSubtitle": "Important actions related to your account.",
-      "photoTitle": "Profile photo",
-      "editPhoto": "Edit photo",
-      "monthYear": "{{month}} {{year}}",
-      "updateFailed": "Could not update the data. Check whether you made any changes.",
-      "saveFailed": "Could not save the changes.",
-      "loadUserError": "Error loading user information"
-    },
-    "security": {
-      "changePassword": "Change password",
-      "changePasswordDescription": "Update your password regularly."
-    },
-    "preferences": {
-      "toggleNotifications": "Toggle notifications",
-      "toggleShowEmail": "Toggle email visibility on items",
-      "receiveNotifications": "Receive notifications",
-      "receiveNotificationsDescription": "Receive notifications about platform news.",
-      "showEmail": "Show my email on items",
-      "showEmailDescription": "Allow other people to see your email when viewing the details of items you published.",
-      "themeTitle": "Platform theme",
-      "themeDescription": "Choose the appearance you prefer to use.",
-      "themeLight": "Light",
-      "themeDark": "Dark"
-    },
-    "danger": {
-      "logout": "Sign out",
-      "logoutDescription": "You can sign back in whenever you want.",
-      "deleteAccount": "Delete account",
-      "deleteDescription": "This action is permanent and cannot be undone.",
-      "confirmQuestion": "Are you sure you want to delete your account?",
-      "confirmWarning": "This action cannot be undone.",
-      "confirmDelete": "Confirm deletion"
-    },
-    "changePassword": {
-      "title": "Change your password",
-      "subtitle": "Enter your current password and your new password.",
-      "currentPassword": "Current password",
-      "currentPlaceholder": "Your current password",
-      "newPassword": "New password",
-      "newPlaceholder": "Your new password",
-      "submit": "Change password",
-      "submitting": "Changing password...",
-      "cancelPrompt": "Don't want to change it anymore?",
-      "success": "Password changed successfully! You will be redirected to the sign-in screen shortly.",
-      "invalidNewPassword": "Invalid new password.",
-      "wrongCurrent": "Incorrect current password.",
-      "samePassword": "The passwords cannot be the same.",
-      "requiredFields": "The fields must be filled in.",
-      "unexpected": "An unexpected error occurred. Check that the information provided is correct."
-    }
+    "profileTitle": "Complete your profile",
+    "profileText": "Your profile is {{percent}}% complete. Complete profiles make contact easier.",
+    "profileCta": "Complete profile",
+    "quickTitle": "Quick actions",
+    "register": "Register item",
+    "viewObjects": "View my items",
+    "viewNotifications": "View notifications",
+    "recentTitle": "Latest items",
+    "recentEmpty": "You haven't registered any items yet."
+  },
+  "objects": {
+    "title": "My items",
+    "subtitle": "Manage the items you lost or found.",
+    "loading": "Loading your items...",
+    "loadError": "Could not load your items.",
+    "count_one": "{{count}} registered item",
+    "count_other": "{{count}} registered items",
+    "optionsOf": "Options for {{name}}",
+    "options": "Item options",
+    "edit": "Edit item",
+    "deleted": "Deleted",
+    "deletedNotice": "You deleted this item. It no longer appears in searches and can't be opened or edited."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Keep up with news about your items and interactions.",
+    "markAllRead": "Mark all as read",
+    "updating": "Updating...",
+    "loading": "Loading notifications...",
+    "loadError": "Could not load the notifications.",
+    "disabled": "You have turned off notifications in your preferences.",
+    "empty": "You have no notifications.",
+    "markReadError": "Could not mark the notification as read.",
+    "markAllReadError": "Could not mark all notifications as read.",
+    "aria": "Notification: {{title}}. {{status}}",
+    "read": "Read",
+    "unread": "Unread"
+  },
+  "profile": {
+    "eyebrow": "MY ACCOUNT",
+    "title": "My profile",
+    "subtitle": "Manage your personal information, preferences and account security.",
+    "personalInfoTitle": "Personal information",
+    "personalInfoSubtitle": "Update your identification and contact details.",
+    "securityTitle": "Security",
+    "securitySubtitle": "Manage access to and protection of your account.",
+    "preferencesTitle": "Preferences",
+    "preferencesSubtitle": "Personalize your experience on the platform.",
+    "dangerTitle": "Danger zone",
+    "dangerSubtitle": "Important actions related to your account.",
+    "photoTitle": "Profile photo",
+    "editPhoto": "Edit photo",
+    "monthYear": "{{month}} {{year}}",
+    "updateFailed": "Could not update the data. Check whether you made any changes.",
+    "saveFailed": "Could not save the changes.",
+    "loadUserError": "Error loading user information"
+  },
+  "security": {
+    "changePassword": "Change password",
+    "changePasswordDescription": "Update your password regularly."
+  },
+  "preferences": {
+    "toggleNotifications": "Toggle notifications",
+    "toggleShowEmail": "Toggle email visibility on items",
+    "receiveNotifications": "Receive notifications",
+    "receiveNotificationsDescription": "Receive notifications about platform news.",
+    "showEmail": "Show my email on items",
+    "showEmailDescription": "Allow other people to see your email when viewing the details of items you published.",
+    "themeTitle": "Platform theme",
+    "themeDescription": "Choose the appearance you prefer to use.",
+    "themeLight": "Light",
+    "themeDark": "Dark"
+  },
+  "danger": {
+    "logout": "Sign out",
+    "logoutDescription": "You can sign back in whenever you want.",
+    "deleteAccount": "Delete account",
+    "deleteDescription": "This action is permanent and cannot be undone.",
+    "confirmQuestion": "Are you sure you want to delete your account?",
+    "confirmWarning": "This action cannot be undone.",
+    "confirmDelete": "Confirm deletion"
+  },
+  "changePassword": {
+    "title": "Change your password",
+    "subtitle": "Enter your current password and your new password.",
+    "currentPassword": "Current password",
+    "currentPlaceholder": "Your current password",
+    "newPassword": "New password",
+    "newPlaceholder": "Your new password",
+    "submit": "Change password",
+    "submitting": "Changing password...",
+    "cancelPrompt": "Don't want to change it anymore?",
+    "success": "Password changed successfully! You will be redirected to the sign-in screen shortly.",
+    "invalidNewPassword": "Invalid new password.",
+    "wrongCurrent": "Incorrect current password.",
+    "samePassword": "The passwords cannot be the same.",
+    "requiredFields": "The fields must be filled in.",
+    "unexpected": "An unexpected error occurred. Check that the information provided is correct."
   },
   "pages": {
     "notAuthenticated": {
@@ -662,5 +721,83 @@
       "title": "Loading your profile...",
       "slow": "Taking too long? Try reloading the page."
     }
+  },
+  "legal": {
+    "eyebrow": "LEGAL INFORMATION",
+    "updated": "Last updated: 23 November 2026",
+    "demoNotice": "This is an academic and portfolio project. The text below is for demonstration only and is not legal advice.",
+    "terms": {
+      "title": "Terms of Use",
+      "sections": [
+        {
+          "title": "Acceptance",
+          "text": "By creating an account or using Achados e Devolvidos, you agree to these terms."
+        },
+        {
+          "title": "Use of the platform",
+          "text": "The platform is for registering and searching lost or found items. Posting false, offensive or infringing content is prohibited."
+        },
+        {
+          "title": "Responsibilities",
+          "text": "Contact and return happen directly between people. The platform does not guarantee the recovery of any item."
+        },
+        {
+          "title": "Changes",
+          "text": "These terms may be updated at any time. Continued use means you accept the current version."
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "sections": [
+        {
+          "title": "Data we collect",
+          "text": "We collect your name, email and, optionally, phone, city and profile photo, plus the details of the items you register."
+        },
+        {
+          "title": "How we use it",
+          "text": "We use your data to maintain your account, display your items and send notifications according to your preferences."
+        },
+        {
+          "title": "Sharing",
+          "text": "Your email only appears on items you published if the option is enabled in your profile. We do not sell your data."
+        },
+        {
+          "title": "Your rights",
+          "text": "You can edit your data or delete your account at any time in the user area."
+        }
+      ]
+    }
+  },
+  "help": {
+    "eyebrow": "HELP CENTER",
+    "title": "How can we help?",
+    "subtitle": "Answers to the most common questions.",
+    "contactTitle": "Still need help?",
+    "contactText": "Send us a message and we will reply as soon as possible.",
+    "contactButton": "Contact us",
+    "contactButtonInfo": "Service currently unavailable",
+    "items": [
+      {
+        "q": "How do I register a lost or found item?",
+        "a": "Sign in, click \"Register item\" and fill in the details. Photos and a good description increase the chances of a return."
+      },
+      {
+        "q": "How do I contact the person who found (or lost) an item?",
+        "a": "Open the item details and use the contact button. You fill in your details and send a message to the owner's email."
+      },
+      {
+        "q": "How do I edit or delete an item?",
+        "a": "In the user area, open \"My items\", click the three dots on the item and choose \"Edit item\"."
+      },
+      {
+        "q": "I forgot my password. What now?",
+        "a": "On the login page, use the password recovery option. We will email you a link to create a new password."
+      },
+      {
+        "q": "Can I hide my email on items?",
+        "a": "Yes, but to keep your items published and visible to everyone, you must keep the email display option enabled. If you want to hide your email, you’ll need to delete your published items before turning off this option under \"My profile\", in the preferences section."
+      }
+    ]
   }
 }

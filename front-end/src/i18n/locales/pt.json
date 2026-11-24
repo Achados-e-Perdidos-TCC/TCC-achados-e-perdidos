@@ -349,6 +349,22 @@
       "emailRequired": "O campo e-mail precisa estar preenchido.",
       "unexpected": "Ocorreu um erro inesperado. Verifique o e-mail informado e tente novamente."
     },
+    "reset": {
+      "title": "Crie uma nova senha",
+      "subtitle": "Escolha uma senha forte para proteger sua conta.",
+      "newPassword": "Nova senha",
+      "confirmPassword": "Confirmar nova senha",
+      "placeholder": "Digite a nova senha",
+      "confirmPlaceholder": "Repita a nova senha",
+      "submit": "Redefinir senha",
+      "submitting": "Salvando...",
+      "success": "Senha redefinida! Você será redirecionado para o login.",
+      "required": "Preencha os dois campos.",
+      "mismatch": "As senhas não coincidem.",
+      "weak": "A senha não atende aos requisitos.",
+      "invalidLink": "Este link é inválido ou expirou. Solicite um novo.",
+      "requestNew": "Solicitar novo link"
+    },
     "register": {
       "title": "Crie sua conta",
       "subtitle": "Vamos começar com seus dados básicos.",
@@ -535,7 +551,41 @@
       "myObjects": "Meus objetos",
       "notifications": "Notificações",
       "avatarAlt": "Foto de perfil",
-      "helpCenter": "Central de ajuda"
+      "helpCenter": "Central de ajuda",
+      "overview": "Visão geral"
+    },
+    "overview": {
+      "live": "Ao vivo",
+      "greeting": "Olá, {{name}}!",
+      "heroText": "Veja como está a movimentação de achados e perdidos na plataforma.",
+      "totalLabel": "objetos na plataforma",
+      "loading": "Carregando panorama...",
+      "loadError": "Não foi possível carregar o panorama.",
+      "insight": "Mais objetos se perdem em <b>{{day}}</b>, por volta das <b>{{hour}}</b>. Fique de olho!",
+      "donut": {
+        "title": "Perdidos x Encontrados",
+        "subtitle": "Todos os objetos da plataforma",
+        "total": "objetos",
+        "lost": "Perdidos",
+        "found": "Encontrados"
+      },
+      "city": {
+        "title": "Na sua cidade",
+        "subtitle": "Movimentação em {{city}}",
+        "share": "{{percent}}% de todos os objetos da plataforma",
+        "none": "Ainda não há objetos registrados em {{city}}.",
+        "noCity": "Informe sua cidade no perfil para ver a movimentação perto de você.",
+        "cta": "Completar perfil"
+      },
+      "categories": {
+        "title": "O que mais se perde",
+        "subtitle": "Categorias mais frequentes entre os objetos perdidos"
+      },
+      "footnote": "Categorias e horários baseados nos {{count}} registros mais recentes. Os totais são exatos.",
+      "empty": {
+        "title": "Ainda não há movimentação",
+        "text": "Quando os primeiros objetos forem registrados, o panorama aparece aqui."
+      }
     },
     "objects": {
       "title": "Meus objetos",
@@ -662,5 +712,83 @@
       "title": "Carregando seu perfil...",
       "slow": "Demorando demais? Tente recarregar a página."
     }
+  },
+  "legal": {
+    "eyebrow": "INFORMAÇÕES LEGAIS",
+    "updated": "Última atualização: 23/11/2026",
+    "demoNotice": "Este é um projeto acadêmico e de portfólio. O texto abaixo é demonstrativo e não substitui um documento jurídico.",
+    "terms": {
+      "title": "Termos de Uso",
+      "sections": [
+        {
+          "title": "Aceitação",
+          "text": "Ao criar uma conta ou usar o Achados e Devolvidos, você concorda com estes termos."
+        },
+        {
+          "title": "Uso da plataforma",
+          "text": "A plataforma serve para cadastrar e buscar objetos perdidos ou encontrados. É proibido publicar conteúdo falso, ofensivo ou que viole direitos de terceiros."
+        },
+        {
+          "title": "Responsabilidades",
+          "text": "O contato e a devolução acontecem diretamente entre as pessoas. A plataforma não garante a recuperação de nenhum objeto."
+        },
+        {
+          "title": "Alterações",
+          "text": "Estes termos podem ser atualizados a qualquer momento. O uso contínuo indica aceitação da versão vigente."
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Política de Privacidade",
+      "sections": [
+        {
+          "title": "Dados coletados",
+          "text": "Coletamos nome, e-mail e, opcionalmente, telefone, cidade e foto de perfil, além das informações dos objetos que você cadastra."
+        },
+        {
+          "title": "Como usamos",
+          "text": "Usamos seus dados para manter sua conta, exibir seus objetos e enviar notificações, conforme suas preferências."
+        },
+        {
+          "title": "Compartilhamento",
+          "text": "Seu e-mail só aparece nos objetos que você publicou se a opção estiver ativada no seu perfil. Não vendemos seus dados."
+        },
+        {
+          "title": "Seus direitos",
+          "text": "Você pode editar seus dados ou excluir sua conta a qualquer momento na área do usuário."
+        }
+      ]
+    }
+  },
+  "help": {
+    "eyebrow": "CENTRAL DE AJUDA",
+    "title": "Como podemos ajudar?",
+    "subtitle": "Respostas para as dúvidas mais comuns.",
+    "contactTitle": "Ainda precisa de ajuda?",
+    "contactText": "Envie uma mensagem e responderemos o mais rápido possível.",
+    "contactButton": "Falar com a gente",
+    "contactButtonInfo": "Serviço Indisponível no momento",
+    "items": [
+      {
+        "q": "Como cadastro um objeto perdido ou encontrado?",
+        "a": "Entre na sua conta, clique em \"Cadastrar objeto\" e preencha as informações. Fotos e uma boa descrição aumentam as chances de devolução."
+      },
+      {
+        "q": "Como falo com quem encontrou (ou perdeu) um objeto?",
+        "a": "Abra os detalhes do objeto e use o botão de contato. Você preenche seus dados e envia uma mensagem para o e-mail do responsável."
+      },
+      {
+        "q": "Como edito ou excluo um objeto?",
+        "a": "Na área do usuário, abra \"Meus objetos\", clique nos três pontinhos do objeto e escolha \"Editar objeto\"."
+      },
+      {
+        "q": "Esqueci minha senha. E agora?",
+        "a": "Na tela de login, use a opção de recuperar senha. Enviaremos um link por e-mail para você criar uma nova senha."
+      },
+      {
+        "q": "Posso esconder meu e-mail nos objetos?",
+        "a": "Sim, mas para que seus objetos permaneçam publicados e visíveis para todos, é necessário manter a opção de exibição do e-mail ativada. Caso queira ocultar seu e-mail, será necessário excluir os objetos publicados antes de desativar essa opção, em \"Meu perfil\", na seção de preferências."
+      }
+    ]
   }
 }
