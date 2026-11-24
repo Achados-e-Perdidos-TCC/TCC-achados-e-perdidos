@@ -67,3 +67,10 @@ export async function forgetPassword(email) {
 
   return data;
 }
+
+export async function resetPassword(token, newPassword) {
+  return await request(ENDPOINTS.auth.resetpassword, {
+    method: "POST",
+    body: JSON.stringify({ token, newPassword }),
+  });
+}

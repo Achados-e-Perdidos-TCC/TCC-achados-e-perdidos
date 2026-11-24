@@ -11,6 +11,8 @@ import inboxBlue from "../../../../../assets/icons/userArea/inbox-blue.png";
 import bellGray from "../../../../../assets/icons/userArea/bell-gray.png";
 import bellBlue from "../../../../../assets/icons/register/bell-blue.png";
 import helpBlue from "../../../../../assets/icons/userArea/help-blue.png";
+import overview from "../../../../../assets/icons/userArea/overview.svg";
+import overviewBlue from "../../../../../assets/icons/userArea/overview-blue.svg";
 import arrowBlue from "../../../../../assets/icons/detalhesObjeto/arrow-blue.svg";
 
 function Sidebar({
@@ -115,6 +117,21 @@ function Sidebar({
 
         <div className="sidebar__links__container">
           <div
+            className={`sidebar__link ${pageActive === 4 ? "link__active" : "none__active"}`}
+            onClick={() => {
+              setPageActive(4);
+            }}
+          >
+            {pageActive === 4 ? (
+              <img src={overviewBlue} />
+            ) : (
+              <img src={overview} />
+            )}
+
+            <p>{t("account.sidebar.overview")}</p>
+          </div>
+
+          <div
             className={`sidebar__link ${pageActive === 2 ? "link__active" : "none__active"}`}
             onClick={() => {
               setPageActive(2);
@@ -162,7 +179,11 @@ function Sidebar({
           </div>
         </div>
 
-        <NavLink end className="sidebar__link sidebar__help__container">
+        <NavLink
+          to="/ajuda"
+          end
+          className="sidebar__link sidebar__help__container"
+        >
           <div className="sidebar__help__content">
             <img src={helpBlue} />
             <p>{t("account.sidebar.helpCenter")}</p>

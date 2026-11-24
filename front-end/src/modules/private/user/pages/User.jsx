@@ -9,6 +9,7 @@ import UserObjects from "../components/user-objects/UserObjects.jsx";
 import UserProfile from "../components/user-profile/UserProfile.jsx";
 import UserNotifications from "../components/user-notifications/UserNotifications.jsx";
 import Loading from "../../../../pages/errors/loading/Loading.jsx";
+import UserOverview from "../components/user-overview/UserOverview.jsx";
 
 function User() {
   const [userInfos, setUserInfos] = useState(null);
@@ -16,7 +17,7 @@ function User() {
 
   const [pageActive, setPageActive] = useState(() => {
     const savedPage = localStorage.getItem("lastUserPage");
-    return savedPage ? Number(savedPage) : 1;
+    return savedPage ? Number(savedPage) : 4;
   });
 
   const [open, setOpen] = useState(() => {
@@ -86,6 +87,18 @@ function User() {
           }`}
         >
           <UserNotifications setNotifications={setNotifications} />
+        </div>
+
+        <div
+          className={`user__area__objects ${
+            pageActive === 4 ? "" : "user__none"
+          }`}
+        >
+          <UserOverview
+            userInfos={userInfos}
+            notifications={notifications}
+            setPageActive={setPageActive}
+          />
         </div>
       </main>
     </section>
